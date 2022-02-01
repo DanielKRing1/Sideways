@@ -1,58 +1,58 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import React, { FC, MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FlatList, Text, TextInput, View } from 'react-native';
 
 /**
  * To properly use this component,
- * wrap the provided RenderItem and RenderInput components in 'React.forwardRef'.
- * This component uses a ref to access the provided TextInput.focus method
- * to focus the most recently added list item,
- * when a new item is added to the list data
+ * The 'lastInput' must be 'up-to-date' after each change to the provided 'list',
+ *      meaning that the provided 'lastInput' key matches the key of the next item actually pushed onto the list, so
+ *      the provided 'push' method must both push another item onto the list and update the 'lastInput' object's id
+ * This constant key allows FlatList to keep focus on the 'lastInput', even after it is no longer the last input, ie FlatList re-renders
  */
 
 export type GrowingInputListProps = {
     list: any;
-    renderItem: FC<{ item: any; index: number }>;
+    renderInput: FC<{ item: any; index: number; push: () => void; replace: () => void; rm: (index: number) => void; }>;
     lastInput: any & { id: any };
-    updateLastInput: () => void;
     keyExtractor: (data: any) => any;
 };
 
+// const NOT_FOCUSED_INDEX: number = -1;
+
+type RenderConditionalItemProps = {
+    item: any;
+    index: number;
+};
+
 const GrowingInputList: FC<GrowingInputListProps> = (props) => {
-    const { list, renderItem, lastInput, updateLastInput, keyExtractor } = props;
+    const { list, renderInput, lastInput, keyExtractor, push, rm, replace, } = props;
 
-    // Check when list grows
-    const [prevListLen, setPrevListLen] = React.useState(list.length);
-    React.useEffect(() => {
-        // Record, then update prev list len
-        const prevLen = prevListLen;
-        setPrevListLen(list.length);
+    // const [focusedIndex, setFocusedIndex] = useState<number>(NOT_FOCUSED_INDEX);
+    // const [prevLen, setPrevLen] = useState(list.length);
 
-        // Do not need to update id counter, List got smaller
-        if (list.length < prevLen) return;
+    const myPush = (newItem: any) => {
+        // 1. List grew, focus last index
+        // setFocusedIndex(prevLen);
+        // setPrevLen(prevLen + 1)
+        
+        push(newItem);
+    }
 
-        // Update id counter
-        updateLastInput();
-    }, [list.length]);
+    const myRm = (index: number) => {
+        // setFocusedIndex(NOT_FOCUSED_INDEX);
+        // setPrevLen(prevLen - 1);
 
-    // const RenderItem = renderItem;
-    // type RenderConditionalItemProps = {
-    //     item: any;
-    //     index: number;
-    // };
-    // const renderConditionalItem = ({ item, index }: RenderConditionalItemProps) => {
-    //     return <RenderItem renderType={index < list.length ? RenderType.Item : RenderType.Input} item={item} index={index} />;
+        rm(index);
+    }
 
-    //     // return RenderItem({renderType: index < data.length ? RenderType.Item : RenderType.Input, item: item, index: index})
-    // };
+    const RenderInput = renderInput;
 
-    return <FlatList data={[...list, lastInput]} renderItem={renderItem} keyExtractor={keyExtractor} />;
-    // return (
-    // <FlatList
-    //   data={[...data]}
-    //   renderItem={({ item, index }: { item: any, index: number }) => <RenderItem item={item} index={index} />}
-    //   keyExtractor={keyExtractor}
-    // />
-    // );
+    const renderConditionalItem = ({ item, index }: RenderConditionalItemProps) => {
+        return <RenderInput list={list} item={item} index={index} push={myPush} replace={index < list.length ? replace : myPush} rm={myRm} />
+    };
+
+    return (
+            <FlatList data={[...list, lastInput]} renderItem={renderConditionalItem} keyExtractor={keyExtractor} />
+    );
 };
 
 export default GrowingInputList;

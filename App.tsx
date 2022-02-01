@@ -34,8 +34,6 @@ const Section: React.FC<{
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
-      <TabOneScreen />
-
       <Text
         style={[
           styles.sectionTitle,
@@ -68,6 +66,9 @@ const App = () => {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+
+      <TabOneScreen />
+
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
