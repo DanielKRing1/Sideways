@@ -26,7 +26,7 @@ const StyledTextInput = styled(MyTextInput)`
     borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.grayBorder};
     paddingVertical: 25px;
     paddingHorizontal: 10px;
-    `;
+`;
 
 const createRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
     <StyledTextInput
