@@ -13,7 +13,7 @@ const MyTextInput: FC<MyTextInputProps> = (props) => {
 
     return (
         <StyledTextInput
-            placeholderTextColor={theme.colors.lightgrayText}
+            placeholderTextColor={theme.colors.lightText}
             {...props}
         />
     )
