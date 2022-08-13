@@ -12,7 +12,6 @@ const MyText: FC<MyTextProps> = (props) => {
 
     return (
         <StyledText
-            placeholderTextColor={theme.colors.lightgrayText}
             {...props}
         />
     )
