@@ -5,13 +5,15 @@ import styled, { DefaultTheme } from 'styled-components/native';
 import Todo from '../../../../components/Dev/Todo';
 import FlexCol from '../../../../components/Flex/FlexCol';
 import { GrowingList } from '../../../../components/Input/GrowingInputList';
+import MyTextInput from '../../../../components/Input/MyTextInput';
 import { TabNavHeader } from '../../../../components/Navigation/NavHeader';
+import MyText from '../../../../components/Text/MyText';
 
 // REDUX
 import { RootState } from '../../../../redux';
 import { addInput, setInputs, setOutputs, startRate, forceSignatureRerender } from '../../../../redux/rateSidewaysSlice';
 
-const StyledTextInput = styled.TextInput`
+const StyledTextInput = styled(MyTextInput)`
     borderWidth: 1px;
     borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.grayBorder};
     paddingVertical: 25px;
@@ -48,7 +50,7 @@ const RateSliceScreen: FC<RateSliceScreenProps> = (props) => {
 
     return (
         <View>
-            <Text>Is this working??</Text>
+            <MyText>Is this working??</MyText>
 
             <FlexCol>
                 <TabNavHeader/>

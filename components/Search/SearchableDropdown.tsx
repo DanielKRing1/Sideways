@@ -4,6 +4,8 @@ import styled from 'styled-components/native';
 import { useOnClickOutsideComponent } from 'rn-click-listener';
 
 import { FlexCol, FlexRow } from '../Flex';
+import MyTextInput from '../Input/MyTextInput';
+import MyText from '../Text/MyText';
 
 type SearchableDropdownProps = {
     placeholder: string;
@@ -36,7 +38,7 @@ export const SearchableDropdown: FC<SearchableDropdownProps> = (props) => {
     return (
         // @ts-ignore
         <StyledRow ref={ref}>
-            <Text>Start</Text>
+            <MyText>Start</MyText>
             {!!LeftComponent && <LeftComponent />}
 
             <FlexCol>
@@ -55,25 +57,25 @@ export const SearchableDropdown: FC<SearchableDropdownProps> = (props) => {
             </FlexCol>
 
             {!!RightComponent && <RightComponent />}
-            <Text>End</Text>
+            <MyText>End</MyText>
         </StyledRow>
     );
 };
 
 const StyledRow = styled(FlexRow)`
-    border-color: black;
-    border-width: 2;
+    borderColor: black;
+    borderWidth: 2;
 `;
 
 type StyledTextInputProps = {
     bottomRounded: boolean;
 };
-const StyledTextInput = styled.TextInput<StyledTextInputProps>`
+const StyledTextInput = styled(MyTextInput)<StyledTextInputProps>`
     padding: 0px 10px;
 
-    border-width: 1px;
-    border-radius: 10px;
-    ${({ bottomRounded }: StyledTextInputProps) => (bottomRounded ? `` : `border-bottom-left-radius: 0px;`)}
-    ${({ bottomRounded }: StyledTextInputProps) => (bottomRounded ? `` : `border-bottom-right-radius: 0px;`)}
-    border-color: #d0d0d0;
+    borderWidth: 1px;
+    borderRadius: 10px;
+    ${({ bottomRounded }: StyledTextInputProps) => (bottomRounded ? `` : `borderBottomLeftRadius: 0px;`)}
+    ${({ bottomRounded }: StyledTextInputProps) => (bottomRounded ? `` : `borderBottomRightRadius: 0px;`)}
+    borderColor: #d0d0d0;
 `;

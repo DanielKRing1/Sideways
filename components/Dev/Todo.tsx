@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import FlexRow from '../Flex/FlexRow';
+import MyText from '../Text/MyText';
 
 type TodoProps = {
     children?: React.ReactNode;
@@ -36,7 +37,7 @@ const Todo: FC<TodoProps> = (props) => {
 
 export default Todo;
 
-const StyledText = styled.Text<StyleProps>`
+const StyledText = styled(MyText)<StyleProps>`
     color: ${({ color }) => color};
 
     fontSize: ${({ fontSize }) => fontSize};

@@ -10,13 +10,16 @@ import { PROFILE_SCREEN_NAME, ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME, S
 import { StackNavigatorNavigationProp, StackNavigatorParamList } from "../../navigation/StackNavigator";
 import { setSliceName } from "../../redux/createSidewaysSlice";
 import { setSearchedSliceName } from "../../redux/readSidewaysSlice";
+import MyTextInput from "../Input/MyTextInput";
+import MyText from "../Text/MyText";
+import { theme } from "../../theme/theme";
 
 function createProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate(PROFILE_SCREEN_NAME)}
         >
-            <Text>{'<- Profile'}</Text>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{'<- Profile'}</MyText>
         </TouchableOpacity>
     );
 };
@@ -28,8 +31,8 @@ function createActiveSliceNavButton<PreviousScreen extends keyof StackNavigatorP
         <TouchableOpacity
             onPress={() => navigation.navigate(ACTIVE_SLICE_SCREEN_NAME)}
         >
-            <Text>{activeSliceName || 'Choose Slice...'}</Text>
-            <Text>Search</Text>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{activeSliceName || 'Choose Slice...'}</MyText>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>Search</MyText>
         </TouchableOpacity>
     );
 };
@@ -43,7 +46,7 @@ function createActiveSliceNavInput<PreviousScreen extends keyof StackNavigatorPa
     };
 
     return (
-        <TextInput
+        <MyTextInput
             placeholder='Find Slice...'
             value={searchedSliceName}
             onChangeText={handleChangeText}
@@ -56,7 +59,7 @@ function createAddSliceNavButton<PreviousScreen extends keyof StackNavigatorPara
         <TouchableOpacity
             onPress={() => navigation.navigate(ADD_SLICE_SCREEN_NAME as keyof StackNavigatorParamList)}
         >
-            <Text>+</Text>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>+</MyText>
         </TouchableOpacity>
     );
 };
@@ -70,7 +73,7 @@ function createAddSliceNavInput<PreviousScreen extends keyof StackNavigatorParam
     };
 
     return (
-        <TextInput
+        <MyTextInput
             placeholder='New Slice name...'
             value={sliceName}
             onChangeText={handleChangeText}
@@ -83,7 +86,7 @@ function createSettingsNavButton<PreviousScreen extends keyof StackNavigatorPara
         <TouchableOpacity
             onPress={() => navigation.navigate(SETTINGS_SCREEN_NAME)}
         >
-            <Text>{'Settings ->'}</Text>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{'Settings ->'}</MyText>
         </TouchableOpacity>
     );
 };
@@ -93,7 +96,7 @@ function createGoBackNavButton<PreviousScreen extends keyof StackNavigatorParamL
         <TouchableOpacity
             onPress={() => navigation.goBack()}
         >
-            <Text>{'<'}</Text>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{'<'}</MyText>
         </TouchableOpacity>
     );
 };

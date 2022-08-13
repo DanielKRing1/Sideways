@@ -13,6 +13,7 @@ import { RootState } from '../../../../../redux';
 // COMPONENTS
 import { FlexRow } from '../../../../../components/Flex';
 import { SearchableFlatList } from '../../../../../components/Search/SearchableFlatList';
+import MyText from '../../../../../components/Text/MyText';
 
 type StackCardProps = {
     item: StackSnapshotRow;
@@ -24,17 +25,17 @@ const createStackCard = (): FC<StackCardProps> => (props) => {
     return (
         <TouchableOpacity onPress={() => {}}>
             <FlexRow>
-                <Text>{item.timestamp}</Text>
-                <Text>{item.rating}</Text>
+                <MyText>{item.timestamp}</MyText>
+                <MyText>{item.rating}</MyText>
 
-                <Text>Inputs:</Text>
+                <MyText>Inputs:</MyText>
                 {
-                    item.inputs.map((input: string) => <Text>{input}</Text>)
+                    item.inputs.map((input: string) => <MyText>{input}</MyText>)
                 }
                 
-                <Text>Outputs:</Text>
+                <MyText>Outputs:</MyText>
                 {
-                    item.outputs.map((output: string) => <Text>{output}</Text>)
+                    item.outputs.map((output: string) => <MyText>{output}</MyText>)
                 }
             </FlexRow>
         </TouchableOpacity>

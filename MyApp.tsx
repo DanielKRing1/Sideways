@@ -9,7 +9,7 @@
  */
 
 import React, { useContext } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import styled from 'styled-components/native';
 
 import store from './redux';
@@ -21,6 +21,8 @@ import StackNavigator from './navigation/StackNavigator';
 
 import { DbLoaderContext, DbLoaderProvider } from './contexts/DbLoader';
 import MyThemeProvider from './theme/ThemeProvider';
+import MyTextInput from './components/Input/MyTextInput';
+import MyText from './components/Text/MyText';
 
 const NewApp = () => {
   return (
@@ -45,24 +47,19 @@ const AppContent = () => {
 
   return (
     <MyThemeProvider>
-      <ThemedContainer>
-      {
-        !isLoaded ?
-          <Text>Loading...</Text>
-          :
+    {
+      !isLoaded ?
+        <MyText>Loading...</MyText>
+        :
 
-            <NavigationContainer>
-              <StackNavigator />
-            </NavigationContainer>
+          <NavigationContainer>
+            <MyTextInput
+              placeholder={'fff'}
+            />
+            <StackNavigator />
+          </NavigationContainer>
 
-      }
-      </ThemedContainer>
+    }
     </MyThemeProvider>
   );
 };
-
-const ThemedContainer = styled.View`
-  flex: 1;
-
-  color: black;
-`;

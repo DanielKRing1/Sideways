@@ -10,6 +10,7 @@ import { setRating } from '../../../../../redux/rateSidewaysSlice'
 
 // COMPONENTS
 import Slider from '../../../../../components/Input/Slider';
+import MyText from '../../../../../components/Text/MyText';
 
 const SLIDER_WIDTH: number = 40;
 
@@ -46,7 +47,7 @@ const RatingSlider: React.FC<RatingSliderProps> = (props) => {
 
     return (
         <View>
-            <Text>Rating: {rating}</Text>
+            <MyText>Rating: {rating}</MyText>
 
             <Slider
                 sliderWidth={SLIDER_WIDTH}
@@ -83,6 +84,6 @@ type StyledTextProps = {
 
     isSelected: boolean;
 };
-const StyledText = styled.Text<StyledTextProps>`
+const StyledText = styled(MyText)<StyledTextProps>`
     backgroundColor: ${({ theme, isSelected }: StyledTextProps) => isSelected ? theme.colors.pastelPurple : theme.colors.grayBorder}
 `;

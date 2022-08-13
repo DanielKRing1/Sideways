@@ -18,7 +18,7 @@ type NavHeaderType = {
   justifyContent?: "space-around" | "flex-start" | "flex-end" | "center" | "space-between" | "space-evenly";
 };
 const NavHeader: FC<NavHeaderType> = (props) => {
-  const { children, justifyContent='space-around' } = props;
+  const { children, justifyContent='space-between' } = props;
 
   // NAVIGATION
   const navigation = useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();

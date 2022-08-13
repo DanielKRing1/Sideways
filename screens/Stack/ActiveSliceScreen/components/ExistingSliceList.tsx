@@ -16,6 +16,7 @@ import { FlexRow } from '../../../../components/Flex';
 
 // UTILS
 import { abbrDate } from '../../../../utils/date';
+import MyText from '../../../../components/Text/MyText';
 
 type ExistingSliceCardProps = {
     item: ExistingSlice;
@@ -27,8 +28,8 @@ const createExistingSliceCard = (onSelectSlice: (sliceName: string) => void): FC
     return (
         <TouchableOpacity onPress={() => onSelectSlice(item.sliceName)}>
             <FlexRow>
-                <Text>{abbrDate(item.lastLogged)}</Text>
-                <Text>{item.sliceName}</Text>
+                <MyText>{abbrDate(item.lastLogged)}</MyText>
+                <MyText>{item.sliceName}</MyText>
             </FlexRow>
         </TouchableOpacity>
     )

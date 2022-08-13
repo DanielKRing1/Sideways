@@ -16,8 +16,8 @@ export const theme: DefaultTheme = {
         fallback: "Roboto",
     },
     fontSizes: {
-      sm: "8px",
-      md: "12px",
-      lg: "14px"
+      sm: 8,
+      md: 12,
+      lg: 16,
     },
 };

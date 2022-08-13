@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
 import { Button, Text, TouchableOpacity } from 'react-native'
 import DatePicker from 'react-native-date-picker'
+import MyText from '../Text/MyText';
 
 type MyDatePickerProps = {
     buttonText: string;
@@ -28,7 +29,7 @@ const MyDatePicker: FC<MyDatePickerProps> = (props) => {
     return (
         <>
             <TouchableOpacity onPress={() => open()}>
-                <Text>{buttonText}</Text>
+                <MyText>{buttonText}</MyText>
             </TouchableOpacity>
 
             <DatePicker

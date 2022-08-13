@@ -17,15 +17,16 @@ import { GrowingList } from '../../../components/Input/GrowingInputList';
 
 // NAV
 import { AddSliceNavHeader } from '../../../components/Navigation/NavHeader';
+import MyTextInput from '../../../components/Input/MyTextInput';
 
 // Possible outputs
 
-const StyledTextInput = styled.TextInput`
+const StyledTextInput = styled(MyTextInput)`
     borderWidth: 1px;
     borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.grayBorder};
     paddingVertical: 25px;
     paddingHorizontal: 10px;
-`;
+    `;
 
 const createRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
     <StyledTextInput
@@ -60,7 +61,7 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
         <View>
             <AddSliceNavHeader/>
 
-            <TextInput
+            <MyTextInput
                 placeholder={'Add a Slice...'}
                 value={newSliceName}
                 onChangeText={setNewSliceName}

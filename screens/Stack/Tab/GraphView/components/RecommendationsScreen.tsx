@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
 import { GrowingList } from '../../../../../components/Input/GrowingInputList';
+import MyTextInput from '../../../../../components/Input/MyTextInput';
 
 // DB DRIVER
 import { DbLoaderContext } from '../../../../../contexts/DbLoader';
@@ -45,12 +46,12 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
 
     // TODO: Move these code blocks out of this component
     // TODO: Make this input component reusable
-    const StyledTextInput = styled.TextInput`
+    const StyledTextInput = styled(MyTextInput)`
         borderWidth: 1px;
         borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.grayBorder};
         paddingVertical: 25px;
         paddingHorizontal: 10px;
-    `;
+        `;
 
     const createRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
         <StyledTextInput
