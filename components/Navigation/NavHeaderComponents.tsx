@@ -14,7 +14,12 @@ import MyTextInput from "../Input/MyTextInput";
 import MyText from "../Text/MyText";
 import { theme } from "../../theme/theme";
 
-function createProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
+type ProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList> = {
+    navigation: StackNavigatorNavigationProp<PreviousScreen>;
+};
+const createProfileNavButton: FC<ProfileNavButton<keyof StackNavigatorParamList>> = (props) => {
+    const { navigation } = props;
+
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate(PROFILE_SCREEN_NAME)}
@@ -24,7 +29,12 @@ function createProfileNavButton<PreviousScreen extends keyof StackNavigatorParam
     );
 };
 
-function createActiveSliceNavButton<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
+type ActiveSliceNavButtonProps<PreviousScreen extends keyof StackNavigatorParamList> = {
+    navigation: StackNavigatorNavigationProp<PreviousScreen>;
+};
+const createActiveSliceNavButton: FC<ActiveSliceNavButtonProps<keyof StackNavigatorParamList>> = (props) => {
+    const { navigation } = props;
+
     const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
     
     return (
@@ -37,7 +47,12 @@ function createActiveSliceNavButton<PreviousScreen extends keyof StackNavigatorP
     );
 };
 
-function createActiveSliceNavInput<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
+type ActiveSliceNavInputProps<PreviousScreen extends keyof StackNavigatorParamList> = {
+    navigation: StackNavigatorNavigationProp<PreviousScreen>;
+};
+const createActiveSliceNavInput: FC<ActiveSliceNavInputProps<keyof StackNavigatorParamList>> = (props) => {
+    const { navigation } = props;
+
     const { activeSliceName, searchedSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
     const dispatch = useDispatch();
 
@@ -54,17 +69,30 @@ function createActiveSliceNavInput<PreviousScreen extends keyof StackNavigatorPa
     );
 };
 
-function createAddSliceNavButton<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
+type AddSliceNavButtonProps<PreviousScreen extends keyof StackNavigatorParamList> = {
+    navigation: StackNavigatorNavigationProp<PreviousScreen>;
+};
+const createAddSliceNavButton: FC<AddSliceNavButtonProps<keyof StackNavigatorParamList>> = (props) => {
+    const { navigation } = props;
+
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate(ADD_SLICE_SCREEN_NAME as keyof StackNavigatorParamList)}
+            onPress={() => navigation.navigate(
+                            ADD_SLICE_SCREEN_NAME as keyof StackNavigatorParamList,
+                            { inputSliceName: '???' })
+                    }
         >
             <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>+</MyText>
         </TouchableOpacity>
     );
 };
 
-function createAddSliceNavInput<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
+type AddSliceNavInputProps<PreviousScreen extends keyof StackNavigatorParamList> = {
+    navigation: StackNavigatorNavigationProp<PreviousScreen>;
+};
+const createAddSliceNavInput: FC<AddSliceNavInputProps<keyof StackNavigatorParamList>> = (props) => {
+    const { navigation } = props;
+
     const { sliceName, possibleOutputs, createdSignature } = useSelector((state: RootState) => ({ ...state.createSidewaysSlice }));
     const dispatch = useDispatch();
 
@@ -81,7 +109,12 @@ function createAddSliceNavInput<PreviousScreen extends keyof StackNavigatorParam
     );
 };
 
-function createSettingsNavButton<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
+type SettingsNavButtonProps<PreviousScreen extends keyof StackNavigatorParamList> = {
+    navigation: StackNavigatorNavigationProp<PreviousScreen>;
+};
+const createSettingsNavButton: FC<SettingsNavButtonProps<keyof StackNavigatorParamList>> = (props) => {
+    const { navigation } = props;
+
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate(SETTINGS_SCREEN_NAME)}
@@ -91,7 +124,12 @@ function createSettingsNavButton<PreviousScreen extends keyof StackNavigatorPara
     );
 };
 
-function createGoBackNavButton<PreviousScreen extends keyof StackNavigatorParamList>(navigation: StackNavigatorNavigationProp<PreviousScreen>) {
+type GoBackNavButtonProps<PreviousScreen extends keyof StackNavigatorParamList> = {
+    navigation: StackNavigatorNavigationProp<PreviousScreen>;
+};
+const createGoBackNavButton: FC<GoBackNavButtonProps<keyof StackNavigatorParamList>> = (props) => {
+    const { navigation } = props;
+
     return (
         <TouchableOpacity
             onPress={() => navigation.goBack()}
