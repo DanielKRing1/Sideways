@@ -12,8 +12,6 @@ import Todo from "../../../components/Dev/Todo";
 const ProfileScreen: FC<StackNavigatorProps<typeof PROFILE_SCREEN_NAME>> = ({ navigation }) =>
 (
     <View>
-          <Todo name='Helloffffooo!!'/>
-
         <Button
             title="<"
             onPress={() => navigation.navigate(TABS_SCREEN_NAME)}

@@ -53,9 +53,6 @@ const AppContent = () => {
         :
 
           <NavigationContainer>
-            <MyTextInput
-              placeholder={'fff'}
-            />
             <StackNavigator />
           </NavigationContainer>
 
