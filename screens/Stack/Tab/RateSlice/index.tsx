@@ -8,10 +8,11 @@ import { GrowingList } from '../../../../components/Input/GrowingInputList';
 import MyTextInput from '../../../../components/Input/MyTextInput';
 import { TabNavHeader } from '../../../../components/Navigation/NavHeader';
 import MyText from '../../../../components/Text/MyText';
+import { useCounterId } from '../../../../hooks/useCounterId';
 
 // REDUX
 import { RootState } from '../../../../redux';
-import { addInput, setInputs, setOutputs, startRate, forceSignatureRerender } from '../../../../redux/rateSidewaysSlice';
+import { addInput, setInputs, setOutputs, startRate, forceSignatureRerender, RateInput } from '../../../../redux/rateSidewaysSlice';
 
 const StyledTextInput = styled(MyTextInput)`
     borderWidth: 1px;
@@ -38,12 +39,16 @@ const RateSliceScreen: FC<RateSliceScreenProps> = (props) => {
     const { ratedSignature, inputs, outputs, rating } = useSelector((state: RootState) => state.rateSidewaysSlice);
     const dispatch = useDispatch();
 
+    // ID GENERATOR
+    // Start id generator with current max id or 0
+    const { peekId, popId } = useCounterId(inputs.reduce((maxId: number, curVal: RateInput) => Math.max(maxId, curVal.id), 0));
+
     // HANDLER METHODS
-    const handleAddInput = (newPossibleInput: string) => {
-        dispatch(addInput(newPossibleInput));
+    const handleAddInput = (newInputOption: string) => {
+        dispatch(addInput({ id: popId(), text: newInputOption }));
     };
     const handleUpdateText = (newText: string, index: number) => {
-        inputs[index] = newText;
+        inputs[index].text = newText;
         // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
         dispatch(setInputs(inputs));
     }
@@ -63,11 +68,11 @@ const RateSliceScreen: FC<RateSliceScreenProps> = (props) => {
                 <GrowingList
                     data={inputs}
                     createRenderItemComponent={createRenderItemComponent}
-                    keyExtractor={(dataPoint: string) => ''}
-                    genNextDataPlaceholder={() => ''}
+                    keyExtractor={(dataPoint: RateInput) => `${dataPoint.id}`}
+                    genNextDataPlaceholder={() => ({ id: peekId(), text: '' })}
                     handleUpdateText={handleUpdateText}
                     handleAddInput={handleAddInput}
-                    />
+                />
                 
             </FlexCol>
         </View>
