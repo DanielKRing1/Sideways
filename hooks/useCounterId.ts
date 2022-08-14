@@ -12,16 +12,21 @@ export const useCounterId = (startingId: number = 0) => {
 
     const peekId = () => curId;
 
-    const undoPop = () => {
-        setCurId(curId-1);
+    const undoPop = (count: number = 1) => {
+        setCurId(curId-count);
     }
 
-    const reset = () => setCurId(startingId);
+    const setId = (value: number) => {
+        setCurId(value);
+    }
+
+    const reset = () => setId(startingId);
 
     return {
         popId,
         peekId,
         undoPop,
+        setId,
         reset,
     }
 };
