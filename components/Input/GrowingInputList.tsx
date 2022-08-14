@@ -26,7 +26,8 @@ export const GrowingList: FC<GrowingListProps> = (props) => {
     }
 
     // Memoize
-    const renderItem = useMemo(() => createRenderItemComponent(handleChangeText), []);
+    const renderItem = useMemo(() => createRenderItemComponent(handleChangeText), [data]);
+    // const renderItem = createRenderItemComponent(handleChangeText);
 
     // Add placeholder
     const grownData = [...data, genNextDataPlaceholder()];
