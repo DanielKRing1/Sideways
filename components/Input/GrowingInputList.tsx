@@ -1,23 +1,23 @@
 import React, { FC, useMemo } from 'react';
 import { FlatList } from 'react-native';
 
-type GrowingListProps = {
+export type GrowingListProps = {
     data: any[];
     keyExtractor: (dataPoint: any) => string;
     createRenderItemComponent: (handleChangeText: (newText: string, index: number) => void) => FC<any>;
 
     genNextDataPlaceholder: () => any;
-    handleUpdateText: (newText: string, index: number) => void;
+    handleUpdateInput: (newText: string, index: number) => void;
     handleAddInput: (newText: string) => void;
 };
 export const GrowingList: FC<GrowingListProps> = (props) => {
-    const { data, createRenderItemComponent, keyExtractor, genNextDataPlaceholder, handleUpdateText, handleAddInput } = props;
+    const { data, createRenderItemComponent, keyExtractor, genNextDataPlaceholder, handleUpdateInput, handleAddInput } = props;
 
     const [ , forceUpdate ] = React.useState<Object>({});
 
     const handleChangeText = (newText: string, index: number) => {
         if (index < data.length) {
-            handleUpdateText(newText, index);
+            handleUpdateInput(newText, index);
         } else {
             handleAddInput(newText);
         }
