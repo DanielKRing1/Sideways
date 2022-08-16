@@ -51,7 +51,7 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
     const handleAddInput = (newPossibleInput: string) => {
         dispatch(addPossibleOutput(newPossibleInput));
     };
-    const handleUpdateText = (newText: string, index: number) => {
+    const handleUpdateInput = (newText: string, index: number) => {
         possibleOutputs[index] = newText;
         // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
         dispatch(setPossibleOutputs(possibleOutputs));
@@ -73,7 +73,7 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
                 createRenderItemComponent={createRenderItemComponent}
                 keyExtractor={(dataPoint: string) => ''}
                 genNextDataPlaceholder={() => ''}
-                handleUpdateText={handleUpdateText}
+                handleUpdateInput={handleUpdateInput}
                 handleAddInput={handleAddInput}
             />
         </View>

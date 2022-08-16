@@ -38,7 +38,7 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
     const handleAddInput = (newInputNodeId: string) => {
         dispatch(addRecommendationInputNodeId(newInputNodeId));
     };
-    const handleUpdateText = (newText: string, index: number) => {
+    const handleUpdateInput = (newText: string, index: number) => {
         recommendationsInputNodeIds[index] = newText;
         // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
         dispatch(setRecommendationInputNodeIds(recommendationsInputNodeIds));
@@ -69,7 +69,7 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
                 createRenderItemComponent={createRenderItemComponent}
                 keyExtractor={(dataPoint: string) => ''}
                 genNextDataPlaceholder={() => ''}
-                handleUpdateText={handleUpdateText}
+                handleUpdateInput={handleUpdateInput}
                 handleAddInput={handleAddInput}
             />
 

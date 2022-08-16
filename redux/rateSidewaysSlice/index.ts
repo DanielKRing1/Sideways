@@ -7,7 +7,7 @@ import { ThunkConfig } from '../types';
 export type RateInput = { text: string, id: number };
 export interface RateSSState {
   inputs: RateInput[];
-  outputs: string[];
+  outputs: RateInput[];
   rating: number;
 
   ratedSignature: {};
@@ -27,7 +27,7 @@ type RateSSThunkArgs = {
   sliceName: string;
 
   inputs: RateInput[];
-  outputs: string[];
+  outputs: RateInput[];
   rating: number;
 };
 
@@ -48,12 +48,11 @@ export const startRate = createAsyncThunk<
     
     // 2. Rate Graph
     const inputTexts: string[] = inputs.map((input: RateInput) => input.text);
-    for(const outputText of outputs) {
-      DbDriver.rateGraph(sliceName, outputText, inputTexts, rating, new Array(inputs.length).fill(1));
+    for(const output of outputs) {
+      DbDriver.rateGraph(sliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1));
     }
 
     thunkAPI.dispatch(forceSignatureRerender());
-    
 
     return true;
   }
@@ -66,7 +65,9 @@ type SetRatingAction = PayloadAction<number>;
 type SetInputsAction = PayloadAction<RateInput[]>;
 type AddInputAction = PayloadAction<RateInput>;
 type RmInputAction = PayloadAction<number>;
-type SetOutputAction = PayloadAction<string[]>;
+type SetOutputAction = PayloadAction<RateInput[]>;
+type AddOutputAction = PayloadAction<RateInput>;
+type RmOutputAction = PayloadAction<number>;
 type StartRateSSFulfilled = PayloadAction<boolean>;
 
 // SLICE
@@ -89,6 +90,12 @@ export const rateSS = createSlice({
     },
     setOutputs: (state: RateSSState, action: SetOutputAction) => {
       state.outputs = action.payload;
+    },
+    addOutput: (state: RateSSState, action: AddOutputAction) => {
+      state.outputs = [ ...state.outputs, action.payload ];
+    },
+    removeOutput: (state: RateSSState, action: RmOutputAction) => {
+      state.outputs = [ ...state.outputs.splice(action.payload, 1) ];
     },
     forceSignatureRerender: (state: RateSSState, action: ForceRatingsRerenderAction) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -116,6 +123,6 @@ export const rateSS = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { forceSignatureRerender, setRating, setInputs, addInput, removeInput, setOutputs } = rateSS.actions;
+export const { forceSignatureRerender, setRating, setInputs, addInput, removeInput, setOutputs, addOutput, removeOutput } = rateSS.actions;
 
 export default rateSS.reducer;
