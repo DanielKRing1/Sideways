@@ -5,12 +5,14 @@ import styled from 'styled-components/native';
 type TempProps = {
 
 };
-const TempScreen: FC<TempProps> = (props) => {
+const Temp: FC<TempProps> = (props) => {
 
 
     return (
         <View>
 
         </View>
-    )
+    );
 }
+
+export default Temp;
