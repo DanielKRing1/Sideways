@@ -340,7 +340,7 @@
 
 "@babel/plugin-proposal-export-namespace-from@^7.17.12":
   version "7.18.9"
-  resolved "https://registry.npmjs.org/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.18.9.tgz"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.18.9.tgz#5f7313ab348cdb19d590145f9247540e94761203"
   integrity sha512-k1NtHyOMvlDDFeb9G5PhUXuGj8m/wiwojgQVEhJ/fsVsMCpLyOP4h0uGEjYJKrRI+EVPlb5Jk+Gt9P97lOGwtA==
   dependencies:
     "@babel/helper-plugin-utils" "^7.18.9"
@@ -419,7 +419,7 @@
 
 "@babel/plugin-syntax-export-namespace-from@^7.8.3":
   version "7.8.3"
-  resolved "https://registry.npmjs.org/@babel/plugin-syntax-export-namespace-from/-/plugin-syntax-export-namespace-from-7.8.3.tgz"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-export-namespace-from/-/plugin-syntax-export-namespace-from-7.8.3.tgz#028964a9ba80dbc094c915c487ad7c4e7a66465a"
   integrity sha512-MXf5laXo6c1IbEbegDmzGPwGNTsHZmEy6QGznu5Sh2UCWvueywb2ee+CCE4zQiZstxU9BMoQO9i6zUFSY0Kj0Q==
   dependencies:
     "@babel/helper-plugin-utils" "^7.8.3"
@@ -632,7 +632,7 @@
 
 "@babel/plugin-transform-object-assign@^7.16.7":
   version "7.18.6"
-  resolved "https://registry.npmjs.org/@babel/plugin-transform-object-assign/-/plugin-transform-object-assign-7.18.6.tgz"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-assign/-/plugin-transform-object-assign-7.18.6.tgz#7830b4b6f83e1374a5afb9f6111bcfaea872cdd2"
   integrity sha512-mQisZ3JfqWh2gVXvfqYCAAyRs6+7oev+myBsTwW5RnPhYXOTuCEw2oe3YgxlXMViXUS53lG8koulI7mJ+8JE+A==
   dependencies:
     "@babel/helper-plugin-utils" "^7.18.6"
@@ -1550,7 +1550,7 @@
 
 "@types/invariant@^2.2.35":
   version "2.2.35"
-  resolved "https://registry.npmjs.org/@types/invariant/-/invariant-2.2.35.tgz"
+  resolved "https://registry.yarnpkg.com/@types/invariant/-/invariant-2.2.35.tgz#cd3ebf581a6557452735688d8daba6cf0bd5a3be"
   integrity sha512-DxX1V9P8zdJPYQat1gHyY0xj3efl8gnMVjiM9iCY6y27lj+PoQWkgjt8jDqmovPqULkKVpKRg8J36iQiA+EtEg==
 
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
@@ -5305,7 +5305,7 @@ lodash.debounce@^4.0.8:
 
 lodash.isequal@^4.5.0:
   version "4.5.0"
-  resolved "https://registry.npmjs.org/lodash.isequal/-/lodash.isequal-4.5.0.tgz"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
   integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
 
 lodash.merge@^4.6.2:
@@ -6593,7 +6593,7 @@ react-native-paper@^4.12.4:
 
 react-native-reanimated@^2.9.1:
   version "2.9.1"
-  resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.9.1.tgz#d9a932e312c13c05b4f919e43ebbf76d996e0bc1"
   integrity sha512-309SIhDBwY4F1n6e5Mr5D1uPZm2ESIcmZsGXHUu8hpKX4oIOlZj2MilTk+kHhi05LjChoJkcpfkstotCJmPRPg==
   dependencies:
     "@babel/plugin-proposal-export-namespace-from" "^7.17.12"
@@ -6769,9 +6769,35 @@ realm-network-transport@^0.7.2:
     abort-controller "^3.0.0"
     node-fetch "^2.6.0"
 
-realm@^10.13.0, realm@^10.19.5:
+realm@^10.13.0:
   version "10.19.5"
   resolved "https://registry.npmjs.org/realm/-/realm-10.19.5.tgz"
+  integrity sha512-JUJEgV7liaqt+xxY+H1PkeAcsHWAiFitUjmMV5i2BRxfvqyHG8Ey5cX3XBGBB7gWTKYmLZ/zIH+Yu0B3HUwhlA==
+  dependencies:
+    "@realm.io/common" "^0.1.4"
+    bindings "^1.5.0"
+    bson "4.4.1"
+    clang-format "^1.6.0"
+    command-line-args "^5.1.1"
+    deepmerge "2.1.0"
+    fs-extra "^4.0.3"
+    ini "^1.3.7"
+    node-addon-api "4.2.0"
+    node-fetch "^3.2.6"
+    node-machine-id "^1.1.10"
+    prebuild-install "^7.0.1"
+    progress "^2.0.3"
+    prop-types "^15.6.2"
+    realm-network-transport "^0.7.2"
+    request "^2.88.0"
+    stream-counter "^1.0.0"
+    sync-request "^3.0.1"
+    tar "^6.0.1"
+    url-parse "^1.4.4"
+
+realm@^10.19.5:
+  version "10.19.5"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-10.19.5.tgz#1caeb4d20f2f9367f1d558f8f24732ed9749d2ca"
   integrity sha512-JUJEgV7liaqt+xxY+H1PkeAcsHWAiFitUjmMV5i2BRxfvqyHG8Ey5cX3XBGBB7gWTKYmLZ/zIH+Yu0B3HUwhlA==
   dependencies:
     "@realm.io/common" "^0.1.4"
@@ -7244,7 +7270,7 @@ set-value@^2.0.0, set-value@^2.0.1:
 
 setimmediate@^1.0.5:
   version "1.0.5"
-  resolved "https://registry.npmjs.org/setimmediate/-/setimmediate-1.0.5.tgz"
+  resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
   integrity sha512-MATJdZp8sLqDl/68LfQmbP8zKPLQNV6BIZoIgrscFDQ+RsvK/BxeDQOgyxKKoh0y/8h3BqVFnCqQ/gd+reiIXA==
 
 setprototypeof@1.2.0:
@@ -7550,7 +7576,7 @@ strict-uri-encode@^2.0.0:
 
 string-hash-64@^1.0.3:
   version "1.0.3"
-  resolved "https://registry.npmjs.org/string-hash-64/-/string-hash-64-1.0.3.tgz"
+  resolved "https://registry.yarnpkg.com/string-hash-64/-/string-hash-64-1.0.3.tgz#0deb56df58678640db5c479ccbbb597aaa0de322"
   integrity sha512-D5OKWKvDhyVWWn2x5Y9b+37NUllks34q1dCDhk/vYcso9fmhs+Tl3KR/gE4v5UNj2UA35cnX4KdVVGkG1deKqw==
 
 string-length@^4.0.1:

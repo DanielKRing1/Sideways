@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+// import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 // REDUX
 import { RootState } from '../../../../../redux';
@@ -11,45 +11,54 @@ import { setRating } from '../../../../../redux/rateSidewaysSlice'
 // COMPONENTS
 import Slider from '../../../../../components/Input/Slider';
 import MyText from '../../../../../components/Text/MyText';
+import MyTextInput from '../../../../../components/Input/MyTextInput';
 
 const SLIDER_WIDTH: number = 40;
 
-const createSliderButton = (isPressed: Animated.SharedValue<boolean>, offsetX: Animated.SharedValue<number>): React.FC<Animated.AnimateProps<any>> => (props) => {
-    const { style: animatedSliderStyles } = props;
+// const createSliderButton = (isPressed: Animated.SharedValue<boolean>, offsetX: Animated.SharedValue<number>): React.FC<Animated.AnimateProps<any>> => (props) => {
+//     const { style: animatedSliderStyles } = props;
 
-    const animatedStyles = useAnimatedStyle(() => ({
-        transform: [
-            { translateX: offsetX.value },
-            { scale: withSpring(isPressed.value ? 1.2 : 1) },
-        ],
-        backgroundColor: isPressed.value ? 'yellow' : 'blue',
-    }));
+//     const animatedStyles = useAnimatedStyle(() => ({
+//         transform: [
+//             { translateX: offsetX.value },
+//             { scale: withSpring(isPressed.value ? 1.2 : 1) },
+//         ],
+//         backgroundColor: isPressed.value ? 'yellow' : 'blue',
+//     }));
 
-    return (
-        <Animated.View style={[styles.slider, animatedStyles, animatedSliderStyles]} />
-    );
-}
+//     return (
+//         <Animated.View style={[styles.slider, animatedStyles, animatedSliderStyles]} />
+//     );
+// }
 
 type RatingSliderProps = {
 
 };
 const RatingSlider: React.FC<RatingSliderProps> = (props) => {
-    const isPressed = useSharedValue(false);
-    const offsetX = useSharedValue(0);
+    // const isPressed = useSharedValue(false);
+    // const offsetX = useSharedValue(0);
 
     const { rating, ratedSignature } = useSelector((state: RootState) => ({ ...state.rateSidewaysSlice }));
     const dispatch = useDispatch();
 
-    const onChangeValue = (newValue: number) => {
-        console.log(`New value: ${newValue}`);
-        dispatch(setRating(newValue));
+    const onChangeValue = (newText: string) => {
+        const newNum: number = parseInt(newText);
+
+        console.log(`New value: ${newNum}`);
+        dispatch(setRating(newNum));
     };
 
     return (
         <View>
-            <MyText>Rating: {rating}</MyText>
+            <MyTextInput
+                keyboardType='numeric'
+                placeholder='Temp rating input...'
+                value={`${rating}`}
+                onChangeText={onChangeValue}
+            />
+            {/* <MyText>Rating: {rating}</MyText> */}
 
-            <Slider
+            {/* <Slider
                 sliderWidth={SLIDER_WIDTH}
                 createSliderButton={createSliderButton}
 
@@ -60,8 +69,8 @@ const RatingSlider: React.FC<RatingSliderProps> = (props) => {
                 minValue={1}
                 maxValue={10}
                 step={1}
-            />
-            <Animated.Text>{offsetX.value}</Animated.Text>
+            /> */}
+            {/* <Animated.Text>{offsetX.value}</Animated.Text> */}
         </View>
     );
 }

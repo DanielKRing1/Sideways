@@ -15,6 +15,7 @@ import { RootState } from '../../../../redux';
 import { addInput, setInputs, setOutputs, startRate, forceSignatureRerender, RateInput } from '../../../../redux/rateSidewaysSlice';
 import GrowingInputsList from './components/GrowingInputsList';
 import GrowingOutputsList from './components/GrowingOutputsList';
+import RatingSlider from './components/RatingSlider';
 
 type RateSliceScreenProps = {
 
@@ -43,13 +44,13 @@ const RateSliceScreen: FC<RateSliceScreenProps> = (props) => {
                 <TabNavHeader/>
 
 
-                <Todo name='Inputs growing input'/>
-                <Todo name='Output input'/>
                 <Todo name='Rating input'/>
 
                 <GrowingInputsList/>
 
                 <GrowingOutputsList/>
+
+                <RatingSlider/>
                 
                 <Button
                     title="Rate .u."
