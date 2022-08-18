@@ -52,6 +52,8 @@ export const startRate = createAsyncThunk<
       DbDriver.rateGraph(sliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1));
     }
 
+    thunkAPI.dispatch(setRating(0));
+    thunkAPI.dispatch(setOutputs([]));
     thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
