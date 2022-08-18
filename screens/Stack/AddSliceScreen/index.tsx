@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
@@ -41,11 +41,14 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
     const { inputSliceName } = route.params;
 
     // REDUX
+    const { searchedSliceName } = useSelector((state: RootState) => state.readSidewaysSlice.toplevelReadReducer);
     const { createdSignature, possibleOutputs, sliceName } = useSelector((state: RootState) => state.createSidewaysSlice);
     const dispatch = useDispatch();
 
-    // STATE
-    const [ newSliceName, setNewSliceName ] = useState<string>(inputSliceName);
+    // UPDATE REDUX STATE
+    useEffect(() => {
+        dispatch(setSliceName(searchedSliceName));
+    }, []);
 
     // HANDLER METHODS
     const handleAddInput = (newPossibleInput: string) => {
@@ -60,12 +63,6 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
     return (
         <View>
             <AddSliceNavHeader/>
-
-            <MyTextInput
-                placeholder={'Add a Slice...'}
-                value={newSliceName}
-                onChangeText={setNewSliceName}
-            />
 
             <Todo name='Possible outputs growing input'/>
             <GrowingList

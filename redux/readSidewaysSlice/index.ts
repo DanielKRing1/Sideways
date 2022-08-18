@@ -35,6 +35,7 @@ export const readSS = createSlice({
   reducers: {
     setActiveSliceName: (state: ReadSSState, action: SetActiveSliceAction) => {
       state.activeSliceName = action.payload;
+      state.searchedSliceName = '';
     },
     setSearchedSliceName: (state: ReadSSState, action: SetSearchedSliceAction) => {
       state.searchedSliceName = action.payload;
