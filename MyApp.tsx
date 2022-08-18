@@ -28,13 +28,17 @@ const NewApp = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <ReduxProvider store={store}>
-        <DbLoaderProvider>
+        <GestureHandlerRootView style={{flex: 1}}>
 
-          <GestureHandlerRootView style={{flex: 1}}>
-            <AppContent />
+          <MyThemeProvider>
+            <NavigationContainer>
+              
+                <AppContent />
+
+            </NavigationContainer>
+          </MyThemeProvider>
+          
           </GestureHandlerRootView>
-
-        </DbLoaderProvider>
       </ReduxProvider>
     </SafeAreaView>
   );
@@ -46,17 +50,10 @@ const AppContent = () => {
   const { isLoaded } = useContext(DbLoaderContext);
 
   return (
-    <MyThemeProvider>
-    {
-      !isLoaded ?
-        <MyText>Loading...</MyText>
-        :
+    <DbLoaderProvider>
 
-          <NavigationContainer>
-            <StackNavigator />
-          </NavigationContainer>
-
-    }
-    </MyThemeProvider>
+      <StackNavigator />
+      
+    </DbLoaderProvider>
   );
 };

@@ -1,4 +1,5 @@
 import React, { createContext, FC, useEffect, useState } from "react";
+import MyText from "../components/Text/MyText";
 import dbDriver from "../database/dbDriver";
 
 // CONTEXT
@@ -33,7 +34,12 @@ const DbLoaderProvider: FC<DbLoaderProviderType> = (props) => {
 
     return (
         <DbLoaderContext.Provider style={{flex: 1}} value={{ isLoaded, load }}>
-            {children}
+        {
+            !isLoaded ?
+                <MyText>Loading...</MyText>
+                :
+            children
+        }
         </DbLoaderContext.Provider>
     );
 };
