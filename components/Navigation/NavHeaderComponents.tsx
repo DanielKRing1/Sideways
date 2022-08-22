@@ -10,8 +10,8 @@ import { PROFILE_SCREEN_NAME, ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME, S
 import { StackNavigatorNavigationProp, StackNavigatorParamList } from "../../navigation/StackNavigator";
 import { setSliceName } from "../../redux/createSidewaysSlice";
 import { setSearchedSliceName } from "../../redux/readSidewaysSlice";
-import MyTextInput from "../Input/MyTextInput";
-import MyText from "../Text/MyText";
+import MyTextInput from "../ReactNative/MyTextInput";
+import MyText from "../ReactNative/MyText";
 import { theme } from "../../theme/theme";
 
 type ProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList> = {

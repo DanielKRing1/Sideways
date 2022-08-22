@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
 import { GrowingList } from '../../../../../components/Input/GrowingInputList';
-import MyTextInput from '../../../../../components/Input/MyTextInput';
+import MyTextInput from '../../../../../components/ReactNative/MyTextInput';
 
 // DB DRIVER
 import { DbLoaderContext } from '../../../../../contexts/DbLoader';

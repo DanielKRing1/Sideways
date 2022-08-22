@@ -21,8 +21,8 @@ import StackNavigator from './navigation/StackNavigator';
 
 import { DbLoaderContext, DbLoaderProvider } from './contexts/DbLoader';
 import MyThemeProvider from './theme/ThemeProvider';
-import MyTextInput from './components/Input/MyTextInput';
-import MyText from './components/Text/MyText';
+import MyTextInput from './components/ReactNative/MyTextInput';
+import MyText from './components/ReactNative/MyText';
 import RequireActiveSlice from './components/TopLevel/RequireActiveSlice';
 
 const NewApp = () => {

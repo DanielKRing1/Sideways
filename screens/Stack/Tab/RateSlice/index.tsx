@@ -5,9 +5,9 @@ import styled, { DefaultTheme } from 'styled-components/native';
 import Todo from '../../../../components/Dev/Todo';
 import FlexCol from '../../../../components/Flex/FlexCol';
 import { GrowingList } from '../../../../components/Input/GrowingInputList';
-import MyTextInput from '../../../../components/Input/MyTextInput';
+import MyTextInput from '../../../../components/ReactNative/MyTextInput';
 import { TabNavHeader } from '../../../../components/Navigation/NavHeader';
-import MyText from '../../../../components/Text/MyText';
+import MyText from '../../../../components/ReactNative/MyText';
 import { useCounterId } from '../../../../hooks/useCounterId';
 
 // REDUX

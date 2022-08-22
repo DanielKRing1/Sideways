@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/native';
 import FlexRow from '../Flex/FlexRow';
-import MyText from '../Text/MyText';
+import MyText from '../ReactNative/MyText';
 
 type TodoProps = {
     children?: React.ReactNode;

@@ -1,5 +1,5 @@
 import React, { createContext, FC, useEffect, useState } from "react";
-import MyText from "../components/Text/MyText";
+import MyText from "../components/ReactNative/MyText";
 import dbDriver from "../database/dbDriver";
 
 // CONTEXT

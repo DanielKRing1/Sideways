@@ -4,8 +4,8 @@ import styled from 'styled-components/native';
 import { useOnClickOutsideComponent } from 'rn-click-listener';
 
 import { FlexCol, FlexRow } from '../Flex';
-import MyTextInput from '../Input/MyTextInput';
-import MyText from '../Text/MyText';
+import MyTextInput from '../ReactNative/MyTextInput';
+import MyText from '../ReactNative/MyText';
 
 type SearchableDropdownProps = {
     placeholder: string;

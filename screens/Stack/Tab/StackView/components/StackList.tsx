@@ -13,7 +13,7 @@ import { RootState } from '../../../../../redux';
 // COMPONENTS
 import { FlexRow } from '../../../../../components/Flex';
 import { SearchableFlatList } from '../../../../../components/Search/SearchableFlatList';
-import MyText from '../../../../../components/Text/MyText';
+import MyText from '../../../../../components/ReactNative/MyText';
 
 type StackCardProps = {
     item: StackSnapshotRow;

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
 import FlexCol from '../../../../../components/Flex/FlexCol';
 import GrowingIdList from '../../../../../components/Input/GrowingIdList';
-import MyTextInput from '../../../../../components/Input/MyTextInput';
-import MyText from '../../../../../components/Text/MyText';
+import MyTextInput from '../../../../../components/ReactNative/MyTextInput';
+import MyText from '../../../../../components/ReactNative/MyText';
 
 // REDUX
 import { RootState } from '../../../../../redux';

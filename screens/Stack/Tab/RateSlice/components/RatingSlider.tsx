@@ -10,8 +10,8 @@ import { setRating } from '../../../../../redux/rateSidewaysSlice'
 
 // COMPONENTS
 import Slider from '../../../../../components/Input/Slider';
-import MyText from '../../../../../components/Text/MyText';
-import MyTextInput from '../../../../../components/Input/MyTextInput';
+import MyText from '../../../../../components/ReactNative/MyText';
+import MyTextInput from '../../../../../components/ReactNative/MyTextInput';
 
 const SLIDER_WIDTH: number = 40;
 

@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { Button, Text, TouchableOpacity } from 'react-native'
 import DatePicker from 'react-native-date-picker'
-import MyText from '../Text/MyText';
+import MyText from '../ReactNative/MyText';
 
 type MyDatePickerProps = {
     buttonText: string;

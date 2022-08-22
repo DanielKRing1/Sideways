@@ -17,7 +17,7 @@ import { GrowingList } from '../../../components/Input/GrowingInputList';
 
 // NAV
 import { AddSliceNavHeader } from '../../../components/Navigation/NavHeader';
-import MyTextInput from '../../../components/Input/MyTextInput';
+import MyTextInput from '../../../components/ReactNative/MyTextInput';
 
 // Possible outputs
 

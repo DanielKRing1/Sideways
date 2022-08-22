@@ -16,7 +16,7 @@ import { FlexRow } from '../../../../components/Flex';
 
 // UTILS
 import { abbrDate } from '../../../../utils/date';
-import MyText from '../../../../components/Text/MyText';
+import MyText from '../../../../components/ReactNative/MyText';
 
 type ExistingSliceCardProps = {
     item: ExistingSlice;
