@@ -23,6 +23,7 @@ import { DbLoaderContext, DbLoaderProvider } from './contexts/DbLoader';
 import MyThemeProvider from './theme/ThemeProvider';
 import MyTextInput from './components/Input/MyTextInput';
 import MyText from './components/Text/MyText';
+import RequireActiveSlice from './components/TopLevel/RequireActiveSlice';
 
 const NewApp = () => {
   return (
@@ -51,9 +52,11 @@ const AppContent = () => {
 
   return (
     <DbLoaderProvider>
+      <RequireActiveSlice>
 
-      <StackNavigator />
-      
+        <StackNavigator />
+
+      </RequireActiveSlice>
     </DbLoaderProvider>
   );
 };
