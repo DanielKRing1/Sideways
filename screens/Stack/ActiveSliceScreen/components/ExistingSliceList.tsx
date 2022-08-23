@@ -28,7 +28,7 @@ const createExistingSliceCard = (onSelectSlice: (sliceName: string) => void): FC
     return (
         <TouchableOpacity onPress={() => onSelectSlice(item.sliceName)}>
             <FlexRow>
-                <MyText>{abbrDate(item.lastLogged)}</MyText>
+                <MyText>{abbrDate(item.lastLogged).toString()}</MyText>
                 <MyText>{item.sliceName}</MyText>
             </FlexRow>
         </TouchableOpacity>
