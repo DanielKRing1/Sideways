@@ -11,6 +11,7 @@ declare module 'styled-components' {
             grayBorder: string;
 
             pastelPurple: string;
+            darkRed: string;
         };
         fonts: {
             main: string;
