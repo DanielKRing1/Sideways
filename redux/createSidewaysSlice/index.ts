@@ -6,14 +6,14 @@ import { ThunkConfig } from '../types';
 // INITIAL STATE
 
 export interface CreateSSState {
-  sliceName: string;
+  newSliceName: string;
   possibleOutputs: string[],
 
   createdSignature: {},
 };
 
 const initialState: CreateSSState = {
-  sliceName: '',
+  newSliceName: '',
   possibleOutputs: [],
 
   createdSignature: {},
@@ -22,23 +22,23 @@ const initialState: CreateSSState = {
 // ASYNC THUNKS
 
 type CreateSSThunkArgs = {
-  sliceName: string,
+  newSliceName: string,
   possibleOutputs: string[],
 };
 
-export const startCreate = createAsyncThunk<
+export const startCreateSlice = createAsyncThunk<
   boolean,
   CreateSSThunkArgs,
   ThunkConfig<CreateSSState>
 >(
-  'createSS/startCreate',
-  async ({ sliceName, possibleOutputs }: CreateSSThunkArgs, thunkAPI) => {
+  'createSS/startCreateSlice',
+  async ({ newSliceName, possibleOutputs }: CreateSSThunkArgs, thunkAPI) => {
 
     // 1. Create Stack
-    const stackPromise = DbDriver.createStack(sliceName);
+    const stackPromise = DbDriver.createStack(newSliceName);
     
     // 2. Create Graph
-    const graphPromise = DbDriver.createGraph(sliceName, possibleOutputs);
+    const graphPromise = DbDriver.createGraph(newSliceName, possibleOutputs);
 
     await Promise.all([ stackPromise, graphPromise ]);
 
@@ -51,7 +51,7 @@ export const startCreate = createAsyncThunk<
 // ACTION TYPES
 
 type ForceSSRerenderAction = PayloadAction<undefined>;
-type SetSliceNameAction = PayloadAction<string>;
+type SetnewSliceNameAction = PayloadAction<string>;
 type SetPossibleOutputsAction = PayloadAction<string[]>;
 type AddPossibleOutputAction = PayloadAction<string>;
 type RmPossibleOutputAction = PayloadAction<number>;
@@ -63,8 +63,8 @@ export const createSS = createSlice({
   name: 'createSS',
   initialState,
   reducers: {
-    setSliceName: (state: CreateSSState, action: SetSliceNameAction) => {
-      state.sliceName = action.payload;
+    setNewSliceName: (state: CreateSSState, action: SetnewSliceNameAction) => {
+      state.newSliceName = action.payload;
     },
     setPossibleOutputs: (state: CreateSSState, action: SetPossibleOutputsAction) => {
       state.possibleOutputs = action.payload;
@@ -87,19 +87,19 @@ export const createSS = createSlice({
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(startCreate.fulfilled, (state, action: StartCreateSSFulfilled) => {
+    builder.addCase(startCreateSlice.fulfilled, (state, action: StartCreateSSFulfilled) => {
       // Add user to the state array
 
       state.createdSignature = {};
       
     });
-    builder.addCase(startCreate.rejected, (state, action) => {
+    builder.addCase(startCreateSlice.rejected, (state, action) => {
         console.log(action.error.message);
     });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSliceName, setPossibleOutputs, addPossibleOutput, removePossibleOutput, forceSignatureRerender } = createSS.actions;
+export const { setNewSliceName, setPossibleOutputs, addPossibleOutput, removePossibleOutput, forceSignatureRerender } = createSS.actions;
 
 export default createSS.reducer;

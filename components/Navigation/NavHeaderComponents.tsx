@@ -8,7 +8,7 @@ import { RootState } from "../../redux";
 // NAVIGATION
 import { PROFILE_SCREEN_NAME, ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME, SETTINGS_SCREEN_NAME } from "../../navigation/constants";
 import { StackNavigatorNavigationProp, StackNavigatorParamList } from "../../navigation/StackNavigator";
-import { setSliceName } from "../../redux/createSidewaysSlice";
+import { setNewSliceName } from "../../redux/createSidewaysSlice";
 import { setSearchedSliceName } from "../../redux/readSidewaysSlice";
 import MyTextInput from "../ReactNative/MyTextInput";
 import MyText from "../ReactNative/MyText";
@@ -94,17 +94,17 @@ type AddSliceNavInputProps<PreviousScreen extends keyof StackNavigatorParamList>
 const createAddSliceNavInput: FC<AddSliceNavInputProps<keyof StackNavigatorParamList>> = (props) => {
     const { navigation } = props;
 
-    const { sliceName, possibleOutputs, createdSignature } = useSelector((state: RootState) => ({ ...state.createSidewaysSlice }));
+    const { newSliceName, possibleOutputs, createdSignature } = useSelector((state: RootState) => ({ ...state.createSidewaysSlice }));
     const dispatch = useDispatch();
 
     const handleChangeText = (newText: string) => {
-        dispatch(setSliceName);
+        dispatch(setNewSliceName);
     };
 
     return (
         <MyTextInput
             placeholder='New Slice name...'
-            value={sliceName}
+            value={newSliceName}
             onChangeText={handleChangeText}
         />
     );
