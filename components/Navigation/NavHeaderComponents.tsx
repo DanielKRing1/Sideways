@@ -13,6 +13,7 @@ import { setSearchedSliceName } from "../../redux/readSidewaysSlice";
 import MyTextInput from "../ReactNative/MyTextInput";
 import MyText from "../ReactNative/MyText";
 import { theme } from "../../theme/theme";
+import BackButton from "../../navigation/components/Buttons/BackButton";
 
 type ProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList> = {
     navigation: StackNavigatorNavigationProp<PreviousScreen>;
@@ -131,11 +132,9 @@ const createGoBackNavButton: FC<GoBackNavButtonProps<keyof StackNavigatorParamLi
     const { navigation } = props;
 
     return (
-        <TouchableOpacity
+        <BackButton
             onPress={() => navigation.goBack()}
-        >
-            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{'<'}</MyText>
-        </TouchableOpacity>
+        />
     );
 };
 

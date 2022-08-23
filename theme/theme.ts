@@ -10,6 +10,7 @@ export const theme: DefaultTheme = {
         grayBorder: 'lightgray',
 
         pastelPurple: '#b19cd9',
+        darkRed: '#900',
     },
     fonts: {
         main: "sans-serif",

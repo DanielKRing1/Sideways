@@ -1,24 +1,31 @@
 import React, { FC } from 'react';
-import { TextProps } from 'react-native';
+import { ButtonProps } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import { Dict } from '../../global';
 import { theme } from '../../theme/theme';
 
-type MyButtonProps = {
+export type MyButtonProps = {
+    children?: React.ReactNode;
     style?: Dict<number | string>;
-} & TextProps;
+} & Omit<ButtonProps, 'title'>;
 const MyButton: FC<MyButtonProps> = (props) => {
 
     return (
-        <StyledText
+        <StyledTouchableOpacity
             {...props}
+            style={props.style}
         />
     )
 };
 export default MyButton;
 
-const StyledText = styled.Text<DefaultTheme>`
+const StyledTouchableOpacity = styled.TouchableOpacity<DefaultTheme>`
+    borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.grayBorder};
+
     backgroundColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.whiteBg};
     color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.blackText};
+
+    justifyContent: center;
+    alignItems: center;
 `;
