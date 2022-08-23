@@ -13,7 +13,10 @@ import { setSearchedSliceName } from "../../redux/readSidewaysSlice";
 import MyTextInput from "../ReactNative/MyTextInput";
 import MyText from "../ReactNative/MyText";
 import { theme } from "../../theme/theme";
-import BackButton from "../../navigation/components/Buttons/BackButton";
+import MyButton from "../ReactNative/MyButton";
+import { BackButton, PlusButton, ProfileButton, SettingsButton } from "../../navigation/components/Buttons";
+import { FlexRow } from "../Flex";
+import { useTheme } from "styled-components";
 
 type ProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList> = {
     navigation: StackNavigatorNavigationProp<PreviousScreen>;
@@ -21,12 +24,16 @@ type ProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList> = {
 const createProfileNavButton: FC<ProfileNavButton<keyof StackNavigatorParamList>> = (props) => {
     const { navigation } = props;
 
+    const theme = useTheme();
+
     return (
-        <TouchableOpacity
+        <ProfileButton
+            alignItems="center"
+            marginRight={10}
             onPress={() => navigation.navigate(PROFILE_SCREEN_NAME)}
         >
-            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{'<- Profile'}</MyText>
-        </TouchableOpacity>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg, color: theme.colors.darkRed }}>Profile</MyText>
+        </ProfileButton>
     );
 };
 
@@ -39,12 +46,12 @@ const createActiveSliceNavButton: FC<ActiveSliceNavButtonProps<keyof StackNaviga
     const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
     
     return (
-        <TouchableOpacity
+        <MyButton
             onPress={() => navigation.navigate(ACTIVE_SLICE_SCREEN_NAME)}
         >
             <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{activeSliceName || 'Choose Slice...'}</MyText>
             <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>Search</MyText>
-        </TouchableOpacity>
+        </MyButton>
     );
 };
 
@@ -77,14 +84,7 @@ const createAddSliceNavButton: FC<AddSliceNavButtonProps<keyof StackNavigatorPar
     const { navigation } = props;
 
     return (
-        <TouchableOpacity
-            onPress={() => navigation.navigate(
-                            ADD_SLICE_SCREEN_NAME as keyof StackNavigatorParamList,
-                            { inputSliceName: '???' })
-                    }
-        >
-            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>+</MyText>
-        </TouchableOpacity>
+        <PlusButton onPress={() => navigation.navigate(ADD_SLICE_SCREEN_NAME, { inputSliceName: '???' })} />
     );
 };
 
@@ -116,12 +116,17 @@ type SettingsNavButtonProps<PreviousScreen extends keyof StackNavigatorParamList
 const createSettingsNavButton: FC<SettingsNavButtonProps<keyof StackNavigatorParamList>> = (props) => {
     const { navigation } = props;
 
+    const theme = useTheme();
+
     return (
-        <TouchableOpacity
+        <SettingsButton
+            alignItems="center"
+            marginLeft={10}
+            front={false}
             onPress={() => navigation.navigate(SETTINGS_SCREEN_NAME)}
         >
-            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg }}>{'Settings ->'}</MyText>
-        </TouchableOpacity>
+            <MyText style={{ fontWeight: 'bold', fontSize: theme.fontSizes.lg, color: theme.colors.darkRed }}>Settings</MyText>
+        </SettingsButton>
     );
 };
 

@@ -16,6 +16,7 @@ import { addInput, setInputs, setOutputs, startRate, forceSignatureRerender, Rat
 import GrowingInputsList from './components/GrowingInputsList';
 import GrowingOutputsList from './components/GrowingOutputsList';
 import RatingSlider from './components/RatingSlider';
+import MyButton from '../../../../components/ReactNative/MyButton';
 
 type RateSliceScreenProps = {
 
@@ -52,10 +53,21 @@ const RateSliceScreen: FC<RateSliceScreenProps> = (props) => {
 
                 <RatingSlider/>
                 
-                <Button
-                    title="Rate .u."
-                    onPress={handleRate}
-                />
+                <FlexCol
+                    alignItems='center'
+                >
+                    <MyButton
+                        style={{
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            padding: 10,
+                            width: '80%',
+                        }}
+                        onPress={handleRate}
+                        >
+                        <MyText>Rate .u.</MyText>
+                    </MyButton>
+                </FlexCol>
                 
             </FlexCol>
         </View>

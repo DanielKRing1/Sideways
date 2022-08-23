@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import FlexBase from './FlexBase'
 
-type FlexRowProps = {
+export type FlexRowProps = {
   children: React.ReactNode;
 
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';

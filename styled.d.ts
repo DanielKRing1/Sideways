@@ -22,5 +22,10 @@ declare module 'styled-components' {
             md: number;
             lg: number;
         };
+        iconSizes: {
+            sm: number;
+            md: number;
+            lg: number;
+        };
     };
 }

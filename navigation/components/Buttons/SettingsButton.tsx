@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
 
 import IconButton, { IconButtonProps } from '../../../components/Button/IconButton';
+import { RequiredExceptFor } from '../../../global';
 
 type PlusButtonProps = {
 
-} & Omit<IconButtonProps, 'iconName'>;
+} & RequiredExceptFor<Omit<IconButtonProps, 'iconName'>, 'children'>;
 const PlusButton: FC<PlusButtonProps> = (props) => {
     return (
         <IconButton
-            iconName='angle-double-left'
+            iconName='gear'
             {...props}
         />
     );

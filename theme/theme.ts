@@ -21,4 +21,9 @@ export const theme: DefaultTheme = {
       md: 12,
       lg: 16,
     },
+    iconSizes: {
+        sm: 20,
+        md: 30,
+        lg: 45,
+    }
 };

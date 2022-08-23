@@ -20,7 +20,6 @@ import { AddSliceNavHeader } from '../../../components/Navigation/NavHeader';
 import MyTextInput from '../../../components/ReactNative/MyTextInput';
 import MyButton from '../../../components/ReactNative/MyButton';
 import MyText from '../../../components/ReactNative/MyText';
-import dbDriver from '../../../database/dbDriver';
 
 // Possible outputs
 
