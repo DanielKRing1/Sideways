@@ -8,14 +8,13 @@ import { StackNavigatorProps } from "../../../navigation/StackNavigator";
 
 // COMPONENTS
 import Todo from "../../../components/Dev/Todo";
+import BackButton from "../../../navigation/components/Buttons/BackButton";
+import { ProfileHeader } from "../../../components/Navigation/NavHeader";
 
 const ProfileScreen: FC<StackNavigatorProps<typeof PROFILE_SCREEN_NAME>> = ({ navigation }) =>
 (
     <View>
-        <Button
-            title="<"
-            onPress={() => navigation.navigate(TABS_SCREEN_NAME)}
-        />
+        <ProfileHeader/>
 
         <Todo name='My name'/>
 

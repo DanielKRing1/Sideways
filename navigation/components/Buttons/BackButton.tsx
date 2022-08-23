@@ -16,7 +16,6 @@ const BackButton: FC<BackButtonProps> = (props) => {
     return (
         <StyledMyButton
             {...props}
-            style={props.style}
         >
             <Icon name="angle-double-left" size={30} color={theme.colors.darkRed} />
             {/* <Icon.Button

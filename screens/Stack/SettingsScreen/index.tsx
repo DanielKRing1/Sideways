@@ -8,13 +8,12 @@ import { StackNavigatorProps } from "../../../navigation/StackNavigator";
 
 // COMPONENTS
 import Todo from "../../../components/Dev/Todo";
+import BackButton from "../../../navigation/components/Buttons/BackButton";
+import { SettingsHeader } from "../../../components/Navigation/NavHeader";
 
 const SettingsScreen: FC<StackNavigatorProps<typeof SETTINGS_SCREEN_NAME>> = ({ navigation }) => (
     <View>
-        <Button
-            title="<"
-            onPress={() => navigation.navigate(TABS_SCREEN_NAME)}
-        />
+        <SettingsHeader/>
 
         <Todo name='?'/>
     </View>

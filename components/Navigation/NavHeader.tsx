@@ -11,7 +11,8 @@ import { TABS_SCREEN_NAME } from '../../navigation/constants';
 
 // COMPONENTS
 import FlexRow from '../Flex/FlexRow';
-import NavComponentCreator, { ACTIVE_SLICE_BUTTON, ACTIVE_SLICE_INPUT, ADD_SLICE_BUTTON, ADD_SLICE_INPUT, GO_BACK_BUTTON, PROFILE_BUTTON, SETTINGS_BUTTON } from './NavHeaderComponents';
+import NavComponentCreator, { ACTIVE_SLICE_BUTTON, ACTIVE_SLICE_INPUT, ADD_SLICE_BUTTON, ADD_SLICE_INPUT, GO_BACK_BUTTON, GO_NAV_BUTTON, PROFILE_BUTTON, SETTINGS_BUTTON } from './NavHeaderComponents';
+import { View } from 'react-native';
 
 type NavHeaderType = {
   children: React.ReactNode;
@@ -19,12 +20,6 @@ type NavHeaderType = {
 };
 const NavHeader: FC<NavHeaderType> = (props) => {
   const { children, justifyContent='space-between' } = props;
-
-  // NAVIGATION
-  const navigation = useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
-
-  // REDUX ACTIVE SLICE
-  const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
   
   return (
     <FlexRow
@@ -83,6 +78,58 @@ export const AddSliceNavHeader: FC<AddSliceHeaderProps> = (props) => {
         [
           <NavComponentCreator.GO_BACK_BUTTON key={GO_BACK_BUTTON} navigation={navigation}/>,
           <NavComponentCreator.ADD_SLICE_INPUT key={ADD_SLICE_INPUT} navigation={navigation}/>,
+        ]
+      }
+    </NavHeader>
+  );
+};
+
+type ProfileHeaderProps = {
+  justifyContent?: "space-around" | "flex-start" | "flex-end" | "center" | "space-between" | "space-evenly";
+};
+export const ProfileHeader: FC<ProfileHeaderProps> = (props) => {
+  const { justifyContent='flex-start' } = props;
+
+  const navigation = useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
+  
+  return (
+    <NavHeader justifyContent={justifyContent}>
+      {
+        [
+            <NavComponentCreator.GO_NAV_BUTTON
+              key={GO_NAV_BUTTON}
+              style={{
+                paddingTop: 15,
+                paddingLeft: 15,
+              }}
+              onPress={() => navigation.navigate(TABS_SCREEN_NAME)}
+            />
+        ]
+      }
+    </NavHeader>
+  );
+};
+
+type SettingsHeaderProps = {
+  justifyContent?: "space-around" | "flex-start" | "flex-end" | "center" | "space-between" | "space-evenly";
+};
+export const SettingsHeader: FC<SettingsHeaderProps> = (props) => {
+  const { justifyContent='flex-start' } = props;
+
+  const navigation = useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
+  
+  return (
+    <NavHeader justifyContent={justifyContent}>
+      {
+        [
+            <NavComponentCreator.GO_NAV_BUTTON
+              key={GO_NAV_BUTTON}
+              style={{
+                paddingTop: 15,
+                paddingLeft: 15,
+              }}
+              onPress={() => navigation.navigate(TABS_SCREEN_NAME)}
+            />
         ]
       }
     </NavHeader>

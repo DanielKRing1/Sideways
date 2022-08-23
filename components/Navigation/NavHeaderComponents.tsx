@@ -138,6 +138,20 @@ const createGoBackNavButton: FC<GoBackNavButtonProps<keyof StackNavigatorParamLi
     );
 };
 
+type GoNavButtonProps = {
+    onPress: () => void;
+};
+const createGoNavButton: FC<GoNavButtonProps> = (props) => {
+    const { onPress } = props;
+
+    return (
+        <BackButton
+            {...props}
+            onPress={onPress}
+        />
+    );
+};
+
 export const PROFILE_BUTTON = 'PROFILE_BUTTON';
 export const ACTIVE_SLICE_BUTTON = 'ACTIVE_SLICE_BUTTON';
 export const ADD_SLICE_BUTTON = 'ADD_SLICE_BUTTON';
@@ -145,8 +159,9 @@ export const SETTINGS_BUTTON = 'SETTINGS_BUTTON';
 export const ACTIVE_SLICE_INPUT = 'ACTIVE_SLICE_INPUT';
 export const ADD_SLICE_INPUT = 'ADD_SLICE_INPUT';
 export const GO_BACK_BUTTON = 'GO_BACK_BUTTON';
+export const GO_NAV_BUTTON = 'GO_NAV_BUTTON';
 
-type ComponentCreatorKeys = typeof PROFILE_BUTTON | typeof ACTIVE_SLICE_BUTTON | typeof ADD_SLICE_BUTTON | typeof SETTINGS_BUTTON | typeof ACTIVE_SLICE_INPUT | typeof ADD_SLICE_INPUT | typeof GO_BACK_BUTTON;
+type ComponentCreatorKeys = typeof PROFILE_BUTTON | typeof ACTIVE_SLICE_BUTTON | typeof ADD_SLICE_BUTTON | typeof SETTINGS_BUTTON | typeof ACTIVE_SLICE_INPUT | typeof ADD_SLICE_INPUT | typeof GO_BACK_BUTTON | typeof GO_NAV_BUTTON;
 
 const componentCreator: Record<ComponentCreatorKeys, FC<any>> = {
     [PROFILE_BUTTON]: createProfileNavButton,
@@ -158,6 +173,7 @@ const componentCreator: Record<ComponentCreatorKeys, FC<any>> = {
     [ADD_SLICE_INPUT]: createAddSliceNavInput,
 
     [GO_BACK_BUTTON]: createGoBackNavButton,
+    [GO_NAV_BUTTON]: createGoNavButton,
 };
 
 export default componentCreator;
