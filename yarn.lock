@@ -24,23 +24,23 @@
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
 
-"@asianpersonn/realm-graph@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.npmjs.org/@asianpersonn/realm-graph/-/realm-graph-1.0.13.tgz"
-  integrity sha512-C7zTz3RCAsmFUu/uB03gulQB2O+8ceSXT9O+q5dEbBg9mrlnKaRuE5v7tF+8kkMMv9/7D8INjKfc6kTayywsNw==
+"@asianpersonn/realm-graph@^1.0.16":
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-1.0.16.tgz#7d974cf5a8ec30e7e222b05fe3ecc5bf45a12dcd"
+  integrity sha512-KM//7n3vFDcAEyUy5bB+K7ljpOlUXxrcagp0XKLgS31Q1f4noVDAQb4VmFXXTEXzW3/UjTXl06KhBUrPYUZkfw==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
     "@asianpersonn/pagerank" "^1.0.7"
     catalyst-graph "^1.0.17"
-    dynamic-realm "^1.0.42"
+    dynamic-realm "^1.0.44"
     realm "^10.13.0"
 
-"@asianpersonn/realm-stack@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.npmjs.org/@asianpersonn/realm-stack/-/realm-stack-1.0.8.tgz"
-  integrity sha512-zNfokGxC6TauCOC41U9Bh0mvUAS4RGWrWxo97LI/P75q3LVTJoD28XQgjvu3rxvofg3i452nO50CLCIVzFNC9w==
+"@asianpersonn/realm-stack@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-stack/-/realm-stack-1.0.11.tgz#903976a97b75eb02dbdd608df70bc008cd939260"
+  integrity sha512-Vsuvc5rvucuDGdEaqURBmtE3hDeOhgY7uWIhU+JePBKw4QoHCsd8/YWMMCANcQkzLvVToDOh/5iH8B0nhcGaaw==
   dependencies:
-    dynamic-realm "^1.0.42"
+    dynamic-realm "^1.0.44"
     realm "^10.13.0"
 
 "@asianpersonn/trie@^2.0.1":
@@ -1540,7 +1540,7 @@
   resolved "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.41.tgz"
   integrity sha512-ewXv/ceBaJprikMcxCmWU1FKyMAQ2X7a9Gtmzw8fcg2kIePI1crERDM818W+XYrxqdBBOdlf2rm137bU+BltCA==
 
-"@types/hoist-non-react-statics@*", "@types/hoist-non-react-statics@^3.3.1":
+"@types/hoist-non-react-statics@*", "@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
   resolved "https://registry.npmjs.org/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz"
   integrity sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==
@@ -1626,6 +1626,16 @@
   integrity sha512-yzAy5i2IS8co/ZdCwgop+ka76yLIseKyNoGfzwVaNAIxvxfME0qVwmkJsWCJpymSoT3y0brwMqCPFQJxqdkxlw==
   dependencies:
     "@types/react" "^17"
+
+"@types/react-redux@^7.1.24":
+  version "7.1.24"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.24.tgz#6caaff1603aba17b27d20f8ad073e4c077e975c0"
+  integrity sha512-7FkurKcS1k0FHZEtdbbgN8Oc6b+stGSfZYjQGicofJ0j4U0qIn/jaSvnP2pLwZKiai3/17xqqxkkrxTgN8UNbQ==
+  dependencies:
+    "@types/hoist-non-react-statics" "^3.3.0"
+    "@types/react" "*"
+    hoist-non-react-statics "^3.3.0"
+    redux "^4.0.0"
 
 "@types/react-test-renderer@^18.0.0":
   version "18.0.0"
@@ -3066,10 +3076,10 @@ domexception@^2.0.1:
   dependencies:
     webidl-conversions "^5.0.0"
 
-dynamic-realm@^1.0.42:
-  version "1.0.42"
-  resolved "https://registry.npmjs.org/dynamic-realm/-/dynamic-realm-1.0.42.tgz"
-  integrity sha512-MSFPfQHLGcp2j+5+Hd/OooczmnKrhl1UiZRS+QGdsDK8uMwieBw3GpUjt5dEwjVfW7JVJoLtBjtEi63k3jIpZg==
+dynamic-realm@^1.0.44:
+  version "1.0.44"
+  resolved "https://registry.yarnpkg.com/dynamic-realm/-/dynamic-realm-1.0.44.tgz#10fd518b11019d3982fdf91c6f406d506d0278af"
+  integrity sha512-U58kiOYSB4CfGLlWg/JIFvS65ujrC/gO2FytPK6suLM1MiAHWamH/fNpZikTGHyPulCZmnYxoAJyDzXyv8V0bw==
   dependencies:
     realm "^10.13.0"
 
@@ -6826,7 +6836,7 @@ redux-thunk@^2.4.1:
   resolved "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.4.1.tgz"
   integrity sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==
 
-redux@^4.1.2:
+redux@^4.0.0, redux@^4.1.2:
   version "4.2.0"
   resolved "https://registry.npmjs.org/redux/-/redux-4.2.0.tgz"
   integrity sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==
