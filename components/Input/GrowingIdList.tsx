@@ -2,14 +2,17 @@ import React, { FC } from 'react';
 import { GrowingList, GrowingListProps } from './GrowingInputList';
 import { useCounterId } from '../../hooks/useCounterId';
 
+export type GrowingIdText = { text: string, id: number };
 type GrowingIdListProps = {
-    startingId: number;
+    startingId?: number;
 
     genNextDataPlaceholder: (id: number) => any;
     handleAddInput: (id: number, newText: string) => void;
 } & Omit<GrowingListProps, 'genNextDataPlaceholder' | 'handleAddInput'>;
 const GrowingIdList: FC<GrowingIdListProps> = (props) => {
-    const { data, createRenderItemComponent, keyExtractor, startingId, genNextDataPlaceholder, handleUpdateInput, handleAddInput } = props;
+    const { data, createRenderItemComponent, keyExtractor,
+        startingId=data.reduce((maxId: number, curVal: GrowingIdText) => Math.max(maxId, curVal.id), -1)+1,
+        genNextDataPlaceholder, handleUpdateInput, handleAddInput } = props;
     
     // ID GENERATOR
     // Start id generator with current max id or 0
