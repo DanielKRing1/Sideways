@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { GrowingIdText as RateInput } from '../../components/Input/GrowingIdList';
 import DbDriver from '../../database/dbDriver';
 import { ThunkConfig } from '../types';
 
 // INITIAL STATE
 
-export type RateInput = { text: string, id: number };
 export interface RateSSState {
   inputs: RateInput[];
   outputs: RateInput[];

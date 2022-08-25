@@ -17,6 +17,7 @@ import MyButton from "../ReactNative/MyButton";
 import { BackButton, PlusButton, ProfileButton, SettingsButton } from "../../navigation/components/Buttons";
 import { FlexRow } from "../Flex";
 import { useTheme } from "styled-components";
+import HorizontalSpace, { HorizontalSpaceProps } from "../Spacing/HorizontalSpace";
 
 type ProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList> = {
     navigation: StackNavigatorNavigationProp<PreviousScreen>;
@@ -98,7 +99,7 @@ const createAddSliceNavInput: FC<AddSliceNavInputProps<keyof StackNavigatorParam
     const dispatch = useDispatch();
 
     const handleChangeText = (newText: string) => {
-        dispatch(setNewSliceName);
+        dispatch(setNewSliceName(newText));
     };
 
     return (
@@ -157,6 +158,15 @@ const createGoNavButton: FC<GoNavButtonProps> = (props) => {
     );
 };
 
+type EmptySpaceProps = {} & HorizontalSpaceProps;
+const createEmptySpace: FC<EmptySpaceProps> = (props) => {
+    const { spacing } = props;
+
+    return (
+        <HorizontalSpace spacing={spacing} />
+    )
+}
+
 export const PROFILE_BUTTON = 'PROFILE_BUTTON';
 export const ACTIVE_SLICE_BUTTON = 'ACTIVE_SLICE_BUTTON';
 export const ADD_SLICE_BUTTON = 'ADD_SLICE_BUTTON';
@@ -165,8 +175,9 @@ export const ACTIVE_SLICE_INPUT = 'ACTIVE_SLICE_INPUT';
 export const ADD_SLICE_INPUT = 'ADD_SLICE_INPUT';
 export const GO_BACK_BUTTON = 'GO_BACK_BUTTON';
 export const GO_NAV_BUTTON = 'GO_NAV_BUTTON';
+export const EMPTY_SPACE = 'EMPTY_SPACE';
 
-type ComponentCreatorKeys = typeof PROFILE_BUTTON | typeof ACTIVE_SLICE_BUTTON | typeof ADD_SLICE_BUTTON | typeof SETTINGS_BUTTON | typeof ACTIVE_SLICE_INPUT | typeof ADD_SLICE_INPUT | typeof GO_BACK_BUTTON | typeof GO_NAV_BUTTON;
+type ComponentCreatorKeys = typeof PROFILE_BUTTON | typeof ACTIVE_SLICE_BUTTON | typeof ADD_SLICE_BUTTON | typeof SETTINGS_BUTTON | typeof ACTIVE_SLICE_INPUT | typeof ADD_SLICE_INPUT | typeof GO_BACK_BUTTON | typeof GO_NAV_BUTTON | typeof EMPTY_SPACE;
 
 const componentCreator: Record<ComponentCreatorKeys, FC<any>> = {
     [PROFILE_BUTTON]: createProfileNavButton,
@@ -179,6 +190,8 @@ const componentCreator: Record<ComponentCreatorKeys, FC<any>> = {
 
     [GO_BACK_BUTTON]: createGoBackNavButton,
     [GO_NAV_BUTTON]: createGoNavButton,
+
+    [EMPTY_SPACE]: createEmptySpace,
 };
 
 export default componentCreator;

@@ -9,7 +9,8 @@ import MyText from '../../../../../components/ReactNative/MyText';
 
 // REDUX
 import { RootState } from '../../../../../redux';
-import { addOutput, setOutputs, startRate, forceSignatureRerender, RateInput } from '../../../../../redux/rateSidewaysSlice';
+import { addOutput, setOutputs, startRate, forceSignatureRerender } from '../../../../../redux/rateSidewaysSlice';
+import { GrowingIdText as RateInput } from '../../../../../components/Input/GrowingIdList';
 
 const StyledTextOutput = styled(MyTextInput)`
     borderWidth: 1px;
@@ -44,14 +45,11 @@ const GrowingOutputsList: FC = (props) => {
         dispatch(setOutputs(outputs));
     };
 
-    const startingId: number = outputs.reduce((maxId: number, curVal: RateInput) => Math.max(maxId, curVal.id), 0);
-
     return (
         <GrowingIdList
             data={outputs}
             createRenderItemComponent={createOutputsRenderItemComponent}
             keyExtractor={keyExtractor}
-            startingId={startingId}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateOutput}
             handleAddInput={handleAddOutput}

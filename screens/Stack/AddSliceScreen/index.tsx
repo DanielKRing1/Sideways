@@ -13,13 +13,17 @@ import { StackNavigatorProps } from '../../../navigation/StackNavigator';
 
 // COMPONENTS
 import Todo from '../../../components/Dev/Todo';
-import { GrowingList } from '../../../components/Input/GrowingInputList';
+import GrowingIdList, { GrowingIdText } from '../../../components/Input/GrowingIdList';
+import { GrowingIdText as NewSliceOutputs } from '../../../components/Input/GrowingIdList';
 
 // NAV
 import { AddSliceNavHeader } from '../../../components/Navigation/NavHeader';
 import MyTextInput from '../../../components/ReactNative/MyTextInput';
 import MyButton from '../../../components/ReactNative/MyButton';
 import MyText from '../../../components/ReactNative/MyText';
+import { theme } from '../../../theme/theme';
+import { FlexCol } from '../../../components/Flex';
+import VerticalSpace from '../../../components/Spacing/VerticalSpace';
 
 // Possible outputs
 
@@ -53,11 +57,13 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
     }, []);
 
     // HANDLER METHODS
-    const handleAddInput = (newPossibleInput: string) => {
-        dispatch(addPossibleOutput(newPossibleInput));
+    const keyExtractor = (dataPoint: NewSliceOutputs) => `${dataPoint.id}`;
+    const genNextDataPlaceholder = (id: number) => ({ id, text: '' });
+    const handleAddInput = (id: number, newPossibleInput: string) => {
+        dispatch(addPossibleOutput({ id, text: newPossibleInput }));
     };
     const handleUpdateInput = (newText: string, index: number) => {
-        possibleOutputs[index] = newText;
+        possibleOutputs[index].text = newText;
         // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
         dispatch(setPossibleOutputs(possibleOutputs));
     }
@@ -66,20 +72,30 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
         <View>
             <AddSliceNavHeader/>
 
-            <MyButton
-                onPress={() => startCreateSlice({ newSliceName, possibleOutputs })}
-            >
-                <MyText>Create new slice!</MyText>
-            </MyButton>
-
-            <GrowingList
+            <GrowingIdList
                 data={possibleOutputs}
                 createRenderItemComponent={createRenderItemComponent}
-                keyExtractor={(dataPoint: string) => ''}
-                genNextDataPlaceholder={() => ''}
+                keyExtractor={keyExtractor}
+                genNextDataPlaceholder={genNextDataPlaceholder}
                 handleUpdateInput={handleUpdateInput}
                 handleAddInput={handleAddInput}
             />
+
+            <VerticalSpace/>
+
+            <FlexCol alignItems='center'>
+                <MyButton
+                    style={{
+                        width: '80%',
+                        borderWidth: 1,
+                        borderColor: theme.colors.grayBorder,
+                        padding: 10,
+                    }}
+                    onPress={() => dispatch(startCreateSlice({ newSliceName, possibleOutputs }))}
+                >
+                    <MyText>Create new slice!</MyText>
+                </MyButton>
+            </FlexCol>
         </View>
     )
 }

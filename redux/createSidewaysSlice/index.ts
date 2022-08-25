@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { GrowingIdText as NewSliceOutputs } from '../../components/Input/GrowingIdList';
 import DbDriver from '../../database/dbDriver';
 import { ThunkConfig } from '../types';
 
@@ -7,7 +8,7 @@ import { ThunkConfig } from '../types';
 
 export interface CreateSSState {
   newSliceName: string;
-  possibleOutputs: string[],
+  possibleOutputs: NewSliceOutputs[],
 
   createdSignature: {},
 };
@@ -35,10 +36,10 @@ export const startCreateSlice = createAsyncThunk<
   async ({ newSliceName, possibleOutputs }: CreateSSThunkArgs, thunkAPI) => {
 
     // 1. Create Stack
-    const stackPromise = DbDriver.createStack(newSliceName);
+    const stackPromise = await DbDriver.createStack(newSliceName);
     
     // 2. Create Graph
-    const graphPromise = DbDriver.createGraph(newSliceName, possibleOutputs);
+    const graphPromise = await DbDriver.createGraph(newSliceName, possibleOutputs);
 
     await Promise.all([ stackPromise, graphPromise ]);
 
@@ -52,8 +53,8 @@ export const startCreateSlice = createAsyncThunk<
 
 type ForceSSRerenderAction = PayloadAction<undefined>;
 type SetnewSliceNameAction = PayloadAction<string>;
-type SetPossibleOutputsAction = PayloadAction<string[]>;
-type AddPossibleOutputAction = PayloadAction<string>;
+type SetPossibleOutputsAction = PayloadAction<NewSliceOutputs[]>;
+type AddPossibleOutputAction = PayloadAction<NewSliceOutputs>;
 type RmPossibleOutputAction = PayloadAction<number>;
 type StartCreateSSFulfilled = PayloadAction<boolean>;
 

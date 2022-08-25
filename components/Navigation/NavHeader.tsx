@@ -11,7 +11,7 @@ import { TABS_SCREEN_NAME } from '../../navigation/constants';
 
 // COMPONENTS
 import FlexRow from '../Flex/FlexRow';
-import NavComponentCreator, { ACTIVE_SLICE_BUTTON, ACTIVE_SLICE_INPUT, ADD_SLICE_BUTTON, ADD_SLICE_INPUT, GO_BACK_BUTTON, GO_NAV_BUTTON, PROFILE_BUTTON, SETTINGS_BUTTON } from './NavHeaderComponents';
+import NavComponentCreator, { ACTIVE_SLICE_BUTTON, ACTIVE_SLICE_INPUT, ADD_SLICE_BUTTON, ADD_SLICE_INPUT, EMPTY_SPACE, GO_BACK_BUTTON, GO_NAV_BUTTON, PROFILE_BUTTON, SETTINGS_BUTTON } from './NavHeaderComponents';
 import { View } from 'react-native';
 
 type NavHeaderType = {
@@ -68,7 +68,7 @@ type AddSliceHeaderProps = {
   justifyContent?: "space-around" | "flex-start" | "flex-end" | "center" | "space-between" | "space-evenly";
 };
 export const AddSliceNavHeader: FC<AddSliceHeaderProps> = (props) => {
-  const { justifyContent='space-around' } = props;
+  const { justifyContent='space-between' } = props;
 
   const navigation = useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
   
@@ -78,6 +78,7 @@ export const AddSliceNavHeader: FC<AddSliceHeaderProps> = (props) => {
         [
           <NavComponentCreator.GO_BACK_BUTTON key={GO_BACK_BUTTON} navigation={navigation}/>,
           <NavComponentCreator.ADD_SLICE_INPUT key={ADD_SLICE_INPUT} navigation={navigation}/>,
+          <NavComponentCreator.EMPTY_SPACE key={EMPTY_SPACE}/>,
         ]
       }
     </NavHeader>
