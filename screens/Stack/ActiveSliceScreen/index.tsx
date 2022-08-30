@@ -8,7 +8,7 @@ import { setActiveSliceName, setSearchedSliceName } from "../../../redux/readSid
 
 // NAVIGATION
 import { StackNavigatorProps } from "../../../navigation/StackNavigator";
-import { ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME } from "../../../navigation/constants";
+import { ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME, TABS_SCREEN_NAME } from "../../../navigation/constants";
 
 // COMPONENTS
 import { SearchableDropdown } from "../../../components/Search/SearchableDropdown";
@@ -27,6 +27,8 @@ const ActiveSliceScreen: FC<StackNavigatorProps<typeof ACTIVE_SLICE_SCREEN_NAME>
     // SLICE HANDLER METHODS
     const handleSelectActiveSlice = (sliceName: string) => {
         dispatch(setActiveSliceName(sliceName));
+
+        navigation.navigate(TABS_SCREEN_NAME);
     };
 
     return (

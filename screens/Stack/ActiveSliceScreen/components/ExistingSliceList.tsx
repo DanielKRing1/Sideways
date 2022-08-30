@@ -1,5 +1,6 @@
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { FlatList, Text } from 'react-native';
+import styled, { DefaultTheme } from 'styled-components/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import createTrie, { TrieTree } from '@asianpersonn/trie';
@@ -17,6 +18,7 @@ import { FlexRow } from '../../../../components/Flex';
 // UTILS
 import { abbrDate } from '../../../../utils/date';
 import MyText from '../../../../components/ReactNative/MyText';
+import DateCard from './DateCard';
 
 type ExistingSliceCardProps = {
     item: ExistingSlice;
@@ -25,17 +27,38 @@ type ExistingSliceCardProps = {
 const createExistingSliceCard = (onSelectSlice: (sliceName: string) => void): FC<ExistingSliceCardProps> => (props) => {
     const { item } = props;
 
-    console.log(item);
+    const { month=undefined, day=undefined } = item.lastLogged !== undefined ? abbrDate(item.lastLogged) : {};
+
+    console.log(item.lastLogged)
 
     return (
-        <TouchableOpacity onPress={() => onSelectSlice(item.sliceName)}>
-            <FlexRow>
-                <MyText>{abbrDate(item.lastLogged).toString()}</MyText>
+        <StyledTouchableOpacity onPress={() => onSelectSlice(item.sliceName)}>
+            <FlexRow justifyContent='space-around'>
+                {
+                    month === undefined || day === undefined ?
+                        <MyText>Unused</MyText>
+                    :
+                        <DateCard
+                            month={month}
+                            day={day}
+                        />
+                }
                 <MyText>{item.sliceName}</MyText>
             </FlexRow>
-        </TouchableOpacity>
+        </StyledTouchableOpacity>
     )
 };
+
+const StyledTouchableOpacity = styled.TouchableOpacity`
+    borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.darkRed};
+    borderWidth: 1px;
+    borderRadius: 5px;
+
+    marginLeft: 25px;
+    marginRight: 25px;
+    paddingTop: 15px;
+    paddingBottom: 15px;
+`;
 
 type ExistingSliceListProps= {
     onSelectSlice: (sliceName: string) => void;

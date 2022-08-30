@@ -6,6 +6,6 @@ export const isToday = (someDate: Date) => {
 };
 
 export const abbrDate = (date: Date) => ({
+    day: date.getDate(),
     month: date.toLocaleString('default', { month: 'short' }),
-    day: date.toLocaleString('default', { day: 'numeric' }),
 });

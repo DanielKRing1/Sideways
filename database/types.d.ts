@@ -1,4 +1,4 @@
-type ExistingSlice = { sliceName: string, lastLogged: Date };
+type ExistingSlice = { sliceName: string, lastLogged: Date | undefined };
 
 type DriverType = {
     isLoaded: boolean;
