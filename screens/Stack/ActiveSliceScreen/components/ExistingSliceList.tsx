@@ -25,6 +25,8 @@ type ExistingSliceCardProps = {
 const createExistingSliceCard = (onSelectSlice: (sliceName: string) => void): FC<ExistingSliceCardProps> => (props) => {
     const { item } = props;
 
+    console.log(item);
+
     return (
         <TouchableOpacity onPress={() => onSelectSlice(item.sliceName)}>
             <FlexRow>
@@ -41,30 +43,36 @@ type ExistingSliceListProps= {
 const ExistingSliceList: FC<ExistingSliceListProps> = (props) => {
     const { onSelectSlice } = props;
 
-    const [ trie, setTrie ] = useState<TrieTree<ExistingSlice>>(createTrie());
+    const [ trie ] = useState<TrieTree<ExistingSlice>>(createTrie());
+    const [ autoComplete, setAutoComplete ] = useState<ExistingSlice[]>([]);
 
     // REDUX
     const { activeSliceName, searchedSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
-
+    
     // DB DRIVER
     const { isLoaded } = useContext(DbLoaderContext);
     const lastLoggedSlices = useMemo(() => dbDriver.getLastLoggedSlices(), [isLoaded]);
     useEffect(() => {
-        setTrie(createTrie());
-
+        trie.clear();
+        
         const trieValues: { key: string, value: ExistingSlice }[] = lastLoggedSlices.map((existingSlice: ExistingSlice) => ({
             key: existingSlice.sliceName,
             value: existingSlice
         }));
+        // console.log(trieValues);
         trie.addAll(trieValues);
     }, [lastLoggedSlices]);
 
     // LIST COMPONENT
     const ExistingSliceCard = useMemo(() => createExistingSliceCard(onSelectSlice), [onSelectSlice]);
 
+    useEffect(() => {
+        setAutoComplete(trie.search(searchedSliceName));
+    }, [searchedSliceName]);
+
     return (
         <FlatList
-            data={trie.search(searchedSliceName)}
+            data={autoComplete}
             renderItem={ExistingSliceCard}
         />
     );
