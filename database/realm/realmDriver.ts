@@ -18,8 +18,10 @@ let isLoaded = false;
 const load = async () => {
     if(isLoaded) return;
 
-    await RealmGraphManager.loadGraphs(DEFAULT_REALM_GRAPH_META_REALM_PATH, DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH);
-    await RealmStack.realmCache.loadStacks(DEFAULT_REALM_STACK_META_REALM_PATH, DEFAULT_REALM_STACK_LOADABLE_REALM_PATH);
+    const graphPromise = await RealmGraphManager.loadGraphs(DEFAULT_REALM_GRAPH_META_REALM_PATH, DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH);
+    const stackPromise = await RealmStack.realmCache.loadStacks(DEFAULT_REALM_STACK_META_REALM_PATH, DEFAULT_REALM_STACK_LOADABLE_REALM_PATH);
+
+    await Promise.all([graphPromise, stackPromise]);
 
     isLoaded = true;
 };
@@ -51,10 +53,23 @@ const getSliceProperties = (sliceName: string): string[] => {
 const getLastLoggedSlices = (): ExistingSlice[] => {
     const existingSliceNames: string[] = getSliceNames();
 
-    return existingSliceNames.map((sliceName: string) => ({
-        sliceName,
-        lastLogged: getStack(sliceName)[0][RealmStack.TIMESTAMP_COLUMN_KEY] as Date,
-    })).sort(({ lastLogged: lastLoggedA }, { lastLogged: lastLoggedB }) => lastLoggedB.getTime() - lastLoggedA.getTime());
+    // console.log('EXISTING SLICE NAMES');
+    // console.log(existingSliceNames);
+
+    const a = existingSliceNames.map((sliceName: string) => {
+        console.log(getStack(sliceName));
+        const stack: StackSnapshotRow[] = getStack(sliceName);
+
+            return ({
+            sliceName,
+            lastLogged: stack.length > 0 ? stack[0][RealmStack.TIMESTAMP_COLUMN_KEY] as Date : new Date(),
+        })
+    }).sort(({ lastLogged: lastLoggedA }, { lastLogged: lastLoggedB }) => lastLoggedB.getTime() - lastLoggedA.getTime());
+
+    console.log('GET LAST LOGGED SLICES');
+    console.log(a);
+
+    return a;
 };
 
 // REALM STACK
