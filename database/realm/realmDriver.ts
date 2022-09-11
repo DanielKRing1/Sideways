@@ -64,7 +64,7 @@ const getLastLoggedSlices = async (): Promise<ExistingSlice[]> => {
 
     let existingSlices: ExistingSlice[] = []
     for(let sliceName of existingSliceNames) {
-        const stack: StackSnapshotRow[] = await getStack(sliceName);
+        const stack: SidewaysSnapshotRow[] = await getStack(sliceName);
         existingSlices.push({
             sliceName,
             lastLogged: stack.length > 0 ? stack[0][TIMESTAMP_COLUMN_KEY] as Date : undefined,
@@ -108,11 +108,11 @@ const createStack = async (stackName: string) => {
     });
 };
 // READ STACK
-const getStack = async (stackName: string): Promise<StackSnapshotRow[]> => {
+const getStack = async (stackName: string): Promise<SidewaysSnapshotRow[]> => {
     throwLoadError();
 
     const realmStack: RealmStack | never = RealmStackManager.getStack(stackName);
-    return await (realmStack.getList()) as StackSnapshotRow[];
+    return await (realmStack.getList()) as SidewaysSnapshotRow[];
 };
 // PUSH ONTO STACK
 const pushOntoStack = (stackName: string, ...snapshots: Dict<any>[]) => {

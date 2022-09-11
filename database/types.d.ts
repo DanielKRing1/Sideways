@@ -9,7 +9,7 @@ type DriverType = {
     getLastLoggedSlices: () => Promise<ExistingSlice[]>;
 
     createStack: (stackName: string) => Promise<void>;
-    getStack: (stackName: string) => Promise<StackSnapshotRow[]>;
+    getStack: (stackName: string) => Promise<SidewaysSnapshotRow[]>;
     pushOntoStack: (stackName: string, ...snapshots: Dict<any>[]) => void;
     searchStack: (stackName: string, date: Date) => Promise<number>;
 
@@ -20,7 +20,7 @@ type DriverType = {
     getRecommendations: (graphName: string, desiredOutput: string, inputNodeIds: string[], targetInputNodeWeight: number, edgeInflationMagnitude: number, iterations?: number, dampingFactor?: number) => Promise<false | RankedNode[]>;
 }
 
-type StackSnapshotRow = {
+type SidewaysSnapshotRow = {
     inputs: string[];
     outputs: string[];
     rating: int;

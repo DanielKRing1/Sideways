@@ -16,7 +16,7 @@ import { SearchableFlatList } from '../../../../../components/Search/SearchableF
 import MyText from '../../../../../components/ReactNative/MyText';
 
 type StackCardProps = {
-    item: StackSnapshotRow;
+    item: SidewaysSnapshotRow;
     index?: number;
 };
 const createStackCard = (): FC<StackCardProps> => (props) => {
@@ -77,7 +77,7 @@ const StackList: FC<StackListProps> = (props) => {
             searchIndex={searchIndex}
             data={stack}
             renderItem={StackCard}
-            keyExtractor={(item: StackSnapshotRow): string => item.timestamp.toISOString()}
+            keyExtractor={(item: SidewaysSnapshotRow): string => item.timestamp.toISOString()}
         />
     );
 };
