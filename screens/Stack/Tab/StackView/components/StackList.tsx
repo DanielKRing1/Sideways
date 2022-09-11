@@ -61,8 +61,10 @@ const StackList: FC<StackListProps> = (props) => {
     const searchIndex: number = useMemo(() => {
         if(!activeSliceName) return 0;
 
-        return dbDriver.searchStack(activeSliceName, stackStartDate || new Date(0));
-    }, [isLoaded, activeSliceName, stackStartDate]);
+        const index = dbDriver.searchStack(activeSliceName, stackStartDate || new Date(0));
+        
+        return index > -1 ? index : 0;
+    }, [isLoaded, activeSliceName, stackStartDate, stack]);
 
     // LIST COMPONENT
     const StackCard = useMemo(() => createStackCard(), []);

@@ -4,16 +4,16 @@ type DriverType = {
     isLoaded: boolean;
     load: () => Promise<void>;
     getSliceNames: () => string[];
-    getSliceProperties: (sliceName: string) => string[];
-    getLastLoggedSlices: () => ExistingSlice[];
+    getSlicePropertyNames: (sliceName: string) => string[];
+    getSliceProperties: (sliceName: string) => Dict<any>;
+    getLastLoggedSlices: () => Promise<ExistingSlice[]>;
 
     createStack: (stackName: string) => Promise<void>;
-    getStack: (stackName: string) => any[];
+    getStack: (stackName: string) => Promise<StackSnapshotRow[]>;
     pushOntoStack: (stackName: string, ...snapshots: Dict<any>[]) => void;
-    searchStack: (stackName: string, date: Date) => number;
+    searchStack: (stackName: string, date: Date) => Promise<number>;
 
     createGraph: (graphName: string, propertyNames: string[]) => Promise<void>;
-    getGraph: (graphName: string) => RealmGraph | undefined;
     rateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights: number[]) => Promise<boolean>;
     undoRateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights: number[]) => Promise<boolean>;
     pageRank: (graphName: string, iterations?: number, dampingFactor?: number) => Promise<false | Dict<Dict<number>>>;

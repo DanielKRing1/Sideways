@@ -24,8 +24,12 @@ import MyThemeProvider from './theme/ThemeProvider';
 import MyTextInput from './components/ReactNative/MyTextInput';
 import MyText from './components/ReactNative/MyText';
 import RequireActiveSlice from './components/TopLevel/RequireActiveSlice';
+import { resetRealm } from './realm/reset';
 
 const NewApp = () => {
+  // resetRealm();
+  
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ReduxProvider store={store}>

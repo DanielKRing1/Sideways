@@ -10,14 +10,13 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@asianpersonn/realm-graph": "^1.0.16",
-    "@asianpersonn/realm-stack": "^1.0.11",
+    "@asianpersonn/realm-graph": "^2.0.8",
+    "@asianpersonn/realm-stack": "^2.0.6",
     "@asianpersonn/trie": "^2.0.1",
     "@react-navigation/material-bottom-tabs": "^6.2.2",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/stack": "^6.2.2",
     "@reduxjs/toolkit": "^1.8.4",
-    "dynamic-realm": "^1.0.44",
     "react": "18.0.0",
     "react-native": "0.69.4",
     "react-native-date-picker": "^4.2.5",

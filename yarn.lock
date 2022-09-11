@@ -17,6 +17,13 @@
   dependencies:
     npm-run-all "^4.1.5"
 
+"@asianpersonn/metarealm@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/metarealm/-/metarealm-1.0.4.tgz#ca228ba9e67018907107085fc0255c3e2915f625"
+  integrity sha512-zoNaouxVpjftKYKDEAel1wTM9BnEKuXx3LBHA/9dduBxyEcoV8Pje/gmb295lRXXz3lJofZFNDn8+6aNi4MFvQ==
+  dependencies:
+    realm "^10.13.0"
+
 "@asianpersonn/pagerank@^1.0.7":
   version "1.0.7"
   resolved "https://registry.npmjs.org/@asianpersonn/pagerank/-/pagerank-1.0.7.tgz"
@@ -24,23 +31,23 @@
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
 
-"@asianpersonn/realm-graph@^1.0.16":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-1.0.16.tgz#7d974cf5a8ec30e7e222b05fe3ecc5bf45a12dcd"
-  integrity sha512-KM//7n3vFDcAEyUy5bB+K7ljpOlUXxrcagp0XKLgS31Q1f4noVDAQb4VmFXXTEXzW3/UjTXl06KhBUrPYUZkfw==
+"@asianpersonn/realm-graph@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.8.tgz#3c855f4498e4cfeab04f5cd96bdc61bf626efaf1"
+  integrity sha512-Ev6V3yKeiBL8po48yCqLF0Prsu1ODMwwzFLXhyraoIN/f8O451PTOcR09DNldq96ecKqJLP34kF0TeNVy0CeHw==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
+    "@asianpersonn/metarealm" "^1.0.4"
     "@asianpersonn/pagerank" "^1.0.7"
-    catalyst-graph "^1.0.17"
-    dynamic-realm "^1.0.44"
+    catalyst-graph "^1.0.19"
     realm "^10.13.0"
 
-"@asianpersonn/realm-stack@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-stack/-/realm-stack-1.0.11.tgz#903976a97b75eb02dbdd608df70bc008cd939260"
-  integrity sha512-Vsuvc5rvucuDGdEaqURBmtE3hDeOhgY7uWIhU+JePBKw4QoHCsd8/YWMMCANcQkzLvVToDOh/5iH8B0nhcGaaw==
+"@asianpersonn/realm-stack@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-stack/-/realm-stack-2.0.6.tgz#dec854db26e359cc0cb956de2a88ff18a57e0111"
+  integrity sha512-un6LcCQYG2CQcB/prZwfdm3dbEyrFnne0SES4Syl2/ZwIkdZ8/0BxWXfz3Oa3PVMBtOsqdfJR3rwVtrHJ4h94w==
   dependencies:
-    dynamic-realm "^1.0.44"
+    "@asianpersonn/metarealm" "^1.0.4"
     realm "^10.13.0"
 
 "@asianpersonn/trie@^2.0.1":
@@ -2508,10 +2515,10 @@ caseless@~0.12.0:
   resolved "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz"
   integrity sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==
 
-catalyst-graph@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.npmjs.org/catalyst-graph/-/catalyst-graph-1.0.17.tgz"
-  integrity sha512-bdZ+SIRuGzmNoFt8bzcuO4tRJup06btUsWcppbHkD3+OV3g8JrDiSGEd79sJLZWvztq36Z4IFn63AP6paia9Aw==
+catalyst-graph@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/catalyst-graph/-/catalyst-graph-1.0.19.tgz#5fefdc42552687b8b8756a3eaaf99d66bedf4107"
+  integrity sha512-RSqHTEId1ztQlSs24Ztu5qZAezxY3WbPCyfY9/EjGOR3nHBoaUo8saoXygsqbCJ+jRcR91bFs/csHCJz6nNB4g==
   dependencies:
     typescript "^4.6.3"
 
@@ -3075,13 +3082,6 @@ domexception@^2.0.1:
   integrity sha512-yxJ2mFy/sibVQlu5qHjOkf9J3K6zgmCxgJ94u2EdvDOV09H+32LtRswEcUsmUWN72pVLOEnTSRaIVVzVQgS0dg==
   dependencies:
     webidl-conversions "^5.0.0"
-
-dynamic-realm@^1.0.44:
-  version "1.0.44"
-  resolved "https://registry.yarnpkg.com/dynamic-realm/-/dynamic-realm-1.0.44.tgz#10fd518b11019d3982fdf91c6f406d506d0278af"
-  integrity sha512-U58kiOYSB4CfGLlWg/JIFvS65ujrC/gO2FytPK6suLM1MiAHWamH/fNpZikTGHyPulCZmnYxoAJyDzXyv8V0bw==
-  dependencies:
-    realm "^10.13.0"
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
