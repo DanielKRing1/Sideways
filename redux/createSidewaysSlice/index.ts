@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { GrowingIdText as NewSliceOutputs } from '../../components/Input/GrowingIdList';
+import { GrowingIdText as NewSliceOutput } from '../../components/Input/GrowingIdList';
 import DbDriver from '../../database/dbDriver';
 import { ThunkConfig } from '../types';
 
@@ -8,7 +8,7 @@ import { ThunkConfig } from '../types';
 
 export interface CreateSSState {
   newSliceName: string;
-  possibleOutputs: NewSliceOutputs[],
+  possibleOutputs: NewSliceOutput[],
 
   createdSignature: {},
 };
@@ -24,22 +24,25 @@ const initialState: CreateSSState = {
 
 type CreateSSThunkArgs = {
   newSliceName: string,
-  possibleOutputs: string[],
+  possibleOutputs: NewSliceOutput[],
 };
 
 export const startCreateSlice = createAsyncThunk<
   boolean,
-  CreateSSThunkArgs,
-  ThunkConfig<CreateSSState>
+  undefined,
+  ThunkConfig
 >(
   'createSS/startCreateSlice',
-  async ({ newSliceName, possibleOutputs }: CreateSSThunkArgs, thunkAPI) => {
+  async (undefined, thunkAPI) => {
+
+    const { newSliceName, possibleOutputs } = thunkAPI.getState().createSidewaysSlice;
 
     // 1. Create Stack (also reloads stack LoadableRealm)
     const stackPromise: Promise<void> = DbDriver.createStack(newSliceName);
     
     // 2. Create Graph (also reloads graph LoadableRealm)
-    const graphPromise: Promise<void> = DbDriver.createGraph(newSliceName, possibleOutputs);
+    const outputTextList: string[] = possibleOutputs.map((possibleOutput: NewSliceOutput) => possibleOutput.text);
+    const graphPromise: Promise<void> = DbDriver.createGraph(newSliceName, outputTextList);
 
     const results: [void, void] = await Promise.all([ stackPromise, graphPromise ]);
 
@@ -53,8 +56,8 @@ export const startCreateSlice = createAsyncThunk<
 
 type ForceSSRerenderAction = PayloadAction<undefined>;
 type SetnewSliceNameAction = PayloadAction<string>;
-type SetPossibleOutputsAction = PayloadAction<NewSliceOutputs[]>;
-type AddPossibleOutputAction = PayloadAction<NewSliceOutputs>;
+type SetPossibleOutputsAction = PayloadAction<NewSliceOutput[]>;
+type AddPossibleOutputAction = PayloadAction<NewSliceOutput>;
 type RmPossibleOutputAction = PayloadAction<number>;
 type StartCreateSSFulfilled = PayloadAction<boolean>;
 

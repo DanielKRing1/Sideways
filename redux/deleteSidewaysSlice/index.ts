@@ -4,13 +4,13 @@ import { ThunkConfig } from '../types';
 // INITIAL STATE
 
 export interface DeleteSSState {
-  sliceName: string;
+  sliceToDelete: string;
 
   deletedSignature: {};
 };
 
 const initialState: DeleteSSState = {
-  sliceName: '',
+  sliceToDelete: '',
 
   deletedSignature: {},
 };
@@ -18,16 +18,18 @@ const initialState: DeleteSSState = {
 // ASYNC THUNKS
 
 type DeleteSSThunkArgs = {
-  sliceName: string;
+  sliceToDelete: string;
 };
 
 export const startDelete = createAsyncThunk<
   boolean,
-  DeleteSSThunkArgs,
-  ThunkConfig<DeleteSSState>
+  undefined,
+  ThunkConfig
 >(
   'deleteSS/startDelete',
-  async ({ sliceName }: DeleteSSThunkArgs, thunkAPI) => {
+  async (undefined, thunkAPI) => {
+
+    const { sliceToDelete } = thunkAPI.getState().deleteSidewaysSlice;
 
     // 1. Add to Stack
     

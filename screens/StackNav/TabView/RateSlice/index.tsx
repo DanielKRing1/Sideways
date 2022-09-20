@@ -10,7 +10,7 @@ import { TabNavHeader } from '../../../../components/Navigation/NavHeader';
 import MyText from '../../../../components/ReactNative/MyText';
 
 // REDUX
-import { RootState } from '../../../../redux';
+import { AppDispatch, RootState } from '../../../../redux';
 import { addInput, setInputs, setOutputs, startRate, forceSignatureRerender, RateInput } from '../../../../redux/rateSidewaysSlice';
 import GrowingInputsList from './components/GrowingInputsList';
 import GrowingOutputsList from './components/GrowingOutputsList';
@@ -38,15 +38,10 @@ const RateSliceScreen: FC<RateSliceScreenProps> = (props) => {
     // REDUX
     const { ratedSignature, inputs, outputs, rating } = useSelector((state: RootState) => state.rateSidewaysSlice);
     const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     const handleRate = async () => {
-        dispatch(startRate({
-            sliceName: activeSliceName,
-            inputs,
-            outputs,
-            rating,
-        }));
+        dispatch(startRate());
     };
 
     return (

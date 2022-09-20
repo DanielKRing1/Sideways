@@ -35,14 +35,17 @@ type RateSSThunkArgs = {
 
 export const startRate = createAsyncThunk<
   boolean,
-  RateSSThunkArgs,
-  ThunkConfig<RateSSState>
+  undefined,
+  ThunkConfig
 >(
   'rateSS/startRate',
-  async ({ sliceName, inputs, outputs, rating }: RateSSThunkArgs, thunkAPI) => {
+  async (undefined, thunkAPI) => {
+
+    const { activeSliceName } = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+    const { inputs, outputs, rating } = thunkAPI.getState().rateSidewaysSlice;
 
     // 1. Add to Stack
-    DbDriver.push(sliceName, {
+    DbDriver.push(activeSliceName, {
       inputs,
       outputs,
       rating,
@@ -51,7 +54,7 @@ export const startRate = createAsyncThunk<
     // 2. Rate Graph
     const inputTexts: string[] = inputs.map((input: RateInput) => input.text);
     for (const output of outputs) {
-      await DbDriver.rateGraph(sliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1));
+      await DbDriver.rateGraph(activeSliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1));
     }
 
     thunkAPI.dispatch(setRating(0));

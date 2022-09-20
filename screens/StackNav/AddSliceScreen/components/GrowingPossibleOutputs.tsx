@@ -14,7 +14,7 @@ import { StackNavigatorProps } from '../../../../navigation/StackNavigator';
 // COMPONENTS
 import Todo from '../../../../components/Dev/Todo';
 import GrowingIdList, { GrowingIdText } from '../../../../components/Input/GrowingIdList';
-import { GrowingIdText as NewSliceOutputs } from '../../../../components/Input/GrowingIdList';
+import { GrowingIdText as NewSliceOutput } from '../../../../components/Input/GrowingIdList';
 
 // NAV
 import { AddSliceNavHeader } from '../../../../components/Navigation/NavHeader';
@@ -55,7 +55,7 @@ const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = (props) => {
     }, []);
 
     // HANDLER METHODS
-    const keyExtractor = (dataPoint: NewSliceOutputs) => `${dataPoint.id}`;
+    const keyExtractor = (dataPoint: NewSliceOutput) => `${dataPoint.id}`;
     const genNextDataPlaceholder = (id: number) => ({ id, text: '' });
     const handleAddOutput = (id: number, newPossibleOutput: string) => {
         dispatch(addPossibleOutput({ id, text: newPossibleOutput }));

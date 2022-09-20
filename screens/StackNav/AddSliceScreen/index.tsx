@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 // REDUX
-import { RootState } from '../../../redux';
+import { AppDispatch, RootState } from '../../../redux';
 import { forceSignatureRerender, setNewSliceName, addPossibleOutput, removePossibleOutput, setPossibleOutputs, startCreateSlice } from '../../../redux/createSidewaysSlice';
 
 // NAVIGATION
@@ -12,9 +12,6 @@ import { ADD_SLICE_SCREEN_NAME } from '../../../navigation/constants';
 import { StackNavigatorProps } from '../../../navigation/StackNavigator';
 
 // COMPONENTS
-import Todo from '../../../components/Dev/Todo';
-import GrowingIdList, { GrowingIdText } from '../../../components/Input/GrowingIdList';
-import { GrowingIdText as NewSliceOutputs } from '../../../components/Input/GrowingIdList';
 
 // NAV
 import { AddSliceNavHeader } from '../../../components/Navigation/NavHeader';
@@ -52,7 +49,7 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
     // REDUX
     const { searchedSliceName } = useSelector((state: RootState) => state.readSidewaysSlice.toplevelReadReducer);
     const { createdSignature, possibleOutputs, newSliceName } = useSelector((state: RootState) => state.createSidewaysSlice);
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
 
     // UPDATE REDUX STATE
     useEffect(() => {
@@ -75,7 +72,7 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
                         borderColor: theme.colors.grayBorder,
                         padding: 10,
                     }}
-                    onPress={() => dispatch(startCreateSlice({ newSliceName, possibleOutputs }))}
+                    onPress={() => dispatch(startCreateSlice())}
                 >
                     <MyText>Create new slice!</MyText>
                 </MyButton>

@@ -1,10 +1,11 @@
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
+import { RootState } from ".";
 
-export type ThunkConfig<T> = {
+export type ThunkConfig = {
     /** return type for `thunkApi.getState` */
-    state: T;
+    state: RootState;
     /** type for `thunkApi.dispatch` */
-    dispatch: ThunkDispatch<T, any, AnyAction>;
+    dispatch: ThunkDispatch<RootState, any, AnyAction>;
     /** type of the `extra` argument for the thunk middleware, which will be passed in as `thunkApi.extra` */
     extra?: unknown;
     /** type to be passed into `rejectWithValue`'s first argument that will end up on `rejectedAction.payload` */
