@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
 import { TextInputProps } from 'react-native';
-import styled, { DefaultTheme } from 'styled-components/native';
+import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 import { Dict } from '../../global';
-import { theme } from '../../theme/theme';
 
 type MyTextInputProps = {
     style?: Dict<number | string>;
 } & TextInputProps;
 const MyTextInput: FC<MyTextInputProps> = (props) => {
     const { style, placeholder, value, onChangeText, onFocus, onBlur } = props;
+
+    const theme = useTheme();
 
     return (
         <StyledTextInput

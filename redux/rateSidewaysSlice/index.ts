@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { GrowingIdText as RateInput } from '../../components/Input/GrowingIdList';
+export type { GrowingIdText as RateInput } from '../../components/Input/GrowingIdList';
 import DbDriver from '../../database/dbDriver';
 import { ThunkConfig } from '../types';
 
@@ -41,16 +42,16 @@ export const startRate = createAsyncThunk<
   async ({ sliceName, inputs, outputs, rating }: RateSSThunkArgs, thunkAPI) => {
 
     // 1. Add to Stack
-    DbDriver.pushOntoStack(sliceName, {
+    DbDriver.push(sliceName, {
       inputs,
       outputs,
       rating,
     });
-    
+
     // 2. Rate Graph
     const inputTexts: string[] = inputs.map((input: RateInput) => input.text);
-    for(const output of outputs) {
-      DbDriver.rateGraph(sliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1));
+    for (const output of outputs) {
+      await DbDriver.rateGraph(sliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1));
     }
 
     thunkAPI.dispatch(setRating(0));
@@ -86,19 +87,19 @@ export const rateSS = createSlice({
       state.inputs = action.payload;
     },
     addInput: (state: RateSSState, action: AddInputAction) => {
-      state.inputs = [ ...state.inputs, action.payload ];
+      state.inputs = [...state.inputs, action.payload];
     },
     removeInput: (state: RateSSState, action: RmInputAction) => {
-      state.inputs = [ ...state.inputs.splice(action.payload, 1) ];
+      state.inputs = [...state.inputs.splice(action.payload, 1)];
     },
     setOutputs: (state: RateSSState, action: SetOutputAction) => {
       state.outputs = action.payload;
     },
     addOutput: (state: RateSSState, action: AddOutputAction) => {
-      state.outputs = [ ...state.outputs, action.payload ];
+      state.outputs = [...state.outputs, action.payload];
     },
     removeOutput: (state: RateSSState, action: RmOutputAction) => {
-      state.outputs = [ ...state.outputs.splice(action.payload, 1) ];
+      state.outputs = [...state.outputs.splice(action.payload, 1)];
     },
     forceSignatureRerender: (state: RateSSState, action: ForceRatingsRerenderAction) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -114,13 +115,13 @@ export const rateSS = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(startRate.fulfilled, (state, action: StartRateSSFulfilled) => {
       // Add user to the state array
-      
+
       // 1. Update the ratings
       state.ratedSignature = {};
 
     });
     builder.addCase(startRate.rejected, (state, action) => {
-        console.log(action.error.message);
+      console.log(action.error.message);
     });
   },
 });

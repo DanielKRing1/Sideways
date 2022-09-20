@@ -1,5 +1,5 @@
 import RealmGraphManager, { RealmGraph, RatingMode, RankedNode } from '@asianpersonn/realm-graph';
-import RealmStackManager, { RealmStack, RSSnapshot, COLUMN_NAME_SNAPSHOT_TIMESTAMP as TIMESTAMP_COLUMN_KEY } from '@asianpersonn/realm-stack';
+import RealmStackManager, { RealmStack, RSSnapshot, COLUMN_NAME_SNAPSHOT_TIMESTAMP as TIMESTAMP_COLUMN_KEY, RealmStackRow } from '@asianpersonn/realm-stack';
 import {
     DEFAULT_REALM_STACK_META_REALM_PATH,
     DEFAULT_REALM_STACK_LOADABLE_REALM_PATH,
@@ -14,7 +14,7 @@ let isLoaded = false;
 
 // LOAD STACK AND GRAPH ----
 
-const load = async () => {
+const load = async (): Promise<void> => {
     if(isLoaded) return;
 
     const graphPromise = await RealmGraphManager.loadGraphs(DEFAULT_REALM_GRAPH_META_REALM_PATH, DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH);
@@ -25,20 +25,20 @@ const load = async () => {
     isLoaded = true;
 };
 
-const throwLoadError = () => {
+const throwLoadError = (): void | never => {
     if(!isLoaded) throw new Error('Must call "load()" before RealmStack and RealmGraph can be used');
 };
 
 // SLICES AND THEIR PROPERTIES ----
 
-const getSliceNames = (): string[] => {
+const getSliceNames = (): string[] | never => {
     throwLoadError();
 
     return RealmGraphManager.getAllLoadedGraphNames();
 
     // return RealmStack.getStackNames(DEFAULT_REALM_STACK_META_REALM_PATH,DEFAULT_REALM_STACK_LOADABLE_REALM_PATH);
 };
-const getSlicePropertyNames = (sliceName: string): string[] => {
+const getSlicePropertyNames = (sliceName: string): string[] | never => {
     throwLoadError();
 
     return RealmGraphManager.getGraph(sliceName).getPropertyNames();
@@ -46,7 +46,7 @@ const getSlicePropertyNames = (sliceName: string): string[] => {
     // return RealmStack.getStackProperties(DEFAULT_REALM_STACK_META_REALM_PATH, sliceName);
 };
 
-const getSliceProperties = (sliceName: string): Dict<any> => {
+const getSliceProperties = (sliceName: string): Dict<any> | never => {
     const realmStack: RealmStack | undefined = RealmStackManager.getStack(sliceName);
 
     return realmStack !== undefined ? realmStack.getProperties() : {};
@@ -56,7 +56,7 @@ const getSliceProperties = (sliceName: string): Dict<any> => {
  * 
  * @returns List of { sliceName, lsatLogged: last time this slice was logged }, sorted by descending recency
  */
-const getLastLoggedSlices = async (): Promise<ExistingSlice[]> => {
+const getLastLoggedSlices = async (): Promise<ExistingSlice[]> | never => {
     const existingSliceNames: string[] = getSliceNames();
 
     // console.log('EXISTING SLICE NAMES');
@@ -91,7 +91,7 @@ const getLastLoggedSlices = async (): Promise<ExistingSlice[]> => {
 // REALM STACK
 
 // CREATE SINGLE STACK
-const createStack = async (stackName: string) => {
+const createStack = async (stackName: string): Promise<void> | never => {
     throwLoadError();
 
     const DEFAULT_SNAPSHOT_PROPERTIES: Dict<string> = {
@@ -108,20 +108,46 @@ const createStack = async (stackName: string) => {
     });
 };
 // READ STACK
-const getStack = async (stackName: string): Promise<SidewaysSnapshotRow[]> => {
+const getStack = async (stackName: string): Promise<SidewaysSnapshotRow[]> | never => {
     throwLoadError();
 
     const realmStack: RealmStack | never = RealmStackManager.getStack(stackName);
-    return await (realmStack.getList()) as SidewaysSnapshotRow[];
+    return await (realmStack.getListJSON()) as SidewaysSnapshotRow[];
 };
 // PUSH ONTO STACK
-const pushOntoStack = (stackName: string, ...snapshots: Dict<any>[]) => {
+const push = (stackName: string, ...snapshots: Dict<any>[]): void | never => {
     throwLoadError();
 
     RealmStackManager.getStack(stackName).push({}, ...snapshots);
 };
+
+const setSnapshotInputs = async (stackName: string, index: number, inputs: string[]): Promise<void> | never => {
+    throwLoadError();
+
+    const stack: (RealmStackRow & Realm.Object) | undefined = await RealmStackManager.getStack(stackName).getStackRow();
+    if(stack === undefined) return;
+
+    const entry: (Realm.Object & SidewaysSnapshotRow) = stack.list[index] as unknown as (Realm.Object & SidewaysSnapshotRow);
+    entry.inputs = inputs;
+};
+const setSnapshotOutputs = async (stackName: string, index: number, outputs: string[]): Promise<void> | never => {
+    throwLoadError();
+
+    const stack: (RealmStackRow & Realm.Object) | undefined = await RealmStackManager.getStack(stackName).getStackRow();
+    if(stack === undefined) return;
+
+    const entry: (Realm.Object & SidewaysSnapshotRow) = stack.list[index] as unknown as (Realm.Object & SidewaysSnapshotRow);
+    entry.outputs = outputs;
+};
+
+const deleteIndexes = async (stackName: string, indexesToRm: number[]): Promise<void> | never => {
+    throwLoadError();
+
+    await RealmStackManager.getStack(stackName).deleteIndexes(indexesToRm);
+};
+
 // SEARCH STACK
-const searchStack = async (stackName: string, date: Date): Promise<number> => {
+const searchStack = async (stackName: string, date: Date): Promise<number> | never => {
     throwLoadError();
 
     const closestIndexOlderOrEqual: number = await RealmStackManager.getStack(stackName).getClosestDate(date);
@@ -133,7 +159,7 @@ const searchStack = async (stackName: string, date: Date): Promise<number> => {
 // REALM GRAPH
 
 // CREATE A SINGLE GRAPH
-const createGraph = async (graphName: string, propertyNames: string[]) => {
+const createGraph = async (graphName: string, propertyNames: string[]): Promise<void> | never => {
     throwLoadError();
 
     await RealmGraphManager.createGraph({
@@ -145,7 +171,13 @@ const createGraph = async (graphName: string, propertyNames: string[]) => {
 };
 
 // ADD GRAPH RATING
-const rateGraph = async (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights: number[]): Promise<boolean> => {
+const rateGraph = async (
+    graphName: string,
+    outputProperty: string,
+    inputProperties: string[],
+    rating: number,
+    weights: number[]=new Array(inputProperties.length).fill(1/inputProperties.length)
+): Promise<boolean> | never => {
     throwLoadError();
 
     const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
@@ -155,13 +187,21 @@ const rateGraph = async (graphName: string, outputProperty: string, inputPropert
 
     return true;
 };
-const undoRateGraph = async (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights: number[]): Promise<boolean> => {
+const undoRateGraph = async (
+    graphName: string,
+    outputProperty: string,
+    inputProperties: string[],
+    rating: number,
+    weights: number[]=new Array(inputProperties.length).fill(1/inputProperties.length)
+): Promise<boolean> | never => {
     throwLoadError();
 
-    rating *= -1;
-    weights = weights.map((weight: number) => -1 * weight);
+    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
 
-    return rateGraph(graphName, outputProperty, inputProperties, rating, weights);
+    realmGraph.rate(outputProperty, inputProperties, rating, weights, RatingMode.Single);
+    realmGraph.rate(outputProperty, inputProperties, rating, weights, RatingMode.Collective);
+
+    return true;
 };
 const pageRank = async (graphName: string, iterations?: number, dampingFactor?: number): Promise<Dict<Dict<number>>> | never => {
     throwLoadError();
@@ -187,7 +227,10 @@ const Driver: DriverType = {
 
     createStack,
     getStack,
-    pushOntoStack,
+    push,
+    setSnapshotInputs,
+    setSnapshotOutputs,
+    deleteIndexes,
     searchStack,
 
     createGraph,

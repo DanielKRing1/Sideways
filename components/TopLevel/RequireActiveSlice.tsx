@@ -20,12 +20,13 @@ const RequireActiveSlice: FC<RequireActiveSliceProps> = (props) => {
     const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
     
     useEffect(() => {
-        // If no active slice selected
-        if(activeSliceName === '') {
+        // If no active slice selected or
+        // not a valid slice name
+        if(activeSliceName === '' || !dbDriver.getSliceNames().includes(activeSliceName)) {
             // Nav to Select Active Slice screen
             if(dbDriver.getSliceNames().length > 0) navigation.navigate(ACTIVE_SLICE_SCREEN_NAME);
             // Or nav to Add Slice screen
-            else navigation.navigate(ADD_SLICE_SCREEN_NAME as keyof StackNavigatorParamList, {  inputSliceName: '' });
+            else navigation.navigate(ADD_SLICE_SCREEN_NAME as keyof StackNavigatorParamList, {  inputSliceName: activeSliceName });
         }
     }, [activeSliceName]);
 

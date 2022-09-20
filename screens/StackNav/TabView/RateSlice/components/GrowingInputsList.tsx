@@ -44,14 +44,11 @@ const GrowingInputList: FC = (props) => {
         dispatch(setInputs(inputs));
     };
 
-    const startingId: number = inputs.reduce((maxId: number, curVal: RateInput) => Math.max(maxId, curVal.id), 0);
-
     return (
         <GrowingIdList
             data={inputs}
             createRenderItemComponent={createInputsRenderItemComponent}
             keyExtractor={keyExtractor}
-            startingId={startingId}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateInput}
             handleAddInput={handleAddInput}

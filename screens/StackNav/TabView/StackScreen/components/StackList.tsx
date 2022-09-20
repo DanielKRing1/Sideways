@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 // DB DRIVER
 import dbDriver from '../../../../../database/dbDriver';
-import { DbLoaderContext } from '../../../../../contexts/DbLoader';
+import { DbLoaderContext } from '../../../../../contexts/DbLoader/DbLoader';
 
 // REDUX
 import { RootState } from '../../../../../redux';
@@ -25,7 +25,7 @@ const createStackCard = (): FC<StackCardProps> => (props) => {
     return (
         <TouchableOpacity onPress={() => {}}>
             <FlexRow>
-                <MyText>{item.timestamp}</MyText>
+                <MyText>{item.timestamp.toDateString()}</MyText>
                 <MyText>{item.rating}</MyText>
 
                 <MyText>Inputs:</MyText>
@@ -47,24 +47,38 @@ type StackListProps= {
 const StackList: FC<StackListProps> = (props) => {
     const {  } = props;
 
+    // LOCAL STATE
+    const [ searchIndex, setSearchIndex ] = useState<number>(-1);
+    const [ stack, setStack ] = useState<SidewaysSnapshotRow[]>([]);
+
     // REDUX
     const { activeSliceName, searchedSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
     const { stackStartDate, readStackSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.internalReadReducer.readStackReducer }));
 
     // DB DRIVER
     const { isLoaded } = useContext(DbLoaderContext);
-    const stack = useMemo(() => {
-        if(!activeSliceName) return [];
-        
-        return dbDriver.getStack(activeSliceName);
-    }, [isLoaded, activeSliceName]);
-    const searchIndex: number = useMemo(() => {
-        if(!activeSliceName) return 0;
 
-        const index = dbDriver.searchStack(activeSliceName, stackStartDate || new Date(0));
+    // 1. Get stack list
+    useEffect(() => {
+        // if(!activeSliceName) return setStack([]);
+
+        (async () => {
+            const stack: SidewaysSnapshotRow[] = await dbDriver.getStack(activeSliceName);
+            setStack(stack);
+        })();
+
+    }, [isLoaded, activeSliceName]);
+
+    // 2. Get stack search index
+    useEffect(() => {
+        // if(!activeSliceName) return setSearchIndex(-1);
+
+        (async () => {
+            let index: number = await dbDriver.searchStack(activeSliceName, stackStartDate);
+            setSearchIndex(index);
+        })();
         
-        return index > -1 ? index : 0;
-    }, [isLoaded, activeSliceName, stackStartDate, stack]);
+    }, [stackStartDate, stack]);
 
     // LIST COMPONENT
     const StackCard = useMemo(() => createStackCard(), []);

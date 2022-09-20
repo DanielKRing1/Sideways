@@ -19,7 +19,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import StackNavigator from './navigation/StackNavigator';
 
-import { DbLoaderContext, DbLoaderProvider } from './contexts/DbLoader';
+import { DbLoaderContext, DbLoaderProvider } from './contexts/DbLoader/DbLoader';
 import MyThemeProvider from './theme/ThemeProvider';
 import MyTextInput from './components/ReactNative/MyTextInput';
 import MyText from './components/ReactNative/MyText';

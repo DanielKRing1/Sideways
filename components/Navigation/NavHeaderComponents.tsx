@@ -12,7 +12,6 @@ import { setNewSliceName } from "../../redux/createSidewaysSlice";
 import { setSearchedSliceName } from "../../redux/readSidewaysSlice";
 import MyTextInput from "../ReactNative/MyTextInput";
 import MyText from "../ReactNative/MyText";
-import { theme } from "../../theme/theme";
 import MyButton from "../ReactNative/MyButton";
 import { BackButton, PlusButton, ProfileButton, SettingsButton } from "../../navigation/components/Buttons";
 import { FlexRow } from "../Flex";
@@ -45,6 +44,8 @@ const createActiveSliceNavButton: FC<ActiveSliceNavButtonProps<keyof StackNaviga
     const { navigation } = props;
 
     const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
+    
+    const theme = useTheme();
     
     return (
         <MyButton

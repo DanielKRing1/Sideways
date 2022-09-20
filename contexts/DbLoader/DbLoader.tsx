@@ -1,6 +1,7 @@
 import React, { createContext, FC, useEffect, useState } from "react";
-import MyText from "../components/ReactNative/MyText";
-import dbDriver from "../database/dbDriver";
+
+import { useDbDriverLoader } from "../../hooks/useDbDriverLoader";
+import { LoadingComponent } from "./components/LoadingComponent";
 
 // CONTEXT
 type DbLoaderContextValueType = {
@@ -20,25 +21,15 @@ type DbLoaderProviderType = {
 const DbLoaderProvider: FC<DbLoaderProviderType> = (props) => {
     const { children } = props;
     
-    const [ isLoaded, setIsLoaded ] = useState(dbDriver.isLoaded);
-
-    const load = async (): Promise<void> => {
-        if(dbDriver.isLoaded) return;
-        await dbDriver.load();
-
-        console.log('about to set load');
-        setIsLoaded(true);
-        console.log('set load');
-    };
-    useEffect(() => { load(); }, []);
+    const { isLoaded, load } = useDbDriverLoader();
 
     return (
         <DbLoaderContext.Provider style={{flex: 1}} value={{ isLoaded, load }}>
         {
             !isLoaded ?
-                <MyText>Loading...</MyText>
+                <LoadingComponent/>
                 :
-            children
+                children
         }
         </DbLoaderContext.Provider>
     );

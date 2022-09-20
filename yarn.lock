@@ -31,21 +31,21 @@
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
 
-"@asianpersonn/realm-graph@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.8.tgz#3c855f4498e4cfeab04f5cd96bdc61bf626efaf1"
-  integrity sha512-Ev6V3yKeiBL8po48yCqLF0Prsu1ODMwwzFLXhyraoIN/f8O451PTOcR09DNldq96ecKqJLP34kF0TeNVy0CeHw==
+"@asianpersonn/realm-graph@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.9.tgz#6877eaec08363d4e3a7c5d4e79e1db87f3bfa30a"
+  integrity sha512-PwrhEK3l2WF0wLT98zC8T7qLrAQEZPEvnXkj/VW3szOMCV6QbyBDYK4SEcKDc8quNVNc3kMRkRPMr3OYJsa7Fw==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
     "@asianpersonn/metarealm" "^1.0.4"
     "@asianpersonn/pagerank" "^1.0.7"
-    catalyst-graph "^1.0.19"
+    catalyst-graph "^1.0.22"
     realm "^10.13.0"
 
-"@asianpersonn/realm-stack@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-stack/-/realm-stack-2.0.6.tgz#dec854db26e359cc0cb956de2a88ff18a57e0111"
-  integrity sha512-un6LcCQYG2CQcB/prZwfdm3dbEyrFnne0SES4Syl2/ZwIkdZ8/0BxWXfz3Oa3PVMBtOsqdfJR3rwVtrHJ4h94w==
+"@asianpersonn/realm-stack@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-stack/-/realm-stack-2.0.7.tgz#531cbbacf259842d921dd92e10f87ce2c2d63316"
+  integrity sha512-Dzi6bVktILofvbSoAjJhuKElmya2B0v/EHum/lS26LbWhUALdbKwcMh2HqDTs5RfE/LyRQkqSi/+lulv4GExuw==
   dependencies:
     "@asianpersonn/metarealm" "^1.0.4"
     realm "^10.13.0"
@@ -2515,10 +2515,10 @@ caseless@~0.12.0:
   resolved "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz"
   integrity sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==
 
-catalyst-graph@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/catalyst-graph/-/catalyst-graph-1.0.19.tgz#5fefdc42552687b8b8756a3eaaf99d66bedf4107"
-  integrity sha512-RSqHTEId1ztQlSs24Ztu5qZAezxY3WbPCyfY9/EjGOR3nHBoaUo8saoXygsqbCJ+jRcR91bFs/csHCJz6nNB4g==
+catalyst-graph@^1.0.22:
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/catalyst-graph/-/catalyst-graph-1.0.22.tgz#75ace534e9db03b5839d50723431775f72b0d6a5"
+  integrity sha512-6tnvAnRAz7tM2ooVbdAVI4DSfLtrMNavPuy06zZBEr5PbFRGZDIx4CgP+cV82v2xuUFeXJYvmagQZ/SHCPQ31w==
   dependencies:
     typescript "^4.6.3"
 

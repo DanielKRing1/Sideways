@@ -10,8 +10,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@asianpersonn/realm-graph": "^2.0.8",
-    "@asianpersonn/realm-stack": "^2.0.6",
+    "@asianpersonn/realm-graph": "^2.0.9",
+    "@asianpersonn/realm-stack": "^2.0.7",
     "@asianpersonn/trie": "^2.0.1",
     "@react-navigation/material-bottom-tabs": "^6.2.2",
     "@react-navigation/native": "^6.0.11",

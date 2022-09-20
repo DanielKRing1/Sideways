@@ -1,18 +1,21 @@
 import { combineReducers } from 'redux';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { GrowingIdText as RecoInput } from '../../components/Input/GrowingIdList';
+export type { GrowingIdText as RecoInput } from '../../components/Input/GrowingIdList';
+
 // INITIAL STATE
 
 export interface RecommendationsState {
   recommendationSliceOutput: string;
-  recommendationsInputNodeIds: string[];
+  recommendationInputs: RecoInput[];
 
   recommendationsSignature: {};
 };
 
 const initialState: RecommendationsState = {
   recommendationSliceOutput: '',
-  recommendationsInputNodeIds: [],
+  recommendationInputs: [],
 
   recommendationsSignature: {},
 };
@@ -21,9 +24,9 @@ const initialState: RecommendationsState = {
 
 type ForceRecommendationsRerenderAction = PayloadAction<undefined>;
 type SetRecommendationSliceOuputAction = PayloadAction<string>;
-type SetRecommendationInputNodeIds = PayloadAction<string[]>;
-type AddRecommendationInputNodeId = PayloadAction<string>;
-type RemoveRecommendationInputNodeId = PayloadAction<number>;
+type SetRecommendationInputs = PayloadAction<RecoInput[]>;
+type AddRecommendationInput = PayloadAction<RecoInput>;
+type RemoveRecommendationInput = PayloadAction<number>;
 
 // SLICE
 
@@ -34,14 +37,14 @@ export const recommendationsSlice = createSlice({
     setRecommendationSliceOutput: (state: RecommendationsState, action: SetRecommendationSliceOuputAction) => {
       state.recommendationSliceOutput = action.payload;
     },
-    setRecommendationInputNodeIds: (state: RecommendationsState, action: SetRecommendationInputNodeIds) => {
-      state.recommendationsInputNodeIds = action.payload;
+    setRecommendationInputs: (state: RecommendationsState, action: SetRecommendationInputs) => {
+      state.recommendationInputs = action.payload;
     },
-    addRecommendationInputNodeId: (state: RecommendationsState, action: AddRecommendationInputNodeId) => {
-      state.recommendationsInputNodeIds = [ ...state.recommendationsInputNodeIds, action.payload ];
+    addRecommendationInput: (state: RecommendationsState, action: AddRecommendationInput) => {
+      state.recommendationInputs = [ ...state.recommendationInputs, action.payload ];
     },
-    removeRecommendationInputNodeId: (state: RecommendationsState, action: RemoveRecommendationInputNodeId) => {
-      state.recommendationsInputNodeIds = [ ...state.recommendationsInputNodeIds.splice(action.payload, 1) ];
+    removeRecommendationInput: (state: RecommendationsState, action: RemoveRecommendationInput) => {
+      state.recommendationInputs = [ ...state.recommendationInputs.splice(action.payload, 1) ];
     },
     forceSignatureRerender: (state: RecommendationsState, action: ForceRecommendationsRerenderAction) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -56,7 +59,7 @@ export const recommendationsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setRecommendationSliceOutput, setRecommendationInputNodeIds, addRecommendationInputNodeId, removeRecommendationInputNodeId, forceSignatureRerender } = recommendationsSlice.actions;
+export const { setRecommendationSliceOutput, setRecommendationInputs, addRecommendationInput, removeRecommendationInput, forceSignatureRerender } = recommendationsSlice.actions;
 
 
 export default recommendationsSlice.reducer;

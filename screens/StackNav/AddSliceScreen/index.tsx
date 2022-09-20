@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import styled, { DefaultTheme } from 'styled-components/native';
+import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 // REDUX
 import { RootState } from '../../../redux';
@@ -21,9 +21,9 @@ import { AddSliceNavHeader } from '../../../components/Navigation/NavHeader';
 import MyTextInput from '../../../components/ReactNative/MyTextInput';
 import MyButton from '../../../components/ReactNative/MyButton';
 import MyText from '../../../components/ReactNative/MyText';
-import { theme } from '../../../theme/theme';
 import { FlexCol } from '../../../components/Flex';
 import VerticalSpace from '../../../components/Spacing/VerticalSpace';
+import GrowingPossibleOutputs from './components/GrowingPossibleOutputs';
 
 // Possible outputs
 
@@ -46,6 +46,9 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
     const { navigation, route } = props;
     const { inputSliceName } = route.params;
 
+    // THEME
+    const theme = useTheme();
+
     // REDUX
     const { searchedSliceName } = useSelector((state: RootState) => state.readSidewaysSlice.toplevelReadReducer);
     const { createdSignature, possibleOutputs, newSliceName } = useSelector((state: RootState) => state.createSidewaysSlice);
@@ -55,31 +58,12 @@ const AddSliceScreen: FC<StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>> = (p
     useEffect(() => {
         dispatch(setNewSliceName(searchedSliceName));
     }, []);
-
-    // HANDLER METHODS
-    const keyExtractor = (dataPoint: NewSliceOutputs) => `${dataPoint.id}`;
-    const genNextDataPlaceholder = (id: number) => ({ id, text: '' });
-    const handleAddInput = (id: number, newPossibleInput: string) => {
-        dispatch(addPossibleOutput({ id, text: newPossibleInput }));
-    };
-    const handleUpdateInput = (newText: string, index: number) => {
-        possibleOutputs[index].text = newText;
-        // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-        dispatch(setPossibleOutputs(possibleOutputs));
-    }
     
     return (
         <View>
             <AddSliceNavHeader/>
 
-            <GrowingIdList
-                data={possibleOutputs}
-                createRenderItemComponent={createRenderItemComponent}
-                keyExtractor={keyExtractor}
-                genNextDataPlaceholder={genNextDataPlaceholder}
-                handleUpdateInput={handleUpdateInput}
-                handleAddInput={handleAddInput}
-            />
+            <GrowingPossibleOutputs/>
 
             <VerticalSpace/>
 

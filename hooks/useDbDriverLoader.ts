@@ -10,7 +10,7 @@ export const useDbDriverLoader = () => {
 
         setIsLoaded(true);
     };
-    load();
+    if(!dbDriver.isLoaded) load();
 
     return {
         isLoaded,

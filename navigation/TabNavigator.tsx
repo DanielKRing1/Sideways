@@ -5,9 +5,9 @@ import { createMaterialBottomTabNavigator, MaterialBottomTabScreenProps } from '
 
 import { GRAPHS_SCREEN_NAME, RATE_SCREEN_NAME, STACK_SCREEN_NAME } from './constants';
 
-import StackViewScreen from '../screens/Stack/Tab/StackView';
-import RateScreen from '../screens/Stack/Tab/RateSlice';
-import GraphViewScreen from '../screens/Stack/Tab/GraphView';
+import StackViewScreen from '../screens/StackNav/TabView/StackScreen';
+import RateScreen from '../screens/StackNav/TabView/RateSlice';
+import GraphViewScreen from '../screens/StackNav/TabView/AnayticsView';
 
 export type TabNavigatorParamList = {
   [GRAPHS_SCREEN_NAME]: undefined;

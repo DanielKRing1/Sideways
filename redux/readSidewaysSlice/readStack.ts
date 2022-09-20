@@ -4,20 +4,20 @@ import { ThunkConfig } from '../types';
 // INITIAL STATE
 
 export interface ReadStackState {
-    stackStartDate: Date | null;
+    stackStartDate: Date;
 
     readStackSignature: {};
 };
 
 const initialState: ReadStackState = {
-    stackStartDate: null,
+    stackStartDate: new Date(),
 
     readStackSignature: {},
 };
 
 // ACTION TYPES
 
-type SetStartDateAction = PayloadAction<Date | null>;
+type SetStartDateAction = PayloadAction<Date>;
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 
 // SLICE

@@ -3,10 +3,10 @@ import { createStackNavigator, StackScreenProps } from '@react-navigation/stack'
 
 import { TABS_SCREEN_NAME, PROFILE_SCREEN_NAME, ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME, SETTINGS_SCREEN_NAME } from './constants';
 import TabNavigator from './TabNavigator';
-import ProfileScreen from '../screens/Stack/ProfileScreen';
-import SettingsScreen from '../screens/Stack/SettingsScreen';
-import ActiveSliceScreen from '../screens/Stack/ActiveSliceScreen';
-import AddSliceScreen from '../screens/Stack/AddSliceScreen';
+import ProfileScreen from '../screens/StackNav/ProfileScreen';
+import SettingsScreen from '../screens/StackNav/SettingsScreen';
+import ActiveSliceScreen from '../screens/StackNav/ActiveSliceScreen';
+import AddSliceScreen from '../screens/StackNav/AddSliceScreen';
 
 export type StackNavigatorParamList = {
     [TABS_SCREEN_NAME]: undefined;

@@ -35,13 +35,13 @@ export const startCreateSlice = createAsyncThunk<
   'createSS/startCreateSlice',
   async ({ newSliceName, possibleOutputs }: CreateSSThunkArgs, thunkAPI) => {
 
-    // 1. Create Stack
-    const stackPromise = await DbDriver.createStack(newSliceName);
+    // 1. Create Stack (also reloads stack LoadableRealm)
+    const stackPromise: Promise<void> = DbDriver.createStack(newSliceName);
     
-    // 2. Create Graph
-    const graphPromise = await DbDriver.createGraph(newSliceName, possibleOutputs);
+    // 2. Create Graph (also reloads graph LoadableRealm)
+    const graphPromise: Promise<void> = DbDriver.createGraph(newSliceName, possibleOutputs);
 
-    await Promise.all([ stackPromise, graphPromise ]);
+    const results: [void, void] = await Promise.all([ stackPromise, graphPromise ]);
 
     thunkAPI.dispatch(forceSignatureRerender());
 
