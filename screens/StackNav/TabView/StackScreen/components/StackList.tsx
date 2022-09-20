@@ -14,17 +14,24 @@ import { RootState } from '../../../../../redux';
 import { FlexRow } from '../../../../../components/Flex';
 import { SearchableFlatList } from '../../../../../components/Search/SearchableFlatList';
 import MyText from '../../../../../components/ReactNative/MyText';
+import MyButton from '../../../../../components/ReactNative/MyButton';
 
 type StackCardProps = {
     item: SidewaysSnapshotRow;
-    index?: number;
+    index: number;
 };
-const createStackCard = (): FC<StackCardProps> => (props) => {
-    const { item } = props;
+const createStackCard = (deleteStackEntry: (index: number) => void): FC<StackCardProps> => (props) => {
+    const { item, index } = props;
 
     return (
         <TouchableOpacity onPress={() => {}}>
             <FlexRow>
+                <MyButton
+                    onPress={() => deleteStackEntry(index)}
+                >
+                    <MyText>X</MyText>
+                </MyButton>
+
                 <MyText>{item.timestamp.toDateString()}</MyText>
                 <MyText>{item.rating}</MyText>
 
@@ -81,7 +88,10 @@ const StackList: FC<StackListProps> = (props) => {
     }, [stackStartDate, stack]);
 
     // LIST COMPONENT
-    const StackCard = useMemo(() => createStackCard(), []);
+    const deleteStackEntry = async (index: number) => {
+        dbDriver.deleteIndexes(activeSliceName, [index]);
+    }
+    const StackCard = createStackCard(deleteStackEntry);
 
     console.log(searchIndex)
     console.log('searchIndex')
