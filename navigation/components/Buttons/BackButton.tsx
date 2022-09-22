@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 
 import IconButton, { IconButtonProps } from '../../../components/Button/IconButton';
 
-type PlusButtonProps = {
+type BackButtonProps = {
 
 } & Omit<IconButtonProps, 'iconName'>;
-const PlusButton: FC<PlusButtonProps> = (props) => {
+const BackButton: FC<BackButtonProps> = (props) => {
     return (
         <IconButton
             iconName='angle-double-left'
@@ -14,4 +14,4 @@ const PlusButton: FC<PlusButtonProps> = (props) => {
     );
 }
 
-export default PlusButton;
+export default BackButton;
