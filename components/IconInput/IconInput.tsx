@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
+import { useFlexContainer } from '../../hooks/useFlexContainer';
 
 import IconButton, { IconButtonProps } from '../Button/IconButton';
+import { FlexRowProps } from '../Flex';
 import MyText from '../ReactNative/MyText';
 
 export type IconInputProps = {
@@ -10,18 +12,35 @@ export type IconInputProps = {
     selectedColor: string;
 } & IconButtonProps;
 const IconInput: FC<IconInputProps> = (props) => {
-    const { name, iconName, onPress, isSelected, size, unselectedColor, selectedColor } = props;
+    const {
+        name, isSelected, unselectedColor, selectedColor,
+        iconName, size,
+        onPress,
+        flexDirection='row', front=true,
+        children
+    } = props;
+
+    const FlexContainer: FC<FlexRowProps> = useFlexContainer(flexDirection);
 
     return (
-        <IconButton
-            flexDirection='column'
-            iconName={iconName}
-            onPress={onPress}
-            size={size}
-            color={isSelected ? selectedColor : unselectedColor}
+        <FlexContainer
+            {...props}
         >
-            <MyText>{name}</MyText>
-        </IconButton>
+            { !front && !!children && children }
+
+            <IconButton
+                flexDirection='column'
+                iconName={iconName}
+                onPress={onPress}
+                size={size}
+                color={isSelected ? selectedColor : unselectedColor}
+                >
+                <MyText>{name}</MyText>
+            </IconButton>
+
+            { front && !!children && children }
+            
+        </FlexContainer>
     );
 }
 
