@@ -3,12 +3,13 @@ import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { FlexCol, FlexRow } from '../Flex';
 import IconInput, { IconInputProps } from './IconInput';
+import IconInputRow from './IconInputRow';
 
-type TempProps = {
+type IconInputGridProps = {
     iconProps: IconInputProps[];
     colCount: number;
 };
-const Temp: FC<TempProps> = (props) => {
+const IconInputGrid: FC<IconInputGridProps> = (props) => {
     const { iconProps, colCount } = props;
 
     const iconPropRows: IconInputProps[][] = useMemo(() => {
@@ -36,19 +37,10 @@ const Temp: FC<TempProps> = (props) => {
             alignItems='center'
         >
         {
-            iconPropRows.map((row: IconInputProps[]) => (
-                <FlexRow
-                    justifyContent='space-around'
-                    alignItems='center'
-                >
-                {
-                    row.map((iconInput: IconInputProps) => <IconInput {...iconInput} />)
-                }
-                </FlexRow>
-            ))
+            iconPropRows.map((row: IconInputProps[]) => <IconInputRow iconProps={row} />)
         }
         </FlexCol>
     );
 }
 
-export default Temp;
+export default IconInputGrid;
