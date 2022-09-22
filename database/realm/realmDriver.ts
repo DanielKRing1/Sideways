@@ -1,4 +1,4 @@
-import RealmGraphManager, { RealmGraph, RatingMode, RankedNode } from '@asianpersonn/realm-graph';
+import RealmGraphManager, { RealmGraph, RatingMode, RankedNode, genEdgeName, CGNode, CGEdge, genCollectiveAverageName, genSingleAverageName } from '@asianpersonn/realm-graph';
 import RealmStackManager, { RealmStack, RSSnapshot, COLUMN_NAME_SNAPSHOT_TIMESTAMP as TIMESTAMP_COLUMN_KEY, RealmStackRow } from '@asianpersonn/realm-stack';
 import {
     DEFAULT_REALM_STACK_META_REALM_PATH,
@@ -8,6 +8,7 @@ import {
 } from './config';
 
 import { Dict } from '../../global';
+import { DriverType, ExistingSlice, SidewaysSnapshotRow } from '../types';
 
 // VARIABLES
 let isLoaded = false;
@@ -225,6 +226,37 @@ const createGraph = async (graphName: string, propertyNames: string[]): Promise<
     });
 };
 
+// READ GRAPH
+const getNode = (graphName: string, nodeId: string): Realm.Object & CGNode | undefined | never => {
+    throwLoadError();
+
+    const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+
+    return realmGraph.getNode(nodeId);
+}
+const getEdge = (graphName: string, node1Id: string, node2Id: string): Realm.Object & CGEdge | undefined | never => {
+    throwLoadError();
+
+    const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+
+    const edgeId: string = genEdgeName(node1Id, node2Id);
+    return realmGraph.getEdge(edgeId);
+}
+const getAllNodes = (graphName: string): Realm.Results<Realm.Object & CGNode> | [] | never => {
+    throwLoadError();
+
+    const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+
+    return realmGraph.getAllNodes();
+}
+const getAllEdges = (graphName: string): Realm.Results<Realm.Object & CGEdge> | [] | never => {
+    throwLoadError();
+
+    const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+
+    return realmGraph.getAllEdges();
+}
+
 
 // UPDATE / ADD GRAPH RATING
 const rateGraph = async (
@@ -274,11 +306,26 @@ const pageRank = async (graphName: string, iterations?: number, dampingFactor?: 
     return realmGraph.pageRank(iterations, dampingFactor);
 };
 // GET GRAPH RECOMMENDATIONS
-const getRecommendations = async (graphName: string, desiredOutput: string, inputNodeIds: string[], targetInputNodeWeight: number, edgeInflationMagnitude: number, iterations?: number, dampingFactor?: number): Promise<RankedNode[]> | never => {
+const SINGLE_KEY: string = 'SINGLE';
+const COLLECTIVE_KEY: string = 'COLLECTIVE';
+type OutputKeyType = typeof SINGLE_KEY | typeof COLLECTIVE_KEY;
+export const OUTPUT_KEYS: Record<OutputKeyType, OutputKeyType> = {
+    [SINGLE_KEY]: SINGLE_KEY,
+    [COLLECTIVE_KEY]: COLLECTIVE_KEY,
+}
+const sortRankedNodes = (rankedNodes: Dict<Dict<number>>, targetOutput: string, outputType: OutputKeyType=OUTPUT_KEYS.SINGLE): RankedNode[] => {
+    const targetOutputKey: string = outputType === OUTPUT_KEYS.SINGLE ? genSingleAverageName(targetOutput) : genCollectiveAverageName(targetOutput);
+
+    return Object.keys(rankedNodes).map((key: string) => ({ ...rankedNodes[key], id: key })).sort((a: RankedNode, b: RankedNode) =>  a[targetOutputKey]-b[targetOutputKey]);
+}
+
+const getRecommendations = (graphName: string, targetOutput: string, inputNodeIds: string[], iterations?: number, dampingFactor?: number): RankedNode[] | never => {
     throwLoadError();
     
-    const realmGraph: RealmGraph = await RealmGraphManager.getGraph(graphName);
-    return realmGraph.recommend(desiredOutput, inputNodeIds, targetInputNodeWeight, edgeInflationMagnitude, iterations, dampingFactor);
+    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+    const rankedNodes: Dict<Dict<number>> = realmGraph.rankMostInfluentialToCentralSet(inputNodeIds, iterations, dampingFactor);
+
+    return sortRankedNodes(rankedNodes, targetOutput);
 };
 
 const Driver: DriverType = {
@@ -300,11 +347,17 @@ const Driver: DriverType = {
     deleteSnapshotIndexes,
 
     createGraph,
+    getNode,
+    getAllNodes,
+    getEdge,
+    getAllEdges,
     deleteGraph,
     rateGraph,
     undoRateGraph,
     pageRank,
     getRecommendations,
+
+    sortRankedNodes,
 };
 
 export default Driver;
