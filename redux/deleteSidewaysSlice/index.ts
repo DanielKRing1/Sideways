@@ -1,40 +1,34 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import dbDriver from '../../database/dbDriver';
 import { ThunkConfig } from '../types';
 
 // INITIAL STATE
 
 export interface DeleteSSState {
-  sliceToDelete: string;
-
-  deletedSignature: {};
+  deleteSSSignature: {};
 };
 
 const initialState: DeleteSSState = {
-  sliceToDelete: '',
-
-  deletedSignature: {},
+  deleteSSSignature: {},
 };
 
 // ASYNC THUNKS
 
-type DeleteSSThunkArgs = {
-  sliceToDelete: string;
-};
+type DeleteSSThunkArgs = string;
 
-export const startDelete = createAsyncThunk<
+export const startDeleteSlice = createAsyncThunk<
   boolean,
-  undefined,
+  DeleteSSThunkArgs,
   ThunkConfig
 >(
   'deleteSS/startDelete',
-  async (undefined, thunkAPI) => {
+  async (sliceName: DeleteSSThunkArgs, thunkAPI) => {
 
-    const { sliceToDelete } = thunkAPI.getState().deleteSidewaysSlice;
-
-    // 1. Add to Stack
+    // 1. Delete from Stack
+    await dbDriver.deleteStack(sliceName);
     
-    
-    // 2. Add to Graph
+    // 2. Delete from Graph
+    await dbDriver.deleteGraph(sliceName);
 
     thunkAPI.dispatch(forceSignatureRerender());
 
@@ -60,19 +54,19 @@ export const deleteSS = createSlice({
       // immutable state based off those changes
 
       // 1. Update the ratings
-      state.deletedSignature = {};
+      state.deleteSSSignature = {};
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(startDelete.fulfilled, (state, action: StartRateSSFulfilled) => {
+    builder.addCase(startDeleteSlice.fulfilled, (state, action: StartRateSSFulfilled) => {
       // Add user to the state array
       
       // 1. Update the ratings
-      state.deletedSignature = {};
+      state.deleteSSSignature = {};
 
     });
-    builder.addCase(startDelete.rejected, (state, action) => {
+    builder.addCase(startDeleteSlice.rejected, (state, action) => {
         console.log(action.error.message);
     });
   },

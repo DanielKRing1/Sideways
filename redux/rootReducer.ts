@@ -5,6 +5,7 @@ import rateSidewaysSlice from './rateSidewaysSlice';
 import deleteSidewaysSlice from './deleteSidewaysSlice';
 import recommendationsSlice from './recommendationsSlice';
 import statsSlice from './statsSlice';
+import snapshotCrudSlice from './snapshotCrudSlice';
 
 export default combineReducers({
     createSidewaysSlice,
@@ -13,4 +14,5 @@ export default combineReducers({
     deleteSidewaysSlice,
     recommendationsSlice,
     statsSlice,
+    snapshotCrudSlice,
 });

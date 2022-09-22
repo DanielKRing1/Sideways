@@ -19,17 +19,18 @@ import { FlexRow } from '../../../../components/Flex';
 import { abbrDate } from '../../../../utils/date';
 import MyText from '../../../../components/ReactNative/MyText';
 import DateCard from './DateCard';
+import MyButton from '../../../../components/ReactNative/MyButton';
 
 type ExistingSliceCardProps = {
     item: ExistingSlice;
     index?: number;
 };
-const createExistingSliceCard = (onSelectSlice: (sliceName: string) => void): FC<ExistingSliceCardProps> => (props) => {
+const createExistingSliceCard = (onSelectSlice: (sliceName: string) => void, onDeleteSlice: (sliceName: string) => void): FC<ExistingSliceCardProps> => (props) => {
     const { item } = props;
 
     const { month=undefined, day=undefined } = item.lastLogged !== undefined ? abbrDate(item.lastLogged) : {};
 
-    console.log(item.lastLogged)
+    console.log(item.lastLogged);
 
     return (
         <StyledTouchableOpacity onPress={() => onSelectSlice(item.sliceName)}>
@@ -44,6 +45,12 @@ const createExistingSliceCard = (onSelectSlice: (sliceName: string) => void): FC
                         />
                 }
                 <MyText>{item.sliceName}</MyText>
+
+                <MyButton
+                    onPress={() => onDeleteSlice(item.sliceName)}
+                >
+                    <MyText>X</MyText>
+                </MyButton>
             </FlexRow>
         </StyledTouchableOpacity>
     )
@@ -62,9 +69,10 @@ const StyledTouchableOpacity = styled.TouchableOpacity`
 
 type ExistingSliceListProps= {
     onSelectSlice: (sliceName: string) => void;
+    onDeleteSlice: (sliceName: string) => void;
 };
 const ExistingSliceList: FC<ExistingSliceListProps> = (props) => {
-    const { onSelectSlice } = props;
+    const { onSelectSlice, onDeleteSlice } = props;
 
     const [ lastLogged, setLastLogged ] = useState<ExistingSlice[]>([]);
     const [ trie ] = useState<TrieTree<ExistingSlice>>(createTrie());
@@ -108,7 +116,7 @@ const ExistingSliceList: FC<ExistingSliceListProps> = (props) => {
     }, [searchedSliceName]);
 
     // LIST COMPONENT
-    const ExistingSliceCard = useMemo(() => createExistingSliceCard(onSelectSlice), [onSelectSlice]);
+    const ExistingSliceCard = useMemo(() => createExistingSliceCard(onSelectSlice, onDeleteSlice), [onSelectSlice, onDeleteSlice]);
 
     return (
         <FlatList

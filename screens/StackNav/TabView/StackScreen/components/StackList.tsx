@@ -1,5 +1,4 @@
 import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { FlatList, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
@@ -11,52 +10,110 @@ import { DbLoaderContext } from '../../../../../contexts/DbLoader/DbLoader';
 import { RootState } from '../../../../../redux';
 
 // COMPONENTS
-import { FlexRow } from '../../../../../components/Flex';
+import { FlexCol, FlexRow } from '../../../../../components/Flex';
 import { SearchableFlatList } from '../../../../../components/Search/SearchableFlatList';
 import MyText from '../../../../../components/ReactNative/MyText';
 import MyButton from '../../../../../components/ReactNative/MyButton';
 
 type StackCardProps = {
-    item: SidewaysSnapshotRow;
+    item: Realm.Object & SidewaysSnapshotRow;
     index: number;
 };
-const createStackCard = (deleteStackEntry: (index: number) => void): FC<StackCardProps> => (props) => {
+const createStackCard = (
+    updateSnapshot: (oldSnapshot: Realm.Object & SidewaysSnapshotRow, newInputs: string[], newOutputs: string[], newRating: number) => Promise<void>,
+    deleteSnapshot: (snapshot: Realm.Object & SidewaysSnapshotRow, index: number) => void,
+): FC<StackCardProps> => (props) => {
+
     const { item, index } = props;
+
+    const [ inputsToRm, setInputsToRm ] = useState<Set<string>>(new Set());
+    const [ outputsToRm, setOutputsToRm ] = useState<Set<string>>(new Set());
+
+    const toggleInputToRm = (input: string) => {
+        if(inputsToRm.has(input)) inputsToRm.delete(input);
+        else inputsToRm.add(input);
+
+        setInputsToRm(new Set([...inputsToRm]));
+    }
+
+    const toggleOutputToRm = (output: string) => {
+        if(outputsToRm.has(output)) inputsToRm.delete(output);
+        else outputsToRm.add(output);
+
+        setOutputsToRm(new Set([...outputsToRm]));
+    }
+
+    const _updateSnapshot = async () => {
+        const inputsToKeep: string[] = item.inputs.filter((input) => !inputsToRm.has(input));
+        const outputsToKeep: string[] = item.outputs.filter((output) => !outputsToRm.has(output));
+
+        await updateSnapshot(item, inputsToKeep, outputsToKeep, item.rating);
+    }
 
     return (
         <TouchableOpacity onPress={() => {}}>
-            <FlexRow>
+            <FlexCol>
                 <MyButton
-                    onPress={() => deleteStackEntry(index)}
+                    onPress={() => deleteSnapshot(item, index)}
                 >
-                    <MyText>X</MyText>
+                    <MyText>Delete Stack Snapshot X</MyText>
                 </MyButton>
 
                 <MyText>{item.timestamp.toDateString()}</MyText>
                 <MyText>{item.rating}</MyText>
-
+                
                 <MyText>Inputs:</MyText>
                 {
-                    item.inputs.map((input: string) => <MyText>{input}</MyText>)
+                    item.inputs.map((input: string) => (
+                        <FlexRow>
+                            <MyText
+                                style={{color: !inputsToRm.has(input) ? 'green' : 'red'}}
+                            >{input}</MyText>
+                            <MyButton
+                                onPress={() => toggleInputToRm(input)}
+                            >
+                                <MyText>X</MyText>
+                            </MyButton>
+                        </FlexRow>
+                    ))
                 }
                 
                 <MyText>Outputs:</MyText>
                 {
-                    item.outputs.map((output: string) => <MyText>{output}</MyText>)
+                    item.outputs.map((output: string) => (
+                        <FlexRow>
+                            <MyText
+                                style={{color: !outputsToRm.has(output) ? 'green' : 'red'}}
+                            >{output}</MyText>
+                            <MyButton
+                                onPress={() => toggleOutputToRm(output)}
+                            >
+                                <MyText>X</MyText>
+                            </MyButton>
+                        </FlexRow>
+                    ))
                 }
-            </FlexRow>
+
+                <MyButton
+                    onPress={_updateSnapshot}
+                >
+                    <MyText>Update Stack Snapshot</MyText>
+                </MyButton>
+            </FlexCol>
         </TouchableOpacity>
     )
 };
 
 type StackListProps= {
+    updateSnapshot: (oldSnapshot: Realm.Object & SidewaysSnapshotRow, newInputs: string[], newOutputs: string[], newRating: number) => Promise<void> | never;
+    deleteSnapshot: (snapshot: Realm.Object & SidewaysSnapshotRow, index: number) => Promise<void> | never;
 };
 const StackList: FC<StackListProps> = (props) => {
-    const {  } = props;
+    const { updateSnapshot, deleteSnapshot } = props;
 
     // LOCAL STATE
     const [ searchIndex, setSearchIndex ] = useState<number>(-1);
-    const [ stack, setStack ] = useState<SidewaysSnapshotRow[]>([]);
+    const [ stack, setStack ] = useState<Realm.List<SidewaysSnapshotRow> | []>([]);
 
     // REDUX
     const { activeSliceName, searchedSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
@@ -70,7 +127,7 @@ const StackList: FC<StackListProps> = (props) => {
         // if(!activeSliceName) return setStack([]);
 
         (async () => {
-            const stack: SidewaysSnapshotRow[] = await dbDriver.getStack(activeSliceName);
+            const stack: Realm.List<SidewaysSnapshotRow> | [] = await dbDriver.getStack(activeSliceName);
             setStack(stack);
         })();
 
@@ -88,10 +145,7 @@ const StackList: FC<StackListProps> = (props) => {
     }, [stackStartDate, stack]);
 
     // LIST COMPONENT
-    const deleteStackEntry = async (index: number) => {
-        dbDriver.deleteIndexes(activeSliceName, [index]);
-    }
-    const StackCard = createStackCard(deleteStackEntry);
+    const StackCard = createStackCard(updateSnapshot, deleteSnapshot);
 
     console.log(searchIndex)
     console.log('searchIndex')
@@ -99,6 +153,8 @@ const StackList: FC<StackListProps> = (props) => {
     return (
         <SearchableFlatList
             searchIndex={searchIndex}
+            // @ts-ignore
+            // TODO: See if this works
             data={stack}
             renderItem={StackCard}
             keyExtractor={(item: SidewaysSnapshotRow): string => item.timestamp.toISOString()}

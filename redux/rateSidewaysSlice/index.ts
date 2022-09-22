@@ -54,7 +54,7 @@ export const startRate = createAsyncThunk<
     // 2. Rate Graph
     const inputTexts: string[] = inputs.map((input: RateInput) => input.text);
     for (const output of outputs) {
-      await DbDriver.rateGraph(activeSliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1));
+      await DbDriver.rateGraph(activeSliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1/inputs.length/outputs.length));
     }
 
     thunkAPI.dispatch(setRating(0));

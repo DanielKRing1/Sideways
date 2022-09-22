@@ -9,14 +9,17 @@ type DriverType = {
     getLastLoggedSlices: () => Promise<ExistingSlice[]> | never;
 
     createStack: (stackName: string) => Promise<void> | never;
-    getStack: (stackName: string) => Promise<SidewaysSnapshotRow[]> | never;
-    push: (stackName: string, ...snapshots: Dict<any>[]) => void | never;
-    setSnapshotInputs: (stackName: string, index: number, inputs: string[]) => Promise<void> | never;
-    setSnapshotOutputs: (stackName: string, index: number, outputs: string[]) => Promise<void> | never;
-    deleteIndexes: (stackName: string, indexesToRm: number[]) => Promise<void> | never;
+    getStack: (stackName: string) => Promise<Realm.List<SidewaysSnapshotRow> | []> | never;
+    getList: (stackName: string) => Promise<SidewaysSnapshotRow[]> | never;
     searchStack: (stackName: string, date: Date) => Promise<number> | never;
+    push: (stackName: string, ...snapshots: Dict<any>[]) => void | never;
+    deleteStack: (stackName: string) => Promise<void> | never;
+
+    deleteSnapshotIndexes: (stackName: string, indexesToRm: number[]) => Promise<void> | never;
+    updateSnapshot: (sliceName: string, oldSnapshot: Realm.Object & SidewaysSnapshotRow, newInputs: string[], newOutputs: string[], newRating: number) => Promise<void> | never;
 
     createGraph: (graphName: string, propertyNames: string[]) => Promise<void> | never;
+    deleteGraph: (graphName: string) => Promise<void> | never;
     rateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
     undoRateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
     pageRank: (graphName: string, iterations?: number, dampingFactor?: number) => Promise<false | Dict<Dict<number>>> | never;
