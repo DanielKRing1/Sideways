@@ -4,7 +4,8 @@ import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import MyButton, { MyButtonProps } from '../ReactNative/MyButton';
-import { FlexRow, FlexRowProps, FlexCol } from '../Flex';
+import { FlexRowProps } from '../Flex';
+import { useFlexContainer } from '../../hooks/useFlexContainer';
 import { RequiredExceptFor } from '../../global';
 
 
@@ -35,7 +36,7 @@ const IconButton: FC<IconButtonProps> = (props) => {
         children
     } = props;
 
-    const FlexContainer = useMemo(() => flexDirection === 'row' ? FlexRow : FlexCol, [flexDirection]);
+    const FlexContainer: FC<FlexRowProps> = useFlexContainer(flexDirection);
 
     return (
         <StyledMyButton
