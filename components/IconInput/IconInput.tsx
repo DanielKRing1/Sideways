@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import IconButton, { IconButtonProps } from '../Button/IconButton';
 import MyText from '../ReactNative/MyText';
 
-type IconInputProps = {
+export type IconInputProps = {
     name: string;
     isSelected: boolean;
     unselectedColor: string;
