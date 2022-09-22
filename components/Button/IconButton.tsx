@@ -11,6 +11,9 @@ import { RequiredExceptFor } from '../../global';
 export type IconButtonProps = {
     iconName: string;
 
+    size?: number;
+    color?: string;
+
     marginTop?: number;
     marginRight?: number;
     marginBottom?: number;
@@ -21,14 +24,16 @@ export type IconButtonProps = {
 
 } & MyButtonProps & RequiredExceptFor<FlexRowProps, 'children'>;
 const IconButton: FC<IconButtonProps> = (props) => {
+    const theme = useTheme();
+
     const {
         iconName,
+        size=theme.iconSizes.md,
+        color=theme.colors.darkRed,
         marginTop=0, marginRight=0, marginBottom=0, marginLeft=0,
         flexDirection='row', front=true,
         children
     } = props;
-
-    const theme = useTheme();
 
     const FlexContainer = useMemo(() => flexDirection === 'row' ? FlexRow : FlexCol, [flexDirection]);
 
@@ -50,8 +55,8 @@ const IconButton: FC<IconButtonProps> = (props) => {
                         marginLeft,
                     }}
                     name={iconName}
-                    size={theme.iconSizes.md}
-                    color={theme.colors.darkRed}
+                    size={size}
+                    color={color}
                 />
 
                 { front && !!children && children }
