@@ -29,11 +29,11 @@ export const statsSlice = createSlice({
   name: 'statsSlice',
   initialState,
   reducers: {
+    setStatsInput: (state: StatsState, action: SetStatsInputAction) => {
+      state.statsInput = action.payload;
+    },
     setStatsOutput: (state: StatsState, action: SetStatsInputAction) => {
       state.statsOutput = action.payload;
-    },
-    setStatsInputs: (state: StatsState, action: SetStatsInputAction) => {
-      state.statsInput = action.payload;
     },
     forceSignatureRerender: (state: StatsState, action: ForceStatsRerenderAction) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -48,7 +48,7 @@ export const statsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setStatsOutput, setStatsInputs, forceSignatureRerender } = statsSlice.actions;
+export const { setStatsInput, setStatsOutput, forceSignatureRerender } = statsSlice.actions;
 
 
 export default statsSlice.reducer;
