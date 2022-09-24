@@ -11,11 +11,11 @@ type StickyScrollViewProps = {
     stickyHeaderIndices: number[];
     children: React.ReactNode;
     
-    scrollActions: ScrollAction[];
+    scrollActions?: ScrollAction[];
 } & ScrollViewProps;
 
 const StickyScrollView: FC<StickyScrollViewProps> = (props) => {
-    const { stickyHeaderIndices, children, scrollActions } = props;
+    const { stickyHeaderIndices, children, scrollActions=[] } = props;
 
     const unfiredActions = new Set<ScrollAction>(scrollActions);
     const firedActions = new Set<ScrollAction>();
