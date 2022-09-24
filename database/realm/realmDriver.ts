@@ -1,5 +1,6 @@
-import RealmGraphManager, { RealmGraph, RatingMode, RankedNode, genEdgeName, CGNode, CGEdge, genCollectiveAverageName, genSingleAverageName } from '@asianpersonn/realm-graph';
+import RealmGraphManager, { RealmGraph, RatingMode, RankedNode, genEdgeName, CGNode, CGEdge, genCollectiveAverageName, genSingleAverageName, ID_KEY } from '@asianpersonn/realm-graph';
 import RealmStackManager, { RealmStack, RSSnapshot, COLUMN_NAME_SNAPSHOT_TIMESTAMP as TIMESTAMP_COLUMN_KEY, RealmStackRow } from '@asianpersonn/realm-stack';
+
 import {
     DEFAULT_REALM_STACK_META_REALM_PATH,
     DEFAULT_REALM_STACK_LOADABLE_REALM_PATH,
@@ -8,7 +9,8 @@ import {
 } from './config';
 
 import { Dict } from '../../global';
-import { DriverType, ExistingSlice, SidewaysSnapshotRow } from '../types';
+import { DriverType, ExistingSlice, HiLoRankings, OutputKeyType, OUTPUT_KEYS, SidewaysSnapshotRow } from '../types';
+import { sortRankedNodesMapByOutput } from './utils';
 
 // VARIABLES
 let isLoaded = false;
@@ -299,33 +301,40 @@ const deleteGraph = async (graphName: string): Promise<void> | never => {
     await RealmGraphManager.getGraph(graphName).deleteGraph();
 };
 
-const pageRank = async (graphName: string, iterations?: number, dampingFactor?: number): Promise<Dict<Dict<number>>> | never => {
+// GET GRAPH RECOMMENDATIONS
+
+/**
+ * Raw PageRank on all Nodes
+ * 
+ * @param graphName 
+ * @param iterations 
+ * @param dampingFactor 
+ * @returns 
+ */
+const pageRank = (graphName: string, iterations?: number, dampingFactor?: number): Dict<Dict<number>> | never => {
     throwLoadError();
     
-    const realmGraph: RealmGraph = await RealmGraphManager.getGraph(graphName);
+    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
     return realmGraph.pageRank(iterations, dampingFactor);
 };
-// GET GRAPH RECOMMENDATIONS
-const SINGLE_KEY: string = 'SINGLE';
-const COLLECTIVE_KEY: string = 'COLLECTIVE';
-type OutputKeyType = typeof SINGLE_KEY | typeof COLLECTIVE_KEY;
-export const OUTPUT_KEYS: Record<OutputKeyType, OutputKeyType> = {
-    [SINGLE_KEY]: SINGLE_KEY,
-    [COLLECTIVE_KEY]: COLLECTIVE_KEY,
-}
-const sortRankedNodes = (rankedNodes: Dict<Dict<number>>, targetOutput: string, outputType: OutputKeyType=OUTPUT_KEYS.SINGLE): RankedNode[] => {
-    const targetOutputKey: string = outputType === OUTPUT_KEYS.SINGLE ? genSingleAverageName(targetOutput) : genCollectiveAverageName(targetOutput);
 
-    return Object.keys(rankedNodes).map((key: string) => ({ ...rankedNodes[key], id: key })).sort((a: RankedNode, b: RankedNode) =>  a[targetOutputKey]-b[targetOutputKey]);
-}
-
+/**
+ * Recommmend Nodes based on an set of input Nodes
+ * 
+ * @param graphName 
+ * @param targetOutput 
+ * @param inputNodeIds 
+ * @param iterations 
+ * @param dampingFactor 
+ * @returns 
+ */
 const getRecommendations = (graphName: string, targetOutput: string, inputNodeIds: string[], iterations?: number, dampingFactor?: number): RankedNode[] | never => {
     throwLoadError();
     
     const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
     const rankedNodes: Dict<Dict<number>> = realmGraph.rankMostInfluentialToCentralSet(inputNodeIds, iterations, dampingFactor);
 
-    return sortRankedNodes(rankedNodes, targetOutput);
+    return sortRankedNodesMapByOutput(rankedNodes, targetOutput);
 };
 
 const Driver: DriverType = {
@@ -356,8 +365,6 @@ const Driver: DriverType = {
     undoRateGraph,
     pageRank,
     getRecommendations,
-
-    sortRankedNodes,
 };
 
 export default Driver;

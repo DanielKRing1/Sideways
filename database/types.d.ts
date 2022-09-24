@@ -1,4 +1,5 @@
-import { CGNode } from "@asianpersonn/realm-graph";
+import { CGNode, CGEdge } from "@asianpersonn/realm-graph";
+import { OutputKeyType } from './realm/realmDriver';
 
 type ExistingSlice = { sliceName: string, lastLogged: Date | undefined };
 
@@ -28,10 +29,8 @@ type DriverType = {
     deleteGraph: (graphName: string) => Promise<void> | never;
     rateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
     undoRateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
-    pageRank: (graphName: string, iterations?: number, dampingFactor?: number) => Promise<false | Dict<Dict<number>>> | never;
+    pageRank: (graphName: string, iterations?: number, dampingFactor?: number) => Dict<Dict<number>> | never;
     getRecommendations: (graphName: string, targetOutput: string, inputNodeIds: string[], iterations?: number, dampingFactor?: number) => RankedNode[] | never;
-
-    sortRankedNodes: (rankedNodes: Dict<Dict<number>>, targetAttr: string) => RankedNode[];
 }
 
 type SidewaysSnapshotRow = {
@@ -41,3 +40,18 @@ type SidewaysSnapshotRow = {
 
     timestamp: Date;
 };
+
+type RankedNodesMap = Dict<Dict<number>>;
+
+type HiLoRankings = {
+    highestRankedLists: Dict<RankedNode[]>;
+    lowestRankedLists: Dict<RankedNode[]>;
+};
+
+const SINGLE_KEY: string = 'SINGLE';
+const COLLECTIVE_KEY: string = 'COLLECTIVE';
+type OutputKeyType = typeof SINGLE_KEY | typeof COLLECTIVE_KEY;
+export const OUTPUT_KEYS: Record<OutputKeyType, OutputKeyType> = {
+    [SINGLE_KEY]: SINGLE_KEY,
+    [COLLECTIVE_KEY]: COLLECTIVE_KEY,
+}

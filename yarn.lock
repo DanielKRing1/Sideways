@@ -12,7 +12,7 @@
 
 "@asianpersonn/dict-utils@^1.0.5":
   version "1.0.5"
-  resolved "https://registry.npmjs.org/@asianpersonn/dict-utils/-/dict-utils-1.0.5.tgz"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/dict-utils/-/dict-utils-1.0.5.tgz#e66ed9b77ba0e20c980c295f6fbf575d0679570c"
   integrity sha512-mcSrORWYTLu53hmcanIEWN2ESDKU8hHFgKFZtyoKNbxAelZD08FwzWf7dF5lk/N3cWDq4PIUpYSiUksc77omaw==
   dependencies:
     npm-run-all "^4.1.5"
@@ -31,10 +31,10 @@
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
 
-"@asianpersonn/realm-graph@^2.0.9":
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.9.tgz#6877eaec08363d4e3a7c5d4e79e1db87f3bfa30a"
-  integrity sha512-PwrhEK3l2WF0wLT98zC8T7qLrAQEZPEvnXkj/VW3szOMCV6QbyBDYK4SEcKDc8quNVNc3kMRkRPMr3OYJsa7Fw==
+"@asianpersonn/realm-graph@^2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.12.tgz#1d6c168bb844e3b0a406ae04f46c67f5aa90bffc"
+  integrity sha512-tKQ306Yb/2ZjWinUHfxW8e11udHLQcvqDW1ZNKfxQiJKduiujXx3wO73raKafijDm32Q/gAPfvWoSuBrkQnb8Q==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
     "@asianpersonn/metarealm" "^1.0.4"
