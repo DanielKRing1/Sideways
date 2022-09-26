@@ -15,11 +15,15 @@ import { RootState } from '../../../../redux';
 // COMPONENTS
 import { FlexRow } from '../../../../components/Flex';
 
+// HOOKS
+import { useTrie } from '../../../../hooks/useTrie';
+
 // UTILS
 import { abbrDate } from '../../../../utils/date';
 import MyText from '../../../../components/ReactNative/MyText';
 import DateCard from './DateCard';
 import MyButton from '../../../../components/ReactNative/MyButton';
+import { ExistingSlice } from '../../../../database/types';
 
 type ExistingSliceCardProps = {
     item: ExistingSlice;
@@ -74,9 +78,8 @@ type ExistingSliceListProps= {
 const ExistingSliceList: FC<ExistingSliceListProps> = (props) => {
     const { onSelectSlice, onDeleteSlice } = props;
 
+    const { setValues: setTrieValues, search, autoComplete } = useTrie<ExistingSlice>((existingSlice: ExistingSlice) => existingSlice.sliceName);
     const [ lastLogged, setLastLogged ] = useState<ExistingSlice[]>([]);
-    const [ trie ] = useState<TrieTree<ExistingSlice>>(createTrie());
-    const [ autoComplete, setAutoComplete ] = useState<ExistingSlice[]>([]);
 
     // REDUX
     const { activeSliceName, searchedSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
@@ -94,26 +97,10 @@ const ExistingSliceList: FC<ExistingSliceListProps> = (props) => {
     }, [isLoaded]);
 
     // 2. Fill lastLogged slices into Trie
-    useEffect(() => {
-        trie.clear();
-        
-        const trieValues: { key: string, value: ExistingSlice }[] = lastLogged.map((existingSlice: ExistingSlice) => ({
-            key: existingSlice.sliceName,
-            value: existingSlice
-        }));
-        // console.log(trieValues);
-        trie.addAll(trieValues);
-
-    }, [lastLogged]);
+    useEffect(() => { setTrieValues(searchedSliceName, lastLogged); }, [lastLogged]);
 
     // 3. Get autoComplete list, based on searchedSliceName
-    useEffect(() => {
-        // Show lastLogged slices if no search input
-        if(searchedSliceName === '') setAutoComplete(lastLogged);
-        // Else show autocomplete list based on search input
-        else setAutoComplete(trie.search(searchedSliceName));
-
-    }, [searchedSliceName]);
+    useEffect(() => { search(searchedSliceName) }, [searchedSliceName]);
 
     // LIST COMPONENT
     const ExistingSliceCard = useMemo(() => createExistingSliceCard(onSelectSlice, onDeleteSlice), [onSelectSlice, onDeleteSlice]);
