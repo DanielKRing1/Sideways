@@ -1,9 +1,10 @@
-import { CGNode, CGEdge } from "@asianpersonn/realm-graph";
+import { CGNode, CGEdge, RankedNode } from "@asianpersonn/realm-graph";
 import { OutputKeyType } from './realm/realmDriver';
+import { Dict } from '../global';
 
 type ExistingSlice = { sliceName: string, lastLogged: Date | undefined };
 
-type DriverType = {
+type DbDriverType = {
     isLoaded: boolean;
     load: () => Promise<void>;
     getSliceNames: () => string[] | never;
@@ -29,9 +30,40 @@ type DriverType = {
     deleteGraph: (graphName: string) => Promise<void> | never;
     rateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
     undoRateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
-    pageRank: (graphName: string, iterations?: number, dampingFactor?: number) => Dict<Dict<number>> | never;
-    getRecommendations: (graphName: string, targetOutput: string, inputNodeIds: string[], iterations?: number, dampingFactor?: number) => RankedNode[] | never;
-}
+};
+
+type PageRankArgs = {
+    graphName: string;
+    possibleOutputs: string[];
+    listLength: number;
+    outputType: OutputKeyType;
+    iterations?: number;
+    dampingFactor?: number;
+};
+type GetRecommendationsArgs = {
+    graphName: string;
+    targetOutput: string;
+    inputNodeIds: string[];
+    outputType?: OutputKeyType;
+    iterations?: number;
+    dampingFactor?: number;
+};
+type GetNodeStatsArgs = {
+    graphName: string;
+    nodeId: string;
+    rawOutputs: string[];
+};
+type GetNodeStatsByOutputArgs = {
+    listLength: number;
+} & GetNodeStatsArgs;
+type RecoDriverType = {
+    pageRank: (args: PageRankArgs) => HiLoRankingByOutput | never;
+    getRecommendations: (args: GetRecommendationsArgs) => RankedNodes[] | never;
+    getNodeStats: (args: GetNodeStatsArgs) => RankedNode | undefined;
+    getCollectivelyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRanking>;
+    getSinglyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
+    getHighlyRatedTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
+};
 
 type SidewaysSnapshotRow = {
     inputs: string[];
@@ -43,15 +75,20 @@ type SidewaysSnapshotRow = {
 
 type RankedNodesMap = Dict<Dict<number>>;
 
-type HiLoRankings = {
-    highestRankedLists: Dict<RankedNode[]>;
-    lowestRankedLists: Dict<RankedNode[]>;
+type HiLoRanking = {
+    highestRanked: RankedNode[];
+    lowestRanked: RankedNode[];
 };
+type HiLoRankingByOutput = Dict<HiLoRanking>;
 
-const SINGLE_KEY: string = 'SINGLE';
-const COLLECTIVE_KEY: string = 'COLLECTIVE';
-type OutputKeyType = typeof SINGLE_KEY | typeof COLLECTIVE_KEY;
-export const OUTPUT_KEYS: Record<OutputKeyType, OutputKeyType> = {
+const SINGLE_KEY = 'SINGLE';
+const SINGLE_TALLY_KEY = 'SINGLE_TALLY';
+const COLLECTIVE_KEY = 'COLLECTIVE';
+const COLLECTIVE_TALLY_KEY = 'COLLECTIVE_TALLY';
+type OutputKeyType = typeof SINGLE_KEY | typeof SINGLE_TALLY_KEY | typeof COLLECTIVE_KEY | typeof COLLECTIVE_TALLY_KEY;
+export const OUTPUT_KEYS = {
     [SINGLE_KEY]: SINGLE_KEY,
-    [COLLECTIVE_KEY]: COLLECTIVE_KEY,
-}
+    [SINGLE_TALLY_KEY]: SINGLE_KEY,
+    [COLLECTIVE_KEY]: COLLECTIVE_TALLY_KEY,
+    [COLLECTIVE_TALLY_KEY]: COLLECTIVE_TALLY_KEY,
+} as const;

@@ -1,4 +1,4 @@
-import RealmGraphManager, { RealmGraph, RatingMode, RankedNode, genEdgeName, CGNode, CGEdge, genCollectiveAverageName, genSingleAverageName, ID_KEY } from '@asianpersonn/realm-graph';
+import RealmGraphManager, { RealmGraph, RatingMode, RankedNode, genEdgeName, CGNode, CGEdge, ID_KEY } from '@asianpersonn/realm-graph';
 import RealmStackManager, { RealmStack, RSSnapshot, COLUMN_NAME_SNAPSHOT_TIMESTAMP as TIMESTAMP_COLUMN_KEY, RealmStackRow } from '@asianpersonn/realm-stack';
 
 import {
@@ -9,8 +9,7 @@ import {
 } from './config';
 
 import { Dict } from '../../global';
-import { DriverType, ExistingSlice, HiLoRankings, OutputKeyType, OUTPUT_KEYS, SidewaysSnapshotRow } from '../types';
-import { sortRankedNodesMapByOutput } from './utils';
+import { DbDriverType, ExistingSlice, SidewaysSnapshotRow } from '../types';
 
 // VARIABLES
 let isLoaded = false;
@@ -28,8 +27,8 @@ const load = async (): Promise<void> => {
     isLoaded = true;
 };
 
-const throwLoadError = (): void | never => {
-    if(!isLoaded) throw new Error('Must call "load()" before RealmStack and RealmGraph can be used');
+export const throwLoadError = (): void | never => {
+    if(!isLoaded) throw new Error('Must call "load()" before RealmStack or RealmGraph can be used');
 };
 
 // SLICES AND THEIR PROPERTIES ----
@@ -301,43 +300,7 @@ const deleteGraph = async (graphName: string): Promise<void> | never => {
     await RealmGraphManager.getGraph(graphName).deleteGraph();
 };
 
-// GET GRAPH RECOMMENDATIONS
-
-/**
- * Raw PageRank on all Nodes
- * 
- * @param graphName 
- * @param iterations 
- * @param dampingFactor 
- * @returns 
- */
-const pageRank = (graphName: string, iterations?: number, dampingFactor?: number): Dict<Dict<number>> | never => {
-    throwLoadError();
-    
-    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
-    return realmGraph.pageRank(iterations, dampingFactor);
-};
-
-/**
- * Recommmend Nodes based on an set of input Nodes
- * 
- * @param graphName 
- * @param targetOutput 
- * @param inputNodeIds 
- * @param iterations 
- * @param dampingFactor 
- * @returns 
- */
-const getRecommendations = (graphName: string, targetOutput: string, inputNodeIds: string[], iterations?: number, dampingFactor?: number): RankedNode[] | never => {
-    throwLoadError();
-    
-    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
-    const rankedNodes: Dict<Dict<number>> = realmGraph.rankMostInfluentialToCentralSet(inputNodeIds, iterations, dampingFactor);
-
-    return sortRankedNodesMapByOutput(rankedNodes, targetOutput);
-};
-
-const Driver: DriverType = {
+const Driver: DbDriverType = {
     isLoaded,
     load,
     getSliceNames,
@@ -363,8 +326,6 @@ const Driver: DriverType = {
     deleteGraph,
     rateGraph,
     undoRateGraph,
-    pageRank,
-    getRecommendations,
 };
 
 export default Driver;
