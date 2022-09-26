@@ -10,8 +10,9 @@ import { ThunkConfig } from '../types';
 // INITIAL STATE
 
 export interface StatsState {
-  searchedStatsInput: string;
-  statsInput: string;
+  searchedNodeIdInput: string;
+  nodeIdInput: string;
+  listLength: number;
 
   // Identity Stats
   identityNodes: HiLoRankingByOutput,
@@ -30,8 +31,9 @@ export interface StatsState {
 
 const initialState: StatsState = {
   // INPUTS
-  searchedStatsInput: '',
-  statsInput: '',
+  searchedNodeIdInput: '',
+  nodeIdInput: '',
+  listLength: 5,
 
   // STATS
   identityNodes: {},
@@ -53,6 +55,8 @@ const initialState: StatsState = {
 
 // THUNKS
 
+// Identity Stats
+
 export const startGetIdentityNodes = createAsyncThunk<
   boolean,
   PageRankArgs,
@@ -64,6 +68,40 @@ export const startGetIdentityNodes = createAsyncThunk<
 
     thunkAPI.dispatch(setIdentityNodes(hiLoRankings));
     thunkAPI.dispatch(forceIdentityStatsSignatureRerender());
+
+    return true;
+  }
+);
+
+// Input Stats
+
+type StartSetNodeIdInputArgs = string;
+export const startSetNodeIdInput = createAsyncThunk<
+  boolean,
+  StartSetNodeIdInputArgs,
+  ThunkConfig
+>(
+  'statsSS/startGetNodeStats',
+  async (nodeIdInput: StartSetNodeIdInputArgs, thunkAPI) => {
+    // 1. Set node id input
+    thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
+
+    // 2. Get state
+    const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    const listLength: number = thunkAPI.getState().statsSlice.listLength;
+    const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
+
+    // 3. Dispatch stats thunks
+    const p1: Promise<any> = thunkAPI.dispatch(startGetNodeStats({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs: dbDriver.getSlicePropertyNames(activeSliceName) }));
+    const p2: Promise<any> = thunkAPI.dispatch(startGetCollectivelyTandemNodes({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs, listLength }));
+    const p3: Promise<any> = thunkAPI.dispatch(startGetSinglyTandemNodes({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs, listLength }));
+    const p4: Promise<any> = thunkAPI.dispatch(startGetHighlyRatedTandemNodes({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs, listLength }));
+
+    // 4. Await promises
+    await Promise.all([ p1, p2, p3, p4 ]);
+
+    // 5. Dispatch rerender
+    thunkAPI.dispatch(forceInputStatsSignatureRerender());
 
     return true;
   }
@@ -100,7 +138,6 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
     return true;
   }
 );
-
 export const startGetSinglyTandemNodes = createAsyncThunk<
   boolean,
   GetNodeStatsByOutputArgs,
@@ -132,6 +169,8 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
   }
 );
 
+// Recommendations
+
 export const startGetRecommendations = createAsyncThunk<
   boolean,
   GetRecommendationsArgs,
@@ -151,8 +190,9 @@ export const startGetRecommendations = createAsyncThunk<
 // ACTION TYPES
 
 // Input
-type SetSearchedStatsInputAction = PayloadAction<string>;
-type SetStatsInputAction = PayloadAction<string>;
+type SetSearchedNodeIdInputAction = PayloadAction<string>;
+type SetNodeIdInputAction = PayloadAction<string>;
+type SetListLengthAction = PayloadAction<number>;
 // Recommendations
 type SetIdentityNodesAction = PayloadAction<HiLoRankingByOutput>;
 type SetNodeStatsAction = PayloadAction<RankedNode>;
@@ -172,11 +212,14 @@ export const statsSlice = createSlice({
   initialState,
   reducers: {
     // Inputs
-    setSearchStatsInput: (state: StatsState, action: SetSearchedStatsInputAction) => {
-      state.searchedStatsInput = action.payload;
+    setSearchNodeIdInput: (state: StatsState, action: SetSearchedNodeIdInputAction) => {
+      state.searchedNodeIdInput = action.payload;
     },
-    setStatsInput: (state: StatsState, action: SetStatsInputAction) => {
-      state.statsInput = action.payload;
+    setNodeIdInput: (state: StatsState, action: SetNodeIdInputAction) => {
+      state.nodeIdInput = action.payload;
+    },
+    setListLength: (state: StatsState, action: SetListLengthAction) => {
+      state.listLength = action.payload;
     },
 
     // Recommendations
@@ -220,8 +263,8 @@ export const statsSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   // Input
-  setSearchStatsInput,
-  setStatsInput,
+  setSearchNodeIdInput,
+  setNodeIdInput,
 
   // Stats
   setIdentityNodes,
