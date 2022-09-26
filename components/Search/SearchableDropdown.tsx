@@ -8,17 +8,18 @@ import MyTextInput from '../ReactNative/MyTextInput';
 import MyText from '../ReactNative/MyText';
 
 type SearchableDropdownProps = {
+    clickOutsideId: string;
     placeholder: string;
     inputValue: string;
     setInputValue: (newValue: string) => void;
-    LeftComponent: FC | undefined;
-    DropdownComponent: FC | undefined;
-    RightComponent: FC | undefined;
+    LeftComponent?: FC | undefined;
+    DropdownComponent?: FC | undefined;
+    RightComponent?: FC | undefined;
 };
 export const SearchableDropdown: FC<SearchableDropdownProps> = (props) => {
-    const { placeholder, inputValue, setInputValue, LeftComponent, DropdownComponent, RightComponent } = props;
+    const { clickOutsideId, placeholder, inputValue, setInputValue, LeftComponent, DropdownComponent, RightComponent } = props;
 
-    const { ref, clickedInside, registerClickInside, reset } = useOnClickOutsideComponent('search-bar-test-id');
+    const { ref, clickedInside, registerClickInside, reset } = useOnClickOutsideComponent(`${clickOutsideId}/searchable-dropdown`);
 
     const shouldDisplayDropdown = !!clickedInside && !!DropdownComponent;
 
