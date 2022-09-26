@@ -7,13 +7,13 @@ import MyText from '../ReactNative/MyText';
 
 export type IconInputProps = {
     name: string;
-    isSelected: boolean;
-    unselectedColor: string;
-    selectedColor: string;
+    isSelected?: boolean;
+    unselectedColor?: string;
+    selectedColor?: string;
 } & IconButtonProps;
 const IconInput: FC<IconInputProps> = (props) => {
     const {
-        name, isSelected, unselectedColor, selectedColor,
+        name, isSelected=false, unselectedColor='white', selectedColor='black',
         iconName, size,
         onPress,
         flexDirection='row', front=true,
