@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dbDriver from '../../database/dbDriver';
 import { ThunkConfig } from '../types';
+import { SidewaysSnapshotRow } from '../../database/types';
 
 // INITIAL STATE
 
@@ -34,9 +35,8 @@ export const startDeleteSnapshot = createAsyncThunk<
 
     // 2. Undo RealmGraph rating
     const { inputs, outputs, rating } = snapshot;
-    for(const output of outputs) {
-      await dbDriver.undoRateGraph(sliceName, output, inputs, rating);
-    }
+    const promises: Promise<any>[] = outputs.map((output: string) => dbDriver.undoRateGraph(sliceName, output, inputs, rating));
+    await Promise.all(promises);
 
     thunkAPI.dispatch(forceSignatureRerender());
 
@@ -65,14 +65,12 @@ export const startUpdateSnapshot = createAsyncThunk<
 
     // 2. Undo RealmGraph rating
     const { inputs: oldInputs, outputs: oldOutputs, rating: oldRating } = oldSnapshot;
-    for(const output of oldOutputs) {
-      await dbDriver.undoRateGraph(sliceName, output, oldInputs, oldRating, new Array(oldInputs.length).fill(1/oldInputs.length/oldOutputs.length));
-    }
+    const undoPromises: Promise<any>[] = oldOutputs.map((oldOutput: string) => dbDriver.undoRateGraph(sliceName, oldOutput, oldInputs, oldRating, new Array(oldInputs.length).fill(1/oldInputs.length/oldOutputs.length)));
+    await Promise.all(undoPromises);
 
     // 3. Redo RealmGraph rating
-    for (const newOutput of newOutputs) {
-      await dbDriver.rateGraph(sliceName, newOutput, newInputs, newRating, new Array(newInputs.length).fill(1/newInputs.length/newOutput.length));
-    }
+    const redoPromises: Promise<any>[] = newOutputs.map((newOutput: string) => dbDriver.rateGraph(sliceName, newOutput, newInputs, newRating, new Array(newInputs.length).fill(1/newInputs.length/newOutput.length)));
+    await Promise.all(redoPromises);
 
     thunkAPI.dispatch(forceSignatureRerender());
 

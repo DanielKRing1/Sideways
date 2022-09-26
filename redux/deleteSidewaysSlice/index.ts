@@ -25,10 +25,11 @@ export const startDeleteSlice = createAsyncThunk<
   async (sliceName: DeleteSSThunkArgs, thunkAPI) => {
 
     // 1. Delete from Stack
-    await dbDriver.deleteStack(sliceName);
-    
+    const p1: Promise<any> = dbDriver.deleteStack(sliceName);
     // 2. Delete from Graph
-    await dbDriver.deleteGraph(sliceName);
+    const p2: Promise<any> = dbDriver.deleteGraph(sliceName);
+
+    await Promise.all([ p1, p2 ]);
 
     thunkAPI.dispatch(forceSignatureRerender());
 
