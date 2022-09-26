@@ -1,43 +1,67 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/native';
+import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 import dbDriver from '../../../../../database/dbDriver';
 import { RootState } from '../../../../../redux';
-import { setStatsInput, setStatsOutput } from '../../../../../redux/statsSlice';
 import MyTextInput from '../../../../../components/ReactNative/MyTextInput';
-import { CGNode } from '@asianpersonn/realm-graph';
+import { CGNode, RankedNode } from '@asianpersonn/realm-graph';
+import StickyScrollView from '../../../../../components/View/StickyScrollView';
+import { BoxShadow } from '../../../../../components/Shadow/BoxShadow';
+import MyText from '../../../../../components/ReactNative/MyText';
+import IconInput from '../../../../../components/IconInput/IconInput';
+import { Dict } from '../../../../../global';
+import { sortRankedNodesMapByAllOutputs, sortRankedNodesMapByOutput } from '../../../../../database/realm/utils';
+import IconInputRow from '../../../../../components/IconInput/IconInputRow';
+import IdentityNodes from './components/IdentityNodes';
+import NodeInput from './components/NodeInput';
+import InputNodeStats from './components/InputNodeStats';
+import CollectivelyTandemNodes from './components/CollectivelyTandemNodes';
+import SinglyTandemNodes from './components/SinglyTandemNodes';
+import HighlyRatedTandemNodes from './components/HighlyRatedNodes';
 
 type StatsScreenProps = {
 
 };
 const StatsScreen: FC<StatsScreenProps> = (props) => {
 
-    const { activeSliceName, statsInput, statsOutput, readSSSignature, statsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.statsSlice }));
-    const dispatch = useDispatch();
-
-    let node: CGNode;
-    let commonlyDoneWith: CGNode[];
-    let commonlyDoneByOutput: CGNode[];
-    let highlyRatedByOutput: CGNode[];
+    const theme: DefaultTheme = useTheme();
 
     return (
-        <View>
-            <MyTextInput
-                placeholder='Choose a past input'
-                value={statsInput}
-                onChangeText={(newText: string) => dispatch(setStatsInput(newText))}
-            />
+        <StickyScrollView
+            stickyHeaderIndices={[1]}
+        >
+            {/* Index 0 PageRank Stats */}
+            <BoxShadow>
+                <IdentityNodes/>
+            </BoxShadow>
 
-            <MyTextInput
-                placeholder='Choose an output'
-                value={statsOutput}
-                onChangeText={(newText: string) => dispatch(setStatsOutput(newText))}
-            />
+            {/* Index 1 Choose Input */}
+            <NodeInput/>
+
+            {/* Index 2 Node Stats */}
+            <BoxShadow>
+                <InputNodeStats/>
+            </BoxShadow>
+            
+            {/* Index 3 Collectively Tandem Nodes */}
+            <BoxShadow>
+                <CollectivelyTandemNodes/>
+            </BoxShadow>
+            
+            {/* Index 4 Singly Tandem Node */}
+            <BoxShadow>
+                <SinglyTandemNodes/>
+            </BoxShadow>
+
+            {/* Index 5 Highly Rated Tandem Nodes */}
+            <BoxShadow>
+                <HighlyRatedTandemNodes/>
+            </BoxShadow>
 
             
-        </View>
+        </StickyScrollView>
     );
 }
 
