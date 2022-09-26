@@ -1,19 +1,8 @@
 import React, { FC, useMemo } from 'react';
-import { View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
-import dbDriver from '../../../../../database/dbDriver';
-import { RootState } from '../../../../../redux';
-import MyTextInput from '../../../../../components/ReactNative/MyTextInput';
-import { CGNode, RankedNode } from '@asianpersonn/realm-graph';
 import StickyScrollView from '../../../../../components/View/StickyScrollView';
 import { BoxShadow } from '../../../../../components/Shadow/BoxShadow';
-import MyText from '../../../../../components/ReactNative/MyText';
-import IconInput from '../../../../../components/IconInput/IconInput';
-import { Dict } from '../../../../../global';
-import { sortRankedNodesMapByAllOutputs, sortRankedNodesMapByOutput } from '../../../../../database/realm/utils';
-import IconInputRow from '../../../../../components/IconInput/IconInputRow';
 import IdentityNodes from './components/IdentityNodes';
 import NodeInput from './components/NodeInput';
 import InputNodeStats from './components/InputNodeStats';
