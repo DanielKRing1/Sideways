@@ -118,7 +118,6 @@ export const startGetNodeStats = createAsyncThunk<
     if(nodeStats === undefined) return false;
 
     thunkAPI.dispatch(setNodeStats(nodeStats));
-    thunkAPI.dispatch(forceInputStatsSignatureRerender());
 
     return true;
   }
@@ -133,7 +132,6 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
     const hiLoRankings: HiLoRanking = await recommendationsDriver.getCollectivelyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
     thunkAPI.dispatch(setCollectivelyTandemNode(hiLoRankings));
-    thunkAPI.dispatch(forceInputStatsSignatureRerender());
 
     return true;
   }
@@ -148,7 +146,6 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
     const hiLoRankings: HiLoRankingByOutput = await recommendationsDriver.getSinglyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
     thunkAPI.dispatch(setSinglyTandemNodes(hiLoRankings));
-    thunkAPI.dispatch(forceInputStatsSignatureRerender());
 
     return true;
   }
@@ -163,7 +160,6 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
     const hiLoRankings: HiLoRankingByOutput = await recommendationsDriver.getHighlyRatedTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
     thunkAPI.dispatch(setHighlyRatedTandemNodes(hiLoRankings));
-    thunkAPI.dispatch(forceInputStatsSignatureRerender());
 
     return true;
   }
