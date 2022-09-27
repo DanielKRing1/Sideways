@@ -17,6 +17,7 @@ import { startGetRecommendations } from '../../../../../redux/recommendationsSli
 import GrowingRecoInputs from './components/GrowingRecoInputs';
 import MyButton from '../../../../../components/ReactNative/MyButton';
 import MyText from '../../../../../components/ReactNative/MyText';
+import RecommendationNodes from './components/RecommendationNodes';
 
 type RecommendationScreenProps = {
 
@@ -33,6 +34,8 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
     return (
         <View>
 
+            <RecommendationNodes/>
+
             <GrowingRecoInputs/>
             
             <MyButton
@@ -44,7 +47,7 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
                 }}
                 onPress={() => dispatch(startGetRecommendations({}))}
             >
-                <MyText>Create new slice!</MyText>
+                <MyText>Get Recommendations!</MyText>
             </MyButton>
 
         </View>
