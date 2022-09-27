@@ -1,15 +1,7 @@
-import React, { FC, useContext, useMemo, useState } from 'react';
+import React, { FC } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import styled, { DefaultTheme, useTheme } from 'styled-components/native';
-import { RankedNode } from '@asianpersonn/realm-graph';
-
-import { GrowingList } from '../../../../../components/Input/GrowingInputList';
-import MyTextInput from '../../../../../components/ReactNative/MyTextInput';
-
-// DB DRIVER
-import { DbLoaderContext } from '../../../../../contexts/DbLoader/DbLoader';
-import dbDriver from '../../../../../database/dbDriver';
+import styled, { useTheme } from 'styled-components/native';
 
 // REDUX
 import { AppDispatch, RootState } from '../../../../../redux';
