@@ -1,5 +1,4 @@
 import RealmGraphManager, { CGEdge, CGNode, RankedNode, RealmGraph } from "@asianpersonn/realm-graph";
-import { Dict } from "../../global";
 import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, GetRecommendationsArgs, HiLoRanking, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, PageRankArgs, RankedNodesMap, RecoDriverType, SINGLE_KEY } from "../types";
 import { throwLoadError } from "./realmDriver";
 import { filterCGEntityAttrs, getDestinationNodeId, sortRankedNodesMapByAllOutputs, sortRankedNodesMapByOutput } from "./utils";
@@ -15,7 +14,7 @@ import { filterCGEntityAttrs, getDestinationNodeId, sortRankedNodesMapByAllOutpu
  * @param dampingFactor 
  * @returns 
  */
- const getRecommendations = ({ graphName, inputNodeIds, outputType, iterations, dampingFactor }: GetRecommendationsArgs): HiLoRankingByOutput | never => {    
+ const getRecommendations = ({ graphName, inputNodeIds, outputType, iterations=20, dampingFactor=1 }: GetRecommendationsArgs): HiLoRankingByOutput | never => {    
     throwLoadError();
     const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
 

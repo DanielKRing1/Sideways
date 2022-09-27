@@ -42,7 +42,6 @@ type PageRankArgs = {
 };
 type GetRecommendationsArgs = {
     graphName: string;
-    targetOutput: string;
     inputNodeIds: string[];
     outputType?: OutputKeyType;
     iterations?: number;
