@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 import StickyScrollView from '../../../../../components/View/StickyScrollView';
