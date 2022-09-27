@@ -6,7 +6,22 @@ import { filterCGEntityAttrs, getDestinationNodeId, sortRankedNodesMapByAllOutpu
 
 // GET GRAPH RECOMMENDATIONS
 
+/**
+ * Recommmend Nodes based on an set of input Nodes
+ * 
+ * @param graphName 
+ * @param inputNodeIds 
+ * @param iterations 
+ * @param dampingFactor 
+ * @returns 
+ */
+ const getRecommendations = ({ graphName, inputNodeIds, outputType, iterations, dampingFactor }: GetRecommendationsArgs): HiLoRankingByOutput | never => {    
+    throwLoadError();
+    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
 
+    const rankedNodes: RankedNodesMap = realmGraph.rankMostInfluentialToCentralSet(inputNodeIds, iterations, dampingFactor);
+    return sortRankedNodesMapByAllOutputs(rankedNodes, outputType);
+};
 
 /**
  * Raw PageRank on all Nodes
@@ -23,26 +38,6 @@ import { filterCGEntityAttrs, getDestinationNodeId, sortRankedNodesMapByAllOutpu
     const rankingsMap: RankedNodesMap = realmGraph.pageRank(iterations, dampingFactor);
     return sortRankedNodesMapByAllOutputs(rankingsMap, possibleOutputs, listLength, outputType);
 };
-
-
-/**
- * Recommmend Nodes based on an set of input Nodes
- * 
- * @param graphName 
- * @param targetOutput 
- * @param inputNodeIds 
- * @param iterations 
- * @param dampingFactor 
- * @returns 
- */
-const getRecommendations = ({ graphName, targetOutput, inputNodeIds, outputType, iterations, dampingFactor }: GetRecommendationsArgs): RankedNode[] | never => {    
-    throwLoadError();
-    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
-
-    const rankedNodes: RankedNodesMap = realmGraph.rankMostInfluentialToCentralSet(inputNodeIds, iterations, dampingFactor);
-    return sortRankedNodesMapByOutput(rankedNodes, targetOutput, outputType);
-};
-
 
 const getNodeStats = ({ graphName, nodeId, rawOutputs }: GetNodeStatsArgs): RankedNode | undefined => {
     throwLoadError();
@@ -133,8 +128,8 @@ const getHighlyRatedTandemNodes = async ({ graphName, nodeId, rawOutputs, listLe
 }
 
 const Driver: RecoDriverType = {
-    pageRank,
     getRecommendations,
+    pageRank,
     getNodeStats,
     getCollectivelyTandemNodes,
     getSinglyTandemNodes,

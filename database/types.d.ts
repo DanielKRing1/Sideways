@@ -57,8 +57,8 @@ type GetNodeStatsByOutputArgs = {
     listLength: number;
 } & GetNodeStatsArgs;
 type RecoDriverType = {
+    getRecommendations: (args: GetRecommendationsArgs) => HiLoRankingByOutput | never;
     pageRank: (args: PageRankArgs) => HiLoRankingByOutput | never;
-    getRecommendations: (args: GetRecommendationsArgs) => RankedNodes[] | never;
     getNodeStats: (args: GetNodeStatsArgs) => RankedNode | undefined;
     getCollectivelyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRanking>;
     getSinglyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
