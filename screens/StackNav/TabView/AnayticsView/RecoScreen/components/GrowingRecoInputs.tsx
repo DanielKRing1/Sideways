@@ -1,27 +1,40 @@
-import React, { FC, useContext, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
-import { RankedNode } from '@asianpersonn/realm-graph';
+import { FlexRow } from '../../../../../../components/Flex';
 
+// MY COMPONENTS
 import GrowingIdList from '../../../../../../components/Input/GrowingIdList';
+import MyButton from '../../../../../../components/ReactNative/MyButton';
+import MyText from '../../../../../../components/ReactNative/MyText';
 import MyTextInput from '../../../../../../components/ReactNative/MyTextInput';
-
-// DB DRIVER
-import { DbLoaderContext } from '../../../../../../contexts/DbLoader/DbLoader';
-import dbDriver from '../../../../../../database/dbDriver';
 
 // REDUX
 import { RootState } from '../../../../../../redux';
-import { setRecommendationSliceOutput, setRecommendationInputs, addRecommendationInput, removeRecommendationInput, RecoInput } from '../../../../../../redux/recommendationsSlice';
+import { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, RecoInput } from '../../../../../../redux/recommendationsSlice';
+
+const createRenderItemComponent = (deleteInputNode: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
+    <FlexRow>
+        <StyledTextInput
+            placeholder={'Anotha one...'}
+            value={item.title}
+            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        />
+
+        <MyButton
+            onPress={() => deleteInputNode(index)}
+        >
+            <MyText>X</MyText>
+        </MyButton>
+    </FlexRow>
+);
 
 type GrowingRecoInputsProps = {
 
 };
 const GrowingRecoInputs: FC<GrowingRecoInputsProps> = (props) => {
     const dispatch = useDispatch();
-    const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
-    const { recommendationSliceOutput, recommendationInputs, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.recommendationsSlice }));
+    const { readSSSignature, recommendationInputs, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationsSlice }));
 
     // HANDLER METHODS
     const keyExtractor = (dataPoint: RecoInput) => `${dataPoint.id}`;
@@ -35,18 +48,10 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = (props) => {
         dispatch(setRecommendationInputs(recommendationInputs));
     }
 
-    const createRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
-        <StyledTextInput
-            placeholder={'Anotha one...'}
-            value={item.title}
-            onChangeText={(newText: string) => handleChangeText(newText, index)}
-        />
-    );
-
     return (
         <GrowingIdList
             data={recommendationInputs}
-            createRenderItemComponent={createRenderItemComponent}
+            createRenderItemComponent={createRenderItemComponent((index: number) => dispatch(removeRecommendationInput(index)))}
             keyExtractor={keyExtractor}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateInput}

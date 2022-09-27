@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import dbDriver from '../../database/dbDriver';
 import recommendationsDriver from '../../database/recommendationsDriver';
-import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, GetRecommendationsArgs, HiLoRanking, HiLoRankingByOutput, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow } from '../../database/types';
+import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow } from '../../database/types';
 import { forceSignatureRerender } from '../createSidewaysSlice';
 import { ThunkConfig } from '../types';
 
@@ -21,12 +21,9 @@ export interface StatsState {
   collectivelyTandemNodes: HiLoRanking,
   singlyTandemNodes: HiLoRankingByOutput,
   highlyRatedTandemNodes: HiLoRankingByOutput,
-  // Recommendations
-  recommendations: RankedNode[],
 
   identityStatsSignature: {};
   inputStatsSignature: {};
-  recommendationsSignature: {};
 };
 
 const initialState: StatsState = {
@@ -44,13 +41,10 @@ const initialState: StatsState = {
   },
   singlyTandemNodes: {},
   highlyRatedTandemNodes: {},
-  // RECOMMENDATIONS
-  recommendations: [],
 
   // RERENDER
   identityStatsSignature: {},
   inputStatsSignature: {},
-  recommendationsSignature: {},
 };
 
 // THUNKS
@@ -92,7 +86,7 @@ export const startSetNodeIdInput = createAsyncThunk<
     const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
 
     // 3. Dispatch stats thunks
-    const p1: Promise<any> = thunkAPI.dispatch(startGetNodeStats({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs: dbDriver.getSlicePropertyNames(activeSliceName) }));
+    const p1: Promise<any> = thunkAPI.dispatch(startGetNodeStats({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs }));
     const p2: Promise<any> = thunkAPI.dispatch(startGetCollectivelyTandemNodes({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs, listLength }));
     const p3: Promise<any> = thunkAPI.dispatch(startGetSinglyTandemNodes({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs, listLength }));
     const p4: Promise<any> = thunkAPI.dispatch(startGetHighlyRatedTandemNodes({ graphName: activeSliceName, nodeId: nodeIdInput, rawOutputs, listLength }));
@@ -165,41 +159,21 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
   }
 );
 
-// Recommendations
-
-export const startGetRecommendations = createAsyncThunk<
-  boolean,
-  GetRecommendationsArgs,
-  ThunkConfig
->(
-  'statsSS/startGetRecommendations',
-  async ({ graphName, targetOutput, inputNodeIds, iterations, dampingFactor }: GetRecommendationsArgs, thunkAPI) => {
-    const recommendations: RankedNode[] = recommendationsDriver.getRecommendations({ graphName, targetOutput, inputNodeIds, outputType: OUTPUT_KEYS.SINGLE, iterations, dampingFactor });
-
-    thunkAPI.dispatch(setRecommendations(recommendations));
-    thunkAPI.dispatch(forceRecommendationsSignatureRerender());
-
-    return true;
-  }
-);
-
 // ACTION TYPES
 
 // Input
 type SetSearchedNodeIdInputAction = PayloadAction<string>;
 type SetNodeIdInputAction = PayloadAction<string>;
 type SetListLengthAction = PayloadAction<number>;
-// Recommendations
+// Stats
 type SetIdentityNodesAction = PayloadAction<HiLoRankingByOutput>;
 type SetNodeStatsAction = PayloadAction<RankedNode>;
 type SetCollectivelyTandemNodesAction = PayloadAction<HiLoRanking>;
 type SetSinglyTandemNodesAction = PayloadAction<HiLoRankingByOutput>;
 type SetHighlyRatedTandemNodesAction = PayloadAction<HiLoRankingByOutput>;
-type SetRecommendationsAction = PayloadAction<RankedNode[]>;
 // Rerender
 type ForceIdentityStatsRerenderAction = PayloadAction<undefined>;
 type ForceInputStatsRerenderAction = PayloadAction<undefined>;
-type ForceRecommendationsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
 
@@ -218,7 +192,7 @@ export const statsSlice = createSlice({
       state.listLength = action.payload;
     },
 
-    // Recommendations
+    // Stats
     setIdentityNodes: (state: StatsState, action: SetIdentityNodesAction) => {
       state.identityNodes = action.payload;
     },
@@ -234,9 +208,6 @@ export const statsSlice = createSlice({
     setHighlyRatedTandemNodes: (state: StatsState, action: SetHighlyRatedTandemNodesAction) => {
       state.highlyRatedTandemNodes = action.payload;
     },
-    setRecommendations: (state: StatsState, action: SetRecommendationsAction) => {
-      state.recommendations = action.payload;
-    },
 
     // Rerender
     forceIdentityStatsSignatureRerender: (state: StatsState, action: ForceIdentityStatsRerenderAction) => {
@@ -249,9 +220,6 @@ export const statsSlice = createSlice({
     },
     forceInputStatsSignatureRerender: (state: StatsState, action: ForceInputStatsRerenderAction) => {
       state.inputStatsSignature = {};
-    },
-    forceRecommendationsSignatureRerender: (state: StatsState, action: ForceRecommendationsRerenderAction) => {
-      state.recommendationsSignature = {};
     },
   },
 });
@@ -268,13 +236,10 @@ export const {
   setCollectivelyTandemNode,
   setSinglyTandemNodes,
   setHighlyRatedTandemNodes,
-  // Recommendations
-  setRecommendations,
 
   // Rerender
   forceIdentityStatsSignatureRerender,
   forceInputStatsSignatureRerender,
-  forceRecommendationsSignatureRerender,
 } = statsSlice.actions;
 
 

@@ -12,8 +12,8 @@ import { DbLoaderContext } from '../../../../../contexts/DbLoader/DbLoader';
 import dbDriver from '../../../../../database/dbDriver';
 
 // REDUX
-import { RootState } from '../../../../../redux';
-import { setRecommendationSliceOutput, setRecommendationInputs, addRecommendationInput, removeRecommendationInput, RecoInput } from '../../../../../redux/recommendationsSlice';
+import { AppDispatch, RootState } from '../../../../../redux';
+import { startGetRecommendations } from '../../../../../redux/recommendationsSlice';
 import GrowingRecoInputs from './components/GrowingRecoInputs';
 import MyButton from '../../../../../components/ReactNative/MyButton';
 import MyText from '../../../../../components/ReactNative/MyText';
@@ -27,20 +27,8 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
     const theme = useTheme();
 
     // REDUX
-    const dispatch = useDispatch();
-    const { activeSliceName, readSSSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer }));
-    const { recommendationSliceOutput, recommendationInputs, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.recommendationsSlice }));
-    
-    const [ recommendations, setRecommendations ] = useState<RankedNode[]>([]);
-    const getRecommendations = async () => {
-        const { isLoaded } = useContext(DbLoaderContext);
-        const TARGET_INPUT_NODE_WEIGHT: number = 0.5;
-        const EDGE_INFLATION_MAGNITUDE: number = 2;
-        
-        const newRecommendations = await useMemo(() => dbDriver.getRecommendations(activeSliceName, recommendationSliceOutput, recommendationInputs.map((input: RecoInput) => input.text), TARGET_INPUT_NODE_WEIGHT, EDGE_INFLATION_MAGNITUDE, 20, 0.85), [isLoaded, activeSliceName, recommendationSliceOutput, recommendationInputs]);
-        // Type is { id: string, [any key]: any value }
-        setRecommendations(newRecommendations as RankedNode[]);
-    }
+    const dispatch: AppDispatch = useDispatch();
+    const { readSSSignature, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationsSlice }));
 
     return (
         <View>
@@ -54,7 +42,7 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
                     borderColor: theme.colors.grayBorder,
                     padding: 10,
                 }}
-                onPress={getRecommendations}
+                onPress={() => dispatch(startGetRecommendations({}))}
             >
                 <MyText>Create new slice!</MyText>
             </MyButton>
@@ -62,3 +50,5 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
         </View>
     )
 }
+
+export default RecommendationScreen;
