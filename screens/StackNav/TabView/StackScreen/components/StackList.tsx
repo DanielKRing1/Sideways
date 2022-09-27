@@ -14,6 +14,7 @@ import { FlexCol, FlexRow } from '../../../../../components/Flex';
 import { SearchableFlatList } from '../../../../../components/Search/SearchableFlatList';
 import MyText from '../../../../../components/ReactNative/MyText';
 import MyButton from '../../../../../components/ReactNative/MyButton';
+import { SidewaysSnapshotRow } from '../../../../../database/types';
 
 type StackCardProps = {
     item: Realm.Object & SidewaysSnapshotRow;
