@@ -5,7 +5,7 @@ import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 import { CGNode, ID_KEY, RankedNode } from '@asianpersonn/realm-graph';
 
 import { AppDispatch, RootState } from '../../../../../../redux';
-import { setSearchNodeIdInput, startSetNodeIdInput } from '../../../../../../redux/statsSlice';
+import { setSearchNodeIdInput, startSetNodeIdInput } from '../../../../../../redux/identityStatsSlice';
 import MyText from '../../../../../../components/ReactNative/MyText';
 import IconInput from '../../../../../../components/IconInput/IconInput';
 import { FlexCol } from '../../../../../../components/Flex';
@@ -21,7 +21,7 @@ type NodeInputProps = {
 const NodeInput: FC<NodeInputProps> = (props) => {
     const [ allNodeIds, setAllNodeIds ] = useState<string[]>([]);
 
-    const { activeSliceName, searchedNodeIdInput, nodeIdInput, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.statsSlice }));
+    const { activeSliceName, searchedNodeIdInput, nodeIdInput, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     const { setValues: setTrieValues, search, autoComplete } = useTrie<string>((nodeId: string) => nodeId);

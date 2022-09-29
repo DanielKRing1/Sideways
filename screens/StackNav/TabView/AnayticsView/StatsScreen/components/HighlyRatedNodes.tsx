@@ -11,7 +11,7 @@ type HighlyRatedTandemNodesProps = {
 };
 const HighlyRatedTandemNodes: FC<HighlyRatedTandemNodesProps> = (props) => {
 
-    const { nodeIdInput, highlyRatedTandemNodes, readSSSignature, identityStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.statsSlice }));
+    const { nodeIdInput, highlyRatedTandemNodes, readSSSignature, identityStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
 
     return (
         <View>

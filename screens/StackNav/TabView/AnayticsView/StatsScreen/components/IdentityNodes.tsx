@@ -11,7 +11,7 @@ type IdentityNodesProps = {
 };
 const IdentityNodes: FC<IdentityNodesProps> = (props) => {
 
-    const { identityNodes, readSSSignature, identityStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.statsSlice }));
+    const { identityNodes, readSSSignature, identityStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
 
     return (
         <View>

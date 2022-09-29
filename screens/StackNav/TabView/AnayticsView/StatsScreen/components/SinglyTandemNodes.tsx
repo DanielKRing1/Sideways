@@ -11,7 +11,7 @@ type SinglyTandemNodesProps = {
 };
 const SinglyTandemNodes: FC<SinglyTandemNodesProps> = (props) => {
 
-    const { nodeIdInput, singlyTandemNodes, readSSSignature, identityStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.statsSlice }));
+    const { nodeIdInput, singlyTandemNodes, readSSSignature, identityStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
 
     return (
         <View>

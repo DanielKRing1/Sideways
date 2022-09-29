@@ -15,7 +15,7 @@ type InputNodeStatsProps = {
 };
 const InputNodeStats: FC<InputNodeStatsProps> = (props) => {
 
-    const { nodeStats, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.statsSlice }));
+    const { nodeStats, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
 
     const theme: DefaultTheme = useTheme();
 

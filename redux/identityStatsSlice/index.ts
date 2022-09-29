@@ -9,7 +9,7 @@ import { ThunkConfig } from '../types';
 
 // INITIAL STATE
 
-export interface StatsState {
+export interface IdentityStatsState {
   searchedNodeIdInput: string;
   nodeIdInput: string;
   listLength: number;
@@ -26,7 +26,7 @@ export interface StatsState {
   inputStatsSignature: {};
 };
 
-const initialState: StatsState = {
+const initialState: IdentityStatsState = {
   // INPUTS
   searchedNodeIdInput: '',
   nodeIdInput: '',
@@ -56,7 +56,7 @@ export const startGetIdentityNodes = createAsyncThunk<
   PageRankArgs,
   ThunkConfig
 >(
-  'statsSS/startGetIdentityNodes',
+  'identityStatsSS/startGetIdentityNodes',
   async ({ graphName, possibleOutputs, listLength, outputType, iterations, dampingFactor }: PageRankArgs, thunkAPI) => {
     const hiLoRankings: HiLoRankingByOutput = recommendationsDriver.pageRank({ graphName, possibleOutputs, listLength, outputType, iterations, dampingFactor });
 
@@ -75,14 +75,14 @@ export const startSetNodeIdInput = createAsyncThunk<
   StartSetNodeIdInputArgs,
   ThunkConfig
 >(
-  'statsSS/startGetNodeStats',
+  'identityStatsSS/startGetNodeStats',
   async (nodeIdInput: StartSetNodeIdInputArgs, thunkAPI) => {
     // 1. Set node id input
     thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
 
     // 2. Get state
     const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const listLength: number = thunkAPI.getState().statsSlice.listLength;
+    const listLength: number = thunkAPI.getState().identityStatsSlice.listLength;
     const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
 
     // 3. Dispatch stats thunks
@@ -106,7 +106,7 @@ export const startGetNodeStats = createAsyncThunk<
   GetNodeStatsArgs,
   ThunkConfig
 >(
-  'statsSS/startGetNodeStats',
+  'identityStatsSS/startGetNodeStats',
   async ({ graphName, nodeId, rawOutputs }: GetNodeStatsArgs, thunkAPI) => {
     const nodeStats: RankedNode | undefined = recommendationsDriver.getNodeStats({ graphName, nodeId, rawOutputs });
     if(nodeStats === undefined) return false;
@@ -121,7 +121,7 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
   GetNodeStatsByOutputArgs,
   ThunkConfig
 >(
-  'statsSS/startGetCollectivelyTandemNodes',
+  'identityStatsSS/startGetCollectivelyTandemNodes',
   async ({ graphName, nodeId, rawOutputs, listLength }: GetNodeStatsByOutputArgs, thunkAPI) => {
     const hiLoRankings: HiLoRanking = await recommendationsDriver.getCollectivelyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
@@ -135,7 +135,7 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
   GetNodeStatsByOutputArgs,
   ThunkConfig
 >(
-  'statsSS/startGetSinglyTandemNodes',
+  'identityStatsSS/startGetSinglyTandemNodes',
   async ({ graphName, nodeId, rawOutputs, listLength }: GetNodeStatsByOutputArgs, thunkAPI) => {
     const hiLoRankings: HiLoRankingByOutput = await recommendationsDriver.getSinglyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
@@ -149,7 +149,7 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
   GetNodeStatsByOutputArgs,
   ThunkConfig
 >(
-  'statsSS/startGetHighlyRatedTandemNodes',
+  'identityStatsSS/startGetHighlyRatedTandemNodes',
   async ({ graphName, nodeId, rawOutputs, listLength }: GetNodeStatsByOutputArgs, thunkAPI) => {
     const hiLoRankings: HiLoRankingByOutput = await recommendationsDriver.getHighlyRatedTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
@@ -177,40 +177,40 @@ type ForceInputStatsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
 
-export const statsSlice = createSlice({
-  name: 'statsSlice',
+export const identityStatsSlice = createSlice({
+  name: 'identityStatsSlice',
   initialState,
   reducers: {
     // Inputs
-    setSearchNodeIdInput: (state: StatsState, action: SetSearchedNodeIdInputAction) => {
+    setSearchNodeIdInput: (state: IdentityStatsState, action: SetSearchedNodeIdInputAction) => {
       state.searchedNodeIdInput = action.payload;
     },
-    setNodeIdInput: (state: StatsState, action: SetNodeIdInputAction) => {
+    setNodeIdInput: (state: IdentityStatsState, action: SetNodeIdInputAction) => {
       state.nodeIdInput = action.payload;
     },
-    setListLength: (state: StatsState, action: SetListLengthAction) => {
+    setListLength: (state: IdentityStatsState, action: SetListLengthAction) => {
       state.listLength = action.payload;
     },
 
     // Stats
-    setIdentityNodes: (state: StatsState, action: SetIdentityNodesAction) => {
+    setIdentityNodes: (state: IdentityStatsState, action: SetIdentityNodesAction) => {
       state.identityNodes = action.payload;
     },
-    setNodeStats: (state: StatsState, action: SetNodeStatsAction) => {
+    setNodeStats: (state: IdentityStatsState, action: SetNodeStatsAction) => {
       state.nodeStats = action.payload;
     },
-    setCollectivelyTandemNode: (state: StatsState, action: SetCollectivelyTandemNodesAction) => {
+    setCollectivelyTandemNode: (state: IdentityStatsState, action: SetCollectivelyTandemNodesAction) => {
       state.collectivelyTandemNodes = action.payload;
     },
-    setSinglyTandemNodes: (state: StatsState, action: SetSinglyTandemNodesAction) => {
+    setSinglyTandemNodes: (state: IdentityStatsState, action: SetSinglyTandemNodesAction) => {
       state.singlyTandemNodes = action.payload;
     },
-    setHighlyRatedTandemNodes: (state: StatsState, action: SetHighlyRatedTandemNodesAction) => {
+    setHighlyRatedTandemNodes: (state: IdentityStatsState, action: SetHighlyRatedTandemNodesAction) => {
       state.highlyRatedTandemNodes = action.payload;
     },
 
     // Rerender
-    forceIdentityStatsSignatureRerender: (state: StatsState, action: ForceIdentityStatsRerenderAction) => {
+    forceIdentityStatsSignatureRerender: (state: IdentityStatsState, action: ForceIdentityStatsRerenderAction) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
@@ -218,7 +218,7 @@ export const statsSlice = createSlice({
 
       state.identityStatsSignature = {};
     },
-    forceInputStatsSignatureRerender: (state: StatsState, action: ForceInputStatsRerenderAction) => {
+    forceInputStatsSignatureRerender: (state: IdentityStatsState, action: ForceInputStatsRerenderAction) => {
       state.inputStatsSignature = {};
     },
   },
@@ -240,7 +240,7 @@ export const {
   // Rerender
   forceIdentityStatsSignatureRerender,
   forceInputStatsSignatureRerender,
-} = statsSlice.actions;
+} = identityStatsSlice.actions;
 
 
-export default statsSlice.reducer;
+export default identityStatsSlice.reducer;
