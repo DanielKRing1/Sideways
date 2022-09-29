@@ -1,42 +1,9 @@
 import RealmGraphManager, { CGEdge, CGNode, RankedNode, RealmGraph } from "@asianpersonn/realm-graph";
-import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, GetRecommendationsArgs, HiLoRanking, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, PageRankArgs, RankedNodesMap, RecoDriverType, SINGLE_KEY } from "../types";
-import { throwLoadError } from "./realmDriver";
-import { filterCGEntityAttrs, getDestinationNodeId, sortRankedNodesMapByAllOutputs, sortRankedNodesMapByOutput } from "./utils";
+import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, GetRecommendationsArgs, HiLoRanking, HiLoRankingByOutput, IdentityDriverType, OutputKeyType, OUTPUT_KEYS, PageRankArgs, RankedNodesMap, RecoDriverType, SINGLE_KEY } from "../../types";
+import { throwLoadError } from "../realmDriver";
+import { filterCGEntityAttrs, getDestinationNodeId, sortRankedNodesMapByAllOutputs, sortRankedNodesMapByOutput } from "../utils";
 
-// GET GRAPH RECOMMENDATIONS
-
-/**
- * Recommmend Nodes based on an set of input Nodes
- * 
- * @param graphName 
- * @param inputNodeIds 
- * @param iterations 
- * @param dampingFactor 
- * @returns 
- */
- const getRecommendations = ({ graphName, inputNodeIds, outputType, iterations=20, dampingFactor=1 }: GetRecommendationsArgs): HiLoRankingByOutput | never => {    
-    throwLoadError();
-    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
-
-    const rankedNodes: RankedNodesMap = realmGraph.rankMostInfluentialToCentralSet(inputNodeIds, iterations, dampingFactor);
-    return sortRankedNodesMapByAllOutputs(rankedNodes, outputType);
-};
-
-/**
- * Raw PageRank on all Nodes
- * 
- * @param graphName 
- * @param iterations 
- * @param dampingFactor 
- * @returns 
- */
- const pageRank = ({ graphName, possibleOutputs, listLength, outputType, iterations, dampingFactor }: PageRankArgs): HiLoRankingByOutput | never => {
-    throwLoadError();
-    const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
-
-    const rankingsMap: RankedNodesMap = realmGraph.pageRank(iterations, dampingFactor);
-    return sortRankedNodesMapByAllOutputs(rankingsMap, possibleOutputs, listLength, outputType);
-};
+// GET IDENTITY STATS
 
 const getNodeStats = ({ graphName, nodeId, rawOutputs }: GetNodeStatsArgs): RankedNode | undefined => {
     throwLoadError();
@@ -126,9 +93,7 @@ const getHighlyRatedTandemNodes = async ({ graphName, nodeId, rawOutputs, listLe
     return await _getTandemNodesByOutput(graphName, nodeId, rawOutputs, realmGraph.highlyRatedByOutput, listLength);
 }
 
-const Driver: RecoDriverType = {
-    getRecommendations,
-    pageRank,
+const Driver: IdentityDriverType = {
     getNodeStats,
     getCollectivelyTandemNodes,
     getSinglyTandemNodes,

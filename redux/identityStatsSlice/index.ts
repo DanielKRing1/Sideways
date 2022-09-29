@@ -2,7 +2,8 @@ import { RankedNode } from '@asianpersonn/realm-graph';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import dbDriver from '../../database/dbDriver';
-import recommendationsDriver from '../../database/recommendationStatsDriver';
+import recommendationsDriver from '../../database/statsDrivers/recommendationStatsDriver';
+import identityDriver from '../../database/statsDrivers/identityStatsDriver';
 import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow } from '../../database/types';
 import { forceSignatureRerender } from '../createSidewaysSlice';
 import { ThunkConfig } from '../types';
@@ -108,7 +109,7 @@ export const startGetNodeStats = createAsyncThunk<
 >(
   'identityStatsSS/startGetNodeStats',
   async ({ graphName, nodeId, rawOutputs }: GetNodeStatsArgs, thunkAPI) => {
-    const nodeStats: RankedNode | undefined = recommendationsDriver.getNodeStats({ graphName, nodeId, rawOutputs });
+    const nodeStats: RankedNode | undefined = identityDriver.getNodeStats({ graphName, nodeId, rawOutputs });
     if(nodeStats === undefined) return false;
 
     thunkAPI.dispatch(setNodeStats(nodeStats));
@@ -123,7 +124,7 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
 >(
   'identityStatsSS/startGetCollectivelyTandemNodes',
   async ({ graphName, nodeId, rawOutputs, listLength }: GetNodeStatsByOutputArgs, thunkAPI) => {
-    const hiLoRankings: HiLoRanking = await recommendationsDriver.getCollectivelyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
+    const hiLoRankings: HiLoRanking = await identityDriver.getCollectivelyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
     thunkAPI.dispatch(setCollectivelyTandemNode(hiLoRankings));
 
@@ -137,7 +138,7 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
 >(
   'identityStatsSS/startGetSinglyTandemNodes',
   async ({ graphName, nodeId, rawOutputs, listLength }: GetNodeStatsByOutputArgs, thunkAPI) => {
-    const hiLoRankings: HiLoRankingByOutput = await recommendationsDriver.getSinglyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
+    const hiLoRankings: HiLoRankingByOutput = await identityDriver.getSinglyTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
     thunkAPI.dispatch(setSinglyTandemNodes(hiLoRankings));
 
@@ -151,7 +152,7 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
 >(
   'identityStatsSS/startGetHighlyRatedTandemNodes',
   async ({ graphName, nodeId, rawOutputs, listLength }: GetNodeStatsByOutputArgs, thunkAPI) => {
-    const hiLoRankings: HiLoRankingByOutput = await recommendationsDriver.getHighlyRatedTandemNodes({ graphName, nodeId, rawOutputs, listLength });
+    const hiLoRankings: HiLoRankingByOutput = await identityDriver.getHighlyRatedTandemNodes({ graphName, nodeId, rawOutputs, listLength });
 
     thunkAPI.dispatch(setHighlyRatedTandemNodes(hiLoRankings));
 

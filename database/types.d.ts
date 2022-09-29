@@ -32,6 +32,8 @@ type DbDriverType = {
     undoRateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
 };
 
+// RECO STATS DRIVER
+// Methods
 type PageRankArgs = {
     graphName: string;
     possibleOutputs: string[];
@@ -47,6 +49,14 @@ type GetRecommendationsArgs = {
     iterations?: number;
     dampingFactor?: number;
 };
+// Driver type
+type RecoDriverType = {
+    getRecommendations: (args: GetRecommendationsArgs) => HiLoRankingByOutput | never;
+    pageRank: (args: PageRankArgs) => HiLoRankingByOutput | never;
+};
+
+// IDENTITY STATS DRIVER
+// Methods
 type GetNodeStatsArgs = {
     graphName: string;
     nodeId: string;
@@ -55,23 +65,15 @@ type GetNodeStatsArgs = {
 type GetNodeStatsByOutputArgs = {
     listLength: number;
 } & GetNodeStatsArgs;
-type RecoDriverType = {
-    getRecommendations: (args: GetRecommendationsArgs) => HiLoRankingByOutput | never;
-    pageRank: (args: PageRankArgs) => HiLoRankingByOutput | never;
+// Driver type
+type IdentityDriverType = {
     getNodeStats: (args: GetNodeStatsArgs) => RankedNode | undefined;
     getCollectivelyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRanking>;
     getSinglyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
     getHighlyRatedTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
 };
 
-type SidewaysSnapshotRow = {
-    inputs: string[];
-    outputs: string[];
-    rating: int;
-
-    timestamp: Date;
-};
-
+// DATASTRUCTURE TYPE DEFINITIONS
 type RankedNodesMap = Dict<Dict<number>>;
 
 type HiLoRanking = {
@@ -91,3 +93,12 @@ export const OUTPUT_KEYS = {
     [COLLECTIVE_KEY]: COLLECTIVE_TALLY_KEY,
     [COLLECTIVE_TALLY_KEY]: COLLECTIVE_TALLY_KEY,
 } as const;
+
+// REALM DB TYPES
+type SidewaysSnapshotRow = {
+    inputs: string[];
+    outputs: string[];
+    rating: int;
+
+    timestamp: Date;
+};
