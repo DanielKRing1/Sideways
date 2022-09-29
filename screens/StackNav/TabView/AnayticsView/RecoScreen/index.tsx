@@ -5,7 +5,7 @@ import styled, { useTheme } from 'styled-components/native';
 
 // REDUX
 import { AppDispatch, RootState } from '../../../../../redux';
-import { startGetRecommendations } from '../../../../../redux/recommendationsSlice';
+import { startGetRecommendations } from '../../../../../redux/recommendationStatsSlice';
 import GrowingRecoInputs from './components/GrowingRecoInputs';
 import MyButton from '../../../../../components/ReactNative/MyButton';
 import MyText from '../../../../../components/ReactNative/MyText';
@@ -21,7 +21,7 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
 
     // REDUX
     const dispatch: AppDispatch = useDispatch();
-    const { readSSSignature, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationsSlice }));
+    const { readSSSignature, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationStatsSlice }));
 
     return (
         <View>

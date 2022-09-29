@@ -11,7 +11,7 @@ import MyTextInput from '../../../../../../components/ReactNative/MyTextInput';
 
 // REDUX
 import { RootState } from '../../../../../../redux';
-import { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, RecoInput } from '../../../../../../redux/recommendationsSlice';
+import { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, RecoInput } from '../../../../../../redux/recommendationStatsSlice';
 
 const createRenderItemComponent = (deleteInputNode: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
     <FlexRow>
@@ -34,7 +34,7 @@ type GrowingRecoInputsProps = {
 };
 const GrowingRecoInputs: FC<GrowingRecoInputsProps> = (props) => {
     const dispatch = useDispatch();
-    const { readSSSignature, recommendationInputs, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationsSlice }));
+    const { readSSSignature, recommendationInputs, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationStatsSlice }));
 
     // HANDLER METHODS
     const keyExtractor = (dataPoint: RecoInput) => `${dataPoint.id}`;

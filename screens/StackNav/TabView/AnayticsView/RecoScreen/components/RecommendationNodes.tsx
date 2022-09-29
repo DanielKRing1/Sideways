@@ -11,7 +11,7 @@ type RecommendationNodesProps = {
 };
 const RecommendationNodes: FC<RecommendationNodesProps> = (props) => {
 
-    const { recommendations, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.recommendationsSlice }));
+    const { recommendations, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.recommendationStatsSlice }));
 
     return (
         <View>

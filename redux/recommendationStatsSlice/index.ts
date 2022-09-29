@@ -1,10 +1,8 @@
-import { combineReducers } from 'redux';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RankedNode } from '@asianpersonn/realm-graph';
 
 import { GrowingIdText as RecoInput } from '../../components/Input/GrowingIdList';
 export type { GrowingIdText as RecoInput } from '../../components/Input/GrowingIdList';
-import recommendationsDriver from '../../database/recommendationsDriver';
+import recommendationsDriver from '../../database/recommendationStatsDriver';
 import { GetRecommendationsArgs, HiLoRankingByOutput, OUTPUT_KEYS } from '../../database/types';
 import { ThunkConfig } from '../types';
 
@@ -35,7 +33,7 @@ export const startGetRecommendations = createAsyncThunk<
   'statsSS/startGetRecommendations',
   async ({ iterations, dampingFactor }: StartGetRecommendationsArgs, thunkAPI) => {
     const graphName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const inputNodeIds: string[] = thunkAPI.getState().recommendationsSlice.recommendationInputs.map((inputs: RecoInput) => inputs.text);
+    const inputNodeIds: string[] = thunkAPI.getState().recommendationStatsSlice.recommendationInputs.map((inputs: RecoInput) => inputs.text);
 
     const recommendations: HiLoRankingByOutput = recommendationsDriver.getRecommendations({ graphName, inputNodeIds, outputType: OUTPUT_KEYS.SINGLE, iterations, dampingFactor });
 
@@ -59,8 +57,8 @@ type ForceRecommendationsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
 
-export const recommendationsSlice = createSlice({
-  name: 'recommendationsSlice',
+export const recommendationStatsSlice = createSlice({
+  name: 'recommendationStatsSlice',
   initialState,
   reducers: {
     setRecommendationInputs: (state: RecommendationsState, action: SetRecommendationInputs) => {
@@ -87,7 +85,7 @@ export const recommendationsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, setRecommendations, forceSignatureRerender } = recommendationsSlice.actions;
+export const { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, setRecommendations, forceSignatureRerender } = recommendationStatsSlice.actions;
 
 
-export default recommendationsSlice.reducer;
+export default recommendationStatsSlice.reducer;

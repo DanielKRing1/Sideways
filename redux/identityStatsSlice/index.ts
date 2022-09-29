@@ -2,7 +2,7 @@ import { RankedNode } from '@asianpersonn/realm-graph';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import dbDriver from '../../database/dbDriver';
-import recommendationsDriver from '../../database/recommendationsDriver';
+import recommendationsDriver from '../../database/recommendationStatsDriver';
 import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow } from '../../database/types';
 import { forceSignatureRerender } from '../createSidewaysSlice';
 import { ThunkConfig } from '../types';
