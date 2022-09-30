@@ -9,7 +9,7 @@ import { RootState } from '../../../../../redux';
 import { setRating } from '../../../../../redux/rateSidewaysSlice'
 
 // COMPONENTS
-import Slider from '../../../../../components/Input/Slider';
+import Slider from '../../../../../components/Input/ReanimatedSlider';
 import MyText from '../../../../../components/ReactNative/MyText';
 import MyTextInput from '../../../../../components/ReactNative/MyTextInput';
 
