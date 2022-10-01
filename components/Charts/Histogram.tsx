@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { VictoryAxis, VictoryChart, VictoryBar, VictoryLabel } from 'victory-native';
 import { CallbackArgs } from 'victory-core';
-import { Svg, Defs, LinearGradient, Stop } from 'react-native-svg';
+import { Defs, LinearGradient, Stop } from  'react-native-svg';
 
 type GradientColor = { offset: string, color: string; };
 type MyHistorgramDataPoint = {
@@ -11,7 +11,7 @@ type MyHistorgramDataPoint = {
 export type MyHistogramProps = {
   horizontal?: boolean;
   gradientColors: GradientColor[];
-
+  
   data: MyHistorgramDataPoint[];
   x: string;
   tickFormat: (t: CallbackArgs) => string | number
@@ -25,43 +25,41 @@ const MyHistogram: FC<MyHistogramProps> = (props) => {
 
   return (
     <>
-      <Svg>
-        <Defs>
-          <LinearGradient id="linearGradient1" x1="0%" y1="0%" x2={horizontal ? '100%' : "0%"} y2={horizontal ? '0%' : "100%"}>
-            {
-              gradientColors.map(({ offset, color }) => <Stop offset={offset} stopColor={color} />)
-            }
-          </LinearGradient>
-        </Defs>
-      </Svg>
-
       <VictoryChart
         domainPadding={domainPadding}
       >
 
-        <VictoryAxis
-          style={{
-            grid: {
-              pointerEvents: "painted",
-              strokeWidth: 0.5
+        <Defs>
+          <LinearGradient id="linearGradient1" x1="0%" y1="0%" x2={horizontal?'100%':"0%"} y2={horizontal?'0%':"100%"}>
+            {
+              gradientColors.map(({ offset, color }) => <Stop offset={offset} stopColor={color}/>)
             }
-          }}
-          dependentAxis
-        />
+          </LinearGradient>
+        </Defs>
 
-        <VictoryAxis
-          domain={[1, 10]}
-          style={{
-            grid: {
-              pointerEvents: "painted",
-              strokeWidth: 0.5
-            },
-            tickLabels: {
-              angle: -20,
-            }
-          }}
-          tickLabelComponent={<VictoryLabel text={tickFormat} textAnchor={'end'} angle={-20} dy={20} />}
-        />
+          <VictoryAxis
+            style={{
+              grid: {
+                pointerEvents: "painted",
+                strokeWidth: 0.5
+              }
+            }}
+            dependentAxis
+          />
+
+          <VictoryAxis
+            domain={[1, 10]}
+            style={{
+              grid: {
+                pointerEvents: "painted",
+                strokeWidth: 0.5
+              },
+              tickLabels: {
+                angle: -20,
+              }
+            }}
+            tickLabelComponent={<VictoryLabel text={tickFormat} textAnchor={'end'} angle={-20} dy={20}/>}
+          />
 
         <VictoryBar
           horizontal={horizontal}
@@ -73,14 +71,14 @@ const MyHistogram: FC<MyHistogramProps> = (props) => {
           x={x}
 
           style={{
-            data: {
-              stroke: "transparent",
-              fill: "url(#linearGradient1)",
-              strokeWidth: 1,
-            },
-            labels: {
-              fill: "red"
-            }
+              data: {
+                stroke: "transparent",
+                fill: "url(#linearGradient1)",
+                strokeWidth: 1,
+              },
+              labels: {
+                fill: "red"
+              }
           }}
         />
       </VictoryChart>
