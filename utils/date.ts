@@ -23,6 +23,7 @@ export const getNDaysAgo = (days: number) => {
     return date;
 }
 
+// FLOOR/CEIL
 /**
  * Round date to beginning of month
  * Modifies in place
@@ -82,4 +83,21 @@ export const ceilDay = (date: Date) => {
     date.setMilliseconds(999);
 
     return date;
+}
+
+// SPLIT DAY
+// Total minutes in a day, used to split a day to the nearest minute
+const TOTAL_MIN: number = 24*60;
+export const splitDay = (date: Date, segments: number): Date[] => {
+    floorDay(date);
+
+    const minPerSeg: number = Math.floor(TOTAL_MIN/segments);
+    const daySegments: Date[] = [];
+    for(let i = 0; i < segments; i++) {
+        const daySeg: Date = new Date(date);
+        daySeg.setMinutes(i*minPerSeg);
+        daySegments.push(daySeg);
+    }
+
+    return daySegments;
 }
