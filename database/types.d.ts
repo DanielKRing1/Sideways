@@ -32,6 +32,24 @@ type DbDriverType = {
     undoRateGraph: (graphName: string, outputProperty: string, inputProperties: string[], rating: number, weights?: number[]) => Promise<boolean> | never;
 };
 
+// IDENTITY STATS DRIVER
+// Methods
+type GetNodeStatsArgs = {
+    graphName: string;
+    nodeId: string;
+    rawOutputs: string[];
+};
+type GetNodeStatsByOutputArgs = {
+    listLength: number;
+} & GetNodeStatsArgs;
+// Driver type
+type IdentityDriverType = {
+    getNodeStats: (args: GetNodeStatsArgs) => RankedNode | undefined;
+    getCollectivelyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRanking>;
+    getSinglyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
+    getHighlyRatedTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
+};
+
 // RECO STATS DRIVER
 // Methods
 type PageRankArgs = {
@@ -55,25 +73,17 @@ type RecoDriverType = {
     pageRank: (args: PageRankArgs) => HiLoRankingByOutput | never;
 };
 
-// IDENTITY STATS DRIVER
+// TIME STATS DRIVER
 // Methods
-type GetNodeStatsArgs = {
-    graphName: string;
-    nodeId: string;
-    rawOutputs: string[];
-};
-type GetNodeStatsByOutputArgs = {
-    listLength: number;
-} & GetNodeStatsArgs;
 // Driver type
-type IdentityDriverType = {
-    getNodeStats: (args: GetNodeStatsArgs) => RankedNode | undefined;
-    getCollectivelyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRanking>;
-    getSinglyTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
-    getHighlyRatedTandemNodes: (args: GetNodeStatsByOutputArgs) => Promise<HiLoRankingByOutput>;
+type TimeSeriesDriverType = {
+    getDailyOutputLG: ({ sliceName, outputs }: GetTimeSeriesArgs) => Promise<LineGraph>;
+    getMonthlyOutputHistogram: ({ sliceName, outputs }: GetTimeSeriesArgs) => Promise<HistogramByMonth[]>;
+    getNodeOverlapVenn: ({ sliceName, nodeIds }: GetNodeOverlapArgs) => Promise<VennByMonth[]>;
+    getDailyOutputHM: ({ sliceName }: GetTimeSeriesArgs) => Promise<HeatMapByMonth[]>;
 };
 
-// DATASTRUCTURE TYPE DEFINITIONS
+// NON-TIMESERIES DATASTRUCTURE TYPE DEFINITIONS
 type RankedNodesMap = Dict<Dict<number>>;
 
 type HiLoRanking = {
@@ -93,6 +103,9 @@ export const OUTPUT_KEYS = {
     [COLLECTIVE_KEY]: COLLECTIVE_TALLY_KEY,
     [COLLECTIVE_TALLY_KEY]: COLLECTIVE_TALLY_KEY,
 } as const;
+
+// TIMESERIES DATASTRUCTURE TYPE DEFINITIONS
+
 
 // REALM DB TYPES
 type SidewaysSnapshotRow = {
