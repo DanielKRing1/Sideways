@@ -4,7 +4,7 @@ import { FlexRow } from '../../Flex';
 import { Dimensions } from '../types';
 
 type PartialHeatMapCell = {
-    color: string;
+    value: any;
     onPress: (index: number) => void;
 };
 export type CompleteHeatMapCell = {

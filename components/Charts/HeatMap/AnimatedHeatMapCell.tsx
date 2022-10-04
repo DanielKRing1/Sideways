@@ -31,9 +31,9 @@ const AnimatedHeatMapCell: FC<HeatMapCellProps> = (props) => {
     useEffect(() => {
         setColor({
             start: color.end,
-            end: data.color,
+            end: data.value,
         })
-    }, [data.color]);
+    }, [data.value]);
 
     // Animation trigger
     useEffect(() => {

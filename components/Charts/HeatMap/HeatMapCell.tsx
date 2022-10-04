@@ -19,7 +19,7 @@ const HeatMapCell: FC<HeatMapCellProps> = (props) => {
 
     return (
         <ColoredCell
-            style={{ backgroundColor: data.color }}
+            style={{ backgroundColor: data.value }}
             onPress={() => data.onPress(data.index)}
             dim={{ x: width / 10, y: width / 10 }}
             margin={margin}
