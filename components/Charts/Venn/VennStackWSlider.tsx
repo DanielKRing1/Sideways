@@ -6,7 +6,7 @@ import MySlider, { MySliderProps } from '../../Input/Slider';
 type VennStackWSliderProps = VennStackProps & MySliderProps;
 const VennStackWSlider: FC<VennStackWSliderProps> = (props) => {
   const {
-    colorScale, data, x, xValues, yLabels, tickFormat, domainPadding,
+    colorScale, data, x, xValues, xLabels, xLabelFill, yValues, tickFormat, domainPadding,
     value, setValue, min, max, step, leftColor, rightColor,
   } = props;
 
@@ -17,7 +17,9 @@ const VennStackWSlider: FC<VennStackWSliderProps> = (props) => {
         data={data}
         x={x}
         xValues={xValues}
-        yLabels={yLabels}
+        xLabels={xLabels}
+        xLabelFill={xLabelFill}
+        yValues={yValues}
         tickFormat={tickFormat}
         domainPadding={domainPadding}
       />

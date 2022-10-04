@@ -11,16 +11,18 @@ export type VennStackProps = {
   
   data: VennStackDataPoint[][];
   x: string;
-  xValues: number[];
-  yLabels: any[];
-  tickFormat: (t: CallbackArgs) => any;
+  xValues?: number[];
+  xLabels?: any[];
+  xLabelFill?: (l: CallbackArgs) => string | number;
+  yValues?: any[];
+  tickFormat: (t: CallbackArgs) => any | number;
 
   domainPadding: { x: number, y: number };
 };
 
 const VennStack: FC<VennStackProps> = (props) => {
 
-  const { colorScale, data, x, xValues, yLabels, tickFormat, domainPadding } = props;
+  const { colorScale, data, x, xValues, xLabels, xLabelFill=(l: CallbackArgs) => '', yValues, tickFormat, domainPadding } = props;
 
   return (
     <VictoryChart
@@ -37,7 +39,7 @@ const VennStack: FC<VennStackProps> = (props) => {
             angle: -20,
           }
         }}
-        tickValues={yLabels}
+        tickValues={yValues}
         tickLabelComponent={<VictoryLabel text={tickFormat} textAnchor={'end'} angle={-20} dy={20}/>}
         dependentAxis
       />
@@ -57,11 +59,14 @@ const VennStack: FC<VennStackProps> = (props) => {
       />
 
       <VictoryStack
-        animate={{
-          duration: 500,
-          onLoad: { duration: 1000 }
-        }}
         colorScale={colorScale}
+        labelComponent={<VictoryLabel angle={-20} textAnchor='start' />}
+        labels={xLabels}
+        style={{
+          labels: {
+            fill: (data: CallbackArgs) => xLabelFill(data)
+          }
+        }}
       >
       {
         data.map((row: {x: number | Date, y: number | Date}[]) => (
