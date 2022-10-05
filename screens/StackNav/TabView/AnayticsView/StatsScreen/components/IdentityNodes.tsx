@@ -1,10 +1,11 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../../../../../../redux';
+import { AppDispatch, RootState } from '../../../../../../redux';
 import MyText from '../../../../../../components/ReactNative/MyText';
 import HiLoRankingByOutput from '../../../../../../components/Nodes/HiLoRankingByOutput';
+import { startGetIdentityNodes } from 'redux/identityStatsSlice';
 
 type IdentityNodesProps = {
 
@@ -12,6 +13,11 @@ type IdentityNodesProps = {
 const IdentityNodes: FC<IdentityNodesProps> = (props) => {
 
     const { identityNodes, readSSSignature, identityStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
+    const dispatch: AppDispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(startGetIdentityNodes());
+    }, []);
 
     return (
         <View>
