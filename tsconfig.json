@@ -12,7 +12,7 @@
 
     "baseUrl": "./",
     "paths": {
-      "database/*": ["ssDatabase/*"],
+      "ssDatabase/*": ["ssDatabase/*"],
       "*": ["node_modules/*"],
     }
   }

@@ -6,17 +6,17 @@ import thunk from 'redux-thunk';
 
 // 0. Edit Realm Path Constants ---- START
 const TEST_NAME: string = 'TimeSeriesStatsDriver';
-const mockTEST_DIRECTORY: string = `database/realm/__tests__/${TEST_NAME}`;
+const mockTEST_DIRECTORY: string = `ssDatabase/realm/__tests__/${TEST_NAME}`;
 if (fs.existsSync(mockTEST_DIRECTORY)) fs.rmSync(mockTEST_DIRECTORY, { recursive: true });
 fs.mkdirSync(mockTEST_DIRECTORY);
 
-jest.mock(`database/realm/config`, () => {
+jest.mock(`ssDatabase/realm/config`, () => {
     return {
         // Need to type out exact file path; cannot use variable or value will be undefined
-        DEFAULT_REALM_STACK_META_REALM_PATH: `database/realm/__tests__/TimeSeriesStatsDriver/REALM_STACK_META_REALM_PATH.path`,
+        DEFAULT_REALM_STACK_META_REALM_PATH: `ssDatabase/realm/__tests__/TimeSeriesStatsDriver/REALM_STACK_META_REALM_PATH.path`,
         DEFAULT_REALM_STACK_LOADABLE_REALM_PATH: 'SIDEWAYS_STACKS.path',
 
-        DEFAULT_REALM_GRAPH_META_REALM_PATH: `database/realm/__tests__/TimeSeriesStatsDriver/REALM_GRAPH_META_REALM_PATH.path`,
+        DEFAULT_REALM_GRAPH_META_REALM_PATH: `ssDatabase/realm/__tests__/TimeSeriesStatsDriver/REALM_GRAPH_META_REALM_PATH.path`,
         DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH: 'SIDEWAYS_GRAPHS.path',
     }
 });
