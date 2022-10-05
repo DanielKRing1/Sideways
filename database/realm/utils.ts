@@ -50,13 +50,13 @@ export const rankedNodesMapToRankedNodes = (rankedNodesMap: RankedNodesMap): Ran
  * Lowest Ranking: Lowest -> higher
  * 
  * @param rankedNodes 
- * @param possibleOutputs 
+ * @param allOutputs 
  * @param listLength 
  * @param outputType 
  * @returns 
  */
-export const sortRankedNodesByAllOutputs = (rankedNodes: RankedNode[], possibleOutputs: string[], listLength: number=5, outputType?: OutputKeyType): HiLoRankingByOutput => (
-    possibleOutputs.reduce<HiLoRankingByOutput>(
+export const sortRankedNodesByAllOutputs = (rankedNodes: RankedNode[], allOutputs: string[], listLength: number=5, outputType?: OutputKeyType): HiLoRankingByOutput => (
+    allOutputs.reduce<HiLoRankingByOutput>(
         (acc: HiLoRankingByOutput, output: string) => {
             const sortedNodes: RankedNode[] = sortRankedNodesByOutput(rankedNodes, output, outputType);
             acc[output] = {
@@ -79,15 +79,15 @@ export const sortRankedNodesByAllOutputs = (rankedNodes: RankedNode[], possibleO
  * Lowest Ranking: Lowest -> higher
  * 
  * @param rankedNodes 
- * @param possibleOutputs 
+ * @param allOutputs 
  * @param listLength 
  * @param outputType 
  * @returns 
  */
- export const sortRankedNodesMapByAllOutputs = (rankedNodeMap: RankedNodesMap, possibleOutputs: string[], listLength: number=5, outputType?: OutputKeyType): HiLoRankingByOutput => {
+ export const sortRankedNodesMapByAllOutputs = (rankedNodeMap: RankedNodesMap, allOutputs: string[], listLength: number=5, outputType?: OutputKeyType): HiLoRankingByOutput => {
     const rankedNodes: RankedNode[] = rankedNodesMapToRankedNodes(rankedNodeMap);
 
-    return sortRankedNodesByAllOutputs(rankedNodes, possibleOutputs, listLength, outputType);
+    return sortRankedNodesByAllOutputs(rankedNodes, allOutputs, listLength, outputType);
 };
 
 // RankedNode DICT UTILS --------------------------------

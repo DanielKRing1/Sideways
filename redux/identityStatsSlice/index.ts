@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dbDriver from '../../database/dbDriver';
 import recommendationsDriver from '../../database/statsDrivers/recommendationStatsDriver';
 import identityDriver from '../../database/statsDrivers/identityStatsDriver';
-import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow } from '../../database/types';
+import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow, SINGLE_KEY } from '../../database/types';
 import { forceSignatureRerender } from '../createSidewaysSlice';
 import { ThunkConfig } from '../types';
 
@@ -54,12 +54,19 @@ const initialState: IdentityStatsState = {
 
 export const startGetIdentityNodes = createAsyncThunk<
   boolean,
-  PageRankArgs,
+  undefined,
   ThunkConfig
 >(
   'identityStatsSS/startGetIdentityNodes',
-  async ({ graphName, possibleOutputs, listLength, outputType, iterations, dampingFactor }: PageRankArgs, thunkAPI) => {
-    const hiLoRankings: HiLoRankingByOutput = recommendationsDriver.pageRank({ graphName, possibleOutputs, listLength, outputType, iterations, dampingFactor });
+  async (undefined, thunkAPI) => {
+    const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
+    const listLength: number = 5;
+    const outputType: OutputKeyType = OUTPUT_KEYS[SINGLE_KEY];
+    const iterations: number = 20;
+    const dampingFactor: number = 0.85;
+
+    const hiLoRankings: HiLoRankingByOutput = recommendationsDriver.pageRank({ graphName: activeSliceName, rawOutputs, listLength, outputType, iterations, dampingFactor });
 
     thunkAPI.dispatch(setIdentityNodes(hiLoRankings));
     thunkAPI.dispatch(forceIdentityStatsSignatureRerender());

@@ -56,7 +56,7 @@ type IdentityDriverType = {
 // Methods
 type PageRankArgs = {
     graphName: string;
-    possibleOutputs: string[];
+    rawOutputs: string[];
     listLength: number;
     outputType: OutputKeyType;
     iterations?: number;

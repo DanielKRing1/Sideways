@@ -25,17 +25,14 @@ import { filterCGEntityAttrs, getDestinationNodeId, sortRankedNodesMapByAllOutpu
 /**
  * Raw PageRank on all Nodes
  * 
- * @param graphName 
- * @param iterations 
- * @param dampingFactor 
  * @returns 
  */
- const pageRank = ({ graphName, possibleOutputs, listLength, outputType, iterations, dampingFactor }: PageRankArgs): HiLoRankingByOutput | never => {
+ const pageRank = ({ graphName, rawOutputs, listLength, outputType, iterations, dampingFactor }: PageRankArgs): HiLoRankingByOutput | never => {
     throwLoadError();
     const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
 
     const rankingsMap: RankedNodesMap = realmGraph.pageRank(iterations, dampingFactor);
-    return sortRankedNodesMapByAllOutputs(rankingsMap, possibleOutputs, listLength, outputType);
+    return sortRankedNodesMapByAllOutputs(rankingsMap, rawOutputs, listLength, outputType);
 };
 
 const Driver: RecoDriverType = {
