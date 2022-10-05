@@ -30,7 +30,7 @@ export const startGetRecommendations = createAsyncThunk<
   StartGetRecommendationsArgs,
   ThunkConfig
 >(
-  'statsSS/startGetRecommendations',
+  'recommendationStatsSS/startGetRecommendations',
   async ({ iterations, dampingFactor }: StartGetRecommendationsArgs, thunkAPI) => {
     const graphName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const inputNodeIds: string[] = thunkAPI.getState().recommendationStatsSlice.recommendationInputs.map((inputs: RecoInput) => inputs.text);
