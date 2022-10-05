@@ -9,5 +9,10 @@
 
     /* Added by me */
     "types": ["react-native", "jest", "styled-components-react-native"],
+
+    "baseUrl": "./",
+    "paths": {
+      "database/*": ["database/*"],
+    }
   }
 }
