@@ -12,7 +12,17 @@
 
     "baseUrl": "./",
     "paths": {
+      "ssComponents/*": ["ssComponents/*"],
+      "ssConstants/*": ["ssConstants/*"],
+      "ssContexts/*": ["ssContexts/*"],
       "ssDatabase/*": ["ssDatabase/*"],
+      "ssHooks/*": ["ssHooks/*"],
+      "ssNavigation/*": ["ssNavigation/*"],
+      "ssRealm/*": ["ssRealm/*"],
+      "ssRedux/*": ["ssRedux/*"],
+      "ssScreens/*": ["ssScreens/*"],
+      "ssTheme/*": ["ssTheme/*"],
+      "ssUtils/*": ["ssUtils/*"],
       "*": ["node_modules/*"],
     }
   }
