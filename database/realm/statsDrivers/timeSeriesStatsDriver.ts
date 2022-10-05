@@ -2,14 +2,10 @@ import { Dict } from "../../../global";
 import { floorDay, splitDay } from "../../../utils/date";
 import { deepCopy } from "../../../utils/object";
 import dbDriver from "../../dbDriver";
-import { SidewaysSnapshotRow, TimeSeriesDriverType } from "../../types";
+import { GetNodeOverlapArgs, GetTimeSeriesArgs, SidewaysSnapshotRow, TimeSeriesDriverType } from "../../types";
 
-type GetTimeSeriesArgs = {
-    sliceName: string;
-    outputs: string[];
-};
-type LineGraph = DailyOutput[];
-type DailyOutput = {
+export type LineGraph = DailyOutput[];
+export type DailyOutput = {
     x: Date;
     y: number;
 };
@@ -23,25 +19,28 @@ const getDailyOutputLG = async ({ sliceName, outputs }: GetTimeSeriesArgs): Prom
     }, {});
 
     // 2. Map each output for each day to a DailyOutput coordinate
-    return list.reduce((acc: LineGraph, daySnapshot: SidewaysSnapshotRow) => {
+    const lineGraph: LineGraph = [];
+    for(let i = 0; i < list.length; i++) {
+        const daySnapshot: SidewaysSnapshotRow = list[i];
+
         // 3. For each output, split the day into an equal day segment
         const dates: Date[] = splitDay(new Date(), daySnapshot.outputs.length);
 
         // 4. For each day segment, record timestamp and output
         for(let i = 0; i < dates.length; i++) {
             const date: Date = dates[i];
-            acc.push({ x: date, y: outputValueMap[daySnapshot.outputs[i]] });
+            lineGraph.push({ x: date, y: outputValueMap[daySnapshot.outputs[i]] });
         }
-
-        return acc;
-    }, []);
+    }
+        
+    return lineGraph;
 };
 
-type HistogramByMonth = {
+export type HistogramByMonth = {
     timestamp: Date;
     histogram: ChartBar[];
 };
-type ChartBar = {
+export type ChartBar = {
     x: number | string | Date;
     y: number | string | Date;
     y0?: number | string | Date;
@@ -75,6 +74,10 @@ const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeSeriesAr
         const year: number = timestamp.getUTCFullYear();
 
         // 3. New month, calculate histogram data
+        if(prevMonth === -1 || prevYear === -1) {
+            prevMonth = month;
+            prevYear = year;
+        }
         if(month !== prevMonth && year !== prevYear) {
             histogramByMonth.push({
                 timestamp: new Date(prevYear, prevMonth, 1),
@@ -106,10 +109,7 @@ const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeSeriesAr
     return histogramByMonth;
 };
 
-type GetNodeOverlapArgs = {
-    nodeIds: string[];
-} & GetTimeSeriesArgs;
-type VennByMonth = {
+export type VennByMonth = {
     timestamp: Date;
     venn: ChartBar[][];
     outputs: string[][];
@@ -140,6 +140,10 @@ const getNodeOverlapVenn = async ({ sliceName, nodeIds }: GetNodeOverlapArgs): P
         const year: number = timestamp.getUTCFullYear();
 
         // 4. New month, calculate histogram data
+        if(prevMonth === -1 || prevYear === -1) {
+            prevMonth = month;
+            prevYear = year;
+        }
         if(month !== prevMonth && year !== prevYear) {
             vennByMonth.push({
                 timestamp: new Date(prevYear, prevMonth, 1),
@@ -179,10 +183,10 @@ const getNodeOverlapVenn = async ({ sliceName, nodeIds }: GetNodeOverlapArgs): P
     return vennByMonth;
 };
 
-type HeatMapDay = {
+export type HeatMapDay = {
     outputs: string[];
 };
-type HeatMapByMonth = {
+export type HeatMapByMonth = {
     timestamp: Date;
     heatMap: HeatMapDay[];
 }
@@ -202,6 +206,10 @@ const getDailyOutputHM = async({ sliceName }: GetTimeSeriesArgs): Promise<HeatMa
         const year: number = timestamp.getUTCFullYear();
 
         // 2. New month, calculate histogram data
+        if(prevMonth === -1 || prevYear === -1) {
+            prevMonth = month;
+            prevYear = year;
+        }
         if(month !== prevMonth && year !== prevYear) {
             heatmapByMonth.push({
                 timestamp: new Date(prevYear, prevMonth, 1),
