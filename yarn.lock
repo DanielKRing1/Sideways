@@ -31,10 +31,10 @@
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
 
-"@asianpersonn/realm-graph@^2.0.12":
-  version "2.0.12"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.12.tgz#1d6c168bb844e3b0a406ae04f46c67f5aa90bffc"
-  integrity sha512-tKQ306Yb/2ZjWinUHfxW8e11udHLQcvqDW1ZNKfxQiJKduiujXx3wO73raKafijDm32Q/gAPfvWoSuBrkQnb8Q==
+"@asianpersonn/realm-graph@^2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.13.tgz#503f9221c15961e3967ad79ac462b28d0d9b459e"
+  integrity sha512-Hr7o+Sollaf21FPDghfp6cK/dagua+Yz778ERe/j720PTHWJx4jVY9sZ4mTztFQS8gP2/TK7cyQIgs/5J24cqQ==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
     "@asianpersonn/metarealm" "^1.0.4"
@@ -42,10 +42,10 @@
     catalyst-graph "^1.0.22"
     realm "^10.13.0"
 
-"@asianpersonn/realm-stack@^2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-stack/-/realm-stack-2.0.7.tgz#531cbbacf259842d921dd92e10f87ce2c2d63316"
-  integrity sha512-Dzi6bVktILofvbSoAjJhuKElmya2B0v/EHum/lS26LbWhUALdbKwcMh2HqDTs5RfE/LyRQkqSi/+lulv4GExuw==
+"@asianpersonn/realm-stack@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-stack/-/realm-stack-2.0.8.tgz#4eab90b59d7fbd70dcb8a8bfcf1a4ba33ba2198f"
+  integrity sha512-OzK5tmPv8a4SNeeQTgPLD7NjkFRwMuZ5uRLMBIxirl7NayKulcdzVxpqOcFZuWAqDqCwEoQ7g6d3KLOTREZsdA==
   dependencies:
     "@asianpersonn/metarealm" "^1.0.4"
     realm "^10.13.0"
@@ -5539,6 +5539,11 @@ lodash.isequal@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
   integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
 
+lodash.isplainobject@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
+  integrity sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==
+
 lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
@@ -7069,9 +7074,16 @@ redux-devtools-instrument@^1.3.1:
     lodash "^4.17.19"
     symbol-observable "^1.2.0"
 
+redux-mock-store@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.5.4.tgz#90d02495fd918ddbaa96b83aef626287c9ab5872"
+  integrity sha512-xmcA0O/tjCLXhh9Fuiq6pMrJCwFRaouA8436zcikdIpYWWCjU76CRk+i2bHx8EeiSiMGnB85/lZdU3wIJVXHTA==
+  dependencies:
+    lodash.isplainobject "^4.0.6"
+
 redux-thunk@^2.4.1:
   version "2.4.1"
-  resolved "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.4.1.tgz"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.4.1.tgz#0dd8042cf47868f4b29699941de03c9301a75714"
   integrity sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==
 
 redux@^4.0.0, redux@^4.1.2:
