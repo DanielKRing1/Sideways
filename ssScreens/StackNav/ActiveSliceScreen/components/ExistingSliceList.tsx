@@ -7,7 +7,7 @@ import createTrie, { TrieTree } from '@asianpersonn/trie';
 
 // DB DRIVER
 import dbDriver from '../../../../ssDatabase/dbDriver';
-import { DbLoaderContext } from '../../../../ssCcontexts/DbLoader/DbLoader';
+import { DbLoaderContext } from '../../../../ssContexts/DbLoader/DbLoader';
 
 // REDUX
 import { RootState } from '../../../../ssRedux';
