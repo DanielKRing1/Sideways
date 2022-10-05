@@ -27,6 +27,11 @@ const load = async (): Promise<void> => {
     isLoaded = true;
 };
 
+const closeAll = async (): Promise<void> => {
+    await RealmGraphManager.closeAllGraphs();
+    await RealmStackManager.closeAllStacks();
+}
+
 export const throwLoadError = (): void | never => {
     if(!isLoaded) throw new Error('Must call "load()" before RealmStack or RealmGraph can be used');
 };
@@ -303,6 +308,8 @@ const deleteGraph = async (graphName: string): Promise<void> | never => {
 const Driver: DbDriverType = {
     isLoaded,
     load,
+    closeAll,
+    
     getSliceNames,
     getSlicePropertyNames,
     getSliceProperties,

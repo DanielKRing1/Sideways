@@ -7,6 +7,8 @@ type ExistingSlice = { sliceName: string, lastLogged: Date | undefined };
 type DbDriverType = {
     isLoaded: boolean;
     load: () => Promise<void>;
+    closeAll: () => Promise<void>;
+
     getSliceNames: () => string[] | never;
     getSlicePropertyNames: (sliceName: string) => string[] | never;
     getSliceProperties: (sliceName: string) => Dict<any> | never;
@@ -75,6 +77,15 @@ type RecoDriverType = {
 
 // TIME STATS DRIVER
 // Methods
+export type GetTimeSeriesArgs = {
+    sliceName: string;
+    outputs: string[];
+};
+
+export type GetNodeOverlapArgs = {
+    nodeIds: string[];
+} & Omit<GetTimeSeriesArgs, 'outputs'>;
+
 // Driver type
 type TimeSeriesDriverType = {
     getDailyOutputLG: ({ sliceName, outputs }: GetTimeSeriesArgs) => Promise<LineGraph>;
