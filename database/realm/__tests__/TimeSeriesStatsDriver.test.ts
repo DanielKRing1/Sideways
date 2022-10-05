@@ -1,4 +1,6 @@
+// @ts-ignore
 import fs from 'fs';
+// @ts-ignore
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
@@ -25,9 +27,9 @@ import dbDriver from '../../dbDriver';
 import { startCreateSlice } from '../../../redux/createSidewaysSlice';
 import { startRate } from '../../../redux/rateSidewaysSlice';
 
-import TimeSeriesStatsDriver, { ChartBar, DailyOutput, HeatMapByMonth, HeatMapDay, HistogramByMonth, LineGraph, VennByMonth } from '../statsDrivers/timeSeriesStatsDriver';
-import { GrowingIdText as NewSliceOutput } from 'components/Input/GrowingIdList';
-import { Dict } from 'global';
+import TimeSeriesStatsDriver, { ChartBar, DailyOutput, HeatMapByMonth, HistogramByMonth, LineGraph, VennByMonth } from '../statsDrivers/timeSeriesStatsDriver';
+import { GrowingIdText as NewSliceOutput } from '../../../components/Input/GrowingIdList';
+import { Dict } from '../../../global';
 
 // ALL AVAILABLE DATA
 const TEST_SLICE_NAME: string = 'TestSlice';
@@ -136,6 +138,10 @@ describe('TimeSeriesStatsDriver', () => {
         
     });
 
+// eat, walk, basketball, run, sleep | good, bad | 10
+// eat, walk | good | 8
+// basketball, run | bad | 6
+// run, sleep | bad | 4
     it('Should Get Daily Outputs for a Line Graph', async () => {
         const lineGraph: LineGraph = await TimeSeriesStatsDriver.getDailyOutputLG({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
 
@@ -171,11 +177,6 @@ describe('TimeSeriesStatsDriver', () => {
             ]);
     });
     it('Should Get Daily Outputs for a HeatMap', async () => {
-// eat, walk, basketball, run, sleep | good, bad | 10
-// eat, walk | good | 8
-// basketball, run | bad | 6
-// run, sleep | bad | 4
-
         const heatMapByMonth: HeatMapByMonth[] = await TimeSeriesStatsDriver.getDailyOutputHM({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
         expect(heatMapByMonth.map<HeatMapByMonth>((heatMapSnapshot: HeatMapByMonth) => ({ ...heatMapSnapshot, timestamp: new Date(0) }))).toEqual<HeatMapByMonth[]>([ {timestamp: new Date(0), heatMap: [ {outputs: TEST_RATE_4.outputs}, {outputs: TEST_RATE_3.outputs}, {outputs: TEST_RATE_2.outputs}, {outputs: TEST_RATE_1.outputs} ]} ]);
     });
