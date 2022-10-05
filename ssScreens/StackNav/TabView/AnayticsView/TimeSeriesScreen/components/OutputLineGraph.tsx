@@ -4,19 +4,19 @@ import styled from 'styled-components/native';
 
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 
-type InputVennProps = {
+type OutputLineGraphProps = {
 
 };
-const InputVenn: FC<InputVennProps> = (props) => {
+const OutputLineGraph: FC<OutputLineGraphProps> = (props) => {
 
 
     return (
         <View>
 
-            <MyText>Input Venn</MyText>
+            <MyText>Output Line Graph</MyText>
 
         </View>
     );
 }
 
-export default InputVenn;
+export default OutputLineGraph;

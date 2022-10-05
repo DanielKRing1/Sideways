@@ -12,19 +12,19 @@ import React, { useContext } from 'react';
 import { SafeAreaView, Text, TextInput, View } from 'react-native';
 import styled from 'styled-components/native';
 
-import store from './redux';
+import store from './ssRedux';
 import { Provider as ReduxProvider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import StackNavigator from './navigation/StackNavigator';
+import StackNavigator from './ssNavigation/StackNavigator';
 
-import { DbLoaderContext, DbLoaderProvider } from './contexts/DbLoader/DbLoader';
-import MyThemeProvider from './theme/ThemeProvider';
-import MyTextInput from './components/ReactNative/MyTextInput';
-import MyText from './components/ReactNative/MyText';
-import RequireActiveSlice from './components/TopLevel/RequireActiveSlice';
-import { resetRealm } from './realm/reset';
+import { DbLoaderContext, DbLoaderProvider } from './ssCcontexts/DbLoader/DbLoader';
+import MyThemeProvider from './ssTheme/ThemeProvider';
+import MyTextInput from './ssComponents/ReactNative/MyTextInput';
+import MyText from './ssComponents/ReactNative/MyText';
+import RequireActiveSlice from './ssComponents/TopLevel/RequireActiveSlice';
+import { resetRealm } from './ssRealm/reset';
 
 const NewApp = () => {
   // resetRealm();

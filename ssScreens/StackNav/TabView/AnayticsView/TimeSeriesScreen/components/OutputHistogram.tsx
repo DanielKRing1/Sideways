@@ -4,19 +4,19 @@ import styled from 'styled-components/native';
 
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 
-type InputVennProps = {
+type OutputHistogramProps = {
 
 };
-const InputVenn: FC<InputVennProps> = (props) => {
+const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 
 
     return (
         <View>
 
-            <MyText>Input Venn</MyText>
+            <MyText>Output Histogram</MyText>
 
         </View>
     );
 }
 
-export default InputVenn;
+export default OutputHistogram;
