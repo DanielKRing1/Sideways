@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { GrowingIdText as VennInput } from '../../ssComponents/Input/GrowingIdList';
 export type { GrowingIdText as VennInput } from '../../ssComponents/Input/GrowingIdList';
-import dbDriver from 'ssDatabase/dbDriver';
-import timeSeriesDriver from '../../ssDatabase/api/statsDrivers/timeSeriesStatsDriver';
+import dbDriver from 'ssDatabase/api/dbDriver';
+import timeSeriesDriver from '../../ssDatabase/api/analytics/timeSeriesStatsDriver';
 
 import { HiLoRankingByOutput, OUTPUT_KEYS } from '../../ssDatabase/api/types';
 import { ThunkConfig } from '../types';

@@ -23,7 +23,7 @@ jest.mock(`ssDatabase/realm/config`, () => {
 // 0. Edit Realm Path Constants ---- END
 
 // TO TEST
-import dbDriver from '../../../dbDriver';
+import dbDriver from '../../../api/dbDriver';
 import { startCreateSlice } from '../../../../ssRedux/createSidewaysSlice';
 import { startRate } from '../../../../ssRedux/rateSidewaysSlice';
 

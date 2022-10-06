@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { GrowingIdText as RecoInput } from '../../ssComponents/Input/GrowingIdList';
 export type { GrowingIdText as RecoInput } from '../../ssComponents/Input/GrowingIdList';
-import recommendationsDriver from '../../ssDatabase/api/statsDrivers/recommendationStatsDriver';
+import recommendationsDriver from '../../ssDatabase/api/analytics/recommendationStatsDriver';
 import { GetRecommendationsArgs, HiLoRankingByOutput, OUTPUT_KEYS } from '../../ssDatabase/api/types';
 import { ThunkConfig } from '../types';
 

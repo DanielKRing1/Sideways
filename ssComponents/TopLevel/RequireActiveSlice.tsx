@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components/native';
-import dbDriver from '../../ssDatabase/dbDriver';
+import dbDriver from '../../ssDatabase/api/dbDriver';
 import { ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME, TABS_SCREEN_NAME } from '../../ssNavigation/constants';
 import { StackNavigatorNavigationProp, StackNavigatorParamList } from '../../ssNavigation/StackNavigator';
 import { RootState } from '../../ssRedux';

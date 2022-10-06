@@ -1,5 +1,5 @@
 import { useState } from "react";
-import dbDriver from "../ssDatabase/dbDriver";
+import dbDriver from "../ssDatabase/api/dbDriver";
 
 export const useDbDriverLoader = () => {
     const [ isLoaded, setIsLoaded ] = useState<boolean>(dbDriver.isLoaded);

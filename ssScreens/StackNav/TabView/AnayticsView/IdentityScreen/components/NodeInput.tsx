@@ -11,7 +11,7 @@ import IconInput from '../../../../../../ssComponents/IconInput/IconInput';
 import { FlexCol } from '../../../../../../ssComponents/Flex';
 import MyTextInput from '../../../../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../../../../ssComponents/ReactNative/MyButton';
-import dbDriver from '../../../../../../ssDatabase/dbDriver';
+import dbDriver from '../../../../../../ssDatabase/api/dbDriver';
 import { SearchableDropdown } from '../../../../../../ssComponents/Search/SearchableDropdown';
 import { useTrie } from '../../../../../../ssHooks/useTrie';
 

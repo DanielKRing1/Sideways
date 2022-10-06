@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { GrowingIdText as RateInput } from '../../ssComponents/Input/GrowingIdList';
 export type { GrowingIdText as RateInput } from '../../ssComponents/Input/GrowingIdList';
-import DbDriver from '../../ssDatabase/dbDriver';
+import DbDriver from '../../ssDatabase/api/dbDriver';
 import { ThunkConfig } from '../types';
 
 // INITIAL STATE

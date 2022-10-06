@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import dbDriver from '../../ssDatabase/dbDriver';
+import dbDriver from '../../ssDatabase/api/dbDriver';
 import { ThunkConfig } from '../types';
 
 // INITIAL STATE
