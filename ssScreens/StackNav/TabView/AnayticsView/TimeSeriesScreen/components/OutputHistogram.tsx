@@ -18,7 +18,7 @@ type OutputHistogramProps = {
 };
 const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 
-    const { activeSliceName, histogramByMonth, dayInput, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { activeSliceName, histogramByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
 // gradientColors={[
