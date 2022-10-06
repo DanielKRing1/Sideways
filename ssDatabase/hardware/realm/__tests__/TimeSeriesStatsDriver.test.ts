@@ -27,7 +27,7 @@ import dbDriver from '../../../api/dbDriver';
 import { startCreateSlice } from '../../../../ssRedux/createSidewaysSlice';
 import { startRate } from '../../../../ssRedux/rateSidewaysSlice';
 
-import TimeSeriesStatsDriver, { ChartBar, DailyOutput, HeatMapByMonth, HistogramByMonth, LineGraph, VennByMonth } from '../statsDrivers/timeSeriesStatsDriver';
+import TimeSeriesStatsDriver, { ChartBar, DailyOutput, HeatMapByMonth, HistogramByMonth, LineGraph, VennByMonth } from '../analytics/timeSeriesStatsDriver';
 import { GrowingIdText as NewSliceOutput } from '../../../../ssComponents/Input/GrowingIdList';
 import { Dict } from '../../../../global';
 

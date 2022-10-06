@@ -8,7 +8,7 @@ import timeSeriesDriver from '../../ssDatabase/api/analytics/timeSeriesStatsDriv
 import { HiLoRankingByOutput, OUTPUT_KEYS } from '../../ssDatabase/api/types';
 import { ThunkConfig } from '../types';
 import { floorDay, floorMonth, getNDaysAgo } from '../../ssUtils/date';
-import { LineGraph, HistogramByMonth, VennByMonth, HeatMapByMonth } from 'ssDatabase/hardware/realm/statsDrivers/timeSeriesStatsDriver';
+import { LineGraph, HistogramByMonth, VennByMonth, HeatMapByMonth } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
 // INITIAL STATE
 
