@@ -18,7 +18,7 @@ const GraphScreen: FC<GraphScreenProps> = (props) => {
 
     // REDUX
     const dispatch: AppDispatch = useDispatch();
-    const { readSSSignature, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationStatsSlice }));
+    const { activeSliceName, readSSSignature, graphsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
 
     return (
         <View>
