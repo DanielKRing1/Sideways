@@ -10,6 +10,9 @@ import identityStatsSlice from './identityStatsSlice';
 import recommendationStatsSlice from './recommendationStatsSlice';
 import timeSeriesStatsSlice from './timeSeriesStatsSlice';
 
+import colorSlice from './colorSlice';
+import iconSlice from './iconSlice';
+
 export default combineReducers({
     createSidewaysSlice,
     readSidewaysSlice,
@@ -21,4 +24,7 @@ export default combineReducers({
     identityStatsSlice,
     recommendationStatsSlice,
     timeSeriesStatsSlice,
+
+    colorSlice,
+    iconSlice,
 });
