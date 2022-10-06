@@ -26,7 +26,7 @@ const StyledTextInput = styled(MyTextInput)`
     paddingHorizontal: 10px;
 `;
 
-const createRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
+const createRenderItemComponent = (deletePossibleOutput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
     <FlexRow>
         <StyledTextInput
             placeholder={'Anotha one...'}
@@ -35,7 +35,7 @@ const createRenderItemComponent = (handleChangeText: (newText: string, index: nu
         />
 
         <MyButton
-            onPress={() => removePossibleOutput(index)}
+            onPress={() => deletePossibleOutput(index)}
         >
             <MyText>X</MyText>
         </MyButton>
@@ -70,7 +70,7 @@ const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = (props) => {
     return (
         <GrowingIdList
             data={possibleOutputs}
-            createRenderItemComponent={createRenderItemComponent}
+            createRenderItemComponent={createRenderItemComponent((index: number) => dispatch(removePossibleOutput(index)))}
             keyExtractor={keyExtractor}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateOutput}

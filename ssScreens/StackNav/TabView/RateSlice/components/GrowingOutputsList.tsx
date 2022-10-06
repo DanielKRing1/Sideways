@@ -20,7 +20,7 @@ const StyledTextOutput = styled(MyTextInput)`
     paddingHorizontal: 10px;
 `;
 
-const createOutputsRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
+const createOutputsRenderItemComponent = (deleteOutput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
     <FlexRow>
         <StyledTextOutput
             placeholder={'Anotha output...'}
@@ -29,7 +29,7 @@ const createOutputsRenderItemComponent = (handleChangeText: (newText: string, in
         />
         
         <MyButton
-            onPress={() => removeOutput(index)}
+            onPress={() => deleteOutput(index)}
         >
             <MyText>X</MyText>
         </MyButton>
@@ -57,7 +57,7 @@ const GrowingOutputsList: FC = (props) => {
     return (
         <GrowingIdList
             data={outputs}
-            createRenderItemComponent={createOutputsRenderItemComponent}
+            createRenderItemComponent={createOutputsRenderItemComponent((index: number) => dispatch(removeOutput(index)))}
             keyExtractor={keyExtractor}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateOutput}

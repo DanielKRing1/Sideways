@@ -18,7 +18,7 @@ const StyledTextInput = styled(MyTextInput)`
     paddingHorizontal: 10px;
 `;
 
-const createInputsRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
+const createInputsRenderItemComponent = (deleteInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
     <FlexRow>
         <StyledTextInput
             placeholder={'Anotha input...'}
@@ -27,7 +27,7 @@ const createInputsRenderItemComponent = (handleChangeText: (newText: string, ind
         />
 
         <MyButton
-            onPress={() => removeInput(index)}
+            onPress={() => deleteInput(index)}
         >
             <MyText>X</MyText>
         </MyButton>
@@ -55,7 +55,7 @@ const GrowingInputList: FC = (props) => {
     return (
         <GrowingIdList
             data={inputs}
-            createRenderItemComponent={createInputsRenderItemComponent}
+            createRenderItemComponent={createInputsRenderItemComponent((index: number) => dispatch(removeInput(index)))}
             keyExtractor={keyExtractor}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateInput}
