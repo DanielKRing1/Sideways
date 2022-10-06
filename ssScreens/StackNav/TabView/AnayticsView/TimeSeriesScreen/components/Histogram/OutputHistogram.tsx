@@ -13,9 +13,7 @@ import dbDriver from 'ssDatabase/api/dbDriver';
 import { GradientColor } from 'ssComponents/Charts/Histogram/Histogram';
 import { setMonthIndex } from 'ssRedux/timeSeriesStatsSlice';
 
-type OutputHistogramProps = {
-
-};
+type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 
     const { activeSliceName, histogramByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));

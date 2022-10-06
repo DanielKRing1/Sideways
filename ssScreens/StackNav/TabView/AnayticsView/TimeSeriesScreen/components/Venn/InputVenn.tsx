@@ -8,15 +8,11 @@ import VennStackWSlider from 'ssComponents/Charts/Venn/VennStackWSlider';
 import { AppDispatch, RootState } from 'ssRedux/index';
 import { setMonthIndex, VennInput } from 'ssRedux/timeSeriesStatsSlice';
 import GrowingVennInputList from './GrowingVennInputList';
-import { GradientColor } from 'ssComponents/Charts/Histogram/Histogram';
 import { getStringMapSubsetList, getStringMapValue, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
-import NodeInput from '../../IdentityScreen/components/NodeInput';
 import { StringMap } from 'ssDatabase/api/types';
 import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
-type InputVennProps = {
-
-};
+type InputVennProps = {};
 const InputVenn: FC<InputVennProps> = (props) => {
 
     const { activeSliceName, vennByMonth, vennNodeInputs, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));

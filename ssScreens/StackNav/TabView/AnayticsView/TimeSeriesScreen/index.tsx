@@ -23,7 +23,7 @@ const GraphScreen: FC<GraphScreenProps> = (props) => {
     return (
         <View>
 
-            {/* <GrowingGraphInputs/> */}
+            
             
             <MyButton
                 style={{

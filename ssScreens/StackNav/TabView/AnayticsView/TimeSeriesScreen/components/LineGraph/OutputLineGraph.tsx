@@ -8,9 +8,7 @@ import dbDriver from 'ssDatabase/api/dbDriver';
 import MyText from 'ssComponents/ReactNative/MyText';
 import BinnedLineGraph from 'ssComponents/Charts/Line/BinnedLineGraph';
 import { RootState, AppDispatch } from 'ssRedux/index';
-import { Dict } from '../../../../../../global';
 import { getStringMapSubset, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
-import { DailyOutput } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 import { StringMap } from 'ssDatabase/api/types';
 
 type OutputLineGraphProps = {

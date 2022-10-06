@@ -13,9 +13,7 @@ import { HeatMapDay } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsD
 import { setMonthIndex } from 'ssRedux/timeSeriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 
-type OutputHeatMapProps = {
-
-};
+type OutputHeatMapProps = {};
 const OutputHeatMap: FC<OutputHeatMapProps> = (props) => {
     // LOCAL STATE
     const [ selectedIndex, setSelectedIndex ] = useState<number>();

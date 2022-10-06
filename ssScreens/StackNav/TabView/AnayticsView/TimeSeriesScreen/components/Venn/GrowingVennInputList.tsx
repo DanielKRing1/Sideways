@@ -1,17 +1,17 @@
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
-import { FlexRow } from '../../../../../../ssComponents/Flex';
+import { FlexRow } from '../../../../../../../ssComponents/Flex';
 
 // MY COMPONENTS
-import GrowingIdList from '../../../../../../ssComponents/Input/GrowingIdList';
-import MyButton from '../../../../../../ssComponents/ReactNative/MyButton';
-import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import MyTextInput from '../../../../../../ssComponents/ReactNative/MyTextInput';
+import GrowingIdList from '../../../../../../../ssComponents/Input/GrowingIdList';
+import MyButton from '../../../../../../../ssComponents/ReactNative/MyButton';
+import MyText from '../../../../../../../ssComponents/ReactNative/MyText';
+import MyTextInput from '../../../../../../../ssComponents/ReactNative/MyTextInput';
 
 // REDUX
-import { AppDispatch, RootState } from '../../../../../../ssRedux';
-import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../ssRedux/timeSeriesStatsSlice';
+import { AppDispatch, RootState } from '../../../../../../../ssRedux';
+import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../../ssRedux/timeSeriesStatsSlice';
 
 
 const createRenderItemComponent = (deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
