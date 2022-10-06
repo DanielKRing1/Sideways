@@ -32,7 +32,7 @@ const InputVenn: FC<InputVennProps> = (props) => {
 
         // 2. Convert nodeIds to colors
         return getStringMapSubsetList<string>(vennNodeIds, fullColorMap, ID_TYPES.INPUT, (i: number, value: string) => value);
-    }, [vennNodeInputs]);
+    }, [vennNodeInputs, fullColorMap]);
 
     return (
         <View>
@@ -50,7 +50,7 @@ const InputVenn: FC<InputVennProps> = (props) => {
                 yValues={vennNodeInputs.map((nodeInput: VennInput) => nodeInput.text)}
                 
                 value={monthIndex}
-                setValue={setMonthIndex}
+                setValue={handleSelectMonth}
                 min={0}
                 max={vennByMonth.length-1}
                 leftColor={'yellow'}
