@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
-import { TextInput, View } from 'react-native';
+import React, { FC, useEffect } from 'react';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 // REDUX
 import { AppDispatch, RootState } from '../../../ssRedux';
-import { forceSignatureRerender, setNewSliceName, addPossibleOutput, removePossibleOutput, setPossibleOutputs, startCreateSlice } from '../../../ssRedux/createSidewaysSlice';
+import { setNewSliceName, startCreateSlice, forceSignatureRerender } from '../../../ssRedux/createSidewaysSlice';
 
 // NAVIGATION
 import { ADD_SLICE_SCREEN_NAME } from '../../../ssNavigation/constants';
