@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
-import { Button, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { FlexRow } from 'ssComponents/Flex';
+import MyButton from 'ssComponents/ReactNative/MyButton';
+import MyText from 'ssComponents/ReactNative/MyText';
 import styled, { DefaultTheme } from 'styled-components/native';
-import FlexCol from '../../../../../ssComponents/Flex/FlexCol';
 import GrowingIdList from '../../../../../ssComponents/Input/GrowingIdList';
 import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
-import MyText from '../../../../../ssComponents/ReactNative/MyText';
 
 // REDUX
 import { RootState } from '../../../../../ssRedux';
-import { addInput, setInputs, setOutputs, startRate, forceSignatureRerender, RateInput } from '../../../../../ssRedux/rateSidewaysSlice';
+import { addInput, setInputs, removeInput, forceSignatureRerender, RateInput } from '../../../../../ssRedux/rateSidewaysSlice';
 
 const StyledTextInput = styled(MyTextInput)`
     borderWidth: 1px;
@@ -19,11 +19,19 @@ const StyledTextInput = styled(MyTextInput)`
 `;
 
 const createInputsRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
-    <StyledTextInput
-        placeholder={'Anotha input...'}
-        value={item.title}
-        onChangeText={(newText: string) => handleChangeText(newText, index)}
-    />
+    <FlexRow>
+        <StyledTextInput
+            placeholder={'Anotha input...'}
+            value={item.title}
+            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        />
+
+        <MyButton
+            onPress={() => removeInput(index)}
+        >
+            <MyText>X</MyText>
+        </MyButton>
+    </FlexRow>
 );
 
 const GrowingInputList: FC = (props) => {

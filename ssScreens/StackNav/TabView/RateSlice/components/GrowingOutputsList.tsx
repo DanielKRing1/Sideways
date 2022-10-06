@@ -1,16 +1,17 @@
 import React, { FC } from 'react';
-import { Button, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme } from 'styled-components/native';
-import FlexCol from '../../../../../ssComponents/Flex/FlexCol';
+
 import GrowingIdList from '../../../../../ssComponents/Input/GrowingIdList';
+import { FlexRow } from 'ssComponents/Flex';
 import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
 
 // REDUX
 import { RootState } from '../../../../../ssRedux';
-import { addOutput, setOutputs, startRate, forceSignatureRerender } from '../../../../../ssRedux/rateSidewaysSlice';
+import { addOutput, setOutputs, removeOutput, forceSignatureRerender } from '../../../../../ssRedux/rateSidewaysSlice';
 import { GrowingIdText as RateInput } from '../../../../../ssComponents/Input/GrowingIdList';
+import MyButton from 'ssComponents/ReactNative/MyButton';
 
 const StyledTextOutput = styled(MyTextInput)`
     borderWidth: 1px;
@@ -20,11 +21,19 @@ const StyledTextOutput = styled(MyTextInput)`
 `;
 
 const createOutputsRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
-    <StyledTextOutput
-        placeholder={'Anotha output...'}
-        value={item.title}
-        onChangeText={(newText: string) => handleChangeText(newText, index)}
-    />
+    <FlexRow>
+        <StyledTextOutput
+            placeholder={'Anotha output...'}
+            value={item.title}
+            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        />
+        
+        <MyButton
+            onPress={() => removeOutput(index)}
+        >
+            <MyText>X</MyText>
+        </MyButton>
+    </FlexRow>
 );
 
 const GrowingOutputsList: FC = (props) => {

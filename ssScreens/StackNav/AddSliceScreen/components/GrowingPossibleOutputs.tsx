@@ -1,27 +1,20 @@
-import React, { FC, useEffect, useState } from 'react';
-import { TextInput, View } from 'react-native';
+import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled, { DefaultTheme, useTheme } from 'styled-components/native';
+import styled, { DefaultTheme } from 'styled-components/native';
 
 // REDUX
 import { RootState } from '../../../../ssRedux';
-import { forceSignatureRerender, setNewSliceName, addPossibleOutput, removePossibleOutput, setPossibleOutputs, startCreateSlice } from '../../../../ssRedux/createSidewaysSlice';
-
-// NAVIGATION
-import { ADD_SLICE_SCREEN_NAME } from '../../../../ssNavigation/constants';
-import { StackNavigatorProps } from '../../../../ssNavigation/StackNavigator';
+import { setNewSliceName, addPossibleOutput, removePossibleOutput, setPossibleOutputs, forceSignatureRerender } from '../../../../ssRedux/createSidewaysSlice';
 
 // COMPONENTS
-import Todo from '../../../../ssComponents/Dev/Todo';
-import GrowingIdList, { GrowingIdText } from '../../../../ssComponents/Input/GrowingIdList';
+import GrowingIdList from '../../../../ssComponents/Input/GrowingIdList';
 import { GrowingIdText as NewSliceOutput } from '../../../../ssComponents/Input/GrowingIdList';
 
 // NAV
-import { AddSliceNavHeader } from '../../../../ssComponents/Navigation/NavHeader';
 import MyTextInput from '../../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
-import { FlexCol } from '../../../../ssComponents/Flex';
+import { FlexRow } from '../../../../ssComponents/Flex';
 import VerticalSpace from '../../../../ssComponents/Spacing/VerticalSpace';
 
 // Possible outputs
@@ -34,11 +27,19 @@ const StyledTextInput = styled(MyTextInput)`
 `;
 
 const createRenderItemComponent = (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
-    <StyledTextInput
-        placeholder={'Anotha one...'}
-        value={item.title}
-        onChangeText={(newText: string) => handleChangeText(newText, index)}
-    />
+    <FlexRow>
+        <StyledTextInput
+            placeholder={'Anotha one...'}
+            value={item.title}
+            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        />
+
+        <MyButton
+            onPress={() => removePossibleOutput(index)}
+        >
+            <MyText>X</MyText>
+        </MyButton>
+    </FlexRow>
 );
 
 type GrowingPossibleOutputsProps = {};
