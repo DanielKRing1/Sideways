@@ -129,7 +129,6 @@ type SidewaysSnapshotRow = {
 
 // COLOR DRIVER
 export type ColorInfo = {
-    groupId: string;
     entityId: string;
     color: string;
 };
@@ -142,7 +141,6 @@ export type ColorDriver = {
 
 // ICONS DRIVER
 export type IconInfo = {
-    groupId: string;
     entityId: string;
     icon: string;
 };
