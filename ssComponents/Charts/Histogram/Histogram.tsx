@@ -2,14 +2,14 @@ import React, { FC } from 'react';
 import { VictoryAxis, VictoryChart, VictoryBar, VictoryLabel } from 'victory-native';
 import { CallbackArgs } from 'victory-core';
 import { Defs, LinearGradient, Stop } from  'react-native-svg';
-import { DataPoint } from '../types';
+import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
-type GradientColor = { offset: string, color: string; };
+export type GradientColor = { offset: string, color: string; };
 export type MyHistogramProps = {
   horizontal?: boolean;
   gradientColors: GradientColor[];
   
-  data: DataPoint[];
+  data: ChartBar[];
   x: string;
   tickFormat: (t: CallbackArgs) => string | number
 
