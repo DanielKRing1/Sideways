@@ -66,6 +66,60 @@ const initialState: TimeStatsState = {
 
 // THUNKS
 
+// Inputs
+type StartAddVennInputsArg = VennInput;
+export const startAddVennInput = createAsyncThunk<
+  boolean,
+  StartAddVennInputsArg,
+  ThunkConfig
+>(
+  'timeSeriesStatsSS/startAddVennInput',
+  async (vennInput: StartAddVennInputsArg, thunkAPI) => {
+    // 1. Add venn input
+    thunkAPI.dispatch(addVennInput(vennInput));
+
+    // 2. Recalculate venn
+    thunkAPI.dispatch(startGetVenn());
+
+    return true;
+  }
+);
+type StartRmVennInputsArg = number;
+export const startRmVennInput = createAsyncThunk<
+  boolean,
+  StartRmVennInputsArg,
+  ThunkConfig
+>(
+  'timeSeriesStatsSS/startRmVennInput',
+  async (indexToRm: StartRmVennInputsArg, thunkAPI) => {
+    // 1. Add venn input
+    thunkAPI.dispatch(removeVennInput(indexToRm));
+
+    // 2. Recalculate venn
+    thunkAPI.dispatch(startGetVenn());
+
+    return true;
+  }
+);
+type StartSetVennInputsArgs = VennInput[];
+export const startSetVennInputs = createAsyncThunk<
+  boolean,
+  StartSetVennInputsArgs,
+  ThunkConfig
+>(
+  'timeSeriesStatsSS/startSetVennInputs',
+  async (vennInputs: StartSetVennInputsArgs, thunkAPI) => {
+    // 1. Set venn inputs
+    thunkAPI.dispatch(setVennInputs(vennInputs));
+
+    // 2. Recalculate venn
+    thunkAPI.dispatch(startGetVenn());
+
+    return true;
+  }
+);
+
+// Charts
 type StartSetAllTimeStatsArgs = undefined;
 export const startGetAllTimeSeriesStats = createAsyncThunk<
   boolean,

@@ -11,7 +11,7 @@ import MyTextInput from '../../../../../../ssComponents/ReactNative/MyTextInput'
 
 // REDUX
 import { AppDispatch, RootState } from '../../../../../../ssRedux';
-import { setVennInputs, addVennInput, removeVennInput, VennInput } from '../../../../../../ssRedux/timeSeriesStatsSlice';
+import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../ssRedux/timeSeriesStatsSlice';
 
 
 const createRenderItemComponent = (deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
@@ -41,18 +41,18 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = (props) => {
     const keyExtractor = (dataPoint: VennInput) => `${dataPoint.id}`;
     const genNextDataPlaceholder = (id: number) => ({ id, text: '' });
     const handleAddInputNode = (id: number, newPossibleOutput: string) => {
-        dispatch(addVennInput({ id, text: newPossibleOutput }));
+        dispatch(startAddVennInput({ id, text: newPossibleOutput }));
     };
     const handleUpdateInputNode = (newText: string, index: number) => {
         vennNodeInputs[index].text = newText;
         // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-        dispatch(setVennInputs(vennNodeInputs));
+        dispatch(startSetVennInputs(vennNodeInputs));
     }
     
     return (
         <GrowingIdList
             data={vennNodeInputs}
-            createRenderItemComponent={createRenderItemComponent((index: number) => dispatch(removeVennInput(index)))}
+            createRenderItemComponent={createRenderItemComponent((index: number) => dispatch(startRmVennInput(index)))}
             keyExtractor={keyExtractor}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateInputNode}
