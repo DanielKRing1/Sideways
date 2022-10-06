@@ -23,7 +23,8 @@ export interface TimeStatsState {
   // Graph Selection
   selectedGraph: SelectableGraph;
   // Date Selection
-  dayInput: Date;     // Derive day/month-based stats date range from this day
+  dayInput: Date;       // Derive day/month-based stats date range from this day
+  monthIndex: number;
   // Node Input
   vennNodeInputs: VennInput[];
 
@@ -43,6 +44,7 @@ const initialState: TimeStatsState = {
   selectedGraph: HEAT_MAP,
   // Date Selection
   dayInput: floorDay(new Date()),   // Set to today
+  monthIndex: 0,
   // Node Input
   vennNodeInputs: [],
 
@@ -172,6 +174,7 @@ type SetDayInputAction = PayloadAction<Date>;
 type AddVennInput = PayloadAction<VennInput>;
 type RemoveVennInput = PayloadAction<number>;
 type SetVennInputs = PayloadAction<VennInput[]>;
+type SetMonthIndex = PayloadAction<number>;
 // TimeStats
 type SetLineGraphAction = PayloadAction<LineGraph>;
 type SetHistogramAction = PayloadAction<HistogramByMonth[]>;
@@ -202,6 +205,24 @@ export const timeSeriesStatsSlice = createSlice({
     setVennInputs: (state: TimeStatsState, action: SetVennInputs) => {
       state.vennNodeInputs = action.payload;
     },
+    setMonthIndex: (state: TimeStatsState, action: SetMonthIndex) => {
+      // 1. Set month index
+      state.monthIndex = action.payload;
+
+      // 2. Also set dayInput Date, based on selected graph type
+      switch(state.selectedGraph) {
+        case HISTOGRAM:
+          state.dayInput = state.histogramByMonth[state.monthIndex].timestamp;
+          break;
+        case VENN_PLOT:
+          state.dayInput = state.vennByMonth[state.monthIndex].timestamp;
+          break;
+        case HEAT_MAP:
+        default:
+          state.dayInput = state.heatMapByMonth[state.monthIndex].timestamp;
+          break;
+      }
+    },
     
     // CHARTS
     setLineGraph: (state: TimeStatsState, action: SetLineGraphAction) => {
@@ -230,7 +251,7 @@ export const timeSeriesStatsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setGraphSelection, setDayInput, addVennInput, removeVennInput, setVennInputs, setLineGraph, setHistogram, setVenn, setHeatMap, forceSignatureRerender } = timeSeriesStatsSlice.actions;
+export const { setGraphSelection, setDayInput, addVennInput, removeVennInput, setVennInputs, setMonthIndex, setLineGraph, setHistogram, setVenn, setHeatMap, forceSignatureRerender } = timeSeriesStatsSlice.actions;
 
 
 export default timeSeriesStatsSlice.reducer;
