@@ -3,9 +3,6 @@ import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { useTheme } from 'styled-components/native';
 
-import { GrowingList } from '../../../../../ssComponents/Input/GrowingInputList';
-import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
-
 // REDUX
 import { AppDispatch, RootState } from '../../../../../ssRedux';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
