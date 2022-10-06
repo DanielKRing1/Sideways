@@ -198,12 +198,18 @@ export const timeSeriesStatsSlice = createSlice({
     },
     addVennInput: (state: TimeStatsState, action: AddVennInput) => {
       state.vennNodeInputs = [ ...state.vennNodeInputs, action.payload ];
+      // Force rerender/recalculate Venn (and all)
+      state.graphsSignature = {};
     },
     removeVennInput: (state: TimeStatsState, action: RemoveVennInput) => {
       state.vennNodeInputs = [ ...state.vennNodeInputs.splice(action.payload, 1) ];
+      // Force rerender/recalculate Venn (and all)
+      state.graphsSignature = {};
     },
     setVennInputs: (state: TimeStatsState, action: SetVennInputs) => {
       state.vennNodeInputs = action.payload;
+      // Force rerender/recalculate Venn (and all)
+      state.graphsSignature = {};
     },
     setMonthIndex: (state: TimeStatsState, action: SetMonthIndex) => {
       // 1. Set month index
@@ -251,7 +257,8 @@ export const timeSeriesStatsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setGraphSelection, setDayInput, addVennInput, removeVennInput, setVennInputs, setMonthIndex, setLineGraph, setHistogram, setVenn, setHeatMap, forceSignatureRerender } = timeSeriesStatsSlice.actions;
+const { addVennInput, removeVennInput, setVennInputs, setLineGraph, setHistogram, setVenn, setHeatMap } = timeSeriesStatsSlice.actions;
+export const { setGraphSelection, setDayInput, setMonthIndex, forceSignatureRerender } = timeSeriesStatsSlice.actions;
 
 
 export default timeSeriesStatsSlice.reducer;

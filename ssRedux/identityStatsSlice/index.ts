@@ -233,17 +233,18 @@ export const identityStatsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
+const {
+    // Stats
+    setIdentityNodes,
+    setNodeStats,
+    setCollectivelyTandemNode,
+    setSinglyTandemNodes,
+    setHighlyRatedTandemNodes,
+} = identityStatsSlice.actions;
 export const {
   // Input
   setSearchNodeIdInput,
   setNodeIdInput,
-
-  // Stats
-  setIdentityNodes,
-  setNodeStats,
-  setCollectivelyTandemNode,
-  setSinglyTandemNodes,
-  setHighlyRatedTandemNodes,
 
   // Rerender
   forceIdentityStatsSignatureRerender,

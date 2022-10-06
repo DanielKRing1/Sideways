@@ -85,7 +85,8 @@ export const recommendationStatsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, setRecommendations, forceSignatureRerender } = recommendationStatsSlice.actions;
+const { setRecommendations } = recommendationStatsSlice.actions;
+export const { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, forceSignatureRerender } = recommendationStatsSlice.actions;
 
 
 export default recommendationStatsSlice.reducer;
