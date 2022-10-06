@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import colorDriver from 'ssDatabase/api/color/colorDriver';
 
-import { ColorInfo, ColorMap } from '../../ssDatabase/api/types';
+import { ColorInfo, StringMap } from '../../ssDatabase/api/types';
 import { ThunkConfig } from '../types';
 
 // INITIAL STATE
 
 export interface ColorState {
   // COLORS
-  colorMap: ColorMap;
+  colorMap: StringMap;
 
   // RERENDER
   colorsSignature: {};
@@ -34,7 +34,7 @@ export const startSetAllColors = createAsyncThunk<
   'colorSlice/startSetAllColors',
   async (undefined: StartSetAllColorsArgs, thunkAPI) => {
 
-    const colorMap: ColorMap = await colorDriver.getAllColors();
+    const colorMap: StringMap = await colorDriver.getAllColors();
     
     thunkAPI.dispatch(setColors(colorMap));
     thunkAPI.dispatch(forceSignatureRerender());
@@ -80,7 +80,7 @@ export const startRmColors = createAsyncThunk<
 // ACTION TYPES
 
 // Color
-type SetColorsAction = PayloadAction<ColorMap>;
+type SetColorsAction = PayloadAction<StringMap>;
 // Rerender
 type ForceColorRerenderAction = PayloadAction<undefined>;
 

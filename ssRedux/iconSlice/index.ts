@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import iconDriver from 'ssDatabase/api/icon/iconDriver';
 
-import { IconInfo, IconMap } from '../../ssDatabase/api/types';
+import { IconInfo, StringMap } from '../../ssDatabase/api/types';
 import { ThunkConfig } from '../types';
 
 // INITIAL STATE
 
 export interface IconState {
   // ICONS
-  iconMap: IconMap;
+  iconMap: StringMap;
 
   // RERENDER
   iconsSignature: {};
@@ -34,7 +34,7 @@ export const startSetAllIcons = createAsyncThunk<
   'iconSlice/startSetAllIcons',
   async (undefined: StartSetAllIconsArgs, thunkAPI) => {
 
-    const iconMap: IconMap = await iconDriver.getAllIcons();
+    const iconMap: StringMap = await iconDriver.getAllIcons();
     
     thunkAPI.dispatch(setIcons(iconMap));
     thunkAPI.dispatch(forceSignatureRerender());
@@ -80,7 +80,7 @@ export const startRmIcons = createAsyncThunk<
 // ACTION TYPES
 
 // Icon
-type SetIconsAction = PayloadAction<IconMap>;
+type SetIconsAction = PayloadAction<StringMap>;
 // Rerender
 type ForceIconRerenderAction = PayloadAction<undefined>;
 

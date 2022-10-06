@@ -132,11 +132,11 @@ export type ColorInfo = {
     entityId: string;
     color: string;
 };
-export type ColorMap = Dict<string>;
+export type StringMap = Dict<string>;
 export type ColorDriver = {
     saveColors: (newColors: ColorInfo[]) => Promise<void>;
     rmColors: (colorsToRm: Omit<ColorInfo, 'color'>[]) => Promise<void>;
-    getAllColors: () => Promise<ColorMap>;
+    getAllColors: () => Promise<StringMap>;
 };
 
 // ICONS DRIVER
@@ -144,9 +144,8 @@ export type IconInfo = {
     entityId: string;
     icon: string;
 };
-export type IconMap = Dict<string>;
 export type IconDriver = {
     saveIcons: (newIcons: IconInfo[]) => Promise<void>;
     rmIcons: (colorsToRm: Omit<IconInfo, 'icon'>[]) => Promise<void>;
-    getAllIcons: () => Promise<IconMap>;
+    getAllIcons: () => Promise<StringMap>;
 };

@@ -1,4 +1,4 @@
-import { ColorMap, IconMap } from "ssDatabase/api/types";
+import { StringMap } from "ssDatabase/api/types";
 import { Dict } from "../../../../global";
 
 const DELIM: string = '_';
@@ -24,13 +24,28 @@ const getId = (raw: string, idType: IdType): string => {
 const getInputId = (rawInput: string): string => `${rawInput}${DELIM}${INPUT_SUFFIX}`;
 const getOutputId = (rawOutput: string): string => `${rawOutput}${DELIM}${OUTPUT_SUFFIX}`;
 
-export const getColorsMap = (rawTexts: string[], colors: ColorMap, idType: IdType) => rawTexts.reduce<Dict<string>>((acc, rawText: string, i): Dict<string> => {
-    acc[i] = colors[getId(rawText, idType)];
+// colorMap={{
+//     0: 'green',
+//     1: '#FFA99F',
+//     2: 'yellow',
+//   }}
+export function getStringMapSubset<T>(rawTexts: string[], stringMap: StringMap, idType: IdType, getKey: (i: number) => number | string, getValue: (stringMapValue: string) => T): Dict<T> {
+    return rawTexts.reduce<Dict<T>>((acc, rawText: string, i) => {
+        acc[getKey(i)] = getValue(stringMap[getId(rawText, idType)]);
 
-    return acc;
-}, {});
-export const getIconsMap = (rawTexts: string[], icons: IconMap, idType: IdType) => rawTexts.reduce<Dict<string>>((acc, rawText: string, i): Dict<string> => {
-    acc[i] = icons[getId(rawText, idType)];
+        return acc;
+    }, {});
+}
 
-    return acc;
-}, {});
+// gradientColors={[
+//     { offset: "0%", color:"green" },
+//     { offset: "40%", color:"#FFA99F" },
+//     { offset: "100%", color:"yellow" },
+//   ]}
+export function getStringMapSubsetList<T>(rawTexts: string[], stringMap: StringMap, idType: IdType, getListValue: (i: number, stringMapValue: string) => T): T[] {
+    return rawTexts.reduce<T[]>((acc, rawText: string, i) => {
+        acc.push({ ...getListValue(i, stringMap[getId(rawText, idType)]) });
+
+        return acc;
+    }, []);
+}
