@@ -126,3 +126,29 @@ type SidewaysSnapshotRow = {
 
     timestamp: Date;
 };
+
+// COLOR DRIVER
+export type ColorInfo = {
+    groupId: string;
+    entityId: string;
+    color: string;
+};
+export type ColorMap = Dict<Dict<string>>;
+export type ColorDriver = {
+    saveColors: (newColors: ColorInfo[]) => Promise<void>;
+    rmColors: (colorsToRm: Omit<ColorInfo, 'color'>[]) => Promise<void>;
+    getAllColors: () => Promise<ColorMap>;
+};
+
+// ICONS DRIVER
+export type IconInfo = {
+    groupId: string;
+    entityId: string;
+    icon: string;
+};
+export type IconMap = Dict<Dict<string>>;
+export type IconDriver = {
+    saveIcons: (newIcons: IconInfo[]) => Promise<void>;
+    rmIcons: (colorsToRm: Omit<IconInfo, 'icon'>[]) => Promise<void>;
+    getAllIcons: () => Promise<IconMap>;
+};
