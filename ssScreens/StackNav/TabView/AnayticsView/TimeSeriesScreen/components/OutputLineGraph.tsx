@@ -9,8 +9,9 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import BinnedLineGraph from 'ssComponents/Charts/Line/BinnedLineGraph';
 import { RootState, AppDispatch } from 'ssRedux/index';
 import { Dict } from '../../../../../../global';
-import { getColorsMap, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
+import { getStringMapSubset, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
 import { DailyOutput } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
+import { StringMap } from 'ssDatabase/api/types';
 
 type OutputLineGraphProps = {
 
@@ -23,8 +24,13 @@ const OutputLineGraph: FC<OutputLineGraphProps> = (props) => {
     const { activeSliceName, lineGraph } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
-    const fullColorMap: Dict<string> = {};
-    const outputColorMap: Dict<string> = useMemo(() => getColorsMap(dbDriver.getSlicePropertyNames(activeSliceName), fullColorMap, ID_TYPES.OUTPUT), [activeSliceName, fullColorMap]);
+// colorMap={{
+//     0: 'green',
+//     1: '#FFA99F',
+//     2: 'yellow',
+//   }}
+    const fullColorMap: StringMap = {};
+    const outputColorMap: StringMap = useMemo(() => getStringMapSubset<string>(dbDriver.getSlicePropertyNames(activeSliceName), fullColorMap, ID_TYPES.OUTPUT, (i: number) => i, (value: string) => value), [activeSliceName, fullColorMap]);
 
     return (
         <View>
