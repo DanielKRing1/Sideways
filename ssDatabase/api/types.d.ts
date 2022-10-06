@@ -1,5 +1,5 @@
 import { CGNode, CGEdge, RankedNode } from "@asianpersonn/realm-graph";
-import { OutputKeyType } from '../hardware/realm/realmDriver';
+import { OutputKeyType } from '../hardware/realm/dbDriver';
 import { Dict } from '../../global';
 
 type ExistingSlice = { sliceName: string, lastLogged: Date | undefined };
