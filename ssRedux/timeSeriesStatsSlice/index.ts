@@ -12,11 +12,17 @@ import { LineGraph, HistogramByMonth, VennByMonth, HeatMapByMonth } from 'ssData
 
 // INITIAL STATE
 
-const LINE_GRAPH = 'Line Graph' as const;
-const HISTOGRAM = 'Histogram' as const;
-const VENN_PLOT = 'Venn Plot' as const;
-const HEAT_MAP = 'Heat Map' as const;
+export const LINE_GRAPH = 'Line Graph' as const;
+export const HISTOGRAM = 'Histogram' as const;
+export const VENN_PLOT = 'Venn Plot' as const;
+export const HEAT_MAP = 'Heat Map' as const;
 type SelectableGraph = typeof LINE_GRAPH | typeof HISTOGRAM | typeof VENN_PLOT | typeof HEAT_MAP;
+export const GRAPH_TYPES = {
+  [LINE_GRAPH]: LINE_GRAPH,
+  [HISTOGRAM]: HISTOGRAM,
+  [VENN_PLOT]: VENN_PLOT,
+  [HEAT_MAP]: HEAT_MAP,
+}
 
 export interface TimeStatsState {
   // INPUTS
