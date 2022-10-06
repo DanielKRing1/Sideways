@@ -10,7 +10,7 @@ import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 import MyTextInput from '../../../../../../ssComponents/ReactNative/MyTextInput';
 
 // REDUX
-import { RootState } from '../../../../../../ssRedux';
+import { AppDispatch, RootState } from '../../../../../../ssRedux';
 import { setVennInputs, addVennInput, removeVennInput, VennInput } from '../../../../../../ssRedux/timeSeriesStatsSlice';
 
 
@@ -35,31 +35,33 @@ type GrowingVennInputListProps = {
 };
 const GrowingVennInputList: FC<GrowingVennInputListProps> = (props) => {
 
-    const { activeSliceName, vennByMonth, vennNodeInputs, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { vennNodeInputs } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
     
     const keyExtractor = (dataPoint: VennInput) => `${dataPoint.id}`;
     const genNextDataPlaceholder = (id: number) => ({ id, text: '' });
-    const handleAddOutput = (id: number, newPossibleOutput: string) => {
-        dispatch(addPossibleOutput({ id, text: newPossibleOutput }));
+    const handleAddInputNode = (id: number, newPossibleOutput: string) => {
+        dispatch(addVennInput({ id, text: newPossibleOutput }));
     };
-    const handleUpdateOutput = (newText: string, index: number) => {
-        possibleOutputs[index].text = newText;
+    const handleUpdateInputNode = (newText: string, index: number) => {
+        vennNodeInputs[index].text = newText;
         // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-        dispatch(setPossibleOutputs(possibleOutputs));
+        dispatch(setVennInputs(vennNodeInputs));
     }
     
     return (
         <GrowingIdList
-            data={possibleOutputs}
+            data={vennNodeInputs}
             createRenderItemComponent={createRenderItemComponent((index: number) => dispatch(removeVennInput(index)))}
             keyExtractor={keyExtractor}
             genNextDataPlaceholder={genNextDataPlaceholder}
-            handleUpdateInput={handleUpdateOutput}
-            handleAddInput={handleAddOutput}
+            handleUpdateInput={handleUpdateInputNode}
+            handleAddInput={handleAddInputNode}
         />
     )
 }
+
+export default GrowingVennInputList;
 
 const StyledTextInput = styled(MyTextInput)`
     borderWidth: 1px;
