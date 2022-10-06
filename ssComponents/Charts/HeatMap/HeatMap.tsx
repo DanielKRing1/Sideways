@@ -3,7 +3,7 @@ import React, { FC, useMemo } from 'react';
 import { FlexRow } from '../../Flex';
 import { Dimensions } from '../types';
 
-type PartialHeatMapCell = {
+export type PartialHeatMapCell = {
     value: any;
     onPress: (index: number) => void;
 };

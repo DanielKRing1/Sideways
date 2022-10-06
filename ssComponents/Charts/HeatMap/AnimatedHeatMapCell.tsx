@@ -58,6 +58,7 @@ const AnimatedHeatMapCell: FC<HeatMapCellProps> = (props) => {
 
     return (
         <ColoredCell
+            // @ts-ignore
             style={{ backgroundColor: myColor }}
             data={data}
             onPress={() => data.onPress(data.index)}
