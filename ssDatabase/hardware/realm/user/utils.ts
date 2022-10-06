@@ -24,6 +24,10 @@ const getId = (raw: string, idType: IdType): string => {
 const getInputId = (rawInput: string): string => `${rawInput}${DELIM}${INPUT_SUFFIX}`;
 const getOutputId = (rawOutput: string): string => `${rawOutput}${DELIM}${OUTPUT_SUFFIX}`;
 
+export function getStringMapValue(raw: string, stringMap: StringMap, idType: IdType) {
+    return stringMap[getId(raw, idType)];
+}
+
 // colorMap={{
 //     0: 'green',
 //     1: '#FFA99F',
@@ -44,7 +48,7 @@ export function getStringMapSubset<T>(rawTexts: string[], stringMap: StringMap, 
 //   ]}
 export function getStringMapSubsetList<T>(rawTexts: string[], stringMap: StringMap, idType: IdType, getListValue: (i: number, stringMapValue: string) => T): T[] {
     return rawTexts.reduce<T[]>((acc, rawText: string, i) => {
-        acc.push({ ...getListValue(i, stringMap[getId(rawText, idType)]) });
+        acc.push(getListValue(i, stringMap[getId(rawText, idType)]));
 
         return acc;
     }, []);

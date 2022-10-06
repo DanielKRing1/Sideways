@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { VictoryTheme, VictoryAxis, VictoryChart, VictoryBar, VictoryLabel, VictoryStack } from 'victory-native';
 import { CallbackArgs } from 'victory-core';
+import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
 export type VennStackDataPoint = {
     x: number | Date;
@@ -9,15 +10,15 @@ export type VennStackDataPoint = {
 export type VennStackProps = {
   colorScale: string[];
   
-  data: VennStackDataPoint[][];
-  x: string;
-  xValues?: number[];
+  data: ChartBar[][];
+  x?: string;
+  xValues?: number[] | Date[];
   xLabels?: any[];
   xLabelFill?: (l: CallbackArgs) => string | number;
   yValues?: any[];
-  tickFormat: (t: CallbackArgs) => any | number;
+  tickFormat?: (t: CallbackArgs) => any | number;
 
-  domainPadding: { x: number, y: number };
+  domainPadding?: { x: number, y: number };
 };
 
 const VennStack: FC<VennStackProps> = (props) => {

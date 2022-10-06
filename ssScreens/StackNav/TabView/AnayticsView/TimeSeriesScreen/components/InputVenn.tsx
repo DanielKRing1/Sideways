@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,8 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import VennStackWSlider from 'ssComponents/Charts/Venn/VennStackWSlider';
 import { AppDispatch, RootState } from 'ssRedux/index';
-import { setMonthIndex } from 'ssRedux/timeSeriesStatsSlice';
+import { setMonthIndex, VennInput } from 'ssRedux/timeSeriesStatsSlice';
 import GrowingVennInputList from './GrowingVennInputList';
+import { GradientColor } from 'ssComponents/Charts/Histogram/Histogram';
+import { getStringMapSubsetList, getStringMapValue, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
+import NodeInput from '../../IdentityScreen/components/NodeInput';
+import { StringMap } from 'ssDatabase/api/types';
+import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
 type InputVennProps = {
 
@@ -20,6 +25,15 @@ const InputVenn: FC<InputVennProps> = (props) => {
     // HANDLER METHODS
     const handleSelectMonth = (newMonthIndex: number) => dispatch(setMonthIndex(newMonthIndex));
 
+    const fullColorMap: StringMap = {};
+    const colorScale: string[] = useMemo(() => {        
+        // 1. Get nodeIds
+        const vennNodeIds: string[] = vennNodeInputs.map((nodeInput: VennInput) => nodeInput.text);
+
+        // 2. Convert nodeIds to colors
+        return getStringMapSubsetList<string>(vennNodeIds, fullColorMap, ID_TYPES.INPUT, (i: number, value: string) => value);
+    }, [vennNodeInputs]);
+
     return (
         <View>
 
@@ -28,7 +42,19 @@ const InputVenn: FC<InputVennProps> = (props) => {
             <GrowingVennInputList/>
 
             <VennStackWSlider
-
+                colorScale={colorScale}
+                data={vennByMonth[monthIndex].venn}
+                xValues={vennByMonth[monthIndex].venn[0].map((day: ChartBar) => day.x as Date)}
+                xLabels={vennByMonth[monthIndex].outputs}
+                xLabelFill={({ text }) => getStringMapValue(text[0], fullColorMap, ID_TYPES.OUTPUT)}
+                yValues={vennNodeInputs.map((nodeInput: VennInput) => nodeInput.text)}
+                
+                value={monthIndex}
+                setValue={setMonthIndex}
+                min={0}
+                max={vennByMonth.length-1}
+                leftColor={'yellow'}
+                rightColor={'red'}
             />
 
         </View>

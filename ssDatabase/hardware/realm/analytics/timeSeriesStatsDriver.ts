@@ -41,9 +41,9 @@ export type HistogramByMonth = {
     histogram: ChartBar[];
 };
 export type ChartBar = {
-    x: number | string | Date;
-    y: number | string | Date;
-    y0?: number | string | Date;
+    x: number | Date;
+    y: number | Date;
+    y0?: number | Date;
 };
 const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeSeriesArgs): Promise<HistogramByMonth[]> => {
     const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
@@ -81,7 +81,7 @@ const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeSeriesAr
         if(month !== prevMonth && year !== prevYear) {
             histogramByMonth.push({
                 timestamp: new Date(prevYear, prevMonth, 1),
-                histogram: Object.keys(countMap).map((outputKey: string) => ({ x: outputKey, y: countMap[outputKey] })),
+                histogram: Object.keys(countMap).map((outputKey: string) => ({ x: outputKey as unknown as number, y: countMap[outputKey] })),
             });
 
             // 4. Reset countMap
@@ -103,7 +103,7 @@ const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeSeriesAr
     // 7. Handle last month
     histogramByMonth.push({
         timestamp: new Date(prevYear, prevMonth, 1),
-        histogram: Object.keys(countMap).map((outputKey: string) => ({ x: outputKey, y: countMap[outputKey] })),
+        histogram: Object.keys(countMap).map((outputKey: string) => ({ x: outputKey as unknown as number, y: countMap[outputKey] })),
     });
 
     return histogramByMonth;
