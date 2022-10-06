@@ -23,7 +23,7 @@ import { abbrDate } from '../../../../ssUtils/date';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
 import DateCard from './DateCard';
 import MyButton from '../../../../ssComponents/ReactNative/MyButton';
-import { ExistingSlice } from '../../../../ssDatabase/types';
+import { ExistingSlice } from '../../../../ssDatabase/api/types';
 
 type ExistingSliceCardProps = {
     item: ExistingSlice;

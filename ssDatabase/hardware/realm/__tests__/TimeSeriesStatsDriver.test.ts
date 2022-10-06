@@ -23,13 +23,13 @@ jest.mock(`ssDatabase/realm/config`, () => {
 // 0. Edit Realm Path Constants ---- END
 
 // TO TEST
-import dbDriver from '../../dbDriver';
-import { startCreateSlice } from '../../../ssRedux/createSidewaysSlice';
-import { startRate } from '../../../ssRedux/rateSidewaysSlice';
+import dbDriver from '../../../dbDriver';
+import { startCreateSlice } from '../../../../ssRedux/createSidewaysSlice';
+import { startRate } from '../../../../ssRedux/rateSidewaysSlice';
 
 import TimeSeriesStatsDriver, { ChartBar, DailyOutput, HeatMapByMonth, HistogramByMonth, LineGraph, VennByMonth } from '../statsDrivers/timeSeriesStatsDriver';
-import { GrowingIdText as NewSliceOutput } from '../../../ssComponents/Input/GrowingIdList';
-import { Dict } from '../../../global';
+import { GrowingIdText as NewSliceOutput } from '../../../../ssComponents/Input/GrowingIdList';
+import { Dict } from '../../../../global';
 
 // ALL AVAILABLE DATA
 const TEST_SLICE_NAME: string = 'TestSlice';

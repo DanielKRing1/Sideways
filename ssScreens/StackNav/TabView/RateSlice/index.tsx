@@ -20,7 +20,7 @@ import VerticalSpace from '../../../../ssComponents/Spacing/VerticalSpace';
 import { useNavigation } from '@react-navigation/native';
 import { ACTIVE_SLICE_SCREEN_NAME } from '../../../../ssNavigation/constants';
 import { StackNavigatorNavigationProp } from '../../../../ssNavigation/StackNavigator';
-import { DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH, DEFAULT_REALM_GRAPH_META_REALM_PATH, DEFAULT_REALM_STACK_LOADABLE_REALM_PATH, DEFAULT_REALM_STACK_META_REALM_PATH } from '../../../../ssDatabase/realm/config';
+import { DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH, DEFAULT_REALM_GRAPH_META_REALM_PATH, DEFAULT_REALM_STACK_LOADABLE_REALM_PATH, DEFAULT_REALM_STACK_META_REALM_PATH } from '../../../../ssDatabase/hardware/realm/config';
 import { resetRealm } from '../../../../ssRealm/reset';
 
 type RateSliceScreenProps = {

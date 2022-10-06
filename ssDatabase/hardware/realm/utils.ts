@@ -1,8 +1,8 @@
 import { genSingleAverageName, genCollectiveAverageName, CGNode, CGEdge, RankedNode, ID_KEY, genSingleTallyName, genCollectiveTallyName } from "@asianpersonn/realm-graph";
 import DictUtils from '@asianpersonn/dict-utils';
 
-import { COLLECTIVE_KEY, COLLECTIVE_TALLY_KEY, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, RankedNodesMap, SINGLE_KEY, SINGLE_TALLY_KEY } from "../types";
-import { Dict } from "../../global";
+import { COLLECTIVE_KEY, COLLECTIVE_TALLY_KEY, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, RankedNodesMap, SINGLE_KEY, SINGLE_TALLY_KEY } from "../../api/types";
+import { Dict } from "../../../global";
 
 // RankedNodeMap UTILS
 

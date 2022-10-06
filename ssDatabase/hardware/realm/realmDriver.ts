@@ -8,8 +8,8 @@ import {
     DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH
 } from './config';
 
-import { Dict } from '../../global';
-import { DbDriverType, ExistingSlice, SidewaysSnapshotRow } from '../types';
+import { Dict } from '../../../global';
+import { DbDriverType, ExistingSlice, SidewaysSnapshotRow } from '../../api/types';
 
 // VARIABLES
 let isLoaded = false;

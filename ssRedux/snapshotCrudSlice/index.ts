@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dbDriver from '../../ssDatabase/dbDriver';
 import { ThunkConfig } from '../types';
-import { SidewaysSnapshotRow } from '../../ssDatabase/types';
+import { SidewaysSnapshotRow } from '../../ssDatabase/api/types';
 
 // INITIAL STATE
 
