@@ -12,7 +12,7 @@ type InputVennProps = {
 };
 const InputVenn: FC<InputVennProps> = (props) => {
 
-    const { vennNodeInputs, vennByMonth } = useSelector((state: RootState) => state.timeSeriesStatsSlice);
+    const { activeSliceName, lineGraph } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     return (

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryLabel } from 'victory-native';
-import { CallbackArgs, ForAxes, DomainTuple } from 'victory-core';
+import { CallbackArgs, ForAxes, DomainTuple, PaddingType } from 'victory-core';
 import { Defs, LinearGradient, Stop } from 'react-native-svg';
 
 type GradientColor = { offset: string, color: string; };
@@ -20,7 +20,7 @@ export type MyLineGraphProps = {
   tickValues: number[];
   tickFormat: (t: CallbackArgs) => string | number;
 
-  domainPadding: { x: number, y: number };
+  domainPadding: ForAxes<PaddingType>;
 };
 
 const MyLineGraph: FC<MyLineGraphProps> = (props) => {

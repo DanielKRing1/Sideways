@@ -132,7 +132,7 @@ export type ColorInfo = {
     entityId: string;
     color: string;
 };
-export type ColorMap = Dict<Dict<string>>;
+export type ColorMap = Dict<string>;
 export type ColorDriver = {
     saveColors: (newColors: ColorInfo[]) => Promise<void>;
     rmColors: (colorsToRm: Omit<ColorInfo, 'color'>[]) => Promise<void>;
@@ -144,7 +144,7 @@ export type IconInfo = {
     entityId: string;
     icon: string;
 };
-export type IconMap = Dict<Dict<string>>;
+export type IconMap = Dict<string>;
 export type IconDriver = {
     saveIcons: (newIcons: IconInfo[]) => Promise<void>;
     rmIcons: (colorsToRm: Omit<IconInfo, 'icon'>[]) => Promise<void>;

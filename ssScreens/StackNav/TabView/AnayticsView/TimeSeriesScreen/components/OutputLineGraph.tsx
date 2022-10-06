@@ -1,19 +1,50 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { CallbackArgs, ForAxes, DomainTuple } from 'victory-core';
 
+import dbDriver from 'ssDatabase/api/dbDriver';
 import MyText from 'ssComponents/ReactNative/MyText';
+import BinnedLineGraph from 'ssComponents/Charts/Line/BinnedLineGraph';
+import { RootState, AppDispatch } from 'ssRedux/index';
+import { Dict } from '../../../../../../global';
+import { getColorsMap, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
+import { DailyOutput } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
 type OutputLineGraphProps = {
 
 };
 const OutputLineGraph: FC<OutputLineGraphProps> = (props) => {
 
+    const [ domain, setDomain ] = React.useState<ForAxes<DomainTuple>>({ x: [0, 7] });
+
+
+    const { activeSliceName, lineGraph } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const dispatch: AppDispatch = useDispatch();
+
+    const fullColorMap: Dict<string> = {};
+    const outputColorMap: Dict<string> = useMemo(() => getColorsMap(dbDriver.getSlicePropertyNames(activeSliceName), fullColorMap, ID_TYPES.OUTPUT), [activeSliceName, fullColorMap]);
 
     return (
         <View>
 
             <MyText>Output Line Graph</MyText>
+            
+            <BinnedLineGraph
+            // TODO Fill in color map
+                colorMap={outputColorMap}
+                xDomain={domain}
+                setXDomain={setDomain}
+                // @ts-ignore
+                tickValues={Object.keys(outputColorMap)}
+                // xValues={lineGraph.map((day: DailyOutput) => day.x)}
+                // brushXValues={lineGraph.map((day: DailyOutput) => day.x)}
+                data={lineGraph}
+                tickFormat={(t: CallbackArgs) => t.index !== undefined ? t.ticks[t.index] : ''}
+                // @ts-ignore
+                domainPadding={{ x: 20 }}
+            />
 
         </View>
     );
