@@ -6,12 +6,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from 'ssRedux/index';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
-import AnimatedHeatMapCell from 'ssComponents/Charts/HeatMap/AnimatedHeatMapCell';
 import { PartialHeatMapCell } from 'ssComponents/Charts/HeatMap/HeatMap';
 import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
 import { StringMap } from 'ssDatabase/api/types';
 import { HeatMapDay } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 import { setMonthIndex } from 'ssRedux/timeSeriesStatsSlice';
+import OutputHeatMapCell from './OutputHeatMapCell';
 
 type OutputHeatMapProps = {
 
@@ -53,7 +53,7 @@ const OutputHeatMap: FC<OutputHeatMapProps> = (props) => {
             <HeatMapWSlider
                 cols={7}
                 data={heatMap}
-                CellComponent={AnimatedHeatMapCell}
+                CellComponent={OutputHeatMapCell}
 
                 value={monthIndex}
                 setValue={handleSelectMonth}
