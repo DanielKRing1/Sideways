@@ -14,6 +14,7 @@ import OutputHistogram from './components/Histogram';
 import InputVenn from './components/Venn';
 import OutputHeatMap from './components/HeatMap';
 import { GRAPH_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/timeSeriesStatsSlice';
+import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
 
 type GraphScreenProps = {
 
@@ -46,6 +47,8 @@ const GraphScreen: FC<GraphScreenProps> = (props) => {
         <View>
             
             <SelectedChart/>
+
+            <FloatingSelectionButton/>
             
             <MyButton
                 style={{
