@@ -6,7 +6,7 @@ import { startGetIdentityNodes } from 'ssRedux/identityStatsSlice';
 import { startGetAllTimeSeriesStats } from 'ssRedux/timeSeriesStatsSlice';
 import styled from 'styled-components/native';
 
-import dbDriver from '../../ssDatabase/api/dbDriver';
+import dbDriver from '../../ssDatabase/api/core/dbDriver';
 import { ACTIVE_SLICE_SCREEN_NAME, ADD_SLICE_SCREEN_NAME } from '../../ssNavigation/constants';
 import { StackNavigatorNavigationProp, StackNavigatorParamList } from '../../ssNavigation/StackNavigator';
 import { AppDispatch, RootState } from '../../ssRedux';

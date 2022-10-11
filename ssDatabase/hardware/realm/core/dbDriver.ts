@@ -8,8 +8,8 @@ import {
     DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH
 } from './config';
 
-import { Dict } from '../../../global';
-import { DbDriverType, ExistingSlice, SidewaysSnapshotRow } from '../../api/types';
+import { Dict } from '../../../../global';
+import { DbDriverType, ExistingSlice, SidewaysSnapshotRow } from '../../../api/types';
 
 // VARIABLES
 let isLoaded = false;
@@ -19,8 +19,8 @@ let isLoaded = false;
 const load = async (): Promise<void> => {
     if(isLoaded) return;
 
-    const graphPromise = await RealmGraphManager.loadGraphs(DEFAULT_REALM_GRAPH_META_REALM_PATH, DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH);
-    const stackPromise = await RealmStackManager.loadStacks(DEFAULT_REALM_STACK_META_REALM_PATH, DEFAULT_REALM_STACK_LOADABLE_REALM_PATH);
+    const graphPromise: Promise<any> = RealmGraphManager.loadGraphs(DEFAULT_REALM_GRAPH_META_REALM_PATH, DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH);
+    const stackPromise: Promise<any> = RealmStackManager.loadStacks(DEFAULT_REALM_STACK_META_REALM_PATH, DEFAULT_REALM_STACK_LOADABLE_REALM_PATH);
 
     await Promise.all([graphPromise, stackPromise]);
 
@@ -28,8 +28,12 @@ const load = async (): Promise<void> => {
 };
 
 const closeAll = async (): Promise<void> => {
-    await RealmGraphManager.closeAllGraphs();
-    await RealmStackManager.closeAllStacks();
+    const graphPromise: Promise<any> = RealmGraphManager.closeAllGraphs();
+    const stackPromise: Promise<any> = RealmStackManager.closeAllStacks();
+
+    await Promise.all([graphPromise, stackPromise]);
+
+    isLoaded = false;
 }
 
 export const throwLoadError = (): void | never => {

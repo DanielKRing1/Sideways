@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { CallbackArgs, ForAxes, DomainTuple } from 'victory-core';
 
-import dbDriver from 'ssDatabase/api/dbDriver';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 import MyText from 'ssComponents/ReactNative/MyText';
 import BinnedLineGraph from 'ssComponents/Charts/Line/BinnedLineGraph';
 import { RootState, AppDispatch } from 'ssRedux/index';

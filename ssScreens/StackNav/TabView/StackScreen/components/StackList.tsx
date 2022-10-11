@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
 // DB DRIVER
-import dbDriver from '../../../../../ssDatabase/api/dbDriver';
+import dbDriver from '../../../../../ssDatabase/api/core/dbDriver';
 import { DbLoaderContext } from '../../../../../ssContexts/DbLoader/DbLoader';
 
 // REDUX

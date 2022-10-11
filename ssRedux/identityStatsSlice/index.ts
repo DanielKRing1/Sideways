@@ -1,7 +1,7 @@
 import { RankedNode } from '@asianpersonn/realm-graph';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import dbDriver from '../../ssDatabase/api/dbDriver';
+import dbDriver from '../../ssDatabase/api/core/dbDriver';
 import recommendationsDriver from '../../ssDatabase/api/analytics/recommendationStatsDriver';
 import identityDriver from '../../ssDatabase/api/analytics/identityStatsDriver';
 import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow, SINGLE_KEY } from '../../ssDatabase/api/types';
