@@ -38,7 +38,8 @@ export const useDbDriverLoader = () => {
         // Is now not loaded
         setIsLoaded(false);
     };
-    if(!dbDriver.isLoaded) load();
+    // Initial load
+    load();
 
     return {
         isLoaded,
