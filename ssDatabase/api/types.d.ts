@@ -128,15 +128,20 @@ type SidewaysSnapshotRow = {
 };
 
 // COLOR DRIVER
+export type StringMap = Dict<string>;
+
 export type ColorInfo = {
     entityId: string;
     color: string;
 };
-export type StringMap = Dict<string>;
 export type ColorDriver = {
-    saveColors: (newColors: ColorInfo[]) => Promise<void>;
-    rmColors: (colorsToRm: Omit<ColorInfo, 'color'>[]) => Promise<void>;
-    getAllColors: () => Promise<StringMap>;
+    isLoaded: boolean;
+    load: () => Promise<void>,
+    closeAll: () => Promise<void>,
+
+    saveColors: (newColors: ColorInfo[]) => void | never;
+    rmColors: (colorsToRm: Omit<ColorInfo, 'color'>[]) => void | never;
+    getAllColors: () => StringMap | never;
 };
 
 // ICONS DRIVER
@@ -145,7 +150,11 @@ export type IconInfo = {
     icon: string;
 };
 export type IconDriver = {
-    saveIcons: (newIcons: IconInfo[]) => Promise<void>;
-    rmIcons: (colorsToRm: Omit<IconInfo, 'icon'>[]) => Promise<void>;
-    getAllIcons: () => Promise<StringMap>;
+    isLoaded: boolean;
+    load: () => Promise<void>,
+    closeAll: () => Promise<void>,
+    
+    saveIcons: (newIcons: IconInfo[]) => void | never;
+    rmIcons: (colorsToRm: Omit<IconInfo, 'icon'>[]) => void | never;
+    getAllIcons: () => StringMap | never;
 };
