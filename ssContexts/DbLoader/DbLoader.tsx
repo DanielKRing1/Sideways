@@ -7,12 +7,14 @@ import { LoadingComponent } from "./components/LoadingComponent";
 type DbLoaderContextValueType = {
     isLoaded: boolean;
     load: () => Promise<void>;
+    closeAll: () => Promise<void>;
 };
 const DEFAULT_CONTEXT_VALUE: DbLoaderContextValueType = {
     isLoaded: false,
     load: async () => {},
+    closeAll: async () => {},
 };
-const DbLoaderContext: React.Context<DbLoaderContextValueType> = createContext(DEFAULT_CONTEXT_VALUE);
+const DbLoaderContext: React.Context<DbLoaderContextValueType> = createContext<DbLoaderContextValueType>(DEFAULT_CONTEXT_VALUE);
 
 // PROVIDER
 type DbLoaderProviderType = {
@@ -21,11 +23,14 @@ type DbLoaderProviderType = {
 const DbLoaderProvider: FC<DbLoaderProviderType> = (props) => {
     const { children } = props;
     
-    const { isLoaded, load } = useDbDriverLoader();
+    const { isLoaded, load, closeAll } = useDbDriverLoader();
 
     return (
-        // @ts-ignore
-        <DbLoaderContext.Provider style={{flex: 1}} value={{ isLoaded, load }}>
+        <DbLoaderContext.Provider
+            // @ts-ignore
+            style={{flex: 1}}
+            value={{ isLoaded, load, closeAll }}
+        >
         {
             !isLoaded ?
                 <LoadingComponent/>
