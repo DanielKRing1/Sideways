@@ -8,8 +8,7 @@ import snapshotCrudSlice from './snapshotCrudSlice';
 
 import analyticsSlice from './analyticsSlice';
 
-import colorSlice from './colorSlice';
-import iconSlice from './iconSlice';
+import userJsonSlice from './userJson';
 
 export default combineReducers({
     createSidewaysSlice,
@@ -21,6 +20,5 @@ export default combineReducers({
 
     analyticsSlice,
 
-    colorSlice,
-    iconSlice,
+    userJsonSlice,
 });
