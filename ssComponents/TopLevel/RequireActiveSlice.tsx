@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { startGetIdentityNodes } from 'ssRedux/identityStatsSlice';
-import { startGetAllTimeSeriesStats } from 'ssRedux/timeSeriesStatsSlice';
+import { startGetIdentityNodes } from 'ssRedux/analyticsSlice/identityStatsSlice';
+import { startGetAllTimeSeriesStats } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
 import styled from 'styled-components/native';
 
 import dbDriver from '../../ssDatabase/api/core/dbDriver';

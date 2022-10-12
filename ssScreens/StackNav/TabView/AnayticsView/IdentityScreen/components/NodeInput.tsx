@@ -5,7 +5,7 @@ import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 import { CGNode, ID_KEY, RankedNode } from '@asianpersonn/realm-graph';
 
 import { AppDispatch, RootState } from '../../../../../../ssRedux';
-import { setSearchNodeIdInput, startSetNodeIdInput } from '../../../../../../ssRedux/identityStatsSlice';
+import { setSearchNodeIdInput, startSetNodeIdInput } from '../../../../../../ssRedux/analyticsSlice/identityStatsSlice';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 import IconInput from '../../../../../../ssComponents/IconInput/IconInput';
 import { FlexCol } from '../../../../../../ssComponents/Flex';

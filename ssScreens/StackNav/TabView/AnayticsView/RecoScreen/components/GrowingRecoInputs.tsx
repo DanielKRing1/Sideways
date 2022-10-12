@@ -11,7 +11,7 @@ import MyTextInput from '../../../../../../ssComponents/ReactNative/MyTextInput'
 
 // REDUX
 import { RootState } from '../../../../../../ssRedux';
-import { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, RecoInput } from '../../../../../../ssRedux/recommendationStatsSlice';
+import { setRecommendationInputs, addRecommendationInput, removeRecommendationInput, RecoInput } from '../../../../../../ssRedux/analyticsSlice/recoStatsSlice';
 
 const createRenderItemComponent = (deleteInputNode: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
     <FlexRow>

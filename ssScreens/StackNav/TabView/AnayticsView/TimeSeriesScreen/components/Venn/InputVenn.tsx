@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import VennStackWSlider from 'ssComponents/Charts/Venn/VennStackWSlider';
 import { AppDispatch, RootState } from 'ssRedux/index';
-import { setMonthIndex, VennInput } from 'ssRedux/timeSeriesStatsSlice';
+import { setMonthIndex, VennInput } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
 import GrowingVennInputList from './GrowingVennInputList';
 import { getStringMapSubsetList, getStringMapValue, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
 import { StringMap } from 'ssDatabase/api/types';

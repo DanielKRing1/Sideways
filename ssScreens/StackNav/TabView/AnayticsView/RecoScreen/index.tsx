@@ -5,7 +5,7 @@ import styled, { useTheme } from 'styled-components/native';
 
 // REDUX
 import { AppDispatch, RootState } from '../../../../../ssRedux';
-import { startGetRecommendations } from '../../../../../ssRedux/recommendationStatsSlice';
+import { startGetRecommendations } from '../../../../../ssRedux/analyticsSlice/recoStatsSlice';
 import GrowingRecoInputs from './components/GrowingRecoInputs';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';

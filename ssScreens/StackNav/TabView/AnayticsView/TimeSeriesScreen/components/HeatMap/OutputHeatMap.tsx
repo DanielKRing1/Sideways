@@ -10,7 +10,7 @@ import { PartialHeatMapCell } from 'ssComponents/Charts/HeatMap/HeatMap';
 import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
 import { StringMap } from 'ssDatabase/api/types';
 import { HeatMapDay } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
-import { setMonthIndex } from 'ssRedux/timeSeriesStatsSlice';
+import { setMonthIndex } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 
 type OutputHeatMapProps = {};

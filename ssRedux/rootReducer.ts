@@ -6,9 +6,7 @@ import deleteSidewaysSlice from './deleteSidewaysSlice';
 
 import snapshotCrudSlice from './snapshotCrudSlice';
 
-import identityStatsSlice from './identityStatsSlice';
-import recommendationStatsSlice from './recommendationStatsSlice';
-import timeSeriesStatsSlice from './timeSeriesStatsSlice';
+import analyticsSlice from './analyticsSlice';
 
 import colorSlice from './colorSlice';
 import iconSlice from './iconSlice';
@@ -21,9 +19,7 @@ export default combineReducers({
     
     snapshotCrudSlice,
 
-    identityStatsSlice,
-    recommendationStatsSlice,
-    timeSeriesStatsSlice,
+    analyticsSlice,
 
     colorSlice,
     iconSlice,

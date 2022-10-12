@@ -13,7 +13,7 @@ import OutputLineGraph from './components/LineGraph';
 import OutputHistogram from './components/Histogram';
 import InputVenn from './components/Venn';
 import OutputHeatMap from './components/HeatMap';
-import { GRAPH_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/timeSeriesStatsSlice';
+import { GRAPH_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
 import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
 
 type GraphScreenProps = {

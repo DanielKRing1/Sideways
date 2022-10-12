@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { GrowingIdText as RecoInput } from '../../ssComponents/Input/GrowingIdList';
-export type { GrowingIdText as RecoInput } from '../../ssComponents/Input/GrowingIdList';
-import recommendationsDriver from '../../ssDatabase/api/analytics/recommendationStatsDriver';
-import { GetRecommendationsArgs, HiLoRankingByOutput, OUTPUT_KEYS } from '../../ssDatabase/api/types';
-import { ThunkConfig } from '../types';
+import { GrowingIdText as RecoInput } from '../../../ssComponents/Input/GrowingIdList';
+export type { GrowingIdText as RecoInput } from '../../../ssComponents/Input/GrowingIdList';
+import recommendationsDriver from '../../../ssDatabase/api/analytics/recommendationStatsDriver';
+import { GetRecommendationsArgs, HiLoRankingByOutput, OUTPUT_KEYS } from '../../../ssDatabase/api/types';
+import { ThunkConfig } from '../../types';
 
 // INITIAL STATE
 
@@ -33,7 +33,7 @@ export const startGetRecommendations = createAsyncThunk<
   'recommendationStatsSS/startGetRecommendations',
   async ({ iterations, dampingFactor }: StartGetRecommendationsArgs, thunkAPI) => {
     const graphName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const inputNodeIds: string[] = thunkAPI.getState().recommendationStatsSlice.recommendationInputs.map((inputs: RecoInput) => inputs.text);
+    const inputNodeIds: string[] = thunkAPI.getState().analyticsSlice.recoStatsSlice.recommendationInputs.map((inputs: RecoInput) => inputs.text);
 
     const recommendations: HiLoRankingByOutput = recommendationsDriver.getRecommendations({ graphName, inputNodeIds, outputType: OUTPUT_KEYS.SINGLE, iterations, dampingFactor });
 

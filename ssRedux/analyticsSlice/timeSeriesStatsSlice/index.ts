@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { GrowingIdText as VennInput } from '../../ssComponents/Input/GrowingIdList';
-export type { GrowingIdText as VennInput } from '../../ssComponents/Input/GrowingIdList';
+import { GrowingIdText as VennInput } from '../../../ssComponents/Input/GrowingIdList';
+export type { GrowingIdText as VennInput } from '../../../ssComponents/Input/GrowingIdList';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import timeSeriesDriver from '../../ssDatabase/api/analytics/timeSeriesStatsDriver';
+import timeSeriesDriver from '../../../ssDatabase/api/analytics/timeSeriesStatsDriver';
 
-import { HiLoRankingByOutput, OUTPUT_KEYS } from '../../ssDatabase/api/types';
-import { ThunkConfig } from '../types';
-import { floorDay, floorMonth, getNDaysAgo } from '../../ssUtils/date';
+import { HiLoRankingByOutput, OUTPUT_KEYS } from '../../../ssDatabase/api/types';
+import { ThunkConfig } from '../../types';
+import { floorDay, floorMonth, getNDaysAgo } from '../../../ssUtils/date';
 import { LineGraph, HistogramByMonth, VennByMonth, HeatMapByMonth } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
 // INITIAL STATE
@@ -195,7 +195,7 @@ export const startGetVenn = createAsyncThunk<
   'timeSeriesStatsSS/startGetVenn',
   async (undefined: StartGetVennArgs, thunkAPI) => {
     const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const inputNodeIds: string[] = thunkAPI.getState().timeSeriesStatsSlice.vennNodeInputs.map((vennInput: VennInput) => vennInput.text);
+    const inputNodeIds: string[] = thunkAPI.getState().analyticsSlice.timeseriesStatsSlice.vennNodeInputs.map((vennInput: VennInput) => vennInput.text);
 
     // const venn: VennByMonth[] = await timeSeriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: [] }) as VennByMonth[];
     const venn: VennByMonth[] = await timeSeriesDriver.getNodeOverlapVenn({ sliceName: activeSliceName, nodeIds: inputNodeIds });

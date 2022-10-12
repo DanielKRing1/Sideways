@@ -11,7 +11,7 @@ import MyTextInput from '../../../../../../../ssComponents/ReactNative/MyTextInp
 
 // REDUX
 import { AppDispatch, RootState } from '../../../../../../../ssRedux';
-import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../../ssRedux/timeSeriesStatsSlice';
+import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../../ssRedux/analyticsSlice/timeSeriesStatsSlice';
 
 
 const createRenderItemComponent = (deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
