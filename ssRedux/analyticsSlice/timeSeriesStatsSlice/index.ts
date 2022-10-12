@@ -5,9 +5,8 @@ export type { GrowingIdText as VennInput } from '../../../ssComponents/Input/Gro
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import timeSeriesDriver from '../../../ssDatabase/api/analytics/timeSeriesStatsDriver';
 
-import { HiLoRankingByOutput, OUTPUT_KEYS } from '../../../ssDatabase/api/types';
 import { ThunkConfig } from '../../types';
-import { floorDay, floorMonth, getNDaysAgo } from '../../../ssUtils/date';
+import { floorDay } from '../../../ssUtils/date';
 import { LineGraph, HistogramByMonth, VennByMonth, HeatMapByMonth } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
 
 // INITIAL STATE
@@ -25,6 +24,9 @@ export const GRAPH_TYPES = {
 }
 
 export interface TimeStatsState {
+  analyzedSliceName: string;
+  isFresh: boolean;
+
   // INPUTS
   // Graph Selection
   selectedGraph: SelectableGraph;
@@ -45,6 +47,10 @@ export interface TimeStatsState {
 };
 
 const initialState: TimeStatsState = {
+  // FRESHNESS
+  analyzedSliceName: '',
+  isFresh: false,
+  
   // INPUTS
   // Graph Selection
   selectedGraph: HEAT_MAP,
@@ -71,6 +77,39 @@ const initialState: TimeStatsState = {
 
 
 // THUNKS
+
+// Freshness
+export const startAssureFreshness = createAsyncThunk<
+  boolean,
+  undefined,
+  ThunkConfig
+>(
+  'timeSeriesStatsSS/startAssureFreshness',
+  async (undefined, thunkAPI) => {
+    const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    const analyzedSliceName: string = thunkAPI.getState().analyticsSlice.timeseriesStatsSlice.analyzedSliceName;
+    const isFresh: boolean = thunkAPI.getState().analyticsSlice.timeseriesStatsSlice.isFresh;
+
+    // 1. 'activeSliceName' changed
+    if(activeSliceName !== analyzedSliceName) {
+      // Recompute charts + reset stats bcus vennNodes are now unknown
+      thunkAPI.dispatch(startGetAllTimeSeriesStats());
+      thunkAPI.dispatch(resetNodesAndStats());
+    }
+    // 2. Freshness changed (rate, undo rate, ...)
+    else if(!isFresh) {
+      // Recompute charts + Rerender
+      thunkAPI.dispatch(startGetAllTimeSeriesStats());
+      thunkAPI.dispatch(forceSignatureRerender()); 
+    }
+    
+    // 3. Is now fresh
+    if(!isFresh) thunkAPI.dispatch(setFreshness(true));
+    if(activeSliceName !== analyzedSliceName) thunkAPI.dispatch(setAnalyzedSliceName(activeSliceName));
+
+    return true;
+  }
+);
 
 // Inputs
 type StartAddVennInputsArg = VennInput;
@@ -127,7 +166,7 @@ export const startSetVennInputs = createAsyncThunk<
 
 // Charts
 type StartSetAllTimeStatsArgs = undefined;
-export const startGetAllTimeSeriesStats = createAsyncThunk<
+const startGetAllTimeSeriesStats = createAsyncThunk<
   boolean,
   StartSetAllTimeStatsArgs,
   ThunkConfig
@@ -149,7 +188,7 @@ export const startGetAllTimeSeriesStats = createAsyncThunk<
 );
 
 type StartGetLineGraphArgs = undefined;
-export const startGetLineGraph = createAsyncThunk<
+const startGetLineGraph = createAsyncThunk<
   boolean,
   StartGetLineGraphArgs,
   ThunkConfig
@@ -168,7 +207,7 @@ export const startGetLineGraph = createAsyncThunk<
 );
 
 type StartGetHistogramArgs = undefined;
-export const startGetHistogram = createAsyncThunk<
+const startGetHistogram = createAsyncThunk<
   boolean,
   StartGetHistogramArgs,
   ThunkConfig
@@ -187,7 +226,7 @@ export const startGetHistogram = createAsyncThunk<
 );
 
 type StartGetVennArgs = undefined;
-export const startGetVenn = createAsyncThunk<
+const startGetVenn = createAsyncThunk<
   boolean,
   StartGetVennArgs,
   ThunkConfig
@@ -207,7 +246,7 @@ export const startGetVenn = createAsyncThunk<
 );
 
 type StartGetHeatMapArgs = undefined;
-export const startGetHeatMap = createAsyncThunk<
+const startGetHeatMap = createAsyncThunk<
   boolean,
   StartGetHeatMapArgs,
   ThunkConfig
@@ -228,6 +267,9 @@ export const startGetHeatMap = createAsyncThunk<
 
 // ACTION TYPES
 
+// Freshness
+type SetFreshnessAction = PayloadAction<boolean>;
+type SetAnalyzedSliceName = PayloadAction<string>;
 // Input
 type SetGraphSelectionAction = PayloadAction<SelectableGraph>;
 type SetDayInputAction = PayloadAction<Date>;
@@ -240,6 +282,8 @@ type SetLineGraphAction = PayloadAction<LineGraph>;
 type SetHistogramAction = PayloadAction<HistogramByMonth[]>;
 type SetVennAction = PayloadAction<VennByMonth[]>;
 type SetHeatMapAction = PayloadAction<HeatMapByMonth[]>;
+// Reset
+type ResetNodesAndStatsAction = PayloadAction<undefined>;
 // Rerender
 type ForceTimeStatsRerenderAction = PayloadAction<undefined>;
 
@@ -249,6 +293,14 @@ export const timeSeriesStatsSlice = createSlice({
   name: 'timeSeriesStatsSlice',
   initialState,
   reducers: {
+    // FRESHNESS
+    setFreshness: (state: TimeStatsState, action: SetFreshnessAction) => {
+      state.isFresh = action.payload;
+    },
+    setAnalyzedSliceName: (state: TimeStatsState, action: SetAnalyzedSliceName) => {
+      state.analyzedSliceName = action.payload;
+    },
+    
     // INPUTS
     setGraphSelection: (state: TimeStatsState, action: SetGraphSelectionAction) => {
       state.graphsSignature = action.payload;
@@ -303,6 +355,22 @@ export const timeSeriesStatsSlice = createSlice({
     setHeatMap: (state: TimeStatsState, action: SetHeatMapAction) => {
       state.heatMapByMonth = action.payload;
     },
+
+    // Reset
+    resetNodesAndStats: (state: TimeStatsState, action: ResetNodesAndStatsAction) => {
+      // INPUTS
+      // Node Input
+      state.vennNodeInputs = [];
+
+      // CHARTS
+      state.lineGraph = [];
+      state.histogramByMonth = [];
+      state.vennByMonth = [];
+      state.heatMapByMonth = [];
+
+      // RERENDER
+      state.graphsSignature = {};
+    },
     
     // RERENDER
     forceSignatureRerender: (state: TimeStatsState, action: ForceTimeStatsRerenderAction) => {
@@ -317,7 +385,7 @@ export const timeSeriesStatsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-const { addVennInput, removeVennInput, setVennInputs, setLineGraph, setHistogram, setVenn, setHeatMap } = timeSeriesStatsSlice.actions;
+const { addVennInput, removeVennInput, setVennInputs, setLineGraph, setHistogram, setVenn, setHeatMap, setFreshness, setAnalyzedSliceName, resetNodesAndStats } = timeSeriesStatsSlice.actions;
 export const { setGraphSelection, setDayInput, setMonthIndex, forceSignatureRerender } = timeSeriesStatsSlice.actions;
 
 

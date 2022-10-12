@@ -4,12 +4,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dbDriver from '../../../ssDatabase/api/core/dbDriver';
 import recommendationsDriver from '../../../ssDatabase/api/analytics/recommendationStatsDriver';
 import identityDriver from '../../../ssDatabase/api/analytics/identityStatsDriver';
-import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, PageRankArgs, SidewaysSnapshotRow, SINGLE_KEY } from '../../../ssDatabase/api/types';
+import { GetNodeStatsArgs, GetNodeStatsByOutputArgs, HiLoRanking, HiLoRankingByOutput, OutputKeyType, OUTPUT_KEYS, SINGLE_KEY } from '../../../ssDatabase/api/types';
 import { ThunkConfig } from '../../types';
 
 // INITIAL STATE
 
 export interface IdentityStatsState {
+  analyzedSliceName: string;
+  isFresh: boolean;
+
   searchedNodeIdInput: string;
   nodeIdInput: string;
   listLength: number;
@@ -27,6 +30,10 @@ export interface IdentityStatsState {
 };
 
 const initialState: IdentityStatsState = {
+  // FRESHNESS
+  analyzedSliceName: '',
+  isFresh: false,
+  
   // INPUTS
   searchedNodeIdInput: '',
   nodeIdInput: '',
@@ -49,9 +56,44 @@ const initialState: IdentityStatsState = {
 
 // THUNKS
 
+// Freshness
+export const startAssureFreshness = createAsyncThunk<
+  boolean,
+  undefined,
+  ThunkConfig
+>(
+  'identityStatsSS/startAssureFreshness',
+  async (undefined, thunkAPI) => {
+    const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    const analyzedSliceName: string = thunkAPI.getState().analyticsSlice.identityStatsSlice.analyzedSliceName;
+    const isFresh: boolean = thunkAPI.getState().analyticsSlice.identityStatsSlice.isFresh;
+
+    // 1. 'activeSliceName' changed
+    if(activeSliceName !== analyzedSliceName) {
+      // Recompute identityNodes + reset stats bcus inputNode is now unknown
+      thunkAPI.dispatch(startGetIdentityNodes());
+      thunkAPI.dispatch(resetNodesAndStats());
+    }
+    // 2. Freshness changed (rate, undo rate, ...)
+    else if(!isFresh) {
+      // Recompute identityNodes + Recompute inputNode stats + Rerender identity and input stats
+      thunkAPI.dispatch(startGetIdentityNodes());
+      thunkAPI.dispatch(startSetNodeIdInput(thunkAPI.getState().analyticsSlice.identityStatsSlice.nodeIdInput));
+      thunkAPI.dispatch(forceIdentityStatsSignatureRerender()); 
+      thunkAPI.dispatch(forceInputStatsSignatureRerender()); 
+    }
+    
+    // 3. Is now fresh
+    if(!isFresh) thunkAPI.dispatch(setFreshness(true));
+    if(activeSliceName !== analyzedSliceName) thunkAPI.dispatch(setAnalyzedSliceName(activeSliceName));
+
+    return true;
+  }
+);
+
 // Identity Stats
 
-export const startGetIdentityNodes = createAsyncThunk<
+const startGetIdentityNodes = createAsyncThunk<
   boolean,
   undefined,
   ThunkConfig
@@ -168,6 +210,9 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
 
 // ACTION TYPES
 
+// Freshness
+type SetFreshnessAction = PayloadAction<boolean>;
+type SetAnalyzedSliceName = PayloadAction<string>;
 // Input
 type SetSearchedNodeIdInputAction = PayloadAction<string>;
 type SetNodeIdInputAction = PayloadAction<string>;
@@ -178,6 +223,8 @@ type SetNodeStatsAction = PayloadAction<RankedNode>;
 type SetCollectivelyTandemNodesAction = PayloadAction<HiLoRanking>;
 type SetSinglyTandemNodesAction = PayloadAction<HiLoRankingByOutput>;
 type SetHighlyRatedTandemNodesAction = PayloadAction<HiLoRankingByOutput>;
+// Reset
+type ResetNodesAndStatsAction = PayloadAction<undefined>;
 // Rerender
 type ForceIdentityStatsRerenderAction = PayloadAction<undefined>;
 type ForceInputStatsRerenderAction = PayloadAction<undefined>;
@@ -188,6 +235,14 @@ export const identityStatsSlice = createSlice({
   name: 'identityStatsSlice',
   initialState,
   reducers: {
+    // FRESHNESS
+    setFreshness: (state: IdentityStatsState, action: SetFreshnessAction) => {
+      state.isFresh = action.payload;
+    },
+    setAnalyzedSliceName: (state: IdentityStatsState, action: SetAnalyzedSliceName) => {
+      state.analyzedSliceName = action.payload;
+    },
+
     // Inputs
     setSearchNodeIdInput: (state: IdentityStatsState, action: SetSearchedNodeIdInputAction) => {
       state.searchedNodeIdInput = action.payload;
@@ -216,6 +271,24 @@ export const identityStatsSlice = createSlice({
       state.highlyRatedTandemNodes = action.payload;
     },
 
+    // Reset
+    resetNodesAndStats: (state: IdentityStatsState, action: ResetNodesAndStatsAction) => {
+      // Input
+      state.searchedNodeIdInput = '';
+      state.nodeIdInput = '';
+
+      // Stats
+      state.identityNodes = {};
+      state.nodeStats = undefined;
+      state.collectivelyTandemNodes = { highestRanked: [], lowestRanked: [], };
+      state.singlyTandemNodes = {};
+      state.highlyRatedTandemNodes = {};
+
+      // Rerender
+      state.identityStatsSignature = {};
+      state.inputStatsSignature = {};
+    },
+
     // Rerender
     forceIdentityStatsSignatureRerender: (state: IdentityStatsState, action: ForceIdentityStatsRerenderAction) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -239,7 +312,11 @@ const {
     setCollectivelyTandemNode,
     setSinglyTandemNodes,
     setHighlyRatedTandemNodes,
+
+    setFreshness,
+    setAnalyzedSliceName,
 } = identityStatsSlice.actions;
+const { resetNodesAndStats } = identityStatsSlice.actions;
 export const {
   // Input
   setSearchNodeIdInput,
