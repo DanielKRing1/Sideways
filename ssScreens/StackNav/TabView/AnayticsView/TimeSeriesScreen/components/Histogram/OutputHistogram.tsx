@@ -16,7 +16,7 @@ import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 
-    const { activeSliceName, histogramByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
+    const { activeSliceName, histogramByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
 // gradientColors={[

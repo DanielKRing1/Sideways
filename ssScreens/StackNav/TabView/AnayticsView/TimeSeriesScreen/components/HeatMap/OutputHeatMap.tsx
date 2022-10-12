@@ -19,7 +19,7 @@ const OutputHeatMap: FC<OutputHeatMapProps> = (props) => {
     const [ selectedIndex, setSelectedIndex ] = useState<number>();
     
     // REDUX
-    const { activeSliceName, heatMapByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
+    const { activeSliceName, heatMapByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     // FORMAT DATA

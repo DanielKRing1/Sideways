@@ -35,7 +35,7 @@ type GrowingVennInputListProps = {
 };
 const GrowingVennInputList: FC<GrowingVennInputListProps> = (props) => {
 
-    const { vennNodeInputs } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
+    const { vennNodeInputs } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
     
     const keyExtractor = (dataPoint: VennInput) => `${dataPoint.id}`;

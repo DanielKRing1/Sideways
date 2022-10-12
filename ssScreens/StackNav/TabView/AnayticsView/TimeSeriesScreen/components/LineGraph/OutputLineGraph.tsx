@@ -19,7 +19,7 @@ const OutputLineGraph: FC<OutputLineGraphProps> = (props) => {
     const [ domain, setDomain ] = React.useState<ForAxes<DomainTuple>>({ x: [0, 7] });
 
 
-    const { activeSliceName, lineGraph } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
+    const { activeSliceName, lineGraph } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
 // colorMap={{
