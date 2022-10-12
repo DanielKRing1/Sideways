@@ -25,7 +25,7 @@ const TimeSeries: FC<TimeSeriesProps> = (props) => {
     const theme = useTheme();
 
     // REDUX
-    const { activeSliceName, selectedChart, readSSSignature, graphsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { activeSliceName, selectedChart, readSSSignature, graphsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     // SELECTED CHART COMPONENT
