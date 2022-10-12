@@ -11,7 +11,7 @@ import MyTextInput from '../../../../../../../ssComponents/ReactNative/MyTextInp
 
 // REDUX
 import { AppDispatch, RootState } from '../../../../../../../ssRedux';
-import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../../ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 
 const createRenderItemComponent = (deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
@@ -35,7 +35,7 @@ type GrowingVennInputListProps = {
 };
 const GrowingVennInputList: FC<GrowingVennInputListProps> = (props) => {
 
-    const { vennNodeInputs } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { vennNodeInputs } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
     
     const keyExtractor = (dataPoint: VennInput) => `${dataPoint.id}`;

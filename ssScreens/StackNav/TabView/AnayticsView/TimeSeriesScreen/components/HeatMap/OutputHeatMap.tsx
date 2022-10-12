@@ -9,8 +9,8 @@ import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
 import { PartialHeatMapCell } from 'ssComponents/Charts/HeatMap/HeatMap';
 import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
 import { StringMap } from 'ssDatabase/api/types';
-import { HeatMapDay } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
-import { setMonthIndex } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { HeatMapDay } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
+import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 
 type OutputHeatMapProps = {};
@@ -19,7 +19,7 @@ const OutputHeatMap: FC<OutputHeatMapProps> = (props) => {
     const [ selectedIndex, setSelectedIndex ] = useState<number>();
     
     // REDUX
-    const { activeSliceName, heatMapByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { activeSliceName, heatMapByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     // FORMAT DATA

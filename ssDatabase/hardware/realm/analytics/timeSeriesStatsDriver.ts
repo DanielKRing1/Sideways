@@ -2,14 +2,14 @@ import { Dict } from "../../../../global";
 import { floorDay, splitDay } from "../../../../ssUtils/date";
 import { deepCopy } from "../../../../ssUtils/object";
 import dbDriver from "../../../api/core/dbDriver";
-import { GetNodeOverlapArgs, GetTimeSeriesArgs, SidewaysSnapshotRow, TimeSeriesDriverType } from "../../../api/types";
+import { GetNodeOverlapArgs, GetTimeseriesArgs, SidewaysSnapshotRow, TimeseriesDriverType } from "../../../api/types";
 
 export type LineGraph = DailyOutput[];
 export type DailyOutput = {
     x: Date;
     y: number;
 };
-const getDailyOutputLG = async ({ sliceName, outputs }: GetTimeSeriesArgs): Promise<LineGraph> => {
+const getDailyOutputLG = async ({ sliceName, outputs }: GetTimeseriesArgs): Promise<LineGraph> => {
     const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
     // 1. Hash outputs to number value
@@ -45,7 +45,7 @@ export type ChartBar = {
     y: number | Date;
     y0?: number | Date;
 };
-const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeSeriesArgs): Promise<HistogramByMonth[]> => {
+const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeseriesArgs): Promise<HistogramByMonth[]> => {
     const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
     // 1. Hash outputs to number value
@@ -190,7 +190,7 @@ export type HeatMapByMonth = {
     timestamp: Date;
     heatMap: HeatMapDay[];
 }
-const getDailyOutputHM = async({ sliceName }: GetTimeSeriesArgs): Promise<HeatMapByMonth[]> => {
+const getDailyOutputHM = async({ sliceName }: GetTimeseriesArgs): Promise<HeatMapByMonth[]> => {
     const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
     // 1. For each month's worth of snapshots...
@@ -236,7 +236,7 @@ const getDailyOutputHM = async({ sliceName }: GetTimeSeriesArgs): Promise<HeatMa
     return heatmapByMonth;
 };
 
-const Driver: TimeSeriesDriverType = {
+const Driver: TimeseriesDriverType = {
     getDailyOutputLG,
     getMonthlyOutputHistogram,
     getNodeOverlapVenn,

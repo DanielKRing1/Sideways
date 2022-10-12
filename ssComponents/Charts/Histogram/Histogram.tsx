@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { VictoryAxis, VictoryChart, VictoryBar, VictoryLabel } from 'victory-native';
 import { CallbackArgs } from 'victory-core';
 import { Defs, LinearGradient, Stop } from  'react-native-svg';
-import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
+import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 
 export type GradientColor = { offset: string, color: string; };
 export type MyHistogramProps = {

@@ -6,16 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import VennStackWSlider from 'ssComponents/Charts/Venn/VennStackWSlider';
 import { AppDispatch, RootState } from 'ssRedux/index';
-import { setMonthIndex, VennInput } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { setMonthIndex, VennInput } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import GrowingVennInputList from './GrowingVennInputList';
 import { getStringMapSubsetList, getStringMapValue, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
 import { StringMap } from 'ssDatabase/api/types';
-import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
+import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 
 type InputVennProps = {};
 const InputVenn: FC<InputVennProps> = (props) => {
 
-    const { activeSliceName, vennByMonth, vennNodeInputs, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { activeSliceName, vennByMonth, vennNodeInputs, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
     
     // HANDLER METHODS

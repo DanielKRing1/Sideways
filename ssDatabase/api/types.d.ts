@@ -77,21 +77,21 @@ type RecoDriverType = {
 
 // TIME STATS DRIVER
 // Methods
-export type GetTimeSeriesArgs = {
+export type GetTimeseriesArgs = {
     sliceName: string;
     outputs: string[];
 };
 
 export type GetNodeOverlapArgs = {
     nodeIds: string[];
-} & Omit<GetTimeSeriesArgs, 'outputs'>;
+} & Omit<GetTimeseriesArgs, 'outputs'>;
 
 // Driver type
-type TimeSeriesDriverType = {
-    getDailyOutputLG: ({ sliceName, outputs }: GetTimeSeriesArgs) => Promise<LineGraph>;
-    getMonthlyOutputHistogram: ({ sliceName, outputs }: GetTimeSeriesArgs) => Promise<HistogramByMonth[]>;
+type TimeseriesDriverType = {
+    getDailyOutputLG: ({ sliceName, outputs }: GetTimeseriesArgs) => Promise<LineGraph>;
+    getMonthlyOutputHistogram: ({ sliceName, outputs }: GetTimeseriesArgs) => Promise<HistogramByMonth[]>;
     getNodeOverlapVenn: ({ sliceName, nodeIds }: GetNodeOverlapArgs) => Promise<VennByMonth[]>;
-    getDailyOutputHM: ({ sliceName }: GetTimeSeriesArgs) => Promise<HeatMapByMonth[]>;
+    getDailyOutputHM: ({ sliceName }: GetTimeseriesArgs) => Promise<HeatMapByMonth[]>;
 };
 
 // NON-TIMESERIES DATASTRUCTURE TYPE DEFINITIONS

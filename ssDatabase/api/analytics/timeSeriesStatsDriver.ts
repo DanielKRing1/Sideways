@@ -1,2 +1,2 @@
 // Export whichever driver is being used
-export { default } from '../../hardware/realm/analytics/timeSeriesStatsDriver';
+export { default } from '../../hardware/realm/analytics/timeseriesStatsDriver';

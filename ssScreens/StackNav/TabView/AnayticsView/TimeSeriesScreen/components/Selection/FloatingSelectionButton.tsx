@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import FloatingActionButton from 'ssComponents/Button/FloatingAction';
 import { AppDispatch } from 'ssRedux/index';
-import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, setGraphSelection, VENN_PLOT } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, setGraphSelection, VENN_PLOT } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 const SelectLineGraph = (dispatch: AppDispatch) => (
     <TouchableOpacity

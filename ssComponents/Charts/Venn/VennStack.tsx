@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { VictoryTheme, VictoryAxis, VictoryChart, VictoryBar, VictoryLabel, VictoryStack } from 'victory-native';
 import { CallbackArgs } from 'victory-core';
-import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
+import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 
 export type VennStackDataPoint = {
     x: number | Date;

@@ -11,12 +11,12 @@ import { StringMap } from 'ssDatabase/api/types';
 import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import { GradientColor } from 'ssComponents/Charts/Histogram/Histogram';
-import { setMonthIndex } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 
-    const { activeSliceName, histogramByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { activeSliceName, histogramByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
 // gradientColors={[

@@ -3,11 +3,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GrowingIdText as VennInput } from '../../../ssComponents/Input/GrowingIdList';
 export type { GrowingIdText as VennInput } from '../../../ssComponents/Input/GrowingIdList';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import timeSeriesDriver from '../../../ssDatabase/api/analytics/timeSeriesStatsDriver';
+import timeseriesDriver from '../../../ssDatabase/api/analytics/timeseriesStatsDriver';
 
 import { ThunkConfig } from '../../types';
 import { floorDay } from '../../../ssUtils/date';
-import { LineGraph, HistogramByMonth, VennByMonth, HeatMapByMonth } from 'ssDatabase/hardware/realm/analytics/timeSeriesStatsDriver';
+import { LineGraph, HistogramByMonth, VennByMonth, HeatMapByMonth } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 
 // INITIAL STATE
 
@@ -71,9 +71,9 @@ const initialState: TimeStatsState = {
   graphsSignature: {},
 };
 
-// const histogramByMonth: HistogramByMonth[] = await TimeSeriesStatsDriver.getMonthlyOutputHistogram({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
-// const vennByMonth: VennByMonth[] = await TimeSeriesStatsDriver.getNodeOverlapVenn({ sliceName: TEST_SLICE_NAME, nodeIds: TEST_NODES_VENN  });
-// const heatMapByMonth: HeatMapByMonth[] = await TimeSeriesStatsDriver.getDailyOutputHM({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
+// const histogramByMonth: HistogramByMonth[] = await TimeseriesStatsDriver.getMonthlyOutputHistogram({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
+// const vennByMonth: VennByMonth[] = await TimeseriesStatsDriver.getNodeOverlapVenn({ sliceName: TEST_SLICE_NAME, nodeIds: TEST_NODES_VENN  });
+// const heatMapByMonth: HeatMapByMonth[] = await TimeseriesStatsDriver.getDailyOutputHM({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
 
 
 // THUNKS
@@ -84,7 +84,7 @@ export const startAssureFreshness = createAsyncThunk<
   undefined,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startAssureFreshness',
+  'timeseriesStatsSS/startAssureFreshness',
   async (undefined, thunkAPI) => {
     const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const analyzedSliceName: string = thunkAPI.getState().analyticsSlice.timeseriesStatsSlice.analyzedSliceName;
@@ -93,13 +93,13 @@ export const startAssureFreshness = createAsyncThunk<
     // 1. 'activeSliceName' changed
     if(activeSliceName !== analyzedSliceName) {
       // Recompute charts + reset stats bcus vennNodes are now unknown
-      thunkAPI.dispatch(startGetAllTimeSeriesStats());
+      thunkAPI.dispatch(startGetAllTimeseriesStats());
       thunkAPI.dispatch(resetNodesAndStats());
     }
     // 2. Freshness changed (rate, undo rate, ...)
     else if(!isFresh) {
       // Recompute charts + Rerender
-      thunkAPI.dispatch(startGetAllTimeSeriesStats());
+      thunkAPI.dispatch(startGetAllTimeseriesStats());
       thunkAPI.dispatch(forceSignatureRerender()); 
     }
     
@@ -118,7 +118,7 @@ export const startAddVennInput = createAsyncThunk<
   StartAddVennInputsArg,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startAddVennInput',
+  'timeseriesStatsSS/startAddVennInput',
   async (vennInput: StartAddVennInputsArg, thunkAPI) => {
     // 1. Add venn input
     thunkAPI.dispatch(addVennInput(vennInput));
@@ -135,7 +135,7 @@ export const startRmVennInput = createAsyncThunk<
   StartRmVennInputsArg,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startRmVennInput',
+  'timeseriesStatsSS/startRmVennInput',
   async (indexToRm: StartRmVennInputsArg, thunkAPI) => {
     // 1. Add venn input
     thunkAPI.dispatch(removeVennInput(indexToRm));
@@ -152,7 +152,7 @@ export const startSetVennInputs = createAsyncThunk<
   StartSetVennInputsArgs,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startSetVennInputs',
+  'timeseriesStatsSS/startSetVennInputs',
   async (vennInputs: StartSetVennInputsArgs, thunkAPI) => {
     // 1. Set venn inputs
     thunkAPI.dispatch(setVennInputs(vennInputs));
@@ -166,12 +166,12 @@ export const startSetVennInputs = createAsyncThunk<
 
 // Charts
 type StartSetAllTimeStatsArgs = undefined;
-const startGetAllTimeSeriesStats = createAsyncThunk<
+const startGetAllTimeseriesStats = createAsyncThunk<
   boolean,
   StartSetAllTimeStatsArgs,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startGetTimeStats',
+  'timeseriesStatsSS/startGetTimeStats',
   async (undefined: StartSetAllTimeStatsArgs, thunkAPI) => {
 
     const p1: Promise<any> = thunkAPI.dispatch(startGetLineGraph());
@@ -193,12 +193,12 @@ const startGetLineGraph = createAsyncThunk<
   StartGetLineGraphArgs,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startGetLineGraph',
+  'timeseriesStatsSS/startGetLineGraph',
   async (undefined: StartGetLineGraphArgs, thunkAPI) => {
     const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
 
-    const lineGraph: LineGraph = await timeSeriesDriver.getDailyOutputLG({ sliceName: activeSliceName, outputs: rawOutputs });
+    const lineGraph: LineGraph = await timeseriesDriver.getDailyOutputLG({ sliceName: activeSliceName, outputs: rawOutputs });
 
     thunkAPI.dispatch(setLineGraph(lineGraph));
 
@@ -212,12 +212,12 @@ const startGetHistogram = createAsyncThunk<
   StartGetHistogramArgs,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startGetHistogram',
+  'timeseriesStatsSS/startGetHistogram',
   async (undefined: StartGetHistogramArgs, thunkAPI) => {
     const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
 
-    const histogram: HistogramByMonth[] = await timeSeriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: rawOutputs });
+    const histogram: HistogramByMonth[] = await timeseriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: rawOutputs });
 
     thunkAPI.dispatch(setHistogram(histogram));
 
@@ -231,13 +231,13 @@ const startGetVenn = createAsyncThunk<
   StartGetVennArgs,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startGetVenn',
+  'timeseriesStatsSS/startGetVenn',
   async (undefined: StartGetVennArgs, thunkAPI) => {
     const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const inputNodeIds: string[] = thunkAPI.getState().analyticsSlice.timeseriesStatsSlice.vennNodeInputs.map((vennInput: VennInput) => vennInput.text);
 
-    // const venn: VennByMonth[] = await timeSeriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: [] }) as VennByMonth[];
-    const venn: VennByMonth[] = await timeSeriesDriver.getNodeOverlapVenn({ sliceName: activeSliceName, nodeIds: inputNodeIds });
+    // const venn: VennByMonth[] = await timeseriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: [] }) as VennByMonth[];
+    const venn: VennByMonth[] = await timeseriesDriver.getNodeOverlapVenn({ sliceName: activeSliceName, nodeIds: inputNodeIds });
 
     thunkAPI.dispatch(setVenn(venn));
 
@@ -251,13 +251,13 @@ const startGetHeatMap = createAsyncThunk<
   StartGetHeatMapArgs,
   ThunkConfig
 >(
-  'timeSeriesStatsSS/startGetHeatMap',
+  'timeseriesStatsSS/startGetHeatMap',
   async (undefined: StartGetHeatMapArgs, thunkAPI) => {
     const activeSliceName: string = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
 
-    const heatmap: HeatMapByMonth[] = await timeSeriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: rawOutputs });
-    // const heatmap: HeatMapByMonth[] = await timeSeriesDriver.getDailyOutputHM({ sliceName: activeSliceName, outputs: rawOutputs });
+    const heatmap: HeatMapByMonth[] = await timeseriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: rawOutputs });
+    // const heatmap: HeatMapByMonth[] = await timeseriesDriver.getDailyOutputHM({ sliceName: activeSliceName, outputs: rawOutputs });
 
     thunkAPI.dispatch(setHeatMap(heatmap));
 
@@ -289,8 +289,8 @@ type ForceTimeStatsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
 
-export const timeSeriesStatsSlice = createSlice({
-  name: 'timeSeriesStatsSlice',
+export const timeseriesStatsSlice = createSlice({
+  name: 'timeseriesStatsSlice',
   initialState,
   reducers: {
     // FRESHNESS
@@ -385,8 +385,8 @@ export const timeSeriesStatsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-const { addVennInput, removeVennInput, setVennInputs, setLineGraph, setHistogram, setVenn, setHeatMap, setFreshness, setAnalyzedSliceName, resetNodesAndStats } = timeSeriesStatsSlice.actions;
-export const { setGraphSelection, setDayInput, setMonthIndex, forceSignatureRerender } = timeSeriesStatsSlice.actions;
+const { addVennInput, removeVennInput, setVennInputs, setLineGraph, setHistogram, setVenn, setHeatMap, setFreshness, setAnalyzedSliceName, resetNodesAndStats } = timeseriesStatsSlice.actions;
+export const { setGraphSelection, setDayInput, setMonthIndex, forceSignatureRerender } = timeseriesStatsSlice.actions;
 
 
-export default timeSeriesStatsSlice.reducer;
+export default timeseriesStatsSlice.reducer;

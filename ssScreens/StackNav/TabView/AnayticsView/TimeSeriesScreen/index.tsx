@@ -13,13 +13,13 @@ import OutputLineGraph from './components/LineGraph';
 import OutputHistogram from './components/Histogram';
 import InputVenn from './components/Venn';
 import OutputHeatMap from './components/HeatMap';
-import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
 
-type TimeSeriesProps = {
+type TimeseriesProps = {
 
 };
-const TimeSeries: FC<TimeSeriesProps> = (props) => {
+const Timeseries: FC<TimeseriesProps> = (props) => {
     
     // THEME
     const theme = useTheme();
@@ -66,4 +66,4 @@ const TimeSeries: FC<TimeSeriesProps> = (props) => {
     )
 }
 
-export default TimeSeries;
+export default Timeseries;

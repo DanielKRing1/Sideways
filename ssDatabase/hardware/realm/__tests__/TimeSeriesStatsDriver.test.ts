@@ -5,7 +5,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 // 0. Edit Realm Path Constants ---- START
-const TEST_NAME: string = 'TimeSeriesStatsDriver';
+const TEST_NAME: string = 'TimeseriesStatsDriver';
 const mockTEST_DIRECTORY: string = `ssDatabase/realm/__tests__/${TEST_NAME}`;
 if (fs.existsSync(mockTEST_DIRECTORY)) fs.rmSync(mockTEST_DIRECTORY, { recursive: true });
 fs.mkdirSync(mockTEST_DIRECTORY);
@@ -13,10 +13,10 @@ fs.mkdirSync(mockTEST_DIRECTORY);
 jest.mock(`ssDatabase/realm/config`, () => {
     return {
         // Need to type out exact file path; cannot use variable or value will be undefined
-        DEFAULT_REALM_STACK_META_REALM_PATH: `ssDatabase/realm/__tests__/TimeSeriesStatsDriver/REALM_STACK_META_REALM_PATH.path`,
+        DEFAULT_REALM_STACK_META_REALM_PATH: `ssDatabase/realm/__tests__/TimeseriesStatsDriver/REALM_STACK_META_REALM_PATH.path`,
         DEFAULT_REALM_STACK_LOADABLE_REALM_PATH: 'SIDEWAYS_STACKS.path',
 
-        DEFAULT_REALM_GRAPH_META_REALM_PATH: `ssDatabase/realm/__tests__/TimeSeriesStatsDriver/REALM_GRAPH_META_REALM_PATH.path`,
+        DEFAULT_REALM_GRAPH_META_REALM_PATH: `ssDatabase/realm/__tests__/TimeseriesStatsDriver/REALM_GRAPH_META_REALM_PATH.path`,
         DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH: 'SIDEWAYS_GRAPHS.path',
     }
 });
@@ -27,7 +27,7 @@ import dbDriver from '../../../api/core/dbDriver';
 import { startCreateSlice } from '../../../../ssRedux/createSidewaysSlice';
 import { startRate } from '../../../../ssRedux/rateSidewaysSlice';
 
-import TimeSeriesStatsDriver, { ChartBar, DailyOutput, HeatMapByMonth, HistogramByMonth, LineGraph, VennByMonth } from '../analytics/timeSeriesStatsDriver';
+import TimeseriesStatsDriver, { ChartBar, DailyOutput, HeatMapByMonth, HistogramByMonth, LineGraph, VennByMonth } from '../analytics/timeseriesStatsDriver';
 import { GrowingIdText as NewSliceOutput } from '../../../../ssComponents/Input/GrowingIdList';
 import { Dict } from '../../../../global';
 
@@ -73,7 +73,7 @@ const TEST_RATE_4: { inputs: string[], outputs: string[], rating: number } = {
 // TIMESERIES STATS ARGS
 const TEST_NODES_VENN: string[] = [ TEST_NODES_ALL[0], TEST_NODES_ALL[1], TEST_NODES_ALL[3] ];
 
-describe('TimeSeriesStatsDriver', () => {
+describe('TimeseriesStatsDriver', () => {
 
     beforeAll(async () => {
         // 1. Load Realm
@@ -143,17 +143,17 @@ describe('TimeSeriesStatsDriver', () => {
 // basketball, run | bad | 6
 // run, sleep | bad | 4
     it('Should Get Daily Outputs for a Line Graph', async () => {
-        const lineGraph: LineGraph = await TimeSeriesStatsDriver.getDailyOutputLG({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
+        const lineGraph: LineGraph = await TimeseriesStatsDriver.getDailyOutputLG({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
 
         // RATING 4 [ bad ], RATING 3 [ bad ], RATING 2 [ good ], RATING 1 [ bad, good ]
         expect(lineGraph.map((snapshot: DailyOutput) => ({ x: new Date(0), y: snapshot.y }))).toEqual([ {x: new Date(0), y: 0}, {x: new Date(0), y: 0}, {x: new Date(0), y: 1}, {x: new Date(0), y: 0}, {x: new Date(0), y: 1} ]);
     });
     it('Should Get Monthly Outputs for a Histogram', async () => {
-        const histogramByMonth: HistogramByMonth[] = await TimeSeriesStatsDriver.getMonthlyOutputHistogram({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
+        const histogramByMonth: HistogramByMonth[] = await TimeseriesStatsDriver.getMonthlyOutputHistogram({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
         expect(histogramByMonth.map((snapshot: HistogramByMonth) => ({ ...snapshot, timestamp: new Date(0) }))).toEqual([ {timestamp: new Date(0), histogram: [ {x: '0', y: 3}, {x: '1', y: 2} ]} ]);
     });
     it('Should Get Node Overlap for a Venn Diagram', async () => {
-        const vennByMonth: VennByMonth[] = await TimeSeriesStatsDriver.getNodeOverlapVenn({ sliceName: TEST_SLICE_NAME, nodeIds: TEST_NODES_VENN  });
+        const vennByMonth: VennByMonth[] = await TimeseriesStatsDriver.getNodeOverlapVenn({ sliceName: TEST_SLICE_NAME, nodeIds: TEST_NODES_VENN  });
         
         let modifiedActual: VennByMonth[] = vennByMonth.map<VennByMonth>((snapshot: VennByMonth) => ({ ...snapshot, timestamp: new Date(0) }));
         for(const monthSnapshot of modifiedActual) {
@@ -177,7 +177,7 @@ describe('TimeSeriesStatsDriver', () => {
             ]);
     });
     it('Should Get Daily Outputs for a HeatMap', async () => {
-        const heatMapByMonth: HeatMapByMonth[] = await TimeSeriesStatsDriver.getDailyOutputHM({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
+        const heatMapByMonth: HeatMapByMonth[] = await TimeseriesStatsDriver.getDailyOutputHM({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
         expect(heatMapByMonth.map<HeatMapByMonth>((heatMapSnapshot: HeatMapByMonth) => ({ ...heatMapSnapshot, timestamp: new Date(0) }))).toEqual<HeatMapByMonth[]>([ {timestamp: new Date(0), heatMap: [ {outputs: TEST_RATE_4.outputs}, {outputs: TEST_RATE_3.outputs}, {outputs: TEST_RATE_2.outputs}, {outputs: TEST_RATE_1.outputs} ]} ]);
     });
 
