@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { useTheme } from 'styled-components/native';
@@ -13,7 +13,7 @@ import OutputLineGraph from './components/LineGraph';
 import OutputHistogram from './components/Histogram';
 import InputVenn from './components/Venn';
 import OutputHeatMap from './components/HeatMap';
-import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
+import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, startAssureFreshness as startAssureTimeseriesFreshness, VENN_PLOT } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
 
 type TimeseriesProps = {
@@ -27,6 +27,15 @@ const Timeseries: FC<TimeseriesProps> = (props) => {
     // REDUX
     const { activeSliceName, selectedChart, readSSSignature, graphsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
+
+    // Assure chart freshness:
+    //  Update charts if activeSliceName is different from analyzedSliceName or if !isFresh
+    // 
+    //  Check freshness when mounting this component.
+    //  Freshness currently will not change while this component is mounted
+    useEffect(() => {
+        dispatch(startAssureTimeseriesFreshness());
+    }, []);
 
     // SELECTED CHART COMPONENT
     const SelectedChart: FC<{}> = useMemo(() => {

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 import StickyScrollView from '../../../../../ssComponents/View/StickyScrollView';
@@ -9,6 +9,9 @@ import InputNodeStats from './components/InputNodeStats';
 import CollectivelyTandemNodes from './components/CollectivelyTandemNodes';
 import SinglyTandemNodes from './components/SinglyTandemNodes';
 import HighlyRatedTandemNodes from './components/HighlyRatedNodes';
+import { AppDispatch } from 'ssRedux/index';
+import { useDispatch } from 'react-redux';
+import { startAssureFreshness as startAssureIdentityFreshness } from 'ssRedux/analyticsSlice/identityStatsSlice';
 
 type StatsScreenProps = {
 
@@ -16,6 +19,16 @@ type StatsScreenProps = {
 const StatsScreen: FC<StatsScreenProps> = (props) => {
 
     const theme: DefaultTheme = useTheme();
+    const dispatch: AppDispatch = useDispatch();
+
+    // Assure chart freshness:
+    //  Update charts if activeSliceName is different from analyzedSliceName or if !isFresh
+    // 
+    //  Check freshness when mounting this component.
+    //  Freshness currently will not change while this component is mounted
+    useEffect(() => {
+        dispatch(startAssureIdentityFreshness());
+    }, []);
 
     return (
         <StickyScrollView
