@@ -1,5 +1,4 @@
 import React, { FC, useMemo } from 'react';
-import { CallbackArgs, ForAxes, DomainTuple } from 'victory-core';
 
 import LineGraph, { MyLineGraphProps } from './LineGraph';
 import DomainScroller, { DomainScrollerProps } from '../Domain/DomainScroller';

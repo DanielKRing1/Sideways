@@ -9,7 +9,7 @@ import { ThunkConfig } from '../../types';
 
 export interface ColorState {
   // COLORS
-  colorMap: StringMap;
+  fullColorMap: StringMap;
 
   // RERENDER
   colorsSignature: {};
@@ -17,7 +17,7 @@ export interface ColorState {
 
 const initialState: ColorState = {
   // COLORS
-  colorMap: {},
+  fullColorMap: {},
 
   // RERENDER
   colorsSignature: {},
@@ -34,9 +34,9 @@ export const startSetAllColors = createAsyncThunk<
   'colorSlice/startSetAllColors',
   async (undefined: StartSetAllColorsArgs, thunkAPI) => {
 
-    const colorMap: StringMap = await colorDriver.getAllColors();
+    const fullColorMap: StringMap = await colorDriver.getAllColors();
     
-    thunkAPI.dispatch(setColors(colorMap));
+    thunkAPI.dispatch(setColors(fullColorMap));
     thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
@@ -92,7 +92,7 @@ export const colorSlice = createSlice({
   reducers: {
     // COLORS
     setColors: (state: ColorState, action: SetColorsAction) => {
-      state.colorMap = action.payload;
+      state.fullColorMap = action.payload;
     },
     
     // RERENDER

@@ -9,7 +9,7 @@ import { ThunkConfig } from '../../types';
 
 export interface IconState {
   // ICONS
-  iconMap: StringMap;
+  fullIconMap: StringMap;
 
   // RERENDER
   iconsSignature: {};
@@ -17,7 +17,7 @@ export interface IconState {
 
 const initialState: IconState = {
   // ICONS
-  iconMap: {},
+  fullIconMap: {},
 
   // RERENDER
   iconsSignature: {},
@@ -34,9 +34,9 @@ export const startSetAllIcons = createAsyncThunk<
   'iconSlice/startSetAllIcons',
   async (undefined: StartSetAllIconsArgs, thunkAPI) => {
 
-    const iconMap: StringMap = await iconDriver.getAllIcons();
+    const fullIconMap: StringMap = await iconDriver.getAllIcons();
     
-    thunkAPI.dispatch(setIcons(iconMap));
+    thunkAPI.dispatch(setIcons(fullIconMap));
     thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
@@ -92,7 +92,7 @@ export const iconSlice = createSlice({
   reducers: {
     // ICONS
     setIcons: (state: IconState, action: SetIconsAction) => {
-      state.iconMap = action.payload;
+      state.fullIconMap = action.payload;
     },
     
     // RERENDER

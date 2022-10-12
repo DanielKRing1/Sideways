@@ -16,7 +16,7 @@ import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 
-    const { activeSliceName, histogramByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
+    const { activeSliceName, histogramByMonth, monthIndex, fullColorMap, fullIconMap } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice, ...state.userJsonSlice.colorSlice, ...state.userJsonSlice.iconSlice }));
     const dispatch: AppDispatch = useDispatch();
 
 // gradientColors={[
@@ -24,7 +24,6 @@ const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 //     { offset: "40%", color:"#FFA99F" },
 //     { offset: "100%", color:"yellow" },
 //   ]}
-    const fullColorMap: StringMap = {};
     const outputColorMap: GradientColor[] = useMemo(() => {
         const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
         const outputHeight: number = 100/rawOutputs.length;

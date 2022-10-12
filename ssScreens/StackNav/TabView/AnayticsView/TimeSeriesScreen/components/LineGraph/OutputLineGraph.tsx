@@ -19,7 +19,7 @@ const OutputLineGraph: FC<OutputLineGraphProps> = (props) => {
     const [ domain, setDomain ] = React.useState<ForAxes<DomainTuple>>({ x: [0, 7] });
 
 
-    const { activeSliceName, lineGraph } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
+    const { activeSliceName, lineGraph, fullColorMap, fullIconMap } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice, ...state.userJsonSlice.colorSlice, ...state.userJsonSlice.iconSlice }));
     const dispatch: AppDispatch = useDispatch();
 
 // colorMap={{
@@ -27,7 +27,6 @@ const OutputLineGraph: FC<OutputLineGraphProps> = (props) => {
 //     1: '#FFA99F',
 //     2: 'yellow',
 //   }}
-    const fullColorMap: StringMap = {};
     const outputColorMap: StringMap = useMemo(() => getStringMapSubset<string>(dbDriver.getSlicePropertyNames(activeSliceName), fullColorMap, ID_TYPES.OUTPUT, (i: number) => i, (value: string) => value), [activeSliceName, fullColorMap]);
 
     return (

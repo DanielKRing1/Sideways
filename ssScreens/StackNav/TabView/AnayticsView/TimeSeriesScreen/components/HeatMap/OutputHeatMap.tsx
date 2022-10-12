@@ -19,11 +19,10 @@ const OutputHeatMap: FC<OutputHeatMapProps> = (props) => {
     const [ selectedIndex, setSelectedIndex ] = useState<number>();
     
     // REDUX
-    const { activeSliceName, heatMapByMonth, monthIndex } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
+    const { activeSliceName, heatMapByMonth, monthIndex, fullColorMap, fullIconMap } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice, ...state.userJsonSlice.colorSlice, ...state.userJsonSlice.iconSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     // FORMAT DATA
-    const fullColorMap: StringMap = {};
     const heatMap: PartialHeatMapCell[] = useMemo(() => {
         const rawHeatMap: HeatMapDay[] = heatMapByMonth[monthIndex].heatMap;
 
