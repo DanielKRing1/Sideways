@@ -13,35 +13,35 @@ import OutputLineGraph from './components/LineGraph';
 import OutputHistogram from './components/Histogram';
 import InputVenn from './components/Venn';
 import OutputHeatMap from './components/HeatMap';
-import { GRAPH_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, VENN_PLOT } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
 import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
 
-type GraphScreenProps = {
+type TimeSeriesProps = {
 
 };
-const GraphScreen: FC<GraphScreenProps> = (props) => {
+const TimeSeries: FC<TimeSeriesProps> = (props) => {
     
     // THEME
     const theme = useTheme();
 
     // REDUX
-    const { activeSliceName, selectedGraph, readSSSignature, graphsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
+    const { activeSliceName, selectedChart, readSSSignature, graphsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.readSidewaysSlice.toplevelReadReducer, ...state.timeSeriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     // SELECTED CHART COMPONENT
     const SelectedChart: FC<{}> = useMemo(() => {
-        switch(selectedGraph) {
-            case GRAPH_TYPES[LINE_GRAPH]:
+        switch(selectedChart) {
+            case CHART_TYPES[LINE_GRAPH]:
                 return OutputLineGraph;
-            case GRAPH_TYPES[HISTOGRAM]:
+            case CHART_TYPES[HISTOGRAM]:
                 return OutputHistogram;
-            case GRAPH_TYPES[VENN_PLOT]:
+            case CHART_TYPES[VENN_PLOT]:
                 return InputVenn;
-            case GRAPH_TYPES[HEAT_MAP]:
+            case CHART_TYPES[HEAT_MAP]:
             default:
                 return OutputHeatMap;
         }
-    }, [selectedGraph]);
+    }, [selectedChart]);
 
     return (
         <View>
@@ -66,4 +66,4 @@ const GraphScreen: FC<GraphScreenProps> = (props) => {
     )
 }
 
-export default GraphScreen;
+export default TimeSeries;

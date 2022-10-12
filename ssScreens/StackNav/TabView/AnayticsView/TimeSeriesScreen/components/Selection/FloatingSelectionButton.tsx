@@ -6,32 +6,32 @@ import { useDispatch } from 'react-redux';
 
 import FloatingActionButton from 'ssComponents/Button/FloatingAction';
 import { AppDispatch } from 'ssRedux/index';
-import { GRAPH_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, setGraphSelection, VENN_PLOT } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
+import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, setGraphSelection, VENN_PLOT } from 'ssRedux/analyticsSlice/timeSeriesStatsSlice';
 
 const SelectLineGraph = (dispatch: AppDispatch) => (
     <TouchableOpacity
-        onPress={() => dispatch(setGraphSelection(GRAPH_TYPES[LINE_GRAPH]))}
+        onPress={() => dispatch(setGraphSelection(CHART_TYPES[LINE_GRAPH]))}
     >
         <Text>Line Graph</Text>
     </TouchableOpacity>
 );
 const SelectHistogram = (dispatch: AppDispatch) => (
     <TouchableOpacity
-        onPress={() => dispatch(setGraphSelection(GRAPH_TYPES[HISTOGRAM]))}
+        onPress={() => dispatch(setGraphSelection(CHART_TYPES[HISTOGRAM]))}
     >
         <Text>Histogram</Text>
     </TouchableOpacity>
 );
 const SelectVenn = (dispatch: AppDispatch) => (
     <TouchableOpacity
-        onPress={() => dispatch(setGraphSelection(GRAPH_TYPES[VENN_PLOT]))}
+        onPress={() => dispatch(setGraphSelection(CHART_TYPES[VENN_PLOT]))}
     >
         <Text>Venn</Text>
     </TouchableOpacity>
 );
 const SelectHeatMap = (dispatch: AppDispatch) => (
     <TouchableOpacity
-        onPress={() => dispatch(setGraphSelection(GRAPH_TYPES[HEAT_MAP]))}
+        onPress={() => dispatch(setGraphSelection(CHART_TYPES[HEAT_MAP]))}
     >
         <Text>Heat Map</Text>
     </TouchableOpacity>

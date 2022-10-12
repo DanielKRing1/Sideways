@@ -16,7 +16,7 @@ export const HISTOGRAM = 'Histogram' as const;
 export const VENN_PLOT = 'Venn Plot' as const;
 export const HEAT_MAP = 'Heat Map' as const;
 type SelectableGraph = typeof LINE_GRAPH | typeof HISTOGRAM | typeof VENN_PLOT | typeof HEAT_MAP;
-export const GRAPH_TYPES = {
+export const CHART_TYPES = {
   [LINE_GRAPH]: LINE_GRAPH,
   [HISTOGRAM]: HISTOGRAM,
   [VENN_PLOT]: VENN_PLOT,
@@ -29,7 +29,7 @@ export interface TimeStatsState {
 
   // INPUTS
   // Graph Selection
-  selectedGraph: SelectableGraph;
+  selectedChart: SelectableGraph;
   // Date Selection
   dayInput: Date;       // Derive day/month-based stats date range from this day
   monthIndex: number;
@@ -53,7 +53,7 @@ const initialState: TimeStatsState = {
   
   // INPUTS
   // Graph Selection
-  selectedGraph: HEAT_MAP,
+  selectedChart: HEAT_MAP,
   // Date Selection
   dayInput: floorDay(new Date()),   // Set to today
   monthIndex: 0,
@@ -328,7 +328,7 @@ export const timeSeriesStatsSlice = createSlice({
       state.monthIndex = action.payload;
 
       // 2. Also set dayInput Date, based on selected graph type
-      switch(state.selectedGraph) {
+      switch(state.selectedChart) {
         case HISTOGRAM:
           state.dayInput = state.histogramByMonth[state.monthIndex].timestamp;
           break;
