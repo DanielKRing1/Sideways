@@ -1,7 +1,6 @@
 import { useState } from "react";
 import dbDriver from "../ssDatabase/api/core/dbDriver";
-import colorDriver from "../ssDatabase/api/user/color/colorDriver";
-import iconDriver from "../ssDatabase/api/user/icon/iconDriver";
+import decorationsDriver from "../ssDatabase/api/userJson/decoration";
 
 export const useDbDriverLoader = () => {
     const [ isLoaded, setIsLoaded ] = useState<boolean>(dbDriver.isLoaded);
@@ -12,9 +11,8 @@ export const useDbDriverLoader = () => {
         // Core
         if(!dbDriver.isLoaded) loadPromises.push(dbDriver.load());
 
-        // Color + Icon
-        if(!colorDriver.isLoaded) loadPromises.push(colorDriver.load());
-        if(!iconDriver.isLoaded) loadPromises.push(iconDriver.load());
+        // Decorations
+        if(!decorationsDriver.isLoaded) loadPromises.push(decorationsDriver.load());
 
         // Parallel await
         await Promise.all(loadPromises);
@@ -28,9 +26,8 @@ export const useDbDriverLoader = () => {
         // Core
         closePromises.push(dbDriver.closeAll());
 
-        // Color + Icon
-        closePromises.push(colorDriver.closeAll());
-        closePromises.push(iconDriver.closeAll());
+        // Decorations
+        closePromises.push(decorationsDriver.closeAll());
 
         // Parallel await
         await Promise.all(closePromises);

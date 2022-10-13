@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import colorDriver from 'ssDatabase/api/user/color/colorDriver';
+import colorDriver from 'ssDatabase/api/json/color/colorDriver';
 
 import { ColorInfo, StringMap } from '../../../ssDatabase/api/types';
 import { ThunkConfig } from '../../types';

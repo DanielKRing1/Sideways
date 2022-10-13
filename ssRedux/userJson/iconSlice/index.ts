@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import iconDriver from 'ssDatabase/api/user/icon/iconDriver';
+import iconDriver from 'ssDatabase/api/json/icon/iconDriver';
 
 import { IconInfo, StringMap } from '../../../ssDatabase/api/types';
 import { ThunkConfig } from '../../types';

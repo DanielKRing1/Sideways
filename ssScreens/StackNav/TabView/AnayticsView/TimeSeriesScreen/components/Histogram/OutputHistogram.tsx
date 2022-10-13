@@ -8,7 +8,7 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import HistogramWSlider from 'ssComponents/Charts/Histogram/HistogramWSlider';
 import { RootState, AppDispatch } from 'ssRedux/index';
 import { StringMap } from 'ssDatabase/api/types';
-import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
+import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/userJson/utils';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import { GradientColor } from 'ssComponents/Charts/Histogram/Histogram';
 import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';

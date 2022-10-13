@@ -1,6 +1,7 @@
 import { CGNode, CGEdge, RankedNode } from "@asianpersonn/realm-graph";
 import { OutputKeyType } from '../hardware/realm/dbDriver';
 import { Dict } from '../../global';
+import { ENTITY_TYPE } from "ssDatabase/hardware/realm/userJson/utils";
 
 type ExistingSlice = { sliceName: string, lastLogged: Date | undefined };
 
@@ -127,34 +128,51 @@ type SidewaysSnapshotRow = {
     timestamp: Date;
 };
 
-// COLOR DRIVER
-export type StringMap = Dict<string>;
+// USER JSON DRIVER
 
-export type ColorInfo = {
-    entityId: string;
+/*
+[Row keys] Dict {
+    [Decoration Rows, Entity ids] Dict {
+        [Data/any]
+        color: string;
+        icon: string;
+    }
+}
+*/
+// Can & other json maps to this type
+export type UserJsonMap = DecorationJsonMap & {};
+
+// DECORATION DRIVER
+
+// Enums
+// (Row Key)
+export enum DECORATION_ROW_KEY {
+    INPUT = 'INPUT',
+    OUTPUT = 'OUTPUT',
+};
+export type DecorationJsonMap = {
+    [DECORATION_ROW_KEY.INPUT]: DecorationJson;
+    [DECORATION_ROW_KEY.OUTPUT]: DecorationJson;
+};
+export type DecorationJson = Dict<DecorationJsonValue>;
+export type DecorationJsonValue = {
     color: string;
-};
-export type ColorDriver = {
-    isLoaded: boolean;
-    load: () => Promise<void>,
-    closeAll: () => Promise<void>,
-
-    saveColors: (newColors: ColorInfo[]) => void | never;
-    rmColors: (colorsToRm: Omit<ColorInfo, 'color'>[]) => void | never;
-    getAllColors: () => StringMap | never;
-};
-
-// ICONS DRIVER
-export type IconInfo = {
-    entityId: string;
     icon: string;
 };
-export type IconDriver = {
+export type DecorationInfo = {
+    decorationRowId: DECORATION_ROW_KEY;
+    entityId: string;
+    color?: string;
+    icon?: string;
+};
+export type DecorationDriver = {
     isLoaded: boolean;
     load: () => Promise<void>,
     closeAll: () => Promise<void>,
-    
-    saveIcons: (newIcons: IconInfo[]) => void | never;
-    rmIcons: (colorsToRm: Omit<IconInfo, 'icon'>[]) => void | never;
-    getAllIcons: () => StringMap | never;
+
+    saveDecorations: (newDecorations: DecorationInfo[]) => void | never;
+    rmDecorations: (decorationsToRm: DecorationInfo[]) => void | never;
+    getAllDecorations: () => UserJsonMap | never;
 };
+
+export type StringMap = Dict<string>;

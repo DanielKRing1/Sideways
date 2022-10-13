@@ -42,10 +42,10 @@
     catalyst-graph "^1.0.22"
     realm "^10.13.0"
 
-"@asianpersonn/realm-json@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-json/-/realm-json-1.0.1.tgz#6a4952637e82940a87c917b1551633029ed05244"
-  integrity sha512-KjXAxPEVCivisI4CU3LwfdslJJxvZrc1hTNqyHF3peoVGqezC+N+tU5JrrRvJ1hEgFoUYvZpFh5Ptn4XlAvsCA==
+"@asianpersonn/realm-json@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-json/-/realm-json-1.0.3.tgz#1b7d38fe2bfec7d06a287dd7d71d94e22e6d5c01"
+  integrity sha512-9gKZU8Hf5bYAlK6phXT7+LQSi34MvkbN3AKS/lPwPbf8dLIWXWnY4LqSkHS1J1llxBbtlEgR5R8b1qas4/V7Vw==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
     "@asianpersonn/metarealm" "^1.0.4"

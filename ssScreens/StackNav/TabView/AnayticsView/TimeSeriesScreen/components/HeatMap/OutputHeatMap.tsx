@@ -7,7 +7,7 @@ import { RootState, AppDispatch } from 'ssRedux/index';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
 import { PartialHeatMapCell } from 'ssComponents/Charts/HeatMap/HeatMap';
-import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
+import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/userJson/utils';
 import { StringMap } from 'ssDatabase/api/types';
 import { HeatMapDay } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';

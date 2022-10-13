@@ -7,7 +7,7 @@ import VennStackWSlider from 'ssComponents/Charts/Venn/VennStackWSlider';
 import { AppDispatch, RootState } from 'ssRedux/index';
 import { setMonthIndex, VennInput } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import GrowingVennInputList from './GrowingVennInputList';
-import { getStringMapSubsetList, getStringMapValue, ID_TYPES } from 'ssDatabase/hardware/realm/user/utils';
+import { getStringMapSubsetList, getStringMapValue, ID_TYPES } from 'ssDatabase/hardware/realm/userJson/utils';
 import { ChartBar } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 
 type InputVennProps = {};
