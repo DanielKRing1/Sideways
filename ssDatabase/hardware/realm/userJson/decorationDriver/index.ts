@@ -92,11 +92,19 @@ const rmDecorations = (decorationsToRm: DecorationInfo[]): void | never => {
         jsonCollection.deleteEntries(rowId, keysToRm[rowId]!);
     }
 };
-const getAllDecorations = (): UserJsonMap | never => {
+const getAllDecorations = (): DecorationJsonMap | never => {
     throwLoadError();
 
     const jsonCollection: RealmJson = RealmJsonManager.getCollection(DEFAULT_REALM_JSON_COLLECTION_NAME);
-    return jsonCollection.getAllJson() as UserJsonMap;
+    const inputDecorationMap: DecorationJson = jsonCollection.getJson(DECORATION_ROW_KEY.INPUT) as DecorationJson;
+    const outputDecorationMap: DecorationJson = jsonCollection.getJson(DECORATION_ROW_KEY.OUTPUT) as DecorationJson;
+
+    const decorationJsonMap: DecorationJsonMap = {
+        [DECORATION_ROW_KEY.INPUT]: inputDecorationMap,
+        [DECORATION_ROW_KEY.OUTPUT]: outputDecorationMap,
+    };
+
+    return decorationJsonMap;
 };
 
 const Driver: DecorationDriver = {

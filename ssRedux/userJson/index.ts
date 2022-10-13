@@ -1,9 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
-import colorSlice from './colorSlice';
-import iconSlice from './iconSlice';
+import decorationSlice from './decorationSlice';
 
 export default combineReducers({
-    colorSlice,
-    iconSlice,
+    decorationSlice,
 });

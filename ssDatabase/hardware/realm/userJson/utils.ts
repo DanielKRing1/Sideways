@@ -1,5 +1,6 @@
-import { StringMap } from "ssDatabase/api/types";
 import { Dict } from "../../../../global";
+
+export type StringMap = Dict<string>;
 
 const DELIM: string = '_';
 const INPUT_SUFFIX: string = 'i';

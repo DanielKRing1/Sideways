@@ -172,7 +172,5 @@ export type DecorationDriver = {
 
     saveDecorations: (newDecorations: DecorationInfo[]) => void | never;
     rmDecorations: (decorationsToRm: DecorationInfo[]) => void | never;
-    getAllDecorations: () => UserJsonMap | never;
+    getAllDecorations: () => DecorationJsonMap | never;
 };
-
-export type StringMap = Dict<string>;
