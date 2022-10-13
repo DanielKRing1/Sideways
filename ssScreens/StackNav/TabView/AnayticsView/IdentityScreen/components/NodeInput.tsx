@@ -7,7 +7,7 @@ import { CGNode, ID_KEY, RankedNode } from '@asianpersonn/realm-graph';
 import { AppDispatch, RootState } from '../../../../../../ssRedux';
 import { setSearchNodeIdInput, startSetNodeIdInput } from '../../../../../../ssRedux/analyticsSlice/identityStatsSlice';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import IconInput from '../../../../../../ssComponents/IconInput/IconInput';
+import IconInput from '../../../../../../ssComponents/IconInput/generic/IconInput';
 import { FlexCol } from '../../../../../../ssComponents/Flex';
 import MyTextInput from '../../../../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../../../../ssComponents/ReactNative/MyButton';
@@ -21,7 +21,7 @@ type NodeInputProps = {
 const NodeInput: FC<NodeInputProps> = (props) => {
     const [ allNodeIds, setAllNodeIds ] = useState<string[]>([]);
 
-    const { activeSliceName, searchedNodeIdInput, nodeIdInput, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
+    const { activeSliceName, searchedNodeIdInput, nodeIdInput, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.identityStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     const { setValues: setTrieValues, search, autoComplete } = useTrie<string>((nodeId: string) => nodeId);

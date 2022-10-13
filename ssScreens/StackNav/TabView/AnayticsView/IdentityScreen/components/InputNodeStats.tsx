@@ -6,7 +6,7 @@ import { ID_KEY } from '@asianpersonn/realm-graph';
 
 import { RootState } from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import IconInput from '../../../../../../ssComponents/IconInput/IconInput';
+import IconInput from '../../../../../../ssComponents/IconInput/generic/IconInput';
 import { FlexCol } from '../../../../../../ssComponents/Flex';
 import NodeStats from './NodeStats';
 
@@ -15,7 +15,7 @@ type InputNodeStatsProps = {
 };
 const InputNodeStats: FC<InputNodeStatsProps> = (props) => {
 
-    const { nodeStats, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.identityStatsSlice }));
+    const { nodeStats, readSSSignature, inputStatsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.identityStatsSlice }));
 
     const theme: DefaultTheme = useTheme();
 

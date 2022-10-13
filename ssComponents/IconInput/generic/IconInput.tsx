@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { useFlexContainer } from '../../ssHooks/useFlexContainer';
+import { useFlexContainer } from '../../../ssHooks/useFlexContainer';
 
-import IconButton, { IconButtonProps } from '../Button/IconButton';
-import { FlexRowProps } from '../Flex';
-import MyText from '../ReactNative/MyText';
+import IconButton, { IconButtonProps } from '../../Button/IconButton';
+import { FlexRowProps } from '../../Flex';
+import MyText from '../../ReactNative/MyText';
 
 export type IconInputProps = {
-    name: string;
+    name?: string;
     isSelected?: boolean;
     unselectedColor?: string;
     selectedColor?: string;
@@ -34,8 +34,11 @@ const IconInput: FC<IconInputProps> = (props) => {
                 onPress={onPress}
                 size={size}
                 color={isSelected ? selectedColor : unselectedColor}
-                >
-                <MyText>{name}</MyText>
+            >
+                {
+                    name !== undefined &&
+                    <MyText>{name}</MyText>
+                }
             </IconButton>
 
             { front && !!children && children }

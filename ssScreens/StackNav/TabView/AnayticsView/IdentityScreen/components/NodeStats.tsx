@@ -1,12 +1,11 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 import { ID_KEY, RankedNode } from '@asianpersonn/realm-graph';
 
 import { RootState } from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import IconInput from '../../../../../../ssComponents/IconInput/IconInput';
+import IconInput from '../../../../../../ssComponents/IconInput/generic/IconInput';
 import { FlexCol } from '../../../../../../ssComponents/Flex';
 
 type NodeStatsProps = {

@@ -1,5 +1,4 @@
-import React, { FC, useMemo } from 'react';
-import { View } from 'react-native';
+import React, { FC } from 'react';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 

@@ -1,7 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { View } from 'react-native';
-import styled from 'styled-components/native';
-import { FlexCol, FlexRow } from '../Flex';
+import { FlexCol, FlexRow } from '../../Flex';
 import IconInput, { IconInputProps } from './IconInput';
 import IconInputRow from './IconInputRow';
 
