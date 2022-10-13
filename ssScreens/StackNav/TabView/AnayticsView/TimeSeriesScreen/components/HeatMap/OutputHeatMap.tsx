@@ -7,8 +7,8 @@ import { RootState, AppDispatch } from 'ssRedux/index';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
 import { PartialHeatMapCell } from 'ssComponents/Charts/HeatMap/HeatMap';
-import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/userJson/utils';
-import { StringMap } from 'ssDatabase/api/types';
+import { getDecorationMapSubsetList } from 'ssDatabase/hardware/realm/userJson/utils';
+import { DECORATION_ROW_KEY, DECORATION_VALUE_KEY, StringMap } from 'ssDatabase/api/types';
 import { HeatMapDay } from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
@@ -19,7 +19,7 @@ const OutputHeatMap: FC<OutputHeatMapProps> = (props) => {
     const [ selectedIndex, setSelectedIndex ] = useState<number>();
     
     // REDUX
-    const { activeSliceName, heatMapByMonth, monthIndex, fullColorMap, fullIconMap } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice, ...state.userJsonSlice.colorSlice, ...state.userJsonSlice.iconSlice }));
+    const { activeSliceName, heatMapByMonth, monthIndex, fullDecorationMap } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice, ...state.userJsonSlice.decorationSlice }));
     const dispatch: AppDispatch = useDispatch();
 
     // FORMAT DATA
@@ -27,8 +27,13 @@ const OutputHeatMap: FC<OutputHeatMapProps> = (props) => {
         const rawHeatMap: HeatMapDay[] = heatMapByMonth[monthIndex].heatMap;
 
         // [ { value: [...colors], onPress: (i) => setSelectedIndex(i) }, ... ]
-        return rawHeatMap.map((day: HeatMapDay) => ({ value: getStringMapSubsetList(day.outputs, fullColorMap, ID_TYPES.OUTPUT, (i: number, v: string) => v), onPress: (index: number) => setSelectedIndex(index) }));
-    }, [heatMapByMonth, monthIndex, fullColorMap]);
+        return rawHeatMap.map((day: HeatMapDay) => (
+            {
+                value: getDecorationMapSubsetList<string>(DECORATION_ROW_KEY.OUTPUT, day.outputs, DECORATION_VALUE_KEY.COLOR, fullDecorationMap, (i: number, v: string) => v),
+                onPress: (index: number) => setSelectedIndex(index)
+            }
+        ));
+    }, [heatMapByMonth, monthIndex, fullDecorationMap]);
 
     // HANDLER METHODS
     const handleSelectMonth = (newMonthIndex: number) => dispatch(setMonthIndex(newMonthIndex));

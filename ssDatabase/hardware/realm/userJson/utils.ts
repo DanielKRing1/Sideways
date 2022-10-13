@@ -1,42 +1,40 @@
+import { DecorationJsonMap, DecorationJsonValue, DECORATION_ROW_KEY, DECORATION_VALUE_KEY } from "ssDatabase/api/types";
+import { DEFAULT_ICON_NAME } from "ssDatabase/api/userJson/decoration/constants";
+import { genRandomColor } from "ssUtils/color";
 import { Dict } from "../../../../global";
 
-export type StringMap = Dict<string>;
-
-const DELIM: string = '_';
-const INPUT_SUFFIX: string = 'i';
-const OUTPUT_SUFFIX: string = 'O';
-
-const INPUT = 'INPUT';
-const OUTPUT = 'OUTPUT';
-type IdType = typeof INPUT | typeof OUTPUT;
-export const ID_TYPES = {
-    [INPUT]: INPUT,
-    [OUTPUT]: OUTPUT,
-} as const;
-const getId = (raw: string, idType: IdType): string => {
-    switch(idType) {
-        case ID_TYPES.INPUT:
-            return getInputId(raw);
-        case ID_TYPES.OUTPUT:
-        default:
-            return getOutputId(raw);
+function genRandDecorationMapValue(): DecorationJsonValue {
+    return {
+        [DECORATION_VALUE_KEY.COLOR]: genRandomColor(),
+        [DECORATION_VALUE_KEY.ICON]: DEFAULT_ICON_NAME,
     }
-}
-const getInputId = (rawInput: string): string => `${rawInput}${DELIM}${INPUT_SUFFIX}`;
-const getOutputId = (rawOutput: string): string => `${rawOutput}${DELIM}${OUTPUT_SUFFIX}`;
+};
+export function hasDecorationMapValue(rowKey: DECORATION_ROW_KEY, entityId: string, decorationJsonMap: DecorationJsonMap): boolean {
+    const value: DecorationJsonValue | undefined = decorationJsonMap[rowKey][entityId];
 
-export function getStringMapValue(raw: string, stringMap: StringMap, idType: IdType) {
-    return stringMap[getId(raw, idType)];
-}
+    return value !== undefined;
+};
+export function getDecorationMapValue(rowKey: DECORATION_ROW_KEY, entityId: string, decorationJsonMap: DecorationJsonMap): DecorationJsonValue {
+    const value: DecorationJsonValue | undefined = decorationJsonMap[rowKey][entityId];
+
+    return value !== undefined ? value : genRandDecorationMapValue();
+};
 
 // colorMap={{
 //     0: 'green',
 //     1: '#FFA99F',
 //     2: 'yellow',
 //   }}
-export function getStringMapSubset<T>(rawTexts: string[], stringMap: StringMap, idType: IdType, getKey: (i: number) => number | string, getValue: (stringMapValue: string) => T): Dict<T> {
-    return rawTexts.reduce<Dict<T>>((acc, rawText: string, i) => {
-        acc[getKey(i)] = getValue(stringMap[getId(rawText, idType)]);
+export function getDecorationMapSubset<T>(
+    decorationRowId: DECORATION_ROW_KEY,
+    entityIds: string[],
+    decorationValueKey: DECORATION_VALUE_KEY,
+    decorationJsonMap: DecorationJsonMap,
+    mutateKey: (i: number) => number | string,
+    mutateValue: (stringMapValue: string) => T
+): Dict<T> {
+    return entityIds.reduce<Dict<T>>((acc, entityId: string, i) => {
+        acc[mutateKey(i)] = mutateValue(getDecorationMapValue(decorationRowId, entityId, decorationJsonMap)[decorationValueKey]);
 
         return acc;
     }, {});
@@ -47,9 +45,15 @@ export function getStringMapSubset<T>(rawTexts: string[], stringMap: StringMap, 
 //     { offset: "40%", color:"#FFA99F" },
 //     { offset: "100%", color:"yellow" },
 //   ]}
-export function getStringMapSubsetList<T>(rawTexts: string[], stringMap: StringMap, idType: IdType, getListValue: (i: number, stringMapValue: string) => T): T[] {
-    return rawTexts.reduce<T[]>((acc, rawText: string, i) => {
-        acc.push(getListValue(i, stringMap[getId(rawText, idType)]));
+export function getDecorationMapSubsetList<T>(
+    decorationRowId: DECORATION_ROW_KEY,
+    entityIds: string[], 
+    decorationValueKey: DECORATION_VALUE_KEY,
+    decorationJsonMap: DecorationJsonMap, 
+    getListValue: (i: number, stringMapValue: string) => T
+): T[] {
+    return entityIds.reduce<T[]>((acc, entityId: string, i) => {
+        acc.push(getListValue(i, getDecorationMapValue(decorationRowId, entityId, decorationJsonMap)[decorationValueKey]));
 
         return acc;
     }, []);

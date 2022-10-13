@@ -150,20 +150,26 @@ export enum DECORATION_ROW_KEY {
     INPUT = 'INPUT',
     OUTPUT = 'OUTPUT',
 };
+// (Value Key)
+export enum DECORATION_VALUE_KEY {
+    COLOR = 'COLOR',
+    ICON = 'ICON',
+};
+
 export type DecorationJsonMap = {
     [DECORATION_ROW_KEY.INPUT]: DecorationJson;
     [DECORATION_ROW_KEY.OUTPUT]: DecorationJson;
 };
 export type DecorationJson = Dict<DecorationJsonValue>;
 export type DecorationJsonValue = {
-    color: string;
-    icon: string;
+    [DECORATION_VALUE_KEY.COLOR]: string;
+    [DECORATION_VALUE_KEY.ICON]: string;
 };
 export type DecorationInfo = {
     decorationRowId: DECORATION_ROW_KEY;
     entityId: string;
-    color?: string;
-    icon?: string;
+    [DECORATION_VALUE_KEY.COLOR]?: string;
+    [DECORATION_VALUE_KEY.ICON]?: string;
 };
 export type DecorationDriver = {
     isLoaded: boolean;
@@ -174,3 +180,5 @@ export type DecorationDriver = {
     rmDecorations: (decorationsToRm: DecorationInfo[]) => void | never;
     getAllDecorations: () => DecorationJsonMap | never;
 };
+
+export type StringMap = Dict<string>;

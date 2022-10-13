@@ -7,16 +7,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HistogramWSlider from 'ssComponents/Charts/Histogram/HistogramWSlider';
 import { RootState, AppDispatch } from 'ssRedux/index';
-import { StringMap } from 'ssDatabase/api/types';
-import { getStringMapSubsetList, ID_TYPES } from 'ssDatabase/hardware/realm/userJson/utils';
+import { getDecorationMapSubsetList } from 'ssDatabase/hardware/realm/userJson/utils';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import { GradientColor } from 'ssComponents/Charts/Histogram/Histogram';
 import { setMonthIndex } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
+import { DECORATION_ROW_KEY, DECORATION_VALUE_KEY } from 'ssDatabase/api/types';
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = (props) => {
 
-    const { activeSliceName, histogramByMonth, monthIndex, fullColorMap, fullIconMap } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice, ...state.userJsonSlice.colorSlice, ...state.userJsonSlice.iconSlice }));
+    const { activeSliceName, histogramByMonth, monthIndex, fullDecorationMap } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice, ...state.userJsonSlice.decorationSlice }));
     const dispatch: AppDispatch = useDispatch();
 
 // gradientColors={[
@@ -28,8 +28,8 @@ const OutputHistogram: FC<OutputHistogramProps> = (props) => {
         const rawOutputs: string[] = dbDriver.getSlicePropertyNames(activeSliceName);
         const outputHeight: number = 100/rawOutputs.length;
         
-        return getStringMapSubsetList<GradientColor>(rawOutputs, fullColorMap, ID_TYPES.OUTPUT, (i: number, value: string) => ({ offset: `${i*outputHeight}%`, color: value }));
-    }, [activeSliceName, fullColorMap]);
+        return getDecorationMapSubsetList<GradientColor>(DECORATION_ROW_KEY.OUTPUT, rawOutputs, DECORATION_VALUE_KEY.COLOR, fullDecorationMap, (i: number, value: string) => ({ offset: `${i*outputHeight}%`, color: value }));
+    }, [activeSliceName, fullDecorationMap]);
 
     // HANDLER METHODS
     const handleSelectMonth = (newMonthIndex: number) => dispatch(setMonthIndex(newMonthIndex));
