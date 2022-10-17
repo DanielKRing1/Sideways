@@ -3,10 +3,10 @@ import React, { FC } from 'react';
 import IconButton, { IconButtonProps } from '../../../ssComponents/Button/IconButton';
 import { RequiredExceptFor } from '../../../global';
 
-type PlusButtonProps = {
+type SettingsButtonProps = {
 
 } & RequiredExceptFor<Omit<IconButtonProps, 'iconName'>, 'children'>;
-const PlusButton: FC<PlusButtonProps> = (props) => {
+const SettingsButton: FC<SettingsButtonProps> = (props) => {
     return (
         <IconButton
             iconName='gear'
@@ -15,4 +15,4 @@ const PlusButton: FC<PlusButtonProps> = (props) => {
     );
 }
 
-export default PlusButton;
+export default SettingsButton;

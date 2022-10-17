@@ -6,7 +6,7 @@ import { RequiredExceptFor } from '../../../global';
 type ProfileButtonProps = {
 
 } & RequiredExceptFor<Omit<IconButtonProps, 'iconName'>, 'children'>;
-const PlusButton: FC<ProfileButtonProps> = (props) => {
+const ProfileButton: FC<ProfileButtonProps> = (props) => {
     return (
         <IconButton
             iconName='user'
@@ -15,4 +15,4 @@ const PlusButton: FC<ProfileButtonProps> = (props) => {
     );
 }
 
-export default PlusButton;
+export default ProfileButton;
