@@ -30,6 +30,7 @@ const IconButton: FC<IconButtonProps> = (props) => {
         iconName,
         size=theme.iconSizes.md,
         color=theme.colors.darkRed,
+        style={},
         marginTop=0, marginRight=0, marginBottom=0, marginLeft=0,
         flexDirection='row', front=true,
         children
@@ -49,6 +50,7 @@ const IconButton: FC<IconButtonProps> = (props) => {
 
                 <Icon
                     style={{
+                        ...style,
                         marginTop,
                         marginRight,
                         marginBottom,
