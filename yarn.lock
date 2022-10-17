@@ -59,6 +59,11 @@
     "@asianpersonn/metarealm" "^1.0.4"
     realm "^10.13.0"
 
+"@asianpersonn/rn-color-wheel@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/rn-color-wheel/-/rn-color-wheel-1.0.6.tgz#91b68f0dd8697504b8c9782c77eeb1792721625b"
+  integrity sha512-xPJXOuyX7ei/hwURSNs+tR9ogFYDEBcsFYzplgFDRGUkaPEMlPyy10KOIvC8GLR+aEkV8ucEn6YuDAzbPkyegA==
+
 "@asianpersonn/trie@^2.0.1":
   version "2.0.1"
   resolved "https://registry.npmjs.org/@asianpersonn/trie/-/trie-2.0.1.tgz"
