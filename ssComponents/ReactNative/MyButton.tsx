@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { ButtonProps } from 'react-native';
+import { ButtonProps, ViewStyle } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
 import { Dict } from '../../global';
 
 export type MyButtonProps = {
     children?: React.ReactNode;
-    style?: Dict<number | string>;
+    style?: ViewStyle;
 } & Omit<ButtonProps, 'title'>;
 const MyButton: FC<MyButtonProps> = (props) => {
 
