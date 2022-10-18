@@ -4,16 +4,13 @@ import { View } from 'react-native';
 import FlexBase, { FlexContainerProps } from './FlexBase'
 
 const FlexRow: FC<FlexContainerProps> = forwardRef<View, FlexContainerProps>((props, ref) => {
-  const { style, children, justifyContent, alignItems } = props;
+  const { children } = props;
 
   return (
     <FlexBase
-      // @ts-ignore
       ref={ref}
-      style={style}
       flexDirection='row'
-      justifyContent={justifyContent}
-      alignItems={alignItems}
+      {...props}
     >
       {children}
     </FlexBase>

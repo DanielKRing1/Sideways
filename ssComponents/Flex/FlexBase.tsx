@@ -6,7 +6,7 @@ export type FlexContainerProps = Omit<FlexBaseProps, 'flexDirection'>;
 type FlexBaseProps = {
   onLayout?: (event: LayoutChangeEvent) => void;
   style?: ViewStyle;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 
   flexDirection: 'row' | 'column' |'column-reverse' | 'row-reverse';
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
