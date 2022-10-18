@@ -4,7 +4,7 @@ import { ViewStyle, View } from 'react-native';
 import FlexBase from './FlexBase'
 
 type FlexColProps = {
-  style: ViewStyle;
+  style?: ViewStyle;
   children: React.ReactNode;
 
   justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
