@@ -28,8 +28,6 @@ const Grid: FC<GridProps> = (props) => {
     return rows;
   }, [children, cols]);
 
-  console.log(childrenRows);
-
   return (
     <View
       style={{width: '100%'}}
