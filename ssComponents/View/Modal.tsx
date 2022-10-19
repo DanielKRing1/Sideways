@@ -43,9 +43,7 @@ const MyModal: FC<MyModalProps> = (props) => {
             }}
           >
             <TouchableWithoutFeedback>
-              <View>
-                {children}
-              </View>
+              {children}
             </TouchableWithoutFeedback>
           </View>
         </View>
