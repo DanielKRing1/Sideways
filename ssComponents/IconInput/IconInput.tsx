@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { ViewStyle } from 'react-native';
 import { useFlexContainer } from '../../ssHooks/useFlexContainer';
 
@@ -52,4 +52,4 @@ const IconInput: FC<IconInputProps> = (props) => {
     );
 }
 
-export default IconInput;
+export default memo(IconInput);
