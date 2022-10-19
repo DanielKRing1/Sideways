@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
-import { Modal, View, TouchableWithoutFeedback, useWindowDimensions } from 'react-native';
+import { Modal, View, TouchableWithoutFeedback, useWindowDimensions, ViewStyle } from 'react-native';
 
 type MyModalProps = {
   isOpen: boolean;
   close: () => void;
   children?: React.ReactNode;
+  contentContainerStyle?: ViewStyle,
 };
 const MyModal: FC<MyModalProps> = (props) => {
-  const { isOpen, close, children } = props;
+  const { isOpen, close, children, contentContainerStyle={} } = props;
 
   const { width, height } = useWindowDimensions();
 
@@ -37,7 +38,8 @@ const MyModal: FC<MyModalProps> = (props) => {
               e.stopPropagation()
             }}
             style={{
-              backgroundColor: '#fff'
+              backgroundColor: '#fff',
+              ...contentContainerStyle,
             }}
           >
             <TouchableWithoutFeedback>
