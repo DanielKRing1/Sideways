@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import FlexBase, { FlexContainerProps } from './FlexBase'
 
-const FlexRow: FC<FlexContainerProps> = forwardRef<View, FlexContainerProps>((props, ref) => {
+const FlexRow = forwardRef<View, FlexContainerProps>((props, ref) => {
   const { children } = props;
 
   return (
