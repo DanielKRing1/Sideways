@@ -2,14 +2,12 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
-import { CGNode, ID_KEY, RankedNode } from '@asianpersonn/realm-graph';
+import { CGNode } from '@asianpersonn/realm-graph';
 
 import { AppDispatch, RootState } from '../../../../../../ssRedux';
 import { setSearchNodeIdInput, startSetNodeIdInput } from '../../../../../../ssRedux/analyticsSlice/identityStatsSlice';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import IconInput from '../../../../../../ssComponents/IconInput/generic/IconInput';
 import { FlexCol } from '../../../../../../ssComponents/Flex';
-import MyTextInput from '../../../../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../../../../ssComponents/ReactNative/MyButton';
 import dbDriver from '../../../../../../ssDatabase/api/core/dbDriver';
 import { SearchableDropdown } from '../../../../../../ssComponents/Search/SearchableDropdown';

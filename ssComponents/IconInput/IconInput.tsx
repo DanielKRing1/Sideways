@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
-import { useFlexContainer } from '../../../ssHooks/useFlexContainer';
+import { ViewStyle } from 'react-native';
+import { useFlexContainer } from '../../ssHooks/useFlexContainer';
 
-import IconButton, { IconButtonProps } from '../../Button/IconButton';
-import { FlexRowProps } from '../../Flex';
-import MyText from '../../ReactNative/MyText';
+import IconButton, { IconButtonProps } from '../Button/IconButton';
+import { FlexContainerProps } from '../Flex';
+import MyText from '../ReactNative/MyText';
 
 export type IconInputProps = {
+    iconStyle?: ViewStyle;
+
     name?: string;
     isSelected?: boolean;
     unselectedColor?: string;
@@ -13,6 +16,7 @@ export type IconInputProps = {
 } & IconButtonProps;
 const IconInput: FC<IconInputProps> = (props) => {
     const {
+        iconStyle={},
         name, isSelected=false, unselectedColor='white', selectedColor='black',
         iconName, size,
         onPress,
@@ -20,7 +24,7 @@ const IconInput: FC<IconInputProps> = (props) => {
         children
     } = props;
 
-    const FlexContainer: FC<FlexRowProps> = useFlexContainer(flexDirection);
+    const FlexContainer: FC<FlexContainerProps> = useFlexContainer(flexDirection);
 
     return (
         <FlexContainer
@@ -29,6 +33,7 @@ const IconInput: FC<IconInputProps> = (props) => {
             { !front && !!children && children }
 
             <IconButton
+                style={iconStyle}
                 flexDirection='column'
                 iconName={iconName}
                 onPress={onPress}

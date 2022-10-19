@@ -1,9 +1,9 @@
 import React, { FC, useMemo, useState } from 'react';
-import { View } from 'react-native';
-import { AvailableIcons, CONFIRM_SELECTION_ICON, getAvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
-import { IconInputProps } from './generic/IconInput';
 
-import IconInputGrid from "./generic/IconInputGrid";
+import { FlexCol } from 'ssComponents/Flex';
+import IconInput, { IconInputProps } from './IconInput';
+import { AvailableIcons, CONFIRM_SELECTION_ICON, getAvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
+import Grid from 'ssComponents/View/Grid';
 
 type SelectableIconsProps = {
     onConfirmSelection: (iconName: AvailableIcons) => void;
@@ -31,12 +31,17 @@ const SelectableIcons: FC<SelectableIconsProps> = (props) => {
     }, [onConfirmSelection]);
 
     return (
-        <View>
-            <IconInputGrid
-                colCount={5}
-                iconProps={iconProps}
-            />
-        </View>
+        <FlexCol
+            alignItems='center'
+        >
+            <Grid
+                cols={[5, 4]}
+            >
+            {
+                iconProps.map((props: IconInputProps) => <IconInput {...props} />)
+            }
+            </Grid>
+        </FlexCol>
     )
 };
 

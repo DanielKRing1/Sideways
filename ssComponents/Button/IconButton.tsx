@@ -3,7 +3,7 @@ import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import MyButton, { MyButtonProps } from '../ReactNative/MyButton';
-import { FlexRowProps } from '../Flex';
+import { FlexContainerProps } from '../Flex';
 import { useFlexContainer } from '../../ssHooks/useFlexContainer';
 import { RequiredExceptFor } from '../../global';
 
@@ -22,7 +22,7 @@ export type IconButtonProps = {
     flexDirection?: 'row' | 'column';
     front?: boolean;
 
-} & MyButtonProps & RequiredExceptFor<FlexRowProps, 'children'>;
+} & MyButtonProps & RequiredExceptFor<FlexContainerProps, 'children'>;
 const IconButton: FC<IconButtonProps> = (props) => {
     const theme = useTheme();
 
@@ -36,7 +36,7 @@ const IconButton: FC<IconButtonProps> = (props) => {
         children
     } = props;
 
-    const FlexContainer: FC<FlexRowProps> = useFlexContainer(flexDirection);
+    const FlexContainer: FC<FlexContainerProps> = useFlexContainer(flexDirection);
 
     return (
         <StyledMyButton

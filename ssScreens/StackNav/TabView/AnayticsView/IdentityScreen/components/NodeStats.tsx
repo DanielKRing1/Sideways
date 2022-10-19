@@ -3,9 +3,8 @@ import { View } from 'react-native';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 import { ID_KEY, RankedNode } from '@asianpersonn/realm-graph';
 
-import { RootState } from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import IconInput from '../../../../../../ssComponents/IconInput/generic/IconInput';
+import IconInput from '../../../../../../ssComponents/IconInput/IconInput';
 import { FlexCol } from '../../../../../../ssComponents/Flex';
 
 type NodeStatsProps = {
