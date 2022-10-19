@@ -1,3 +1,11 @@
+/**
+ * Modal with transparent background
+ * Interact with child content, without closing modal, but
+ * Click outside of child content and close modal
+ * 
+ * My demo at https://snack.expo.dev/@asianpersonn/modal
+ */
+
 import React, { FC } from 'react';
 import { Modal, View, TouchableWithoutFeedback, useWindowDimensions, ViewStyle } from 'react-native';
 
