@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View, StyleProp } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 type EditableTextProps = {
-  style?: StyleProp<View>;
+  style?: ViewStyle;
   text: string;
   handleCommitText: (newText: string) => void;
 };
