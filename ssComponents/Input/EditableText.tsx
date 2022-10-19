@@ -1,5 +1,16 @@
+/**
+ * Render a Text component by default
+ * When clicked, render a TextInput
+ * Upon blur, render a Text component again
+ * 
+ * My demo at https://snack.expo.dev/@asianpersonn/decorationrow
+ */
+
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
+
+import MyText from 'ssComponents/ReactNative/MyText';
+import MyTextInput from 'ssComponents/ReactNative/MyTextInput';
 
 type EditableTextProps = {
   style?: ViewStyle;
@@ -39,10 +50,10 @@ const EditableText: FC<EditableTextProps> = (props) => {
       <TouchableOpacity
         onPress={() => setIsEditing(true)}
       >
-        <Text>{text}</Text>
+        <MyText>{text}</MyText>
       </TouchableOpacity>
       :
-      <TextInput
+      <MyTextInput
         ref={textInputRef}
         onBlur={handleBlur}
         value={editableText}
