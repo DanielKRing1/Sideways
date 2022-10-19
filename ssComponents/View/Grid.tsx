@@ -1,13 +1,14 @@
 import React, { FC, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 
 type GridProps = {
   cols: number[];
   children: React.ReactNode[];
+  style?: ViewStyle;
 };
 
 const Grid: FC<GridProps> = (props) => {
-  const { cols, children } = props;
+  const { cols, children, style } = props;
 
   const childrenRows: React.ReactNode[] = useMemo(() => {
     let rows: React.ReactNode[] = [];
@@ -30,7 +31,11 @@ const Grid: FC<GridProps> = (props) => {
 
   return (
     <View
-      style={{width: '100%'}}
+      style={{
+        flex: 1,
+        width: '100%',
+        ...style,
+      }}
     >
     {
       childrenRows.map((row: React.ReactNode) => <FlexRow>{row}</FlexRow>)
