@@ -46,7 +46,7 @@ const SelectableIcons: FC<SelectableIconsProps> = (props) => {
             onPress: () => {
                 // 1. Force tap a 2nd time
                 if(props.iconName !== tappedIcon) {
-                  setTappedIcon(props.iconName);
+                  setTappedIcon(props.iconName as AvailableIcons);
                 }
                 // 2. 2nd tap, execute cb + reset tapped icon
                 else {

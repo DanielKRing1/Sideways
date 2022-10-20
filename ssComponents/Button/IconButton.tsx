@@ -10,7 +10,7 @@ import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
 
 
 export type IconButtonProps = {
-    iconName: AvailableIcons;
+    iconName: AvailableIcons | string;
 
     size?: number;
     color?: string;

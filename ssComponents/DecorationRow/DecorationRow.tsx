@@ -4,21 +4,27 @@ import { useTheme } from 'styled-components';
 
 import { FlexRow } from 'ssComponents/Flex';
 import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
+import MyText from 'ssComponents/ReactNative/MyText';
 import EditableText from 'ssComponents/Input/EditableText';
-import MyButton from 'ssComponents/ReactNative/MyButton';
 import DecorationRowModal from './components/Modal';
 import DecorationRowColorPicker from './components/ColorPicker';
 import SelectableIcons from 'ssComponents/IconInput/SelectableIcons';
+import ColorModalButton from './components/ColorModalButton';
+import IconModalButton from './components/IconModalButton';
 
 type DecorationRowProps = {
-    editableText: string;
-    setEditableText: (newText: string) => void;
+    editable?: boolean;
+    text: string;
+    setText?: (newText: string) => void;
+
     color: string;
     setColor: (newColor: string) => void;
-    onConfirmSelection: (iconName: AvailableIcons) => void;
+    
+    iconName: AvailableIcons;
+    onConfirmIconSelection: (iconName: AvailableIcons) => void;
 };
 const DecorationRow: FC<DecorationRowProps> = (props) => {
-    const { editableText, setEditableText, color, setColor, onConfirmSelection } = props;
+    const { editable=true, text, setText=()=>{}, color, setColor, iconName, onConfirmIconSelection } = props;
 
     // HOOKS
     const { height, width } = useWindowDimensions();
@@ -50,25 +56,30 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
         >
             {/* DISPLAYED IN ROW */}
 
-            <EditableText
-                style={{ flex: 0.8 }}
-                text={editableText}
-                handleCommitText={setEditableText}
-            />
+            {
+                editable
+                ?
+                <EditableText
+                    style={{ flex: 0.8 }}
+                    text={text}
+                    handleCommitText={setText}
+                />
+                :
+                <MyText>{text}</MyText>
+            }
 
-            <MyButton
+            <ColorModalButton
+                color={color}
                 style={{ flex: 0.1 }}
                 onPress={() => { setColorPickerOpen(true) }}
-            >
-                C
-            </MyButton>
+            />
 
-            <MyButton
+            <IconModalButton
+                color={color}
+                iconName={iconName}
                 style={{ flex: 0.1 }}
                 onPress={() => { setIconPickerOpen(true) }}
-            >
-                I
-            </MyButton>
+            />
 
             {/* MODALS */}
 
@@ -88,7 +99,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                 setIsOpen={setIconPickerOpen}
             >
                 <SelectableIcons
-                    onConfirmSelection={onConfirmSelection}
+                    onConfirmSelection={onConfirmIconSelection}
                 />
 
             </DecorationRowModal>
