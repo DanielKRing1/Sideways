@@ -52,9 +52,10 @@ export enum AvailableIcons {
     'bed' = 'bed',
     'subway' = 'subway',
     'shower' = 'shower',
+    'question' = 'question',
 };
 
 export const DEFAULT_ICON_NAME: AvailableIcons = AvailableIcons.star;
-export const CONFIRM_SELECTION_ICON: string = 'question';
+export const CONFIRM_SELECTION_ICON: AvailableIcons = AvailableIcons.question;
 
 export const getAvailableIcons = (): AvailableIcons[] => getEnumValues(AvailableIcons);
