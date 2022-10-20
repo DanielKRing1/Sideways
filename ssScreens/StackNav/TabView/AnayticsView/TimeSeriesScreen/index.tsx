@@ -15,6 +15,7 @@ import InputVenn from './components/Venn';
 import OutputHeatMap from './components/HeatMap';
 import { CHART_TYPES, HEAT_MAP, HISTOGRAM, LINE_GRAPH, startAssureFreshness as startAssureTimeseriesFreshness, VENN_PLOT } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
+import { TabNavHeader } from 'ssComponents/Navigation/NavHeader';
 
 type TimeseriesProps = {
 
@@ -54,6 +55,7 @@ const Timeseries: FC<TimeseriesProps> = (props) => {
 
     return (
         <View>
+            <TabNavHeader/>
             
             <SelectedChart/>
 

@@ -10,6 +10,7 @@ import GrowingRecoInputs from './components/GrowingRecoInputs';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
 import RecommendationNodes from './components/RecommendationNodes';
+import { TabNavHeader } from 'ssComponents/Navigation/NavHeader';
 
 type RecommendationScreenProps = {
 
@@ -21,10 +22,11 @@ const RecommendationScreen: FC<RecommendationScreenProps> = (props) => {
 
     // REDUX
     const dispatch: AppDispatch = useDispatch();
-    const { readSSSignature, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.recommendationStatsSlice }));
+    const { readSSSignature, recommendationsSignature } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.recoStatsSlice }));
 
     return (
         <View>
+            <TabNavHeader/>
 
             <RecommendationNodes/>
 
