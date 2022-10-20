@@ -41,6 +41,7 @@ const SelectableIcons: FC<SelectableIconsProps> = (props) => {
     const iconProps: IconInputProps[] = useMemo(() => {
         return rawIconProps.map((props: IconInputProps) => props.iconName !== tappedIcon ? props : ({
             ...props,
+            isSelected: true,
             iconName: CONFIRM_SELECTION_ICON,
             onPress: () => {
                 // 1. Force tap a 2nd time
