@@ -20,7 +20,7 @@ const IconInput: FC<IconInputProps> = (props) => {
 
     const {
         iconStyle={},
-        name, isSelected=false, unselectedColor='white', selectedColor=theme.colors.pastelPurple,
+        name, isSelected=false, unselectedColor=theme.colors.whiteFg, selectedColor=theme.colors.pastelPurple,
         iconName, size,
         onPress,
         flexDirection='row', front=true,
