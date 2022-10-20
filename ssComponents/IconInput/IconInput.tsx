@@ -14,7 +14,7 @@ export type IconInputProps = {
     isSelected?: boolean;
     unselectedColor?: string;
     selectedColor?: string;
-} & IconButtonProps;
+} & Omit<IconButtonProps, 'color'>;
 const IconInput: FC<IconInputProps> = (props) => {
     const theme: DefaultTheme = useTheme();
 
