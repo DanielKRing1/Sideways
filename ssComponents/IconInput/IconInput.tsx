@@ -1,5 +1,6 @@
 import React, { FC, memo } from 'react';
 import { ViewStyle } from 'react-native';
+import { useTheme, DefaultTheme } from 'styled-components';
 import { useFlexContainer } from '../../ssHooks/useFlexContainer';
 
 import IconButton, { IconButtonProps } from '../Button/IconButton';
@@ -15,9 +16,11 @@ export type IconInputProps = {
     selectedColor?: string;
 } & IconButtonProps;
 const IconInput: FC<IconInputProps> = (props) => {
+    const theme: DefaultTheme = useTheme();
+
     const {
         iconStyle={},
-        name, isSelected=false, unselectedColor='white', selectedColor='black',
+        name, isSelected=false, unselectedColor='white', selectedColor=theme.colors.pastelPurple,
         iconName, size,
         onPress,
         flexDirection='row', front=true,
