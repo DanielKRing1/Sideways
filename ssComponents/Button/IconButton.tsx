@@ -6,10 +6,11 @@ import MyButton, { MyButtonProps } from '../ReactNative/MyButton';
 import { FlexContainerProps } from '../Flex';
 import { useFlexContainer } from '../../ssHooks/useFlexContainer';
 import { RequiredExceptFor } from '../../global';
+import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
 
 
 export type IconButtonProps = {
-    iconName: string;
+    iconName: AvailableIcons;
 
     size?: number;
     color?: string;
@@ -50,6 +51,7 @@ const IconButton: FC<IconButtonProps> = (props) => {
 
                 <Icon
                     style={{
+                        // @ts-ignore
                         ...style,
                         marginTop,
                         marginRight,
