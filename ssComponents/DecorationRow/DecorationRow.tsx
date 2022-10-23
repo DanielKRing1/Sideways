@@ -1,5 +1,5 @@
 import React, { FC, useState, memo } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { useTheme } from 'styled-components';
 
 import { FlexRow } from 'ssComponents/Flex';
@@ -56,30 +56,40 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
         >
             {/* DISPLAYED IN ROW */}
 
+            <View>
             {
                 editable
                 ?
                 <EditableText
-                    style={{ flex: 0.8 }}
+                    textStyle={{
+                        borderBottomWidth: 3,
+                        borderColor: theme.colors.grayBorder,
+                    }}
                     text={text}
                     handleCommitText={setText}
                 />
                 :
                 <MyText>{text}</MyText>
             }
+            </View>
 
-            <ColorModalButton
-                color={color}
-                style={{ flex: 0.1 }}
-                onPress={() => { setColorPickerOpen(true) }}
-            />
+            <FlexRow
+                style={{ flex: 0.3 }}
+                justifyContent={'space-between'}
+            >
+                <ColorModalButton
+                    style={{ flex: 0.1 }}
+                    color={color}
+                    onPress={() => { setColorPickerOpen(true) }}
+                />
 
-            <IconModalButton
-                color={color}
-                iconName={iconName}
-                style={{ flex: 0.1 }}
-                onPress={() => { setIconPickerOpen(true) }}
-            />
+                <IconModalButton
+                    style={{ flex: 0.1 }}
+                    color={color}
+                    iconName={iconName}
+                    onPress={() => { setIconPickerOpen(true) }}
+                />
+            </FlexRow>
 
             {/* MODALS */}
 
@@ -107,4 +117,4 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
     );
 }
 
-export default memo(DecorationRow);
+export default memo<DecorationRowProps>(DecorationRow);
