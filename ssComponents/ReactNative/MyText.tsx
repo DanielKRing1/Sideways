@@ -1,11 +1,9 @@
 import React, { FC } from 'react';
-import { TextProps } from 'react-native';
+import { TextProps, TextStyle } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 
-import { Dict } from '../../global';
-
 type MyTextProps = {
-    style?: Dict<number | string>;
+    style?: TextStyle;
 } & TextProps;
 const MyText: FC<MyTextProps> = (props) => {
 
