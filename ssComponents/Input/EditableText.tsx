@@ -7,19 +7,20 @@
  */
 
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { TextInput, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 
 import MyText from 'ssComponents/ReactNative/MyText';
 import MyTextInput from 'ssComponents/ReactNative/MyTextInput';
 
 type EditableTextProps = {
   style?: ViewStyle;
+  textStyle?: TextStyle;
   text: string;
   handleCommitText: (newText: string) => void;
 };
 const EditableText: FC<EditableTextProps> = (props) => {
 
-  const { style, text, handleCommitText } = props;
+  const { style={}, textStyle={}, text, handleCommitText } = props;
 
   // Local state
   const [ isEditing, setIsEditing ] = useState(false);
@@ -43,14 +44,15 @@ const EditableText: FC<EditableTextProps> = (props) => {
   }
 
   return (
-    // @ts-ignore
     <View style={style}>
     {
       !isEditing ?
       <TouchableOpacity
         onPress={() => setIsEditing(true)}
       >
-        <MyText>{text}</MyText>
+        <MyText
+          style={textStyle}
+        >{text}</MyText>
       </TouchableOpacity>
       :
       <MyTextInput
