@@ -1,6 +1,8 @@
-import { getEnumValues, iterateEnum } from "ssUtils/enum";
+import { getEnumValues } from "ssUtils/enum";
 
+// ICON ENUM
 export enum AvailableIcons {
+    'circle' = 'circle',
     'glass' = 'glass',
     'music' = 'music',
     'heart' = 'heart',
@@ -55,7 +57,8 @@ export enum AvailableIcons {
     'question' = 'question',
 };
 
-export const DEFAULT_ICON_NAME: AvailableIcons = AvailableIcons.star;
+export const DEFAULT_COLOR: string = '#fff';
+export const DEFAULT_ICON: AvailableIcons = AvailableIcons.circle;
 export const CONFIRM_SELECTION_ICON: AvailableIcons = AvailableIcons.question;
 
 export const getAvailableIcons = (): AvailableIcons[] => getEnumValues(AvailableIcons);
