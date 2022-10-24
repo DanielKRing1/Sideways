@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import styled, { DefaultTheme } from 'styled-components/native';
@@ -16,14 +16,20 @@ import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } fr
 
 // DECORATIONS
 import { DECORATION_ROW_KEY } from 'ssDatabase/api/types';
+import { CGNode } from '@asianpersonn/realm-graph';
+import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 
-const createRenderItemComponent = (deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: { item: VennInput, index: number }) => (
+const createRenderItemComponent = (allInputIds: string[], deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: { item: VennInput, index: number }) => (
     <FlexRow>
-        <DecorationRow
+        <AutoCompleteDecoration
+            clickOutsideId='GrowingVennInputList'
             placeholder='Search an input...'
-            rowKey={DECORATION_ROW_KEY.INPUT}
-            entityId={item.text}
-            onEditEntityId={(newText: string) => handleChangeText(newText, index)}
+            allEntityIds={allInputIds}
+            inputValue={item.text}
+            setInputValue={(newText: string) => handleChangeText(newText, index)}
+            decorationRowKey={DECORATION_ROW_KEY.INPUT}
+            onSelectEntityId={(newText: string) => handleChangeText(newText, index)}
         />
         {/* <StyledTextInput
             placeholder={'Anotha one...'}
@@ -44,9 +50,13 @@ type GrowingVennInputListProps = {
 };
 const GrowingVennInputList: FC<GrowingVennInputListProps> = (props) => {
 
-    const { vennNodeInputs } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
+    // REDUX
+    const { activeSliceName, vennNodeInputs } = useSelector((state: RootState) => ({ ...state.readSidewaysSlice.toplevelReadReducer, ...state.analyticsSlice.timeseriesStatsSlice }));
     const dispatch: AppDispatch = useDispatch();
     
+    const allInputIds: string[] = useMemo(() => dbDriver.getAllNodes(activeSliceName).map((node: Realm.Object & CGNode) => node.id), []);
+
+    // PROP VARIABLES
     const keyExtractor = (dataPoint: VennInput) => `${dataPoint.id}`;
     const genNextDataPlaceholder = (id: number) => ({ id, text: '' });
     const handleAddInputNode = (id: number, newPossibleOutput: string) => {
@@ -61,7 +71,7 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = (props) => {
     return (
         <GrowingIdList
             data={vennNodeInputs}
-            createRenderItemComponent={createRenderItemComponent((index: number) => dispatch(startRmVennInput(index)))}
+            createRenderItemComponent={createRenderItemComponent(allInputIds, (index: number) => dispatch(startRmVennInput(index)))}
             keyExtractor={keyExtractor}
             genNextDataPlaceholder={genNextDataPlaceholder}
             handleUpdateInput={handleUpdateInputNode}
