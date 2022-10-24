@@ -176,7 +176,7 @@ export type DecorationDriver = {
     load: () => Promise<void>;
     closeAll: () => Promise<void>;
 
-    setDecorations: (rowKey: DECORATION_ROW_KEY, newJson: DecorationJson) => void | never;
+    setDecorationRow: (rowKey: DECORATION_ROW_KEY, newJson: DecorationJson) => void | never;
     saveDecorations: (newDecorations: DecorationInfo[]) => void | never;
     rmDecorations: (decorationsToRm: DecorationInfo[]) => void | never;
     getAllDecorations: () => DecorationJsonMap | never;
