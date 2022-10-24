@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import styled, { DefaultTheme } from 'styled-components/native';
 import { FlexRow } from '../../../../../../../ssComponents/Flex';
 
@@ -13,14 +14,22 @@ import MyTextInput from '../../../../../../../ssComponents/ReactNative/MyTextInp
 import { AppDispatch, RootState } from '../../../../../../../ssRedux';
 import { startSetVennInputs, startAddVennInput, startRmVennInput, VennInput } from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
 
+// DECORATIONS
+import { DECORATION_ROW_KEY } from 'ssDatabase/api/types';
 
-const createRenderItemComponent = (deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
+const createRenderItemComponent = (deleteVennInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: { item: VennInput, index: number }) => (
     <FlexRow>
-        <StyledTextInput
-            placeholder={'Anotha one...'}
-            value={item.title}
-            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        <DecorationRow
+            placeholder='Search an input...'
+            rowKey={DECORATION_ROW_KEY.INPUT}
+            entityId={item.text}
+            onEditEntityId={(newText: string) => handleChangeText(newText, index)}
         />
+        {/* <StyledTextInput
+            placeholder={'Anotha one...'}
+            value={item.text}
+            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        /> */}
 
         <MyButton
             onPress={() => deleteVennInput(index)}
@@ -45,7 +54,7 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = (props) => {
     };
     const handleUpdateInputNode = (newText: string, index: number) => {
         vennNodeInputs[index].text = newText;
-        // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
+        // TODO: Dispatch a copy of the previous state: [ ...possibleInputs ]?
         dispatch(startSetVennInputs(vennNodeInputs));
     }
     
