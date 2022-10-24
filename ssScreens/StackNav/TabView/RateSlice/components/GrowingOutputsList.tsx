@@ -12,21 +12,22 @@ import { RootState } from '../../../../../ssRedux';
 import { addOutput, setOutputs, removeOutput, forceSignatureRerender } from '../../../../../ssRedux/rateSidewaysSlice';
 import { GrowingIdText as RateInput } from '../../../../../ssComponents/Input/GrowingIdList';
 import MyButton from 'ssComponents/ReactNative/MyButton';
+import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
+import { DECORATION_ROW_KEY } from 'ssDatabase/api/types';
 
-const StyledTextOutput = styled(MyTextInput)`
-    borderWidth: 1px;
-    borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.grayBorder};
-    paddingVertical: 25px;
-    paddingHorizontal: 10px;
-`;
-
-const createOutputsRenderItemComponent = (deleteOutput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
+const createOutputsRenderItemComponent = (deleteOutput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: { item: RateInput, index: number }) => (
     <FlexRow>
-        <StyledTextOutput
-            placeholder={'Anotha output...'}
-            value={item.title}
-            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        <DecorationRow
+            placeholder='Add an output...'
+            rowKey={DECORATION_ROW_KEY.OUTPUT}
+            entityId={item.text}
+            onEditEntityId={(newText: string) => handleChangeText(newText, index)}
         />
+        {/* <StyledTextOutput
+            placeholder={'Anotha output...'}
+            value={item.text}
+            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        /> */}
         
         <MyButton
             onPress={() => deleteOutput(index)}
@@ -67,3 +68,10 @@ const GrowingOutputsList: FC = (props) => {
 }
 
 export default GrowingOutputsList;
+
+const StyledTextOutput = styled(MyTextInput)`
+    borderWidth: 1px;
+    borderColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.grayBorder};
+    paddingVertical: 25px;
+    paddingHorizontal: 10px;
+`;

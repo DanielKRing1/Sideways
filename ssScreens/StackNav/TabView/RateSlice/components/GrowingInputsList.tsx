@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import { FlexRow } from 'ssComponents/Flex';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
+import { DECORATION_ROW_KEY } from 'ssDatabase/api/types';
 import styled, { DefaultTheme } from 'styled-components/native';
 import GrowingIdList from '../../../../../ssComponents/Input/GrowingIdList';
 import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
@@ -18,13 +20,19 @@ const StyledTextInput = styled(MyTextInput)`
     paddingHorizontal: 10px;
 `;
 
-const createInputsRenderItemComponent = (deleteInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: any) => (
+const createInputsRenderItemComponent = (deleteInput: (index: number) => void) => (handleChangeText: (newText: string, index: number) => void) => ({ item, index }: { item: RateInput, index: number }) => (
     <FlexRow>
-        <StyledTextInput
-            placeholder={'Anotha input...'}
-            value={item.title}
-            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        <DecorationRow
+            placeholder='Add an input...'
+            rowKey={DECORATION_ROW_KEY.INPUT}
+            entityId={item.text}
+            onEditEntityId={(newText: string) => handleChangeText(newText, index)}
         />
+        {/* <StyledTextInput
+            placeholder={'Anotha input...'}
+            value={item.text}
+            onChangeText={(newText: string) => handleChangeText(newText, index)}
+        /> */}
 
         <MyButton
             onPress={() => deleteInput(index)}
