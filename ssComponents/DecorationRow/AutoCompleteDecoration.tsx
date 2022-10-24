@@ -1,14 +1,14 @@
 import React, { FC, useMemo } from 'react';
 import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
-import AutoCompleteDropdown, { AutoCompleteDropdownProps, DropdownRowProps } from 'ssComponents/Search/AutocompleteDropdown';
+import AutoCompleteDropdown, { AutoCompleteDropdownProps, DropdownRowProps } from 'ssComponents/Search/AutoCompleteDropdown';
 import DecorationRow from './DecorationRow';
 import { DecorationJson, DECORATION_ROW_KEY } from 'ssDatabase/api/types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'ssRedux/index';
-import { startUpdateDecorationRow } from 'ssRedux/userJson/decorationSlice';
+import { startUpdateDecorationColor, startUpdateDecorationIcon, startUpdateDecorationRow, startUpdateDecorationText } from 'ssRedux/userJson/decorationSlice';
 import { getDecorationMapValue } from 'ssDatabase/hardware/realm/userJson/utils';
 
 export type AutoCompleteDecorationProps<T> = {
@@ -35,50 +35,9 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps<any>> = (props) => 
     const decorationDict: DecorationJson = useMemo(() => fullDecorationMap[decorationRowKey], [decorationRowKey]);
 
     // HANDLERS (Input text, color, icon)
-    const handleCommitInputText = (oldText: string, newText: string) => {
-        // 1. Add new edited name
-        const newJson: DecorationJson = {
-            ...fullDecorationMap[decorationRowKey],
-            [newText]: fullDecorationMap[decorationRowKey][oldText],
-        };
-        // 2. Remove old name
-        delete fullDecorationMap[decorationRowKey][oldText];
-
-        dispatch(startUpdateDecorationRow({
-            rowKey: DECORATION_ROW_KEY[decorationRowKey],
-            newJson,
-        }));
-    }
-    const handleCommitInputColor = (inputText: string, newColor: string) => {
-        // 1. Add new color
-        const newJson: DecorationJson = {
-            ...fullDecorationMap[decorationRowKey],
-            [inputText]: {
-                ...fullDecorationMap[decorationRowKey][inputText],
-                COLOR: newColor,
-            },
-        };
-
-        dispatch(startUpdateDecorationRow({
-            rowKey: DECORATION_ROW_KEY[decorationRowKey],
-            newJson,
-        }));
-    }
-    const handleCommitInputIcon = (inputText: string, newIconName: string) => {
-        // 1. Add new icon
-        const newJson: DecorationJson = {
-            ...fullDecorationMap[decorationRowKey],
-            [inputText]: {
-                ...fullDecorationMap[decorationRowKey][inputText],
-                ICON: newIconName,
-            },
-        };
-
-        dispatch(startUpdateDecorationRow({
-            rowKey: DECORATION_ROW_KEY[decorationRowKey],
-            newJson,
-        }));
-    }
+    const handleCommitInputText = (oldText: string, newText: string) => dispatch(startUpdateDecorationText({ rowKey: DECORATION_ROW_KEY[decorationRowKey], entityId: oldText, newValue: newText, }));
+    const handleCommitInputColor = (entityId: string, newColor: string) => dispatch(startUpdateDecorationColor({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newColor }));
+    const handleCommitInputIcon = (entityId: string, newIconName: string) => dispatch(startUpdateDecorationIcon({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newIconName }));
 
     const DropdownRow: FC<DropdownRowProps<any>> = useMemo(() => (props) => {
         const entityId: string = props.suggestion;

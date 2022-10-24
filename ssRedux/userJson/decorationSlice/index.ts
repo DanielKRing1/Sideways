@@ -28,6 +28,7 @@ const initialState: DecorationState = {
 
 // THUNKS
 
+// SET ALL
 type StartSetAllDecorationsArgs = undefined;
 export const startSetAllDecorations = createAsyncThunk<
   boolean,
@@ -46,6 +47,7 @@ export const startSetAllDecorations = createAsyncThunk<
   }
 );
 
+// UPDATE
 type StartUpdateDecorationRow = {
   rowKey: DECORATION_ROW_KEY;
   newJson: DecorationJson;
@@ -66,6 +68,95 @@ export const startUpdateDecorationRow = createAsyncThunk<
   }
 );
 
+type StartUpdateDecorationValue = {
+  rowKey: DECORATION_ROW_KEY;
+  entityId: string;
+  newValue: string;
+};
+export const startUpdateDecorationText = createAsyncThunk<
+  boolean,
+  StartUpdateDecorationValue,
+  ThunkConfig
+>(
+  'decorationSlice/startUpdateDecorationText',
+  async ({ rowKey, entityId: oldText, newValue: newText }: StartUpdateDecorationValue, thunkAPI) => {
+    const { fullDecorationMap } = thunkAPI.getState().userJsonSlice.decorationSlice;
+
+    // 1. Add new edited name
+    const newJson: DecorationJson = {
+      ...fullDecorationMap[rowKey],
+      [newText]: fullDecorationMap[rowKey][oldText],
+    };
+    // 2. Remove old name
+    delete fullDecorationMap[rowKey][oldText];
+
+    // 3. Update db
+    await decorationDriver.setDecorationRow(rowKey, newJson);
+
+    // 4. Update Redux
+    thunkAPI.dispatch(startSetAllDecorations());
+
+    return true;
+  }
+);
+
+export const startUpdateDecorationColor = createAsyncThunk<
+  boolean,
+  StartUpdateDecorationValue,
+  ThunkConfig
+>(
+  'decorationSlice/startUpdateDecorationColor',
+  async ({ rowKey, entityId, newValue: newColor }: StartUpdateDecorationValue, thunkAPI) => {
+    const { fullDecorationMap } = thunkAPI.getState().userJsonSlice.decorationSlice;
+
+    // 1. Add new color
+    const newJson: DecorationJson = {
+      ...fullDecorationMap[rowKey],
+      [entityId]: {
+        ...fullDecorationMap[rowKey][entityId],
+        COLOR: newColor,
+      },
+    };
+
+    // 2. Update db
+    await decorationDriver.setDecorationRow(rowKey, newJson);
+
+    // 3. Update Redux
+    thunkAPI.dispatch(startSetAllDecorations());
+
+    return true;
+  }
+);
+
+export const startUpdateDecorationIcon = createAsyncThunk<
+  boolean,
+  StartUpdateDecorationValue,
+  ThunkConfig
+>(
+  'decorationSlice/startUpdateDecorationIcon',
+  async ({ rowKey, entityId, newValue: newIcon }: StartUpdateDecorationValue, thunkAPI) => {
+    const { fullDecorationMap } = thunkAPI.getState().userJsonSlice.decorationSlice;
+
+    // 1. Add new icon
+    const newJson: DecorationJson = {
+      ...fullDecorationMap[rowKey],
+      [entityId]: {
+        ...fullDecorationMap[rowKey][entityId],
+        ICON: newIcon,
+      },
+    };
+
+    // 3. Update db
+    await decorationDriver.setDecorationRow(rowKey, newJson);
+
+    // 4. Update Redux
+    thunkAPI.dispatch(startSetAllDecorations());
+
+    return true;
+  }
+);
+
+// ADD
 type StartAddDecorationsArgs = DecorationInfo[];
 export const startAddDecorations = createAsyncThunk<
   boolean,
@@ -83,6 +174,7 @@ export const startAddDecorations = createAsyncThunk<
   }
 );
 
+// RM
 type StartRmDecorationsArgs = Omit<DecorationInfo, 'decoration'>[];
 export const startRmDecorations = createAsyncThunk<
   boolean,
