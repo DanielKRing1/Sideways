@@ -23,6 +23,7 @@ type DecorationRowProps = {
 
     rowKey: DECORATION_ROW_KEY;
     entityId: string;
+    placeholder?: string;
 
     onEditEntityId?: (oldId: string, newId: string) => void;
     onEditColor?: (entityId: string, color: string) => void;
@@ -35,7 +36,7 @@ type DecorationRowProps = {
 const DecorationRow: FC<DecorationRowProps> = (props) => {
     const {
         editable=true, style={},
-        rowKey, entityId,
+        rowKey, entityId, placeholder,
         onEditEntityId=()=>{}, onEditColor=()=>{}, onEditIcon=()=>{},
         onCommitEntityId=()=>{}, onCommitColor=()=>{}, onCommitIcon=()=>{},
     } = props;
@@ -130,6 +131,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                         borderBottomWidth: 3,
                         borderColor: theme.colors.grayBorder,
                     }}
+                    placeholder={placeholder}
                     text={entityId}
                     onEditText={handleEditEntityId}
                     onCommitText={handleCommitInputText}
