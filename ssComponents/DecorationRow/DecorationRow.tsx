@@ -1,4 +1,4 @@
-import React, { FC, useState, memo } from 'react';
+import React, { FC, useEffect, useState, memo } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { useTheme } from 'styled-components';
 
@@ -15,32 +15,43 @@ import IconModalButton from './components/IconModalButton';
 type DecorationRowProps = {
     editable?: boolean;
     text: string;
-    setText?: (newText: string) => void;
+    onCommitText?: (newText: string) => void;
 
     color: string;
-    setColor: (newColor: string) => void;
+    onCommitColor: (newColor: string) => void;
     
     iconName: AvailableIcons;
-    onConfirmIconSelection: (iconName: AvailableIcons) => void;
+    onCommitIcon: (iconName: AvailableIcons) => void;
 };
 const DecorationRow: FC<DecorationRowProps> = (props) => {
-    const { editable=true, text, setText=()=>{}, color, setColor, iconName, onConfirmIconSelection } = props;
+    const { editable=true, text, onCommitText=()=>{}, color, onCommitColor, iconName, onCommitIcon } = props;
 
     // HOOKS
     const { height, width } = useWindowDimensions();
     const theme = useTheme();
 
     // STATE
+    const [localColor, setLocalColor ] = useState(color);
     const [colorPickerOpen, setColorPickerOpen] = useState(false);
+    const [localIconName, setLocalIconName ] = useState(iconName);
     const [iconPickerOpen, setIconPickerOpen] = useState(false);
 
-    const handleColorChange = (color: string) => {
-        // setColor(color);
-    }
-    const handleColorSelected = (color: string) => {
-        setColor(color);
-        // console.log(color);
-    }
+    // EFFECTS
+
+    // Commit color
+    useEffect(() => {
+        // Update local color
+        if(colorPickerOpen === true) setLocalColor(color);
+        // Commit local color when ColorPicker modal closes
+        else if(color !== localColor) onCommitColor(localColor);
+    }, [colorPickerOpen]);
+    // Commit iconName
+    useEffect(() => {
+        // Update local iconName
+        if(iconPickerOpen === true) setLocalIconName(iconName);
+        // Commit local iconName when IconPicker modal closes
+        else if(iconName !== localIconName) onCommitIcon(localIconName);
+    }, [iconPickerOpen]);
 
     return (
         <FlexRow
@@ -66,7 +77,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                         borderColor: theme.colors.grayBorder,
                     }}
                     text={text}
-                    handleCommitText={setText}
+                    handleCommitText={onCommitText}
                 />
                 :
                 <MyText>{text}</MyText>
@@ -99,8 +110,8 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
             >
                 <DecorationRowColorPicker
                     color={color}
-                    handleColorChange={handleColorChange}
-                    handleColorSelected={handleColorSelected}
+                    onColorChange={()=>{}}
+                    onColorSelected={setLocalColor}
                 />
             </DecorationRowModal>
 
@@ -109,7 +120,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                 setIsOpen={setIconPickerOpen}
             >
                 <SelectableIcons
-                    onConfirmSelection={onConfirmIconSelection}
+                    onConfirmSelection={setLocalIconName}
                 />
 
             </DecorationRowModal>
