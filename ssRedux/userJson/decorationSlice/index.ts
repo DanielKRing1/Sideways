@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import decorationDriver from 'ssDatabase/api/userJson/decoration';
 
-import { DecorationInfo, DecorationJsonMap, DECORATION_ROW_KEY } from '../../../ssDatabase/api/types';
+import { DecorationInfo, DecorationJson, DecorationJsonMap, DECORATION_ROW_KEY } from '../../../ssDatabase/api/types';
 import { ThunkConfig } from '../../types';
 
 // INITIAL STATE
@@ -38,9 +38,29 @@ export const startSetAllDecorations = createAsyncThunk<
   async (undefined: StartSetAllDecorationsArgs, thunkAPI) => {
 
     const fullDecorationMap: DecorationJsonMap = await decorationDriver.getAllDecorations();
-    
+
     thunkAPI.dispatch(setDecorations(fullDecorationMap));
     thunkAPI.dispatch(forceSignatureRerender());
+
+    return true;
+  }
+);
+
+type StartUpdateDecorationRow = {
+  rowKey: DECORATION_ROW_KEY;
+  newJson: DecorationJson;
+}
+export const startUpdateDecorationRow = createAsyncThunk<
+  boolean,
+  StartUpdateDecorationRow,
+  ThunkConfig
+>(
+  'decorationSlice/startUpdateDecorationRow',
+  async ({ rowKey, newJson }: StartUpdateDecorationRow, thunkAPI) => {
+
+    await decorationDriver.setDecorations(rowKey, newJson);
+
+    thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
   }
@@ -56,7 +76,7 @@ export const startAddDecorations = createAsyncThunk<
   async (newDecorations: StartAddDecorationsArgs, thunkAPI) => {
 
     await decorationDriver.saveDecorations(newDecorations);
-    
+
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
@@ -73,7 +93,7 @@ export const startRmDecorations = createAsyncThunk<
   async (decorationsToRm: StartRmDecorationsArgs, thunkAPI) => {
 
     await decorationDriver.rmDecorations(decorationsToRm);
-    
+
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
@@ -97,7 +117,7 @@ export const decorationSlice = createSlice({
     setDecorations: (state: DecorationState, action: SetDecorationsAction) => {
       state.fullDecorationMap = action.payload;
     },
-    
+
     // RERENDER
     forceSignatureRerender: (state: DecorationState, action: ForceDecorationRerenderAction) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
