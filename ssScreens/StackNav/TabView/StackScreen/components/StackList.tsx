@@ -14,7 +14,8 @@ import { FlexCol, FlexRow } from '../../../../../ssComponents/Flex';
 import { SearchableFlatList } from '../../../../../ssComponents/Search/SearchableFlatList';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
-import { SidewaysSnapshotRow } from '../../../../../ssDatabase/api/types';
+import { DECORATION_ROW_KEY, SidewaysSnapshotRow } from '../../../../../ssDatabase/api/types';
+import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 
 type StackCardProps = {
     item: Realm.Object & SidewaysSnapshotRow;
@@ -64,6 +65,7 @@ const createStackCard = (
                 <MyText>{item.rating}</MyText>
                 
                 <MyText>Inputs:</MyText>
+                {/* TODO Remove */}
                 {
                     item.inputs.map((input: string) => (
                         <FlexRow>
@@ -78,14 +80,49 @@ const createStackCard = (
                         </FlexRow>
                     ))
                 }
+                {
+                    item.inputs.map((input: string) => (
+                        <FlexRow>
+                            <DecorationRow
+                                style={{ borderColor: !inputsToRm.has(input) ? 'green' : 'red' }}
+                                editable={true}
+                                rowKey={DECORATION_ROW_KEY.INPUT}
+                                entityId={input}
+                                />
+                            <MyButton
+                                onPress={() => toggleInputToRm(input)}
+                                >
+                                <MyText>X</MyText>
+                            </MyButton>
+                        </FlexRow>
+                    ))
+                }
                 
                 <MyText>Outputs:</MyText>
+                {/* TODO Remove */}
                 {
                     item.outputs.map((output: string) => (
                         <FlexRow>
                             <MyText
                                 style={{color: !outputsToRm.has(output) ? 'green' : 'red'}}
                             >{output}</MyText>
+                            <MyButton
+                                onPress={() => toggleOutputToRm(output)}
+                            >
+                                <MyText>X</MyText>
+                            </MyButton>
+                        </FlexRow>
+                    ))
+                }
+                {
+                    item.outputs.map((output: string) => (
+                        <FlexRow>
+                            <DecorationRow
+                                style={{ borderColor: !outputsToRm.has(output) ? 'green' : 'red' }}
+                                editable={true}
+                                rowKey={DECORATION_ROW_KEY.OUTPUT}
+                                entityId={output}
+                            />
                             <MyButton
                                 onPress={() => toggleOutputToRm(output)}
                             >
