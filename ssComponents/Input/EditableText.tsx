@@ -18,6 +18,7 @@ import MyTextInput from 'ssComponents/ReactNative/MyTextInput';
 type EditableTextProps = {
   style?: ViewStyle;
   textStyle?: TextStyle;
+  placeholder?: string;
   text: string;
   onEditText?: (newText: string) => void;
   onCommitText: (newText: string) => void;
@@ -26,7 +27,7 @@ const EditableText: FC<EditableTextProps> = (props) => {
 
   const {
     style={}, textStyle={},
-    text,
+    placeholder, text,
     onEditText=()=>{},
     onCommitText } = props;
 
@@ -70,12 +71,13 @@ const EditableText: FC<EditableTextProps> = (props) => {
       >
         <MyText
           style={textStyle}
-        >{text}</MyText>
+        >{text || placeholder}</MyText>
       </TouchableOpacity>
       :
       <MyTextInput
         ref={textInputRef}
         onBlur={handleBlur}
+        placeholder={placeholder}
         value={editableText}
         onChangeText={handleChangeText}
       />
