@@ -2,6 +2,7 @@ import { CGNode, CGEdge, RankedNode } from "@asianpersonn/realm-graph";
 import { OutputKeyType } from '../hardware/realm/dbDriver';
 import { Dict } from '../../global';
 import { ENTITY_TYPE } from "ssDatabase/hardware/realm/userJson/utils";
+import { AvailableIcons } from "./userJson/decoration/constants";
 
 type ExistingSlice = { sliceName: string, lastLogged: Date | undefined };
 
@@ -163,13 +164,13 @@ export type DecorationJsonMap = {
 export type DecorationJson = Dict<DecorationJsonValue>;
 export type DecorationJsonValue = {
     [DECORATION_VALUE_KEY.COLOR]: string;
-    [DECORATION_VALUE_KEY.ICON]: string;
+    [DECORATION_VALUE_KEY.ICON]: AvailableIcons;
 };
 export type DecorationInfo = {
     decorationRowId: DECORATION_ROW_KEY;
     entityId: string;
     [DECORATION_VALUE_KEY.COLOR]?: string;
-    [DECORATION_VALUE_KEY.ICON]?: string;
+    [DECORATION_VALUE_KEY.ICON]?: AvailableIcons;
 };
 export type DecorationDriver = {
     isLoaded: boolean;
