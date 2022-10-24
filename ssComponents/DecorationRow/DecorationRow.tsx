@@ -20,11 +20,25 @@ import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
 type DecorationRowProps = {
     editable?: boolean;
     style?: ViewStyle;
+
     rowKey: DECORATION_ROW_KEY;
     entityId: string;
+
+    onEditEntityId?: (oldId: string, newId: string) => void;
+    onEditColor?: (entityId: string, color: string) => void;
+    onEditIcon?: (entityId: string, icon: AvailableIcons) => void;
+
+    onCommitEntityId?: (oldId: string, newId: string) => void;
+    onCommitColor?: (entityId: string, color: string) => void;
+    onCommitIcon?: (entityId: string, icon: AvailableIcons) => void;
 };
 const DecorationRow: FC<DecorationRowProps> = (props) => {
-    const { editable=true, style={}, rowKey, entityId } = props;
+    const {
+        editable=true, style={},
+        rowKey, entityId,
+        onEditEntityId=()=>{}, onEditColor=()=>{}, onEditIcon=()=>{},
+        onCommitEntityId=()=>{}, onCommitColor=()=>{}, onCommitIcon=()=>{},
+    } = props;
 
     // HOOKS
     const { height, width } = useWindowDimensions();
@@ -36,15 +50,44 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
     const dispatch: AppDispatch = useDispatch();
 
     // LOCAL STATE
-    const [localColor, setLocalColor ] = useState('');
+    const [localColor, setLocalColor ] = useState(decorationValue.COLOR);
     const [colorPickerOpen, setColorPickerOpen] = useState(false);
-    const [localIconName, setLocalIconName ] = useState('');
+    const [localIconName, setLocalIconName ] = useState<AvailableIcons>(decorationValue.ICON);
     const [iconPickerOpen, setIconPickerOpen] = useState(false);
 
     // HANDLERS (Input text, color, icon)
-    const handleCommitInputText = (newText: string) => dispatch(startUpdateDecorationText({ rowKey: DECORATION_ROW_KEY[rowKey], entityId, newValue: newText, }));
-    const handleCommitInputColor = (newColor: string) => dispatch(startUpdateDecorationColor({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newColor }));
-    const handleCommitInputIcon = (newIconName: string) => dispatch(startUpdateDecorationIcon({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newIconName }));
+    const handleEditEntityId = (newText: string) => onEditEntityId(entityId, newText);
+    const handleEditColor = (newColor: string) => {
+        // Props
+        onEditColor(entityId, newColor);
+        // Local
+        setLocalColor(newColor);
+    }
+    const handleEditIcon = (newIcon: AvailableIcons) => {
+        // Props
+        onEditIcon(entityId, newIcon);
+        // Local
+        setLocalIconName(newIcon);
+    }
+
+    const handleCommitInputText = (newId: string) => {
+        // Props
+        onCommitEntityId(entityId, newId)
+        // Redux
+        dispatch(startUpdateDecorationText({ rowKey: DECORATION_ROW_KEY[rowKey], entityId, newValue: newId, }));
+    }
+    const handleCommitInputColor = (newColor: string) => {
+        // Props
+        onCommitColor(entityId, newColor)
+        // Redux
+        dispatch(startUpdateDecorationColor({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newColor }));
+    }
+    const handleCommitInputIcon = (newIconName: AvailableIcons) => {
+        // Props
+        onCommitIcon(entityId, newIconName)
+        // Redux
+        dispatch(startUpdateDecorationIcon({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newIconName }));
+    }
     
     // EFFECTS
 
@@ -88,7 +131,8 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                         borderColor: theme.colors.grayBorder,
                     }}
                     text={entityId}
-                    handleCommitText={handleCommitInputText}
+                    onEditText={handleEditEntityId}
+                    onCommitText={handleCommitInputText}
                 />
                 :
                 <MyText>{entityId}</MyText>
@@ -122,7 +166,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                 <DecorationRowColorPicker
                     color={decorationValue.COLOR}
                     onColorChange={()=>{}}
-                    onColorSelected={setLocalColor}
+                    onColorSelected={handleEditColor}
                 />
             </DecorationRowModal>
 
@@ -131,7 +175,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                 setIsOpen={setIconPickerOpen}
             >
                 <SelectableIcons
-                    onConfirmSelection={setLocalIconName}
+                    onConfirmSelection={handleEditIcon}
                 />
 
             </DecorationRowModal>

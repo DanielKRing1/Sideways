@@ -4,6 +4,9 @@
  * Upon blur, render a Text component again
  * 
  * My demo at https://snack.expo.dev/@asianpersonn/decorationrow
+ * 
+ * 'onEditText': Called on each keystroke
+ * 'onCommitText': Called when textinput blurs
  */
 
 import React, { FC, useEffect, useRef, useState } from 'react';
@@ -16,11 +19,16 @@ type EditableTextProps = {
   style?: ViewStyle;
   textStyle?: TextStyle;
   text: string;
-  handleCommitText: (newText: string) => void;
+  onEditText?: (newText: string) => void;
+  onCommitText: (newText: string) => void;
 };
 const EditableText: FC<EditableTextProps> = (props) => {
 
-  const { style={}, textStyle={}, text, handleCommitText } = props;
+  const {
+    style={}, textStyle={},
+    text,
+    onEditText=()=>{},
+    onCommitText } = props;
 
   // Local state
   const [ isEditing, setIsEditing ] = useState(false);
@@ -37,9 +45,19 @@ const EditableText: FC<EditableTextProps> = (props) => {
     if(textInputRef.current) textInputRef.current.focus();
   }, [textInputRef.current]);
 
-  // Handlers
+  // HANDLERS
+
+  // Called every keystroke
+  const handleChangeText = (newText: string) => {
+    // Prop
+    onEditText(newText);
+    // Local
+    setEditableText(newText);
+  }
+  
+  // Called on blur, commit text
   const handleBlur = () => {
-    handleCommitText(editableText);
+    onCommitText(editableText);
     setIsEditing(false);
   }
 
@@ -59,7 +77,7 @@ const EditableText: FC<EditableTextProps> = (props) => {
         ref={textInputRef}
         onBlur={handleBlur}
         value={editableText}
-        onChangeText={setEditableText}
+        onChangeText={handleChangeText}
       />
     }
     </View>
