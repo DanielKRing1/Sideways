@@ -48,7 +48,7 @@ const throwLoadError = (): void | never => {
     if(!isLoaded) throw new Error('Must call "load()" before RealmJson (colors) can be used');
 };
 
-const setDecorations = (rowKey: DECORATION_ROW_KEY, newJson: DecorationJson): void | never => {
+const setDecorationRow = (rowKey: DECORATION_ROW_KEY, newJson: DecorationJson): void | never => {
     throwLoadError();
 
     const jsonCollection: RealmJson = RealmJsonManager.getCollection(DEFAULT_REALM_JSON_COLLECTION_NAME);
@@ -119,7 +119,7 @@ const Driver: DecorationDriver = {
     load,
     closeAll,
 
-    setDecorations,
+    setDecorationRow,
     saveDecorations,
     rmDecorations,
     getAllDecorations,

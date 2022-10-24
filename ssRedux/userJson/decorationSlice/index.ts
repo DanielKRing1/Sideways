@@ -58,7 +58,7 @@ export const startUpdateDecorationRow = createAsyncThunk<
   'decorationSlice/startUpdateDecorationRow',
   async ({ rowKey, newJson }: StartUpdateDecorationRow, thunkAPI) => {
 
-    await decorationDriver.setDecorations(rowKey, newJson);
+    await decorationDriver.setDecorationRow(rowKey, newJson);
 
     thunkAPI.dispatch(startSetAllDecorations());
 
