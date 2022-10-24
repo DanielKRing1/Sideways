@@ -1,12 +1,12 @@
-import { DecorationJsonMap, DecorationJsonValue, DECORATION_ROW_KEY, DECORATION_VALUE_KEY } from "ssDatabase/api/types";
-import { DEFAULT_ICON_NAME } from "ssDatabase/api/userJson/decoration/constants";
+import { DecorationJson, DecorationJsonMap, DecorationJsonValue, DECORATION_ROW_KEY, DECORATION_VALUE_KEY } from "ssDatabase/api/types";
+import { DEFAULT_ICON } from "ssDatabase/api/userJson/decoration/constants";
 import { genRandomColor } from "ssUtils/color";
 import { Dict } from "../../../../global";
 
-function genRandDecorationMapValue(): DecorationJsonValue {
+function genRandDecorationValue(): DecorationJsonValue {
     return {
         [DECORATION_VALUE_KEY.COLOR]: genRandomColor(),
-        [DECORATION_VALUE_KEY.ICON]: DEFAULT_ICON_NAME,
+        [DECORATION_VALUE_KEY.ICON]: DEFAULT_ICON,
     }
 };
 export function hasDecorationMapValue(rowKey: DECORATION_ROW_KEY, entityId: string, decorationJsonMap: DecorationJsonMap): boolean {
@@ -15,9 +15,12 @@ export function hasDecorationMapValue(rowKey: DECORATION_ROW_KEY, entityId: stri
     return value !== undefined;
 };
 export function getDecorationMapValue(rowKey: DECORATION_ROW_KEY, entityId: string, decorationJsonMap: DecorationJsonMap): DecorationJsonValue {
-    const value: DecorationJsonValue | undefined = decorationJsonMap[rowKey][entityId];
+    return getDecorationJsonValue(entityId, decorationJsonMap[rowKey]);
+};
+export function getDecorationJsonValue(entityId: string, decorationJson: DecorationJson): DecorationJsonValue {
+    const value: DecorationJsonValue | undefined = decorationJson[entityId];
 
-    return value !== undefined ? value : genRandDecorationMapValue();
+    return value !== undefined ? value : genRandDecorationValue();
 };
 
 // colorMap={{
