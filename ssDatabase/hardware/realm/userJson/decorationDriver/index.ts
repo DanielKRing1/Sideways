@@ -48,6 +48,13 @@ const throwLoadError = (): void | never => {
     if(!isLoaded) throw new Error('Must call "load()" before RealmJson (colors) can be used');
 };
 
+const setDecorations = (rowKey: DECORATION_ROW_KEY, newJson: DecorationJson): void | never => {
+    throwLoadError();
+
+    const jsonCollection: RealmJson = RealmJsonManager.getCollection(DEFAULT_REALM_JSON_COLLECTION_NAME);
+    jsonCollection.setJson(rowKey, newJson);
+};
+
 const saveDecorations = (newDecorations: DecorationInfo[]): void | never => {
     throwLoadError();
 
@@ -57,15 +64,15 @@ const saveDecorations = (newDecorations: DecorationInfo[]): void | never => {
     
     // 2. Build new json
     for(const newDec of newDecorations) {
-        const { decorationRowId, entityId, color, icon } = newDec;
+        const { decorationRowId, entityId, COLOR, ICON } = newDec;
         const decorationJsonRow: DecorationJson = allJson[decorationRowId];
 
         // 2.1. Create new json key/value pair
-        if(decorationJsonRow[entityId] === undefined) decorationJsonRow[entityId] = { color: '', icon: '', };
+        if(decorationJsonRow[entityId] === undefined) decorationJsonRow[entityId] = { COLOR: '', ICON: '', };
 
         // 2.2. Overwrite properties if not undefined
-        if(color !== undefined) decorationJsonRow[entityId].color = color;
-        if(icon !== undefined) decorationJsonRow[entityId].icon = icon;
+        if(COLOR !== undefined) decorationJsonRow[entityId].COLOR = COLOR;
+        if(ICON !== undefined) decorationJsonRow[entityId].ICON = ICON;
     }
 
     // 3. Overwrite existing json rows with new json rows
@@ -112,6 +119,7 @@ const Driver: DecorationDriver = {
     load,
     closeAll,
 
+    setDecorations,
     saveDecorations,
     rmDecorations,
     getAllDecorations,
