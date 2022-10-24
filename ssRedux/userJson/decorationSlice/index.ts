@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import decorationDriver from 'ssDatabase/api/userJson/decoration';
+import { getDecorationMapValue } from 'ssDatabase/hardware/realm/userJson/utils';
 
 import { DecorationInfo, DecorationJson, DecorationJsonMap, DECORATION_ROW_KEY } from '../../../ssDatabase/api/types';
 import { ThunkConfig } from '../../types';
@@ -68,6 +69,10 @@ export const startUpdateDecorationRow = createAsyncThunk<
   }
 );
 
+/**
+ * Updates Decoration.row.entityId
+ * Creates new entityId if not exists
+ */
 type StartUpdateDecorationValue = {
   rowKey: DECORATION_ROW_KEY;
   entityId: string;
@@ -85,7 +90,7 @@ export const startUpdateDecorationText = createAsyncThunk<
     // 1. Add new edited name
     const newJson: DecorationJson = {
       ...fullDecorationMap[rowKey],
-      [newText]: fullDecorationMap[rowKey][oldText],
+      [newText]: getDecorationMapValue(rowKey, oldText, fullDecorationMap),
     };
     // 2. Remove old name
     delete fullDecorationMap[rowKey][oldText];
@@ -113,7 +118,7 @@ export const startUpdateDecorationColor = createAsyncThunk<
     const newJson: DecorationJson = {
       ...fullDecorationMap[rowKey],
       [entityId]: {
-        ...fullDecorationMap[rowKey][entityId],
+        ...getDecorationMapValue(rowKey, entityId, fullDecorationMap),
         COLOR: newColor,
       },
     };
@@ -141,7 +146,7 @@ export const startUpdateDecorationIcon = createAsyncThunk<
     const newJson: DecorationJson = {
       ...fullDecorationMap[rowKey],
       [entityId]: {
-        ...fullDecorationMap[rowKey][entityId],
+        ...getDecorationMapValue(rowKey, entityId, fullDecorationMap),
         ICON: newIcon,
       },
     };
