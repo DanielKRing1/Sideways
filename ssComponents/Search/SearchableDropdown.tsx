@@ -7,7 +7,7 @@ import { FlexCol, FlexRow } from '../Flex';
 import MyTextInput from '../ReactNative/MyTextInput';
 import MyText from '../ReactNative/MyText';
 
-type SearchableDropdownProps = {
+export type SearchableDropdownProps = {
     clickOutsideId: string;
     placeholder: string;
     inputValue: string;
@@ -37,7 +37,6 @@ export const SearchableDropdown: FC<SearchableDropdownProps> = (props) => {
     }, [clickedInside]);
 
     return (
-        // @ts-ignore
         <StyledRow ref={ref}>
             <MyText>Start</MyText>
             {!!LeftComponent && <LeftComponent />}
