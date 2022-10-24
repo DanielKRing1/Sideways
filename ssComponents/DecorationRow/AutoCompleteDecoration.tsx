@@ -1,5 +1,4 @@
 import React, { FC, useMemo } from 'react';
-import styled, { DefaultTheme, useTheme } from 'styled-components/native';
 
 import AutoCompleteDropdown, { AutoCompleteDropdownProps, DropdownRowProps } from 'ssComponents/Search/AutoCompleteDropdown';
 import DecorationRow from './DecorationRow';
@@ -8,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'ssRedux/index';
-import { startUpdateDecorationColor, startUpdateDecorationIcon, startUpdateDecorationRow, startUpdateDecorationText } from 'ssRedux/userJson/decorationSlice';
+import { startUpdateDecorationColor, startUpdateDecorationIcon, startUpdateDecorationText } from 'ssRedux/userJson/decorationSlice';
 import { getDecorationMapValue } from 'ssDatabase/hardware/realm/userJson/utils';
 
 export type AutoCompleteDecorationProps<T> = {
