@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useState, memo } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import React, { FC, useEffect, useState, memo, useMemo } from 'react';
+import { View, useWindowDimensions, ViewStyle } from 'react-native';
 import { useTheme } from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { FlexRow } from 'ssComponents/Flex';
-import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
 import MyText from 'ssComponents/ReactNative/MyText';
 import EditableText from 'ssComponents/Input/EditableText';
 import DecorationRowModal from './components/Modal';
@@ -11,46 +11,56 @@ import DecorationRowColorPicker from './components/ColorPicker';
 import SelectableIcons from 'ssComponents/IconInput/SelectableIcons';
 import ColorModalButton from './components/ColorModalButton';
 import IconModalButton from './components/IconModalButton';
+import { DecorationJsonValue, DECORATION_ROW_KEY } from 'ssDatabase/api/types';
+import { startUpdateDecorationText, startUpdateDecorationColor, startUpdateDecorationIcon } from 'ssRedux/userJson/decorationSlice';
+import { RootState, AppDispatch } from 'ssRedux/index';
+import { getDecorationJsonValue } from 'ssDatabase/hardware/realm/userJson/utils';
+import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
 
 type DecorationRowProps = {
     editable?: boolean;
-    text: string;
-    onCommitText?: (newText: string) => void;
-
-    color: string;
-    onCommitColor: (newColor: string) => void;
-    
-    iconName: AvailableIcons;
-    onCommitIcon: (iconName: AvailableIcons) => void;
+    style?: ViewStyle;
+    rowKey: DECORATION_ROW_KEY;
+    entityId: string;
 };
 const DecorationRow: FC<DecorationRowProps> = (props) => {
-    const { editable=true, text, onCommitText=()=>{}, color, onCommitColor, iconName, onCommitIcon } = props;
+    const { editable=true, style={}, rowKey, entityId } = props;
 
     // HOOKS
     const { height, width } = useWindowDimensions();
     const theme = useTheme();
 
-    // STATE
-    const [localColor, setLocalColor ] = useState(color);
+    // REDUX SELECTOR
+    const { fullDecorationMap, decorationsSignature, } = useSelector((state: RootState) => (state.userJsonSlice.decorationSlice));
+    const decorationValue: DecorationJsonValue = useMemo(() => getDecorationJsonValue(entityId, fullDecorationMap[rowKey]), [entityId, fullDecorationMap, rowKey]);
+    const dispatch: AppDispatch = useDispatch();
+
+    // LOCAL STATE
+    const [localColor, setLocalColor ] = useState('');
     const [colorPickerOpen, setColorPickerOpen] = useState(false);
-    const [localIconName, setLocalIconName ] = useState(iconName);
+    const [localIconName, setLocalIconName ] = useState('');
     const [iconPickerOpen, setIconPickerOpen] = useState(false);
 
+    // HANDLERS (Input text, color, icon)
+    const handleCommitInputText = (newText: string) => dispatch(startUpdateDecorationText({ rowKey: DECORATION_ROW_KEY[rowKey], entityId, newValue: newText, }));
+    const handleCommitInputColor = (newColor: string) => dispatch(startUpdateDecorationColor({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newColor }));
+    const handleCommitInputIcon = (newIconName: string) => dispatch(startUpdateDecorationIcon({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newIconName }));
+    
     // EFFECTS
 
     // Commit color
     useEffect(() => {
         // Update local color
-        if(colorPickerOpen === true) setLocalColor(color);
-        // Commit local color when ColorPicker modal closes
-        else if(color !== localColor) onCommitColor(localColor);
+        if(colorPickerOpen === true) setLocalColor(decorationValue.COLOR);
+        // If local color is new color, then Commit local color when ColorPicker modal closes
+        else if(decorationValue.COLOR !== localColor) handleCommitInputColor(localColor);
     }, [colorPickerOpen]);
     // Commit iconName
     useEffect(() => {
         // Update local iconName
-        if(iconPickerOpen === true) setLocalIconName(iconName);
-        // Commit local iconName when IconPicker modal closes
-        else if(iconName !== localIconName) onCommitIcon(localIconName);
+        if(iconPickerOpen === true) setLocalIconName(decorationValue.ICON);
+        // If local icon is new icon, then Commit local iconName when IconPicker modal closes
+        else if(decorationValue.ICON !== localIconName) handleCommitInputIcon(localIconName);
     }, [iconPickerOpen]);
 
     return (
@@ -63,6 +73,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                 borderColor: theme.colors.blackText,
                 borderWidth: 2,
                 borderRadius: width / 35,
+                ...style,
             }}
         >
             {/* DISPLAYED IN ROW */}
@@ -76,11 +87,11 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                         borderBottomWidth: 3,
                         borderColor: theme.colors.grayBorder,
                     }}
-                    text={text}
-                    handleCommitText={onCommitText}
+                    text={entityId}
+                    handleCommitText={handleCommitInputText}
                 />
                 :
-                <MyText>{text}</MyText>
+                <MyText>{entityId}</MyText>
             }
             </View>
 
@@ -90,14 +101,14 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
             >
                 <ColorModalButton
                     style={{ flex: 0.1 }}
-                    color={color}
+                    color={decorationValue.COLOR}
                     onPress={() => { setColorPickerOpen(true) }}
                 />
 
                 <IconModalButton
                     style={{ flex: 0.1 }}
-                    color={color}
-                    iconName={iconName}
+                    color={decorationValue.COLOR}
+                    iconName={decorationValue.ICON}
                     onPress={() => { setIconPickerOpen(true) }}
                 />
             </FlexRow>
@@ -109,7 +120,7 @@ const DecorationRow: FC<DecorationRowProps> = (props) => {
                 setIsOpen={setColorPickerOpen}
             >
                 <DecorationRowColorPicker
-                    color={color}
+                    color={decorationValue.COLOR}
                     onColorChange={()=>{}}
                     onColorSelected={setLocalColor}
                 />

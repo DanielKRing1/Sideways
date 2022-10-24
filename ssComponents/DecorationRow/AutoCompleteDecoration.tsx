@@ -33,11 +33,6 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps<any>> = (props) => 
 
     const decorationDict: DecorationJson = useMemo(() => fullDecorationMap[decorationRowKey], [decorationRowKey]);
 
-    // HANDLERS (Input text, color, icon)
-    const handleCommitInputText = (oldText: string, newText: string) => dispatch(startUpdateDecorationText({ rowKey: DECORATION_ROW_KEY[decorationRowKey], entityId: oldText, newValue: newText, }));
-    const handleCommitInputColor = (entityId: string, newColor: string) => dispatch(startUpdateDecorationColor({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newColor }));
-    const handleCommitInputIcon = (entityId: string, newIconName: string) => dispatch(startUpdateDecorationIcon({ rowKey: DECORATION_ROW_KEY.INPUT, entityId, newValue: newIconName }));
-
     const DropdownRow: FC<DropdownRowProps<any>> = useMemo(() => (props) => {
         const entityId: string = props.suggestion;
         
@@ -47,16 +42,12 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps<any>> = (props) => 
             >
                 <DecorationRow
                     editable={editable}
-                    text={entityId}
-                    onCommitText={(newText: string) => handleCommitInputText(entityId, newText)}
-                    color={getDecorationMapValue(decorationRowKey, entityId, fullDecorationMap).COLOR}
-                    onCommitColor={(newColor: string) => handleCommitInputColor(entityId, newColor)}
-                    iconName={getDecorationMapValue(decorationRowKey, entityId, fullDecorationMap).ICON as AvailableIcons}
-                    onCommitIcon={(newIconName: AvailableIcons) => handleCommitInputIcon(entityId, newIconName)}
+                    rowKey={decorationRowKey}
+                    entityId={entityId}
                 />
             </TouchableOpacity>
         )
-    }, [ editable, decorationDict, onSelectEntityId, handleCommitInputText, handleCommitInputColor, handleCommitInputIcon ]);
+    }, [ editable, decorationDict, onSelectEntityId ]);
 
     return (
         <AutoCompleteDropdown
