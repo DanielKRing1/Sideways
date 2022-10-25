@@ -1,18 +1,18 @@
-import { useState } from "react";
+import {useState} from 'react';
 
 export const useRealmResults = (getRealmResults: () => Realm.Results<any>) => {
-    const [results, setResults] = useState([]);
+  const [results, setResults] = useState([]);
 
-    const getPreparedResults = () => {
-        const realmResults: Realm.Results<any> = getRealmResults();
+  const getPreparedResults = () => {
+    const realmResults: Realm.Results<any> = getRealmResults();
 
-        realmResults.addListener();
-    }
+    realmResults.addListener();
+  };
 
-    const updateResults = () => setResults(getRealmResults());
+  const updateResults = () => setResults(getRealmResults());
 
-    return {
-        results,
-        updateResults,
-    }
+  return {
+    results,
+    updateResults,
+  };
 };

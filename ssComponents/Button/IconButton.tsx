@@ -1,84 +1,81 @@
-import React, { FC } from 'react';
-import styled, { DefaultTheme, useTheme } from 'styled-components/native';
+import React, {FC} from 'react';
+import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import MyButton, { MyButtonProps } from '../ReactNative/MyButton';
-import { FlexContainerProps } from '../Flex';
-import { useFlexContainer } from '../../ssHooks/useFlexContainer';
-import { RequiredExceptFor } from '../../global';
-import { AvailableIcons } from 'ssDatabase/api/userJson/decoration/constants';
-
+import MyButton, {MyButtonProps} from '../ReactNative/MyButton';
+import {FlexContainerProps} from '../Flex';
+import {useFlexContainer} from '../../ssHooks/useFlexContainer';
+import {RequiredExceptFor} from '../../global';
+import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
 
 export type IconButtonProps = {
-    iconName: AvailableIcons | string;
+  iconName: AvailableIcons | string;
 
-    size?: number;
-    color?: string;
+  size?: number;
+  color?: string;
 
-    marginTop?: number;
-    marginRight?: number;
-    marginBottom?: number;
-    marginLeft?: number;
+  marginTop?: number;
+  marginRight?: number;
+  marginBottom?: number;
+  marginLeft?: number;
 
-    flexDirection?: 'row' | 'column';
-    front?: boolean;
+  flexDirection?: 'row' | 'column';
+  front?: boolean;
+} & MyButtonProps &
+  RequiredExceptFor<FlexContainerProps, 'children'>;
+const IconButton: FC<IconButtonProps> = props => {
+  const theme = useTheme();
 
-} & MyButtonProps & RequiredExceptFor<FlexContainerProps, 'children'>;
-const IconButton: FC<IconButtonProps> = (props) => {
-    const theme = useTheme();
+  const {
+    iconName,
+    size = theme.iconSizes.md,
+    color = theme.colors.darkRed,
+    style = {},
+    marginTop = 0,
+    marginRight = 0,
+    marginBottom = 0,
+    marginLeft = 0,
+    flexDirection = 'row',
+    front = true,
+    children,
+  } = props;
 
-    const {
-        iconName,
-        size=theme.iconSizes.md,
-        color=theme.colors.darkRed,
-        style={},
-        marginTop=0, marginRight=0, marginBottom=0, marginLeft=0,
-        flexDirection='row', front=true,
-        children
-    } = props;
+  const FlexContainer: FC<FlexContainerProps> = useFlexContainer(flexDirection);
 
-    const FlexContainer: FC<FlexContainerProps> = useFlexContainer(flexDirection);
+  return (
+    <StyledMyButton {...props}>
+      <FlexContainer {...props}>
+        {!front && !!children && children}
 
-    return (
-        <StyledMyButton
-            {...props}
-        >
-            <FlexContainer
-                {...props}
-            >
-                
-                { !front && !!children && children }
+        <Icon
+          style={{
+            // @ts-ignore
+            ...style,
+            marginTop,
+            marginRight,
+            marginBottom,
+            marginLeft,
+          }}
+          name={iconName}
+          size={size}
+          color={color}
+        />
 
-                <Icon
-                    style={{
-                        // @ts-ignore
-                        ...style,
-                        marginTop,
-                        marginRight,
-                        marginBottom,
-                        marginLeft,
-                    }}
-                    name={iconName}
-                    size={size}
-                    color={color}
-                />
-
-                { front && !!children && children }
-
-            </FlexContainer>
-        </StyledMyButton>
-    );
-}
+        {front && !!children && children}
+      </FlexContainer>
+    </StyledMyButton>
+  );
+};
 
 export default IconButton;
 
 const StyledMyButton = styled(MyButton)`
-    justifyContent: center;
-    alignItems: center;
-    
-    padding: 5px;
-    marginRight: 3px;
+  justifycontent: center;
+  alignitems: center;
 
-    backgroundColor: ${({ theme }: { theme: DefaultTheme }) => theme.colors.whiteBg};
-    color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.darkRed};
+  padding: 5px;
+  marginright: 3px;
+
+  backgroundcolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
+  color: ${({theme}: {theme: DefaultTheme}) => theme.colors.darkRed};
 `;

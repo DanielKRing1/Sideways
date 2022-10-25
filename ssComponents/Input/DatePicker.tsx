@@ -1,47 +1,47 @@
-import React, { FC, useState } from 'react'
-import { Button, Text, TouchableOpacity } from 'react-native'
-import DatePicker from 'react-native-date-picker'
+import React, {FC, useState} from 'react';
+import {Button, Text, TouchableOpacity} from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import MyText from '../ReactNative/MyText';
 
 type MyDatePickerProps = {
-    buttonText: string;
-    mode?: 'datetime' | 'date' | 'time';
+  buttonText: string;
+  mode?: 'datetime' | 'date' | 'time';
 
-    date: Date;
-    setDate: (newDate: Date) => void;
+  date: Date;
+  setDate: (newDate: Date) => void;
 
-    isOpen: boolean;
-    open: () => void;
-    close: () => void;
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
 };
-const MyDatePicker: FC<MyDatePickerProps> = (props) => {
-    const { buttonText, mode='date', date, setDate, isOpen, open, close } = props;
+const MyDatePicker: FC<MyDatePickerProps> = props => {
+  const {buttonText, mode = 'date', date, setDate, isOpen, open, close} = props;
 
-    const handleConfirm = (date: Date) => {
-        setDate(date);
-        close();
-    };
+  const handleConfirm = (date: Date) => {
+    setDate(date);
+    close();
+  };
 
-    const handleCancel = () => {
-        close();
-    };
+  const handleCancel = () => {
+    close();
+  };
 
-    return (
-        <>
-            <TouchableOpacity onPress={() => open()}>
-                <MyText>{buttonText}</MyText>
-            </TouchableOpacity>
+  return (
+    <>
+      <TouchableOpacity onPress={() => open()}>
+        <MyText>{buttonText}</MyText>
+      </TouchableOpacity>
 
-            <DatePicker
-                mode={mode}
-                modal
-                open={isOpen}
-                date={date}
-                onConfirm={handleConfirm}
-                onCancel={handleCancel}
-            />
-        </>
-    )
-}
+      <DatePicker
+        mode={mode}
+        modal
+        open={isOpen}
+        date={date}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
+    </>
+  );
+};
 
 export default MyDatePicker;

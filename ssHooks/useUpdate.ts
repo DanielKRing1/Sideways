@@ -1,18 +1,18 @@
-import { useState } from "react";
+import {useState} from 'react';
 
 export const useUpdate = () => {
-    const [shouldUpdate, setShouldUpdate] = useState({});
+  const [shouldUpdate, setShouldUpdate] = useState({});
 
-    const forceUpdate = () => setShouldUpdate({});
+  const forceUpdate = () => setShouldUpdate({});
 
-    const executeThenUpdate = (task: () => void) => {
-        task();
-        forceUpdate();
-    };
+  const executeThenUpdate = (task: () => void) => {
+    task();
+    forceUpdate();
+  };
 
-    return {
-        shouldUpdate,
-        forceUpdate,
-        executeThenUpdate,
-    };
+  return {
+    shouldUpdate,
+    forceUpdate,
+    executeThenUpdate,
+  };
 };

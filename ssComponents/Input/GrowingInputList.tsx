@@ -1,42 +1,54 @@
-import React, { FC, useMemo } from 'react';
-import { FlatList } from 'react-native';
+import React, {FC, useMemo} from 'react';
+import {FlatList} from 'react-native';
 
 export type GrowingListProps = {
-    data: any[];
-    keyExtractor: (dataPoint: any) => string;
-    createRenderItemComponent: (handleChangeText: (newText: string, index: number) => void) => FC<any>;
+  data: any[];
+  keyExtractor: (dataPoint: any) => string;
+  createRenderItemComponent: (
+    handleChangeText: (newText: string, index: number) => void,
+  ) => FC<any>;
 
-    genNextDataPlaceholder: () => any;
-    handleUpdateInput: (newText: string, index: number) => void;
-    handleAddInput: (newText: string) => void;
+  genNextDataPlaceholder: () => any;
+  handleUpdateInput: (newText: string, index: number) => void;
+  handleAddInput: (newText: string) => void;
 };
-export const GrowingList: FC<GrowingListProps> = (props) => {
-    const { data, createRenderItemComponent, keyExtractor, genNextDataPlaceholder, handleUpdateInput, handleAddInput } = props;
+export const GrowingList: FC<GrowingListProps> = props => {
+  const {
+    data,
+    createRenderItemComponent,
+    keyExtractor,
+    genNextDataPlaceholder,
+    handleUpdateInput,
+    handleAddInput,
+  } = props;
 
-    const [ , forceUpdate ] = React.useState<Object>({});
+  const [, forceUpdate] = React.useState<Object>({});
 
-    const handleChangeText = (newText: string, index: number) => {
-        if (index < data.length) {
-            handleUpdateInput(newText, index);
-        } else {
-            handleAddInput(newText);
-        }
-
-        forceUpdate({});
+  const handleChangeText = (newText: string, index: number) => {
+    if (index < data.length) {
+      handleUpdateInput(newText, index);
+    } else {
+      handleAddInput(newText);
     }
 
-    // Memoize
-    const renderItem = useMemo(() => createRenderItemComponent(handleChangeText), [data]);
-    // const renderItem = createRenderItemComponent(handleChangeText);
+    forceUpdate({});
+  };
 
-    // Add placeholder
-    const grownData = [...data, genNextDataPlaceholder()];
+  // Memoize
+  const renderItem = useMemo(
+    () => createRenderItemComponent(handleChangeText),
+    [data],
+  );
+  // const renderItem = createRenderItemComponent(handleChangeText);
 
-    return (
-        <FlatList
-            data={grownData}
-            renderItem={renderItem}
-            keyExtractor={keyExtractor}
-        />
-    )
-}
+  // Add placeholder
+  const grownData = [...data, genNextDataPlaceholder()];
+
+  return (
+    <FlatList
+      data={grownData}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+    />
+  );
+};

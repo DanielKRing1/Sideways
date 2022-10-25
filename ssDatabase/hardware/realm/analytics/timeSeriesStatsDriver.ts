@@ -1,246 +1,284 @@
-import { Dict } from "../../../../global";
-import { floorDay, splitDay } from "../../../../ssUtils/date";
-import { deepCopy } from "../../../../ssUtils/object";
-import dbDriver from "../../../api/core/dbDriver";
-import { GetNodeOverlapArgs, GetTimeseriesArgs, SidewaysSnapshotRow, TimeseriesDriverType } from "../../../api/types";
+import {Dict} from '../../../../global';
+import {floorDay, splitDay} from '../../../../ssUtils/date';
+import {deepCopy} from '../../../../ssUtils/object';
+import dbDriver from '../../../api/core/dbDriver';
+import {
+  GetNodeOverlapArgs,
+  GetTimeseriesArgs,
+  SidewaysSnapshotRow,
+  TimeseriesDriverType,
+} from '../../../api/types';
 
 export type LineGraph = DailyOutput[];
 export type DailyOutput = {
-    x: Date;
-    y: number;
+  x: Date;
+  y: number;
 };
-const getDailyOutputLG = async ({ sliceName, outputs }: GetTimeseriesArgs): Promise<LineGraph> => {
-    const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
+const getDailyOutputLG = async ({
+  sliceName,
+  outputs,
+}: GetTimeseriesArgs): Promise<LineGraph> => {
+  const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
-    // 1. Hash outputs to number value
-    const outputValueMap: Dict<number> = outputs.reduce<Dict<number>>((acc, cur, i) => {
-        acc[cur] = i;
-        return acc;
-    }, {});
+  // 1. Hash outputs to number value
+  const outputValueMap: Dict<number> = outputs.reduce<Dict<number>>(
+    (acc, cur, i) => {
+      acc[cur] = i;
+      return acc;
+    },
+    {},
+  );
 
-    // 2. Map each output for each day to a DailyOutput coordinate
-    const lineGraph: LineGraph = [];
-    for(let i = 0; i < list.length; i++) {
-        const daySnapshot: SidewaysSnapshotRow = list[i];
+  // 2. Map each output for each day to a DailyOutput coordinate
+  const lineGraph: LineGraph = [];
+  for (let i = 0; i < list.length; i++) {
+    const daySnapshot: SidewaysSnapshotRow = list[i];
 
-        // 3. For each output, split the day into an equal day segment
-        const dates: Date[] = splitDay(new Date(), daySnapshot.outputs.length);
+    // 3. For each output, split the day into an equal day segment
+    const dates: Date[] = splitDay(new Date(), daySnapshot.outputs.length);
 
-        // 4. For each day segment, record timestamp and output
-        for(let i = 0; i < dates.length; i++) {
-            const date: Date = dates[i];
-            lineGraph.push({ x: date, y: outputValueMap[daySnapshot.outputs[i]] });
-        }
+    // 4. For each day segment, record timestamp and output
+    for (let i = 0; i < dates.length; i++) {
+      const date: Date = dates[i];
+      lineGraph.push({x: date, y: outputValueMap[daySnapshot.outputs[i]]});
     }
-        
-    return lineGraph;
+  }
+
+  return lineGraph;
 };
 
 export type HistogramByMonth = {
-    timestamp: Date;
-    histogram: ChartBar[];
+  timestamp: Date;
+  histogram: ChartBar[];
 };
 export type ChartBar = {
-    x: number | Date;
-    y: number | Date;
-    y0?: number | Date;
+  x: number | Date;
+  y: number | Date;
+  y0?: number | Date;
 };
-const getMonthlyOutputHistogram = async ({ sliceName, outputs }: GetTimeseriesArgs): Promise<HistogramByMonth[]> => {
-    const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
+const getMonthlyOutputHistogram = async ({
+  sliceName,
+  outputs,
+}: GetTimeseriesArgs): Promise<HistogramByMonth[]> => {
+  const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
-    // 1. Hash outputs to number value
-    const outputValueMap: Dict<number> = outputs.reduce<Dict<number>>((acc, cur, i) => {
-        acc[cur] = i;
-        return acc;
-    }, {});
+  // 1. Hash outputs to number value
+  const outputValueMap: Dict<number> = outputs.reduce<Dict<number>>(
+    (acc, cur, i) => {
+      acc[cur] = i;
+      return acc;
+    },
+    {},
+  );
 
-    const initialCountMap: Dict<number> = outputs.reduce<Dict<number>>((acc, output) => {
-        const outputKey: number = outputValueMap[output];
-        acc[outputKey] = 0;
+  const initialCountMap: Dict<number> = outputs.reduce<Dict<number>>(
+    (acc, output) => {
+      const outputKey: number = outputValueMap[output];
+      acc[outputKey] = 0;
 
-        return acc;
-    }, {});
+      return acc;
+    },
+    {},
+  );
 
-    // 2. For each month's worth of snapshots...
-    let prevMonth: number = -1;
-    let prevYear: number = -1;
-    let countMap: Dict<number> = { ...initialCountMap };
-    const histogramByMonth: HistogramByMonth[] = [];
-    for(let i = 0; i < list.length; i++) {
-        const daySnapshot: SidewaysSnapshotRow = list[i];
-        const { timestamp, outputs } = daySnapshot;
-        
-        const month: number = timestamp.getMonth();
-        const year: number = timestamp.getUTCFullYear();
+  // 2. For each month's worth of snapshots...
+  let prevMonth: number = -1;
+  let prevYear: number = -1;
+  let countMap: Dict<number> = {...initialCountMap};
+  const histogramByMonth: HistogramByMonth[] = [];
+  for (let i = 0; i < list.length; i++) {
+    const daySnapshot: SidewaysSnapshotRow = list[i];
+    const {timestamp, outputs} = daySnapshot;
 
-        // 3. New month, calculate histogram data
-        if(prevMonth === -1 || prevYear === -1) {
-            prevMonth = month;
-            prevYear = year;
-        }
-        if(month !== prevMonth && year !== prevYear) {
-            histogramByMonth.push({
-                timestamp: new Date(prevYear, prevMonth, 1),
-                histogram: Object.keys(countMap).map((outputKey: string) => ({ x: outputKey as unknown as number, y: countMap[outputKey] })),
-            });
+    const month: number = timestamp.getMonth();
+    const year: number = timestamp.getUTCFullYear();
 
-            // 4. Reset countMap
-            countMap = { ...initialCountMap };
-
-            // 5. Update prevMonth/Year
-            prevMonth = month;
-            prevYear = year;
-        }
-
-        // 6. Increment output occurence for month
-        for(const output of outputs) {
-            const outputKey: number = outputValueMap[output];
-
-            if(countMap[outputKey] === undefined) countMap[outputKey] = 1;
-            else countMap[outputKey]++;
-        }
+    // 3. New month, calculate histogram data
+    if (prevMonth === -1 || prevYear === -1) {
+      prevMonth = month;
+      prevYear = year;
     }
-    // 7. Handle last month
-    histogramByMonth.push({
+    if (month !== prevMonth && year !== prevYear) {
+      histogramByMonth.push({
         timestamp: new Date(prevYear, prevMonth, 1),
-        histogram: Object.keys(countMap).map((outputKey: string) => ({ x: outputKey as unknown as number, y: countMap[outputKey] })),
-    });
+        histogram: Object.keys(countMap).map((outputKey: string) => ({
+          x: outputKey as unknown as number,
+          y: countMap[outputKey],
+        })),
+      });
 
-    return histogramByMonth;
+      // 4. Reset countMap
+      countMap = {...initialCountMap};
+
+      // 5. Update prevMonth/Year
+      prevMonth = month;
+      prevYear = year;
+    }
+
+    // 6. Increment output occurence for month
+    for (const output of outputs) {
+      const outputKey: number = outputValueMap[output];
+
+      if (countMap[outputKey] === undefined) countMap[outputKey] = 1;
+      else countMap[outputKey]++;
+    }
+  }
+  // 7. Handle last month
+  histogramByMonth.push({
+    timestamp: new Date(prevYear, prevMonth, 1),
+    histogram: Object.keys(countMap).map((outputKey: string) => ({
+      x: outputKey as unknown as number,
+      y: countMap[outputKey],
+    })),
+  });
+
+  return histogramByMonth;
 };
 
 export type VennByMonth = {
-    timestamp: Date;
-    venn: ChartBar[][];
-    outputs: string[][];
+  timestamp: Date;
+  venn: ChartBar[][];
+  outputs: string[][];
 };
-const getNodeOverlapVenn = async ({ sliceName, nodeIds }: GetNodeOverlapArgs): Promise<VennByMonth[]> => {
-    const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
+const getNodeOverlapVenn = async ({
+  sliceName,
+  nodeIds,
+}: GetNodeOverlapArgs): Promise<VennByMonth[]> => {
+  const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
-    // 1. Hash nodeIds to number value
-    const nodeIdValueMap: Dict<number> = nodeIds.reduce<Dict<number>>((acc, cur, i) => {
-        acc[cur] = i;
-        return acc;
-    }, {});
+  // 1. Hash nodeIds to number value
+  const nodeIdValueMap: Dict<number> = nodeIds.reduce<Dict<number>>(
+    (acc, cur, i) => {
+      acc[cur] = i;
+      return acc;
+    },
+    {},
+  );
 
-    // 2. Create an array for each nodeId
-    const initialNodeMap: ChartBar[][] = nodeIds.map(() => []);
-    
-    // 3. For each month's worth of snapshots...
-    let prevMonth: number = -1;
-    let prevYear: number = -1;
-    let monthNodePoints: ChartBar[][] = deepCopy(initialNodeMap);
-    let monthOutputs: string[][] = [];
-    const vennByMonth: VennByMonth[] = [];
-    for(let i = 0; i < list.length; i++) {
-        const daySnapshot: SidewaysSnapshotRow = list[i];
-        const { timestamp, inputs, outputs: dayOutputs } = daySnapshot;
-        
-        const month: number = timestamp.getMonth();
-        const year: number = timestamp.getUTCFullYear();
+  // 2. Create an array for each nodeId
+  const initialNodeMap: ChartBar[][] = nodeIds.map(() => []);
 
-        // 4. New month, calculate histogram data
-        if(prevMonth === -1 || prevYear === -1) {
-            prevMonth = month;
-            prevYear = year;
-        }
-        if(month !== prevMonth && year !== prevYear) {
-            vennByMonth.push({
-                timestamp: new Date(prevYear, prevMonth, 1),
-                venn: monthNodePoints,
-                outputs: monthOutputs,
-            });
+  // 3. For each month's worth of snapshots...
+  let prevMonth: number = -1;
+  let prevYear: number = -1;
+  let monthNodePoints: ChartBar[][] = deepCopy(initialNodeMap);
+  let monthOutputs: string[][] = [];
+  const vennByMonth: VennByMonth[] = [];
+  for (let i = 0; i < list.length; i++) {
+    const daySnapshot: SidewaysSnapshotRow = list[i];
+    const {timestamp, inputs, outputs: dayOutputs} = daySnapshot;
 
-            // 5. Reset Node Points + Outputs
-            monthNodePoints = deepCopy(initialNodeMap);
-            monthOutputs = []
+    const month: number = timestamp.getMonth();
+    const year: number = timestamp.getUTCFullYear();
 
-            // 6. Update prevMonth/Year
-            prevMonth = month;
-            prevYear = year;
-        }
-
-        // 7. Record daily outputs
-        monthOutputs.push(dayOutputs);
-
-        // 8. Record desired nodeIds that appear in the snapshot
-        for(const nodeId of inputs) {
-            // Unwanted nodeId
-            if(nodeIdValueMap[nodeId] === undefined) continue;
-
-            // Wanted nodeId, track timestamp + height of 1 + y0 starts at nodeIdKey
-            const nodeIdKey: number = nodeIdValueMap[nodeId];
-            monthNodePoints[nodeIdKey].push({ x: floorDay(timestamp), y: 1, y0: nodeIdKey });
-        }
+    // 4. New month, calculate histogram data
+    if (prevMonth === -1 || prevYear === -1) {
+      prevMonth = month;
+      prevYear = year;
     }
-    // 9. Handle last month
-    vennByMonth.push({
+    if (month !== prevMonth && year !== prevYear) {
+      vennByMonth.push({
         timestamp: new Date(prevYear, prevMonth, 1),
         venn: monthNodePoints,
         outputs: monthOutputs,
-    });
+      });
 
-    return vennByMonth;
+      // 5. Reset Node Points + Outputs
+      monthNodePoints = deepCopy(initialNodeMap);
+      monthOutputs = [];
+
+      // 6. Update prevMonth/Year
+      prevMonth = month;
+      prevYear = year;
+    }
+
+    // 7. Record daily outputs
+    monthOutputs.push(dayOutputs);
+
+    // 8. Record desired nodeIds that appear in the snapshot
+    for (const nodeId of inputs) {
+      // Unwanted nodeId
+      if (nodeIdValueMap[nodeId] === undefined) continue;
+
+      // Wanted nodeId, track timestamp + height of 1 + y0 starts at nodeIdKey
+      const nodeIdKey: number = nodeIdValueMap[nodeId];
+      monthNodePoints[nodeIdKey].push({
+        x: floorDay(timestamp),
+        y: 1,
+        y0: nodeIdKey,
+      });
+    }
+  }
+  // 9. Handle last month
+  vennByMonth.push({
+    timestamp: new Date(prevYear, prevMonth, 1),
+    venn: monthNodePoints,
+    outputs: monthOutputs,
+  });
+
+  return vennByMonth;
 };
 
 export type HeatMapDay = {
-    outputs: string[];
+  outputs: string[];
 };
 export type HeatMapByMonth = {
-    timestamp: Date;
-    heatMap: HeatMapDay[];
-}
-const getDailyOutputHM = async({ sliceName }: GetTimeseriesArgs): Promise<HeatMapByMonth[]> => {
-    const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
+  timestamp: Date;
+  heatMap: HeatMapDay[];
+};
+const getDailyOutputHM = async ({
+  sliceName,
+}: GetTimeseriesArgs): Promise<HeatMapByMonth[]> => {
+  const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
-    // 1. For each month's worth of snapshots...
-    let prevMonth: number = -1;
-    let prevYear: number = -1;
-    let monthOutputs: HeatMapDay[] = [];
-    const heatmapByMonth: HeatMapByMonth[] = [];
-    for(let i = 0; i < list.length; i++) {
-        const daySnapshot: SidewaysSnapshotRow = list[i];
-        const { timestamp, inputs, outputs: dayOutputs } = daySnapshot;
-        
-        const month: number = timestamp.getMonth();
-        const year: number = timestamp.getUTCFullYear();
+  // 1. For each month's worth of snapshots...
+  let prevMonth: number = -1;
+  let prevYear: number = -1;
+  let monthOutputs: HeatMapDay[] = [];
+  const heatmapByMonth: HeatMapByMonth[] = [];
+  for (let i = 0; i < list.length; i++) {
+    const daySnapshot: SidewaysSnapshotRow = list[i];
+    const {timestamp, inputs, outputs: dayOutputs} = daySnapshot;
 
-        // 2. New month, calculate histogram data
-        if(prevMonth === -1 || prevYear === -1) {
-            prevMonth = month;
-            prevYear = year;
-        }
-        if(month !== prevMonth && year !== prevYear) {
-            heatmapByMonth.push({
-                timestamp: new Date(prevYear, prevMonth, 1),
-                heatMap: monthOutputs,
-            });
+    const month: number = timestamp.getMonth();
+    const year: number = timestamp.getUTCFullYear();
 
-            // 3. Reset Node Points + Outputs
-            monthOutputs = [];
-
-            // 4. Update prevMonth/Year
-            prevMonth = month;
-            prevYear = year;
-        }
-
-        // 5. Record daily outputs
-        monthOutputs.push({ outputs: dayOutputs });
+    // 2. New month, calculate histogram data
+    if (prevMonth === -1 || prevYear === -1) {
+      prevMonth = month;
+      prevYear = year;
     }
-    // 6. Handle last month
-    heatmapByMonth.push({
+    if (month !== prevMonth && year !== prevYear) {
+      heatmapByMonth.push({
         timestamp: new Date(prevYear, prevMonth, 1),
         heatMap: monthOutputs,
-    });
+      });
 
-    return heatmapByMonth;
+      // 3. Reset Node Points + Outputs
+      monthOutputs = [];
+
+      // 4. Update prevMonth/Year
+      prevMonth = month;
+      prevYear = year;
+    }
+
+    // 5. Record daily outputs
+    monthOutputs.push({outputs: dayOutputs});
+  }
+  // 6. Handle last month
+  heatmapByMonth.push({
+    timestamp: new Date(prevYear, prevMonth, 1),
+    heatMap: monthOutputs,
+  });
+
+  return heatmapByMonth;
 };
 
 const Driver: TimeseriesDriverType = {
-    getDailyOutputLG,
-    getMonthlyOutputHistogram,
-    getNodeOverlapVenn,
-    getDailyOutputHM,
+  getDailyOutputLG,
+  getMonthlyOutputHistogram,
+  getNodeOverlapVenn,
+  getDailyOutputHM,
 };
 
 export default Driver;

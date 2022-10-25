@@ -1,46 +1,47 @@
-import { useState } from "react";
-import dbDriver from "../ssDatabase/api/core/dbDriver";
-import decorationsDriver from "../ssDatabase/api/userJson/decoration";
+import {useState} from 'react';
+import dbDriver from '../ssDatabase/api/core/dbDriver';
+import decorationsDriver from '../ssDatabase/api/userJson/decoration';
 
 export const useDbDriverLoader = () => {
-    const [ isLoaded, setIsLoaded ] = useState<boolean>(dbDriver.isLoaded);
+  const [isLoaded, setIsLoaded] = useState<boolean>(dbDriver.isLoaded);
 
-    const load = async (): Promise<void> => {
-        const loadPromises: Promise<any>[] = [];
-        
-        // Core
-        if(!dbDriver.isLoaded) loadPromises.push(dbDriver.load());
+  const load = async (): Promise<void> => {
+    const loadPromises: Promise<any>[] = [];
 
-        // Decorations
-        if(!decorationsDriver.isLoaded) loadPromises.push(decorationsDriver.load());
+    // Core
+    if (!dbDriver.isLoaded) loadPromises.push(dbDriver.load());
 
-        // Parallel await
-        await Promise.all(loadPromises);
+    // Decorations
+    if (!decorationsDriver.isLoaded)
+      loadPromises.push(decorationsDriver.load());
 
-        // Is now loaded
-        setIsLoaded(true);
-    };
-    const closeAll = async (): Promise<void> => {
-        const closePromises: Promise<any>[] = [];
+    // Parallel await
+    await Promise.all(loadPromises);
 
-        // Core
-        closePromises.push(dbDriver.closeAll());
+    // Is now loaded
+    setIsLoaded(true);
+  };
+  const closeAll = async (): Promise<void> => {
+    const closePromises: Promise<any>[] = [];
 
-        // Decorations
-        closePromises.push(decorationsDriver.closeAll());
+    // Core
+    closePromises.push(dbDriver.closeAll());
 
-        // Parallel await
-        await Promise.all(closePromises);
+    // Decorations
+    closePromises.push(decorationsDriver.closeAll());
 
-        // Is now not loaded
-        setIsLoaded(false);
-    };
-    // Initial load
-    load();
+    // Parallel await
+    await Promise.all(closePromises);
 
-    return {
-        isLoaded,
-        load,
-        closeAll,
-    }
+    // Is now not loaded
+    setIsLoaded(false);
+  };
+  // Initial load
+  load();
+
+  return {
+    isLoaded,
+    load,
+    closeAll,
+  };
 };

@@ -1,81 +1,92 @@
-import React, { FC, useEffect } from 'react';
-import { Keyboard, Text } from 'react-native';
+import React, {FC, useEffect} from 'react';
+import {Keyboard, Text} from 'react-native';
 import styled from 'styled-components/native';
-import { useOnClickOutsideComponent } from 'rn-click-listener';
+import {useOnClickOutsideComponent} from 'rn-click-listener';
 
-import { FlexCol, FlexRow } from '../Flex';
+import {FlexCol, FlexRow} from '../Flex';
 import MyTextInput from '../ReactNative/MyTextInput';
 import MyText from '../ReactNative/MyText';
 
 export type SearchableDropdownProps = {
-    clickOutsideId: string;
-    placeholder: string;
-    inputValue: string;
-    setInputValue: (newValue: string) => void;
-    LeftComponent?: FC | undefined;
-    DropdownComponent?: FC | undefined;
-    RightComponent?: FC | undefined;
+  clickOutsideId: string;
+  placeholder: string;
+  inputValue: string;
+  setInputValue: (newValue: string) => void;
+  LeftComponent?: FC | undefined;
+  DropdownComponent?: FC | undefined;
+  RightComponent?: FC | undefined;
 };
-export const SearchableDropdown: FC<SearchableDropdownProps> = (props) => {
-    const { clickOutsideId, placeholder, inputValue, setInputValue, LeftComponent, DropdownComponent, RightComponent } = props;
+export const SearchableDropdown: FC<SearchableDropdownProps> = props => {
+  const {
+    clickOutsideId,
+    placeholder,
+    inputValue,
+    setInputValue,
+    LeftComponent,
+    DropdownComponent,
+    RightComponent,
+  } = props;
 
-    const { ref, clickedInside, registerClickInside, reset } = useOnClickOutsideComponent(`${clickOutsideId}/searchable-dropdown`);
+  const {ref, clickedInside, registerClickInside, reset} =
+    useOnClickOutsideComponent(`${clickOutsideId}/searchable-dropdown`);
 
-    const shouldDisplayDropdown = !!clickedInside && !!DropdownComponent;
+  const shouldDisplayDropdown = !!clickedInside && !!DropdownComponent;
 
-    const handleFocus = () => {
-        registerClickInside();
-    };
+  const handleFocus = () => {
+    registerClickInside();
+  };
 
-    const handleBlur = () => {
-        reset();
-        Keyboard.dismiss();
-    };
+  const handleBlur = () => {
+    reset();
+    Keyboard.dismiss();
+  };
 
-    useEffect(() => {
-        if (!clickedInside) handleBlur();
-    }, [clickedInside]);
+  useEffect(() => {
+    if (!clickedInside) handleBlur();
+  }, [clickedInside]);
 
-    return (
-        <StyledRow ref={ref}>
-            <MyText>Start</MyText>
-            {!!LeftComponent && <LeftComponent />}
+  return (
+    <StyledRow ref={ref}>
+      <MyText>Start</MyText>
+      {!!LeftComponent && <LeftComponent />}
 
-            <FlexCol>
-                <StyledTextInput
-                    bottomRounded={!shouldDisplayDropdown}
-                    placeholder={placeholder}
-                    value={inputValue}
-                    onChangeText={setInputValue}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    // @ts-ignore
-                    keyboardShouldPersistTaps='always'
-                />
+      <FlexCol>
+        <StyledTextInput
+          bottomRounded={!shouldDisplayDropdown}
+          placeholder={placeholder}
+          value={inputValue}
+          onChangeText={setInputValue}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          // @ts-ignore
+          keyboardShouldPersistTaps="always"
+        />
 
-                {shouldDisplayDropdown && <DropdownComponent />}
-            </FlexCol>
+        {shouldDisplayDropdown && <DropdownComponent />}
+      </FlexCol>
 
-            {!!RightComponent && <RightComponent />}
-            <MyText>End</MyText>
-        </StyledRow>
-    );
+      {!!RightComponent && <RightComponent />}
+      <MyText>End</MyText>
+    </StyledRow>
+  );
 };
 
 const StyledRow = styled(FlexRow)`
-    borderColor: black;
-    borderWidth: 2;
+  bordercolor: black;
+  borderwidth: 2;
 `;
 
 type StyledTextInputProps = {
-    bottomRounded: boolean;
+  bottomRounded: boolean;
 };
 const StyledTextInput = styled(MyTextInput)<StyledTextInputProps>`
-    padding: 0px 10px;
+  padding: 0px 10px;
 
-    borderWidth: 1px;
-    borderRadius: 10px;
-    ${({ bottomRounded }: StyledTextInputProps) => (bottomRounded ? `` : `borderBottomLeftRadius: 0px;`)}
-    ${({ bottomRounded }: StyledTextInputProps) => (bottomRounded ? `` : `borderBottomRightRadius: 0px;`)}
+  borderwidth: 1px;
+  borderradius: 10px;
+  ${({bottomRounded}: StyledTextInputProps) =>
+    bottomRounded ? `` : `borderBottomLeftRadius: 0px;`}
+  ${({bottomRounded}: StyledTextInputProps) =>
+    bottomRounded ? `` : `borderBottomRightRadius: 0px;`}
     borderColor: #d0d0d0;
 `;

@@ -2,34 +2,37 @@
  * Modal with transparent background
  * Interact with child content, without closing modal, but
  * Click outside of child content and close modal
- * 
+ *
  * My demo at https://snack.expo.dev/@asianpersonn/modal
  */
 
-import React, { FC } from 'react';
-import { Modal, View, TouchableWithoutFeedback, useWindowDimensions, ViewStyle } from 'react-native';
+import React, {FC} from 'react';
+import {
+  Modal,
+  View,
+  TouchableWithoutFeedback,
+  useWindowDimensions,
+  ViewStyle,
+} from 'react-native';
 
 type MyModalProps = {
   isOpen: boolean;
   close: () => void;
   children?: React.ReactNode;
-  contentContainerStyle?: ViewStyle,
+  contentContainerStyle?: ViewStyle;
 };
-const MyModal: FC<MyModalProps> = (props) => {
-  const { isOpen, close, children, contentContainerStyle={} } = props;
+const MyModal: FC<MyModalProps> = props => {
+  const {isOpen, close, children, contentContainerStyle = {}} = props;
 
-  const { width, height } = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
 
   return (
     <Modal
-      animationType='fade'
+      animationType="fade"
       transparent={true}
       visible={isOpen}
-      onRequestClose={() => close()}
-    >
-      <TouchableWithoutFeedback
-        onPress={close}
-      >
+      onRequestClose={() => close()}>
+      <TouchableWithoutFeedback onPress={close}>
         <View
           style={{
             height: height,
@@ -37,27 +40,23 @@ const MyModal: FC<MyModalProps> = (props) => {
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)'
-          }}
-        >
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}>
           <View
-            onStartShouldSetResponder={(event) => true}
-            onTouchEnd={(e) => {
-              e.stopPropagation()
+            onStartShouldSetResponder={event => true}
+            onTouchEnd={e => {
+              e.stopPropagation();
             }}
             style={{
               backgroundColor: '#fff',
               ...contentContainerStyle,
-            }}
-          >
-            <TouchableWithoutFeedback>
-              {children}
-            </TouchableWithoutFeedback>
+            }}>
+            <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
           </View>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
-  )
-}
+  );
+};
 
 export default MyModal;

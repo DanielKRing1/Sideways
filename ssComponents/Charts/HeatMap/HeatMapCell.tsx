@@ -1,41 +1,47 @@
-import React, { FC, useMemo } from 'react';
-import { TouchableOpacity, TouchableOpacityProps, useWindowDimensions } from 'react-native';
+import React, {FC, useMemo} from 'react';
+import {
+  TouchableOpacity,
+  TouchableOpacityProps,
+  useWindowDimensions,
+} from 'react-native';
 import styled from 'styled-components/native';
 
-import { HeatMapCellProps } from './HeatMap';
-import { Dimensions } from '../types';
+import {HeatMapCellProps} from './HeatMap';
+import {Dimensions} from '../types';
 
-const HeatMapCell: FC<HeatMapCellProps> = (props) => {
-    const { data, gridDim } = props;
+const HeatMapCell: FC<HeatMapCellProps> = props => {
+  const {data, gridDim} = props;
 
-    const { height, width } = useWindowDimensions();
-    const margin = useMemo(() => {
-        const lastRow: number = Math.floor((gridDim.y) / gridDim.x);
-        const bMargin: string = Math.floor(data.index / gridDim.x) < lastRow ? `${width / 100}` : `0px`;
-        const rMargin: string = (data.index + 1) % gridDim.x !== 0 ? `${width / 100}` : `0px`;
+  const {height, width} = useWindowDimensions();
+  const margin = useMemo(() => {
+    const lastRow: number = Math.floor(gridDim.y / gridDim.x);
+    const bMargin: string =
+      Math.floor(data.index / gridDim.x) < lastRow ? `${width / 100}` : `0px`;
+    const rMargin: string =
+      (data.index + 1) % gridDim.x !== 0 ? `${width / 100}` : `0px`;
 
-        return `0px ${rMargin} ${bMargin} 0px`;
-    }, [data.index]);
+    return `0px ${rMargin} ${bMargin} 0px`;
+  }, [data.index]);
 
-    return (
-        <ColoredCell
-            style={{ backgroundColor: data.value }}
-            onPress={() => data.onPress(data.index)}
-            dim={{ x: width / 10, y: width / 10 }}
-            margin={margin}
-        />
-    );
-}
+  return (
+    <ColoredCell
+      style={{backgroundColor: data.value}}
+      onPress={() => data.onPress(data.index)}
+      dim={{x: width / 10, y: width / 10}}
+      margin={margin}
+    />
+  );
+};
 
 type ColoredCellProps = {
-    dim: Dimensions;
-    margin: string;
+  dim: Dimensions;
+  margin: string;
 } & TouchableOpacityProps;
 const ColoredCell = styled.TouchableOpacity<ColoredCellProps>`
-  borderRadius: 10%;
-  height: ${({ dim }: ColoredCellProps) => `${dim.y}px`};
-  width: ${({ dim }: ColoredCellProps) => `${dim.x}px`};
-  margin: ${({ margin }: ColoredCellProps) => margin};
+  borderradius: 10%;
+  height: ${({dim}: ColoredCellProps) => `${dim.y}px`};
+  width: ${({dim}: ColoredCellProps) => `${dim.x}px`};
+  margin: ${({margin}: ColoredCellProps) => margin};
 `;
 
 export default HeatMapCell;

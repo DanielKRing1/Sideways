@@ -1,9 +1,16 @@
-import { combineReducers } from 'redux';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {combineReducers} from 'redux';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import readGraphReducer, { setInputSelections, setOutputSelections, forceSignatureRerender as _forceGraphRerender } from './readGraph';
-import readStackReducer, { setStartDate, forceSignatureRerender as _forceStackRerender } from './readStack';
-import { ThunkConfig } from '../types';
+import readGraphReducer, {
+  setInputSelections,
+  setOutputSelections,
+  forceSignatureRerender as _forceGraphRerender,
+} from './readGraph';
+import readStackReducer, {
+  setStartDate,
+  forceSignatureRerender as _forceStackRerender,
+} from './readStack';
+import {ThunkConfig} from '../types';
 
 // INITIAL STATE
 
@@ -12,7 +19,7 @@ export interface ReadSSState {
   searchedSliceName: string;
 
   readSSSignature: {};
-};
+}
 
 const initialState: ReadSSState = {
   activeSliceName: '',
@@ -37,10 +44,16 @@ export const readSS = createSlice({
       state.activeSliceName = action.payload;
       state.searchedSliceName = '';
     },
-    setSearchedSliceName: (state: ReadSSState, action: SetSearchedSliceAction) => {
+    setSearchedSliceName: (
+      state: ReadSSState,
+      action: SetSearchedSliceAction,
+    ) => {
       state.searchedSliceName = action.payload;
     },
-    forceSignatureRerender: (state: ReadSSState, action: ForceRatingsRerenderAction) => {
+    forceSignatureRerender: (
+      state: ReadSSState,
+      action: ForceRatingsRerenderAction,
+    ) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
@@ -53,7 +66,11 @@ export const readSS = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { forceSignatureRerender, setActiveSliceName, setSearchedSliceName } = readSS.actions;
+export const {
+  forceSignatureRerender,
+  setActiveSliceName,
+  setSearchedSliceName,
+} = readSS.actions;
 
 const internalReadReducer = combineReducers({
   readGraphReducer,

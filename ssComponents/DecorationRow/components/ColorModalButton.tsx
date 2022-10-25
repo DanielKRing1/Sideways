@@ -1,18 +1,13 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 
-import IconButton, { IconButtonProps } from 'ssComponents/Button/IconButton';
-import { RequiredExceptFor } from '../../../global';
+import IconButton, {IconButtonProps} from 'ssComponents/Button/IconButton';
+import {RequiredExceptFor} from '../../../global';
 
 type ColorModalButtonProps = {
-    color: string;
+  color: string;
 } & RequiredExceptFor<Omit<IconButtonProps, 'iconName'>, 'children'>;
-const ColorModalButton: FC<ColorModalButtonProps> = (props) => {
-    return (
-        <IconButton
-            iconName='square'
-            {...props}
-        />
-    );
-}
+const ColorModalButton: FC<ColorModalButtonProps> = props => {
+  return <IconButton iconName="square" {...props} />;
+};
 
 export default ColorModalButton;

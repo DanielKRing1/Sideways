@@ -1,10 +1,15 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import decorationDriver from 'ssDatabase/api/userJson/decoration';
-import { getDecorationMapValue } from 'ssDatabase/hardware/realm/userJson/utils';
+import {getDecorationMapValue} from 'ssDatabase/hardware/realm/userJson/utils';
 
-import { DecorationInfo, DecorationJson, DecorationJsonMap, DECORATION_ROW_KEY } from '../../../ssDatabase/api/types';
-import { ThunkConfig } from '../../types';
+import {
+  DecorationInfo,
+  DecorationJson,
+  DecorationJsonMap,
+  DECORATION_ROW_KEY,
+} from '../../../ssDatabase/api/types';
+import {ThunkConfig} from '../../types';
 
 // INITIAL STATE
 
@@ -14,7 +19,7 @@ export interface DecorationState {
 
   // RERENDER
   decorationsSignature: {};
-};
+}
 
 const initialState: DecorationState = {
   // DEACORATIONS
@@ -38,35 +43,34 @@ export const startSetAllDecorations = createAsyncThunk<
 >(
   'decorationSlice/startSetAllDecorations',
   async (undefined: StartSetAllDecorationsArgs, thunkAPI) => {
-
-    const fullDecorationMap: DecorationJsonMap = await decorationDriver.getAllDecorations();
+    const fullDecorationMap: DecorationJsonMap =
+      await decorationDriver.getAllDecorations();
 
     thunkAPI.dispatch(setDecorations(fullDecorationMap));
     thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
-  }
+  },
 );
 
 // UPDATE
 type StartUpdateDecorationRow = {
   rowKey: DECORATION_ROW_KEY;
   newJson: DecorationJson;
-}
+};
 export const startUpdateDecorationRow = createAsyncThunk<
   boolean,
   StartUpdateDecorationRow,
   ThunkConfig
 >(
   'decorationSlice/startUpdateDecorationRow',
-  async ({ rowKey, newJson }: StartUpdateDecorationRow, thunkAPI) => {
-
+  async ({rowKey, newJson}: StartUpdateDecorationRow, thunkAPI) => {
     await decorationDriver.setDecorationRow(rowKey, newJson);
 
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
-  }
+  },
 );
 
 /**
@@ -84,8 +88,12 @@ export const startUpdateDecorationText = createAsyncThunk<
   ThunkConfig
 >(
   'decorationSlice/startUpdateDecorationText',
-  async ({ rowKey, entityId: oldText, newValue: newText }: StartUpdateDecorationValue, thunkAPI) => {
-    const { fullDecorationMap } = thunkAPI.getState().userJsonSlice.decorationSlice;
+  async (
+    {rowKey, entityId: oldText, newValue: newText}: StartUpdateDecorationValue,
+    thunkAPI,
+  ) => {
+    const {fullDecorationMap} =
+      thunkAPI.getState().userJsonSlice.decorationSlice;
 
     // 1. Add new edited name
     const newJson: DecorationJson = {
@@ -102,7 +110,7 @@ export const startUpdateDecorationText = createAsyncThunk<
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
-  }
+  },
 );
 
 export const startUpdateDecorationColor = createAsyncThunk<
@@ -111,8 +119,12 @@ export const startUpdateDecorationColor = createAsyncThunk<
   ThunkConfig
 >(
   'decorationSlice/startUpdateDecorationColor',
-  async ({ rowKey, entityId, newValue: newColor }: StartUpdateDecorationValue, thunkAPI) => {
-    const { fullDecorationMap } = thunkAPI.getState().userJsonSlice.decorationSlice;
+  async (
+    {rowKey, entityId, newValue: newColor}: StartUpdateDecorationValue,
+    thunkAPI,
+  ) => {
+    const {fullDecorationMap} =
+      thunkAPI.getState().userJsonSlice.decorationSlice;
 
     // 1. Add new color
     const newJson: DecorationJson = {
@@ -130,7 +142,7 @@ export const startUpdateDecorationColor = createAsyncThunk<
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
-  }
+  },
 );
 
 export const startUpdateDecorationIcon = createAsyncThunk<
@@ -139,8 +151,12 @@ export const startUpdateDecorationIcon = createAsyncThunk<
   ThunkConfig
 >(
   'decorationSlice/startUpdateDecorationIcon',
-  async ({ rowKey, entityId, newValue: newIcon }: StartUpdateDecorationValue, thunkAPI) => {
-    const { fullDecorationMap } = thunkAPI.getState().userJsonSlice.decorationSlice;
+  async (
+    {rowKey, entityId, newValue: newIcon}: StartUpdateDecorationValue,
+    thunkAPI,
+  ) => {
+    const {fullDecorationMap} =
+      thunkAPI.getState().userJsonSlice.decorationSlice;
 
     // 1. Add new icon
     const newJson: DecorationJson = {
@@ -158,7 +174,7 @@ export const startUpdateDecorationIcon = createAsyncThunk<
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
-  }
+  },
 );
 
 // ADD
@@ -170,13 +186,12 @@ export const startAddDecorations = createAsyncThunk<
 >(
   'decorationSlice/startAddDecorations',
   async (newDecorations: StartAddDecorationsArgs, thunkAPI) => {
-
     await decorationDriver.saveDecorations(newDecorations);
 
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
-  }
+  },
 );
 
 // RM
@@ -188,13 +203,12 @@ export const startRmDecorations = createAsyncThunk<
 >(
   'decorationSlice/startRmDecorations',
   async (decorationsToRm: StartRmDecorationsArgs, thunkAPI) => {
-
     await decorationDriver.rmDecorations(decorationsToRm);
 
     thunkAPI.dispatch(startSetAllDecorations());
 
     return true;
-  }
+  },
 );
 
 // ACTION TYPES
@@ -216,7 +230,10 @@ export const decorationSlice = createSlice({
     },
 
     // RERENDER
-    forceSignatureRerender: (state: DecorationState, action: ForceDecorationRerenderAction) => {
+    forceSignatureRerender: (
+      state: DecorationState,
+      action: ForceDecorationRerenderAction,
+    ) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
@@ -228,7 +245,6 @@ export const decorationSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setDecorations, forceSignatureRerender } = decorationSlice.actions;
-
+export const {setDecorations, forceSignatureRerender} = decorationSlice.actions;
 
 export default decorationSlice.reducer;

@@ -1,8 +1,8 @@
-import React, { FC, useState } from 'react';
-import { Animated, Text, TouchableOpacity } from 'react-native';
+import React, {FC, useState} from 'react';
+import {Animated, Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 
-import { BoxShadowStyles } from '../Shadow/BoxShadowStyles';
+import {BoxShadowStyles} from '../Shadow/BoxShadowStyles';
 
 type Coordinate = {
   x: number;
@@ -15,11 +15,11 @@ type FloatingActionButtonProps = {
 
   Components: FC<{}>[];
 };
-const FloatingActionButton: FC<FloatingActionButtonProps> = (props) => {
-  const { position, radius, Components } = props;
+const FloatingActionButton: FC<FloatingActionButtonProps> = props => {
+  const {position, radius, Components} = props;
 
-  const [ isOpen, setIsOpen ] = useState(false);
-  const [ animation ] =  useState(new Animated.Value(0));
+  const [isOpen, setIsOpen] = useState(false);
+  const [animation] = useState(new Animated.Value(0));
 
   const toggleMenu = () => {
     const toValue = isOpen ? 0 : 1;
@@ -30,36 +30,35 @@ const FloatingActionButton: FC<FloatingActionButtonProps> = (props) => {
       friction: 7,
       useNativeDriver: false,
     }).start();
-  }
+  };
 
-  const secondaryRadius: number = radius*4/5;
+  const secondaryRadius: number = (radius * 4) / 5;
   const primaryRadius: number = radius;
 
   return (
     <AbsoluteContainer position={position}>
-    {/* Secondary */}
-    {
-      Components.map((Component: FC<{}>, i: number) => (
+      {/* Secondary */}
+      {Components.map((Component: FC<{}>, i: number) => (
         <StyledAnimation
-          style={[ getTranslateY(animation, secondaryRadius, i), getOpacity(animation) ]}
-          radius={secondaryRadius}
-        >
-            <Component/>
+          style={[
+            getTranslateY(animation, secondaryRadius, i),
+            getOpacity(animation),
+          ]}
+          radius={secondaryRadius}>
+          <Component />
         </StyledAnimation>
-      ))
-    }
+      ))}
 
       {/* Primary */}
       <MyTouchable
         animation={getRotation(animation)}
         radius={primaryRadius}
-        onPress={toggleMenu}
-      >
+        onPress={toggleMenu}>
         <Text>X</Text>
       </MyTouchable>
     </AbsoluteContainer>
-  )
-}
+  );
+};
 
 export default FloatingActionButton;
 
@@ -69,38 +68,47 @@ const getRotation = (animation: Animated.Value) => ({
       rotate: animation.interpolate({
         inputRange: [0, 1],
         outputRange: ['0deg', '45deg'],
-      })
-    }
-  ]
+      }),
+    },
+  ],
 });
 
-const getTranslateY = (animation: Animated.Value, radius: number, index: number) => ({
+const getTranslateY = (
+  animation: Animated.Value,
+  radius: number,
+  index: number,
+) => ({
   transform: [
-    { scale: animation },
+    {scale: animation},
     {
       translateY: animation.interpolate({
-        inputRange: [0,1],
-        outputRange: [0, -(2.4*radius*(index+1))],
-      })
-    }
-  ]
+        inputRange: [0, 1],
+        outputRange: [0, -(2.4 * radius * (index + 1))],
+      }),
+    },
+  ],
 });
 
 const getOpacity = (animation: Animated.Value) => ({
   opacity: animation.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [0, 0, 1],
-  })
+  }),
 });
 
 // MY TOUCHABLE
 type MyTouchableProps = {
-    animation: any;
-    radius: number;
-    onPress: () => void;
-    children: React.ReactNode;
+  animation: any;
+  radius: number;
+  onPress: () => void;
+  children: React.ReactNode;
 };
-const MyTouchable: FC<MyTouchableProps> = ({ radius, onPress, children, animation }) => (
+const MyTouchable: FC<MyTouchableProps> = ({
+  radius,
+  onPress,
+  children,
+  animation,
+}) => (
   <TouchableOpacity onPress={onPress}>
     <StyledAnimation style={animation} radius={radius}>
       {children}
@@ -117,21 +125,21 @@ const AbsoluteContainer = styled.View<AbsoluteContainerProps>`
 
   position: absolute;
 
-  right: ${({ position }: AbsoluteContainerProps) => position.x};
-  bottom: ${({ position }: AbsoluteContainerProps) => position.y};
+  right: ${({position}: AbsoluteContainerProps) => position.x};
+  bottom: ${({position}: AbsoluteContainerProps) => position.y};
 `;
 type StyledAnimationProps = {
   radius: number;
-}
+};
 const StyledAnimation = styled(Animated.View)<StyledAnimationProps>`
   position: absolute;
-  alignItems: center;
-  justifyContent: center;
-  alignSelf: center;
+  alignitems: center;
+  justifycontent: center;
+  alignself: center;
 
-  height: ${({ radius }: StyledAnimationProps) => radius*2};
-  width: ${({ radius }: StyledAnimationProps) => radius*2};
-  borderRadius: ${({ radius }: StyledAnimationProps) => radius};
+  height: ${({radius}: StyledAnimationProps) => radius * 2};
+  width: ${({radius}: StyledAnimationProps) => radius * 2};
+  borderradius: ${({radius}: StyledAnimationProps) => radius};
 
   ${BoxShadowStyles}
 

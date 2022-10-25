@@ -1,23 +1,22 @@
-import React, { FC } from 'react';
-import { useWindowDimensions } from 'react-native';
+import React, {FC} from 'react';
+import {useWindowDimensions} from 'react-native';
 import ColorPicker from '@asianpersonn/rn-color-wheel';
 
 type MyColorPickerProps = {
   handleColorChange: (color: string) => void;
   handleColorSelected: (color: string) => void;
 };
-const MyColorPicker: FC<MyColorPickerProps> = (props) => {
+const MyColorPicker: FC<MyColorPickerProps> = props => {
+  const {handleColorChange, handleColorSelected} = props;
 
-  const { handleColorChange, handleColorSelected } = props;
-
-  const { width, height } = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
 
   return (
     <ColorPicker
       swatchesOnly={false}
       onColorChange={handleColorChange}
       onColorChangeComplete={handleColorSelected}
-      wheelRadius={width*7/8}
+      wheelRadius={(width * 7) / 8}
       thumbSize={20}
       sliderSize={20}
       noSnap={true}
@@ -26,7 +25,7 @@ const MyColorPicker: FC<MyColorPickerProps> = (props) => {
       swatches={true}
       discrete={false}
     />
-  )
+  );
 };
 
 export default MyColorPicker;

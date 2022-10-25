@@ -1,17 +1,17 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import { GrowingIdText as NewSliceOutput } from '../../ssComponents/Input/GrowingIdList';
+import {GrowingIdText as NewSliceOutput} from '../../ssComponents/Input/GrowingIdList';
 import DbDriver from '../../ssDatabase/api/core/dbDriver';
-import { ThunkConfig } from '../types';
+import {ThunkConfig} from '../types';
 
 // INITIAL STATE
 
 export interface CreateSSState {
   newSliceName: string;
-  possibleOutputs: NewSliceOutput[],
+  possibleOutputs: NewSliceOutput[];
 
-  createdSignature: {},
-};
+  createdSignature: {};
+}
 
 const initialState: CreateSSState = {
   newSliceName: '',
@@ -23,34 +23,36 @@ const initialState: CreateSSState = {
 // ASYNC THUNKS
 
 type CreateSSThunkArgs = {
-  newSliceName: string,
-  possibleOutputs: NewSliceOutput[],
+  newSliceName: string;
+  possibleOutputs: NewSliceOutput[];
 };
 
 export const startCreateSlice = createAsyncThunk<
   boolean,
   undefined,
   ThunkConfig
->(
-  'createSS/startCreateSlice',
-  async (undefined, thunkAPI) => {
+>('createSS/startCreateSlice', async (undefined, thunkAPI) => {
+  const {newSliceName, possibleOutputs} =
+    thunkAPI.getState().createSidewaysSlice;
 
-    const { newSliceName, possibleOutputs } = thunkAPI.getState().createSidewaysSlice;
+  // 1. Create Stack (also reloads stack LoadableRealm)
+  const stackPromise: Promise<void> = DbDriver.createStack(newSliceName);
 
-    // 1. Create Stack (also reloads stack LoadableRealm)
-    const stackPromise: Promise<void> = DbDriver.createStack(newSliceName);
-    
-    // 2. Create Graph (also reloads graph LoadableRealm)
-    const outputTextList: string[] = possibleOutputs.map((possibleOutput: NewSliceOutput) => possibleOutput.text);
-    const graphPromise: Promise<void> = DbDriver.createGraph(newSliceName, outputTextList);
+  // 2. Create Graph (also reloads graph LoadableRealm)
+  const outputTextList: string[] = possibleOutputs.map(
+    (possibleOutput: NewSliceOutput) => possibleOutput.text,
+  );
+  const graphPromise: Promise<void> = DbDriver.createGraph(
+    newSliceName,
+    outputTextList,
+  );
 
-    const results: [void, void] = await Promise.all([ stackPromise, graphPromise ]);
+  const results: [void, void] = await Promise.all([stackPromise, graphPromise]);
 
-    thunkAPI.dispatch(forceSignatureRerender());
+  thunkAPI.dispatch(forceSignatureRerender());
 
-    return true;
-  }
-)
+  return true;
+});
 
 // ACTION TYPES
 
@@ -70,16 +72,30 @@ export const createSS = createSlice({
     setNewSliceName: (state: CreateSSState, action: SetnewSliceNameAction) => {
       state.newSliceName = action.payload;
     },
-    setPossibleOutputs: (state: CreateSSState, action: SetPossibleOutputsAction) => {
+    setPossibleOutputs: (
+      state: CreateSSState,
+      action: SetPossibleOutputsAction,
+    ) => {
       state.possibleOutputs = action.payload;
     },
-    addPossibleOutput: (state: CreateSSState, action: AddPossibleOutputAction) => {
-      state.possibleOutputs = [ ...state.possibleOutputs, action.payload ];
+    addPossibleOutput: (
+      state: CreateSSState,
+      action: AddPossibleOutputAction,
+    ) => {
+      state.possibleOutputs = [...state.possibleOutputs, action.payload];
     },
-    removePossibleOutput: (state: CreateSSState, action: RmPossibleOutputAction) => {
-      state.possibleOutputs = [ ...state.possibleOutputs.splice(action.payload, 1) ];
+    removePossibleOutput: (
+      state: CreateSSState,
+      action: RmPossibleOutputAction,
+    ) => {
+      state.possibleOutputs = [
+        ...state.possibleOutputs.splice(action.payload, 1),
+      ];
     },
-    forceSignatureRerender: (state: CreateSSState, action: ForceSSRerenderAction) => {
+    forceSignatureRerender: (
+      state: CreateSSState,
+      action: ForceSSRerenderAction,
+    ) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
@@ -89,21 +105,29 @@ export const createSS = createSlice({
       state.createdSignature = {};
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(startCreateSlice.fulfilled, (state, action: StartCreateSSFulfilled) => {
-      // Add user to the state array
+    builder.addCase(
+      startCreateSlice.fulfilled,
+      (state, action: StartCreateSSFulfilled) => {
+        // Add user to the state array
 
-      state.createdSignature = {};
-      
-    });
+        state.createdSignature = {};
+      },
+    );
     builder.addCase(startCreateSlice.rejected, (state, action) => {
-        console.log(action.error.message);
+      console.log(action.error.message);
     });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setNewSliceName, setPossibleOutputs, addPossibleOutput, removePossibleOutput, forceSignatureRerender } = createSS.actions;
+export const {
+  setNewSliceName,
+  setPossibleOutputs,
+  addPossibleOutput,
+  removePossibleOutput,
+  forceSignatureRerender,
+} = createSS.actions;
 
 export default createSS.reducer;

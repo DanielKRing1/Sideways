@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import styled, { DefaultTheme } from 'styled-components/native';
+import {View, StyleSheet, Text} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import styled, {DefaultTheme} from 'styled-components/native';
 // import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 // REDUX
-import { RootState } from '../../../../../ssRedux';
-import { setRating } from '../../../../../ssRedux/rateSidewaysSlice'
+import {RootState} from '../../../../../ssRedux';
+import {setRating} from '../../../../../ssRedux/rateSidewaysSlice';
 
 // COMPONENTS
 import Slider from '../../../../../ssComponents/Input/ReanimatedSlider';
@@ -31,34 +31,34 @@ const SLIDER_WIDTH: number = 40;
 //     );
 // }
 
-type RatingSliderProps = {
+type RatingSliderProps = {};
+const RatingSlider: React.FC<RatingSliderProps> = props => {
+  // const isPressed = useSharedValue(false);
+  // const offsetX = useSharedValue(0);
 
-};
-const RatingSlider: React.FC<RatingSliderProps> = (props) => {
-    // const isPressed = useSharedValue(false);
-    // const offsetX = useSharedValue(0);
+  const {rating, ratedSignature} = useSelector((state: RootState) => ({
+    ...state.rateSidewaysSlice,
+  }));
+  const dispatch = useDispatch();
 
-    const { rating, ratedSignature } = useSelector((state: RootState) => ({ ...state.rateSidewaysSlice }));
-    const dispatch = useDispatch();
+  const onChangeValue = (newText: string) => {
+    const newNum: number = parseInt(newText);
 
-    const onChangeValue = (newText: string) => {
-        const newNum: number = parseInt(newText);
+    console.log(`New value: ${newNum}`);
+    dispatch(setRating(newNum));
+  };
 
-        console.log(`New value: ${newNum}`);
-        dispatch(setRating(newNum));
-    };
+  return (
+    <View>
+      <MyTextInput
+        keyboardType="numeric"
+        placeholder="Temp rating input..."
+        value={`${rating}`}
+        onChangeText={onChangeValue}
+      />
+      {/* <MyText>Rating: {rating}</MyText> */}
 
-    return (
-        <View>
-            <MyTextInput
-                keyboardType='numeric'
-                placeholder='Temp rating input...'
-                value={`${rating}`}
-                onChangeText={onChangeValue}
-            />
-            {/* <MyText>Rating: {rating}</MyText> */}
-
-            {/* <Slider
+      {/* <Slider
                 sliderWidth={SLIDER_WIDTH}
                 createSliderButton={createSliderButton}
 
@@ -70,29 +70,30 @@ const RatingSlider: React.FC<RatingSliderProps> = (props) => {
                 maxValue={10}
                 step={1}
             /> */}
-            {/* <Animated.Text>{offsetX.value}</Animated.Text> */}
-        </View>
-    );
-}
+      {/* <Animated.Text>{offsetX.value}</Animated.Text> */}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    slider: {
-        width: SLIDER_WIDTH,
-        transform: [{ translateX: -20 }],
-        height: 40,
-        borderRadius: 20,
-        position: 'relative',
-        marginBottom: 50,
-    },
+  slider: {
+    width: SLIDER_WIDTH,
+    transform: [{translateX: -20}],
+    height: 40,
+    borderRadius: 20,
+    position: 'relative',
+    marginBottom: 50,
+  },
 });
 
 export default RatingSlider;
 
 type StyledTextProps = {
-    theme: DefaultTheme;
+  theme: DefaultTheme;
 
-    isSelected: boolean;
+  isSelected: boolean;
 };
 const StyledText = styled(MyText)<StyledTextProps>`
-    backgroundColor: ${({ theme, isSelected }: StyledTextProps) => isSelected ? theme.colors.pastelPurple : theme.colors.grayBorder}
+  backgroundcolor: ${({theme, isSelected}: StyledTextProps) =>
+    isSelected ? theme.colors.pastelPurple : theme.colors.grayBorder};
 `;

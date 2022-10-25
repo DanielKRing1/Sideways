@@ -1,22 +1,26 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
 
-import HeatMap, { HeatMapProps } from './HeatMap';
-import MySlider, { MySliderProps } from '../../Input/Slider';
+import HeatMap, {HeatMapProps} from './HeatMap';
+import MySlider, {MySliderProps} from '../../Input/Slider';
 
 type HeatMapWSliderProps = HeatMapProps & MySliderProps;
-const HeatMapWSlider: FC<HeatMapWSliderProps> = (props) => {
+const HeatMapWSlider: FC<HeatMapWSliderProps> = props => {
   const {
-    CellComponent, data, cols,
-    value, setValue, min, max, step, leftColor, rightColor,
+    CellComponent,
+    data,
+    cols,
+    value,
+    setValue,
+    min,
+    max,
+    step,
+    leftColor,
+    rightColor,
   } = props;
 
   return (
     <>
-      <HeatMap
-        cols={cols}
-        data={data}
-        CellComponent={CellComponent}
-      />
+      <HeatMap cols={cols} data={data} CellComponent={CellComponent} />
 
       <MySlider
         value={value}
@@ -29,6 +33,6 @@ const HeatMapWSlider: FC<HeatMapWSliderProps> = (props) => {
       />
     </>
   );
-}
+};
 
 export default HeatMapWSlider;

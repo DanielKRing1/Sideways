@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import { GrowingIdText as RateInput } from '../../ssComponents/Input/GrowingIdList';
-export type { GrowingIdText as RateInput } from '../../ssComponents/Input/GrowingIdList';
+import {GrowingIdText as RateInput} from '../../ssComponents/Input/GrowingIdList';
+export type {GrowingIdText as RateInput} from '../../ssComponents/Input/GrowingIdList';
 import DbDriver from '../../ssDatabase/api/core/dbDriver';
-import { ThunkConfig } from '../types';
+import {ThunkConfig} from '../types';
 
 // INITIAL STATE
 
@@ -13,7 +13,7 @@ export interface RateSSState {
   rating: number;
 
   ratedSignature: {};
-};
+}
 
 const initialState: RateSSState = {
   inputs: [],
@@ -33,16 +33,12 @@ type RateSSThunkArgs = {
   rating: number;
 };
 
-export const startRate = createAsyncThunk<
-  boolean,
-  undefined,
-  ThunkConfig
->(
+export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'rateSS/startRate',
   async (undefined, thunkAPI) => {
-
-    const { activeSliceName } = thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
-    const { inputs, outputs, rating } = thunkAPI.getState().rateSidewaysSlice;
+    const {activeSliceName} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+    const {inputs, outputs, rating} = thunkAPI.getState().rateSidewaysSlice;
 
     // 1. Add to Stack
     DbDriver.push(activeSliceName, {
@@ -53,7 +49,15 @@ export const startRate = createAsyncThunk<
 
     // 2. Rate Graph
     const inputTexts: string[] = inputs.map((input: RateInput) => input.text);
-    const promises: Promise<any>[] = outputs.map((output: RateInput) => DbDriver.rateGraph(activeSliceName, output.text, inputTexts, rating, new Array(inputs.length).fill(1/inputs.length/outputs.length)));
+    const promises: Promise<any>[] = outputs.map((output: RateInput) =>
+      DbDriver.rateGraph(
+        activeSliceName,
+        output.text,
+        inputTexts,
+        rating,
+        new Array(inputs.length).fill(1 / inputs.length / outputs.length),
+      ),
+    );
     await Promise.all(promises);
 
     thunkAPI.dispatch(setRating(0));
@@ -61,8 +65,8 @@ export const startRate = createAsyncThunk<
     thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
-  }
-)
+  },
+);
 
 // ACTION TYPES
 
@@ -103,7 +107,10 @@ export const rateSS = createSlice({
     removeOutput: (state: RateSSState, action: RmOutputAction) => {
       state.outputs = [...state.outputs.splice(action.payload, 1)];
     },
-    forceSignatureRerender: (state: RateSSState, action: ForceRatingsRerenderAction) => {
+    forceSignatureRerender: (
+      state: RateSSState,
+      action: ForceRatingsRerenderAction,
+    ) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
@@ -113,15 +120,17 @@ export const rateSS = createSlice({
       state.ratedSignature = {};
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(startRate.fulfilled, (state, action: StartRateSSFulfilled) => {
-      // Add user to the state array
+    builder.addCase(
+      startRate.fulfilled,
+      (state, action: StartRateSSFulfilled) => {
+        // Add user to the state array
 
-      // 1. Update the ratings
-      state.ratedSignature = {};
-
-    });
+        // 1. Update the ratings
+        state.ratedSignature = {};
+      },
+    );
     builder.addCase(startRate.rejected, (state, action) => {
       console.log(action.error.message);
     });
@@ -129,6 +138,15 @@ export const rateSS = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { forceSignatureRerender, setRating, setInputs, addInput, removeInput, setOutputs, addOutput, removeOutput } = rateSS.actions;
+export const {
+  forceSignatureRerender,
+  setRating,
+  setInputs,
+  addInput,
+  removeInput,
+  setOutputs,
+  addOutput,
+  removeOutput,
+} = rateSS.actions;
 
 export default rateSS.reducer;

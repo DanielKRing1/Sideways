@@ -1,1 +1,1 @@
-export { default } from './OutputHeatMap';
+export {default} from './OutputHeatMap';

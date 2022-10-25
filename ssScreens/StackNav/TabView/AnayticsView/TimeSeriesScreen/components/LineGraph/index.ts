@@ -1,1 +1,1 @@
-export { default } from './OutputLineGraph';
+export {default} from './OutputLineGraph';
