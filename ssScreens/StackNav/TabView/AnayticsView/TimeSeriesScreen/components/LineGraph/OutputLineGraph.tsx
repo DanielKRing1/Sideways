@@ -1,7 +1,7 @@
 import React, {FC, useMemo} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {CallbackArgs, ForAxes, DomainTuple} from 'victory-core';
+import {CallbackArgs} from 'victory-core';
 
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import MyText from 'ssComponents/ReactNative/MyText';
@@ -13,10 +13,11 @@ import {
   DECORATION_VALUE_KEY,
   StringMap,
 } from 'ssDatabase/api/types';
+import {XDomain} from 'ssComponents/Charts/types';
 
 type OutputLineGraphProps = {};
 const OutputLineGraph: FC<OutputLineGraphProps> = () => {
-  const [domain, setDomain] = React.useState<ForAxes<DomainTuple>>({x: [0, 7]});
+  const [domain, setDomain] = React.useState<XDomain>({x: [0, 7]});
 
   const {activeSliceName, lineGraph, fullDecorationMap} = useSelector(
     (state: RootState) => ({

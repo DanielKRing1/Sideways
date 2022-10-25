@@ -6,14 +6,15 @@ import {
   VictoryLabel,
   VictoryLine,
 } from 'victory-native';
-import {CallbackArgs, ForAxes, DomainTuple} from 'victory-core';
-import {DataPoint} from '../types';
+import {CallbackArgs} from 'victory-core';
+import {XDomain} from '../types';
+import {LineGraph} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 
 export type DomainScrollerProps = {
-  xDomain: ForAxes<DomainTuple>;
-  setXDomain: (newXDomain: ForAxes<DomainTuple>) => void;
+  xDomain: XDomain;
+  setXDomain: (newXDomain: XDomain) => void;
 
-  data: DataPoint[];
+  data: LineGraph;
   brushXValues?: number[] | Date[];
   x: string;
   tickFormat: (t: CallbackArgs) => string | number;
@@ -32,13 +33,16 @@ const DomainScroller: FC<DomainScrollerProps> = props => {
   } = props;
 
   // Prevent updating even when domain has not changed
-  const handleBrush = (newDomain: ForAxes<DomainTuple>) => {
+  const handleBrush = (newDomain: XDomain) => {
     if (newDomain.x[0] !== xDomain.x[0]) setXDomain({x: newDomain.x});
   };
 
-  const fullDomain: ForAxes<DomainTuple> = {
+  const fullDomain: XDomain = {
+    // TODO Fix typing?
+    // @ts-ignore
     x: [
       data[0].x,
+      // @ts-ignore
       data[data.length - 1].x - Math.ceil(xDomain.x[1] - xDomain.x[0]) + 2,
     ],
   };
@@ -52,7 +56,7 @@ const DomainScroller: FC<DomainScrollerProps> = props => {
         <VictoryBrushContainer
           allowResize={false}
           brushDimension="x"
-          brushDomain={{x: xDomain.x}}
+          brushDomain={xDomain}
           onBrushDomainChange={handleBrush}
         />
       }>

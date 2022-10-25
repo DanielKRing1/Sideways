@@ -7,20 +7,16 @@ import {
 } from 'victory-native';
 import {CallbackArgs, ForAxes, DomainTuple, PaddingType} from 'victory-core';
 import {Defs, LinearGradient, Stop} from 'react-native-svg';
+import {LineGraph} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 
 type GradientColor = {offset: string; color: string};
-export type MyLineGraphDataPoint = {
-  x: number | Date;
-  y: number | Date;
-};
-export type XDomain = {x: number[]};
 export type MyLineGraphProps = {
   gradientColors: GradientColor[];
 
   xDomain: ForAxes<DomainTuple>;
   xValues?: number[] | Date[];
 
-  data: MyLineGraphDataPoint[];
+  data: LineGraph;
   x: string;
   tickValues: number[];
   tickFormat: (t: CallbackArgs) => string | number;

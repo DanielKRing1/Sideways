@@ -11,7 +11,7 @@ if (fs.existsSync(mockTEST_DIRECTORY))
   fs.rmSync(mockTEST_DIRECTORY, {recursive: true});
 fs.mkdirSync(mockTEST_DIRECTORY);
 
-jest.mock(`ssDatabase/realm/config`, () => {
+jest.mock(`ssDatabase/realm/core/config`, () => {
   return {
     // Need to type out exact file path; cannot use variable or value will be undefined
     DEFAULT_REALM_STACK_META_REALM_PATH: `ssDatabase/realm/__tests__/TimeseriesStatsDriver/REALM_STACK_META_REALM_PATH.path`,
