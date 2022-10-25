@@ -1,5 +1,5 @@
 module.exports = {
-    moduleNameMapper: {
-        'ssDatabase/(.*)': '<rootDir>/ssDatabase/$1',
-    },
+  moduleNameMapper: {
+    'ssDatabase/(.*)': '<rootDir>/ssDatabase/$1',
+  },
 };

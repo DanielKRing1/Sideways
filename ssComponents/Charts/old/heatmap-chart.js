@@ -11,21 +11,30 @@
 //           onDayPressed={(index) => console.log(index)}
 //         />
 
-
 // #Implementation
 import * as React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 import Animated, {
   withTiming,
   Easing,
   useAnimatedStyle,
   useSharedValue,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
-export const HeatMap = (props) => {
-  const {height, width, animMs, gutter, cellHeight, cellWidth, colCount, data, onDayPressed} = props;
+export const HeatMap = props => {
+  const {
+    height,
+    width,
+    animMs,
+    gutter,
+    cellHeight,
+    cellWidth,
+    colCount,
+    data,
+    onDayPressed,
+  } = props;
 
   // 1. Start opacity at 0
   const scaleYScaler = useSharedValue(0);
@@ -63,13 +72,12 @@ export const HeatMap = (props) => {
       ],
     };
   });
-  
+
   const rows = data.reduce((acc, cur, i) => {
-    if(i % colCount === 0) acc.push([]);
+    if (i % colCount === 0) acc.push([]);
 
     const curRowIndex = Math.floor(i / colCount);
     const curRow = acc[curRowIndex];
-
 
     // console.log(i);
     // console.log(`Cur row index: ${curRowIndex}`)
@@ -88,45 +96,57 @@ export const HeatMap = (props) => {
   return (
     // 4. Apply animation styles to Animated.View
     <StyledContainer style={[fadeInOpacityStyles]}>
-      {
-        rows.map((row, i) => (
-          <FlexRow margin={i < finalRowIndex ? `0px 0px ${gutter.y}px 0px` : '0px'}>
-            {
-              row.map((cell, j) => <FunctionalCell height={cellHeight} width={cellWidth} margin={j < colCount - 1 ? `0px ${gutter.x}px 0px 0px` : '0px'} cell={cell} onDayPressed={() => onDayPressed(i * colCount + j)}/>)
-            }
-          </FlexRow>
-        ))
-      }
+      {rows.map((row, i) => (
+        <FlexRow
+          margin={i < finalRowIndex ? `0px 0px ${gutter.y}px 0px` : '0px'}>
+          {row.map((cell, j) => (
+            <FunctionalCell
+              height={cellHeight}
+              width={cellWidth}
+              margin={j < colCount - 1 ? `0px ${gutter.x}px 0px 0px` : '0px'}
+              cell={cell}
+              onDayPressed={() => onDayPressed(i * colCount + j)}
+            />
+          ))}
+        </FlexRow>
+      ))}
     </StyledContainer>
-  )
-}
+  );
+};
 
 const StyledContainer = styled(Animated.View)`
   display: flex;
-  alignSelf: flex-start;
-  
-  backgroundColor: #abcabc;
+  alignself: flex-start;
+
+  backgroundcolor: #abcabc;
   overflow: hidden;
 `;
 
-const FunctionalCell = (props) => {
+const FunctionalCell = props => {
   const {height, width, margin, cell, onDayPressed} = props;
   const {color, opacity, label} = cell;
 
   const handlePress = () => {
     onDayPressed();
-  }
+  };
 
   return (
     <View>
-      <Cell onPress={handlePress} height={height} width={width} margin={margin} color={color} opacity={opacity}/>
+      <Cell
+        onPress={handlePress}
+        height={height}
+        width={width}
+        margin={margin}
+        color={color}
+        opacity={opacity}
+      />
     </View>
-  )
-}
+  );
+};
 
 const FlexRow = styled.View`
   display: flex;
-  flexDirection: row;
+  flexdirection: row;
 
   margin: ${props => props.margin};
 `;
@@ -136,6 +156,6 @@ const Cell = styled.TouchableOpacity`
   width: ${props => props.width}px;
   margin: ${props => props.margin};
 
-  backgroundColor: ${props => props.color};
+  backgroundcolor: ${props => props.color};
   opacity: ${props => props.opacity};
 `;

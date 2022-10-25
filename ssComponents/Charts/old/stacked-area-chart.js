@@ -15,13 +15,13 @@
 
 // #Implementation
 import * as React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 import {Svg} from 'react-native-svg';
-import { VictoryArea, VictoryStack } from 'victory-native';
+import {VictoryArea, VictoryStack} from 'victory-native';
 
-export const StackedAreaChart = (props) => {
-  const { data, colors } = props;
+export const StackedAreaChart = props => {
+  const {data, colors} = props;
 
   console.log(data);
 
@@ -31,17 +31,12 @@ export const StackedAreaChart = (props) => {
       animate={{
         easing: 'exp',
         duration: 1000,
-        onLoad: { duration: 1 }
+        onLoad: {duration: 1},
       }}
-      colorScale={colors}
-    >
-      {
-        data.map((dataSet) => (
-          <VictoryArea
-            data={dataSet}
-          />
-        ))
-      }
-    </VictoryStack>    
-  )
-}
+      colorScale={colors}>
+      {data.map(dataSet => (
+        <VictoryArea data={dataSet} />
+      ))}
+    </VictoryStack>
+  );
+};

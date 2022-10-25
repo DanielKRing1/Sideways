@@ -14,7 +14,6 @@
 //     '#aaafff'
 //   ]
 
-
 // // Usage
 //       <Pie
 //         data={data}
@@ -25,20 +24,18 @@
 
 // // Implementation
 import * as React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 import Svg from 'react-native-svg';
-import { VictoryContainer, VictoryChart, VictoryPie } from 'victory-native';
+import {VictoryContainer, VictoryChart, VictoryPie} from 'victory-native';
 
-export const Pie = (props) => {
-  const { radius, selectedRadius, innerRadius, data: rawData, colors } = props;
+export const Pie = props => {
+  const {radius, selectedRadius, innerRadius, data: rawData, colors} = props;
 
   const NO_SELECTED_INDEX = -1;
   const [selectedIndex, setSelectedIndex] = React.useState(NO_SELECTED_INDEX);
   const [data, setData] = React.useState(
-    rawData.map((datum, i) =>
-      i === 0 ? { ...datum, y: 1 } : { ...datum, y: 0 }
-    )
+    rawData.map((datum, i) => (i === 0 ? {...datum, y: 1} : {...datum, y: 0})),
   );
 
   const handleClick = () => {
@@ -50,40 +47,36 @@ export const Pie = (props) => {
   }, [rawData]);
 
   return (
-      <VictoryPie
-      containerComponent={<VictoryContainer responsive={false}/>}
+    <VictoryPie
+      containerComponent={<VictoryContainer responsive={false} />}
       //  standalone={false}
-        animate={{ easing: 'exp' }}
-        data={data}
-        radius={(datum) =>
-          datum.index === selectedIndex ? radius * 1.25 : radius
-        }
-        // innerRadius={innerRadius}
-        colorScale={colors}
-
-        events={[
-          {
-            target: 'data',
-            eventHandlers: {
-              onPressIn: () => {
-                console.log('in');
-                return [
-                  {
-                    target: 'data',
-                    mutation: dataProps => {
-                        console.log('item selected is',dataProps.index)
-                          return {}
-                    }
-                  }
-                ]
-              },
-              onPressOut: () => {
-                console.log('out');
-              }
-            }
-          }
-        ]}
-      />
+      animate={{easing: 'exp'}}
+      data={data}
+      radius={datum => (datum.index === selectedIndex ? radius * 1.25 : radius)}
+      // innerRadius={innerRadius}
+      colorScale={colors}
+      events={[
+        {
+          target: 'data',
+          eventHandlers: {
+            onPressIn: () => {
+              console.log('in');
+              return [
+                {
+                  target: 'data',
+                  mutation: dataProps => {
+                    console.log('item selected is', dataProps.index);
+                    return {};
+                  },
+                },
+              ];
+            },
+            onPressOut: () => {
+              console.log('out');
+            },
+          },
+        },
+      ]}
+    />
   );
 };
-
