@@ -13,7 +13,7 @@ type ThemeModeContextValueType = {
 };
 const DEFAULT_CONTEXT_VALUE: ThemeModeContextValueType = {
   mode: 'light',
-  setMode: (newMode: ThemeMode) => {},
+  setMode: () => {},
 };
 
 // CONTEXT

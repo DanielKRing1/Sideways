@@ -9,7 +9,6 @@ import {
   addPossibleOutput,
   removePossibleOutput,
   setPossibleOutputs,
-  forceSignatureRerender,
 } from '../../../../ssRedux/createSidewaysSlice';
 
 // COMPONENTS
@@ -21,7 +20,6 @@ import MyTextInput from '../../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
 import {FlexRow} from '../../../../ssComponents/Flex';
-import VerticalSpace from '../../../../ssComponents/Spacing/VerticalSpace';
 
 // Possible outputs
 
@@ -51,12 +49,12 @@ const createRenderItemComponent =
     );
 
 type GrowingPossibleOutputsProps = {};
-const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = props => {
+const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
   // REDUX
   const {searchedSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const {createdSignature, possibleOutputs, newSliceName} = useSelector(
+  const {possibleOutputs, createdSignature} = useSelector(
     (state: RootState) => state.createSidewaysSlice,
   );
   const dispatch = useDispatch();

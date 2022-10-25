@@ -50,7 +50,7 @@ const createInputsRenderItemComponent =
       </FlexRow>
     );
 
-const GrowingInputList: FC = props => {
+const GrowingInputList: FC = () => {
   // REDUX
   const {ratedSignature, inputs} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,

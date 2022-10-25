@@ -1,7 +1,6 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
-import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 
 import {RootState} from '../../../../../../ssRedux';
 import NodeStats from './NodeStats';
@@ -14,11 +13,6 @@ const InputNodeStats: FC<InputNodeStatsProps> = props => {
       ...state.analyticsSlice.identityStatsSlice,
     }),
   );
-
-  const theme: DefaultTheme = useTheme();
-
-  // TODO: Get Node icon info
-  const iconName: string = 'heart';
 
   return (
     <View>

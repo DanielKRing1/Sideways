@@ -37,12 +37,12 @@ const createRenderItemComponent =
     );
 
 type GrowingRecoInputsProps = {};
-const GrowingRecoInputs: FC<GrowingRecoInputsProps> = props => {
+const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   const dispatch = useDispatch();
   const {readSSSignature, recommendationInputs, recommendationsSignature} =
     useSelector((state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.recommendationStatsSlice,
+      ...state.analyticsSlice.recoStatsSlice,
     }));
 
   // HANDLER METHODS

@@ -18,18 +18,13 @@ import {ChartBar} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDrive
 import {DECORATION_ROW_KEY, DECORATION_VALUE_KEY} from 'ssDatabase/api/types';
 
 type InputVennProps = {};
-const InputVenn: FC<InputVennProps> = props => {
-  const {
-    activeSliceName,
-    vennByMonth,
-    vennNodeInputs,
-    monthIndex,
-    fullDecorationMap,
-  } = useSelector((state: RootState) => ({
-    ...state.readSidewaysSlice.toplevelReadReducer,
-    ...state.analyticsSlice.timeseriesStatsSlice,
-    ...state.userJsonSlice.decorationSlice,
-  }));
+const InputVenn: FC<InputVennProps> = () => {
+  const {vennByMonth, vennNodeInputs, monthIndex, fullDecorationMap} =
+    useSelector((state: RootState) => ({
+      ...state.readSidewaysSlice.toplevelReadReducer,
+      ...state.analyticsSlice.timeseriesStatsSlice,
+      ...state.userJsonSlice.decorationSlice,
+    }));
   const dispatch: AppDispatch = useDispatch();
 
   // HANDLER METHODS

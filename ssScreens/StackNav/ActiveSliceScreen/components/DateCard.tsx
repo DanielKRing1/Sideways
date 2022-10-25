@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import styled from 'styled-components/native';
 import {FlexCol} from '../../../../ssComponents/Flex';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
 

@@ -1,12 +1,10 @@
 import React, {FC, useContext, useEffect, useMemo, useState} from 'react';
-import {FlatList, Text} from 'react-native';
+import {FlatList} from 'react-native';
 import styled, {DefaultTheme} from 'styled-components/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import createTrie, {TrieTree} from '@asianpersonn/trie';
 
 // DB DRIVER
-import dbDriver from '../../../../ssDatabase/dbDriver';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {DbLoaderContext} from '../../../../ssContexts/DbLoader/DbLoader';
 
 // REDUX

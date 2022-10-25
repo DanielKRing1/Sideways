@@ -9,8 +9,7 @@
  */
 
 import React, {useContext} from 'react';
-import {SafeAreaView, Text, TextInput, View} from 'react-native';
-import styled from 'styled-components/native';
+import {SafeAreaView} from 'react-native';
 
 import store from './ssRedux';
 import {Provider as ReduxProvider} from 'react-redux';
@@ -24,8 +23,6 @@ import {
   DbLoaderProvider,
 } from './ssContexts/DbLoader/DbLoader';
 import MyThemeProvider from './ssTheme/ThemeProvider';
-import MyTextInput from './ssComponents/ReactNative/MyTextInput';
-import MyText from './ssComponents/ReactNative/MyText';
 import RequireActiveSlice from './ssComponents/TopLevel/RequireActiveSlice';
 import {resetRealm} from './ssRealm/reset';
 

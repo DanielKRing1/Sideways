@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect, useMemo, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 
@@ -19,6 +19,7 @@ import {
   SidewaysSnapshotRow,
 } from '../../../../../ssDatabase/api/types';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
+import {ViewStyle} from 'react-native';
 
 type StackCardProps = {
   item: Realm.Object & SidewaysSnapshotRow;
@@ -68,6 +69,14 @@ const createStackCard =
       await updateSnapshot(item, inputsToKeep, outputsToKeep, item.rating);
     };
 
+    // STYLES
+    const genInputStyle = (input: string): ViewStyle => ({
+      borderColor: !inputsToRm.has(input) ? 'green' : 'red',
+    });
+    const genOutputStyle = (output: string): ViewStyle => ({
+      borderColor: !outputsToRm.has(output) ? 'green' : 'red',
+    });
+
     return (
       <TouchableOpacity onPress={() => {}}>
         <FlexCol>
@@ -80,20 +89,20 @@ const createStackCard =
 
           <MyText>Inputs:</MyText>
           {/* TODO Remove */}
-          {item.inputs.map((input: string) => (
+          {/* {item.inputs.map((input: string) => (
             <FlexRow>
-              <MyText style={{color: !inputsToRm.has(input) ? 'green' : 'red'}}>
+              <MyText style={genStyle(input)}>
                 {input}
               </MyText>
               <MyButton onPress={() => toggleInputToRm(input)}>
                 <MyText>X</MyText>
               </MyButton>
             </FlexRow>
-          ))}
+          ))} */}
           {item.inputs.map((input: string) => (
             <FlexRow>
               <DecorationRow
-                style={{borderColor: !inputsToRm.has(input) ? 'green' : 'red'}}
+                style={genInputStyle(input)}
                 editable={true}
                 rowKey={DECORATION_ROW_KEY.INPUT}
                 entityId={input}
@@ -106,7 +115,7 @@ const createStackCard =
 
           <MyText>Outputs:</MyText>
           {/* TODO Remove */}
-          {item.outputs.map((output: string) => (
+          {/* {item.outputs.map((output: string) => (
             <FlexRow>
               <MyText
                 style={{color: !outputsToRm.has(output) ? 'green' : 'red'}}>
@@ -116,13 +125,11 @@ const createStackCard =
                 <MyText>X</MyText>
               </MyButton>
             </FlexRow>
-          ))}
+          ))} */}
           {item.outputs.map((output: string) => (
             <FlexRow>
               <DecorationRow
-                style={{
-                  borderColor: !outputsToRm.has(output) ? 'green' : 'red',
-                }}
+                style={genOutputStyle(output)}
                 editable={true}
                 rowKey={DECORATION_ROW_KEY.OUTPUT}
                 entityId={output}
@@ -161,7 +168,7 @@ const StackList: FC<StackListProps> = props => {
   const [stack, setStack] = useState<Realm.List<SidewaysSnapshotRow> | []>([]);
 
   // REDUX
-  const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
+  const {activeSliceName, readSSSignature} = useSelector(
     (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
   );
   const {stackStartDate, readStackSignature} = useSelector(
@@ -173,14 +180,14 @@ const StackList: FC<StackListProps> = props => {
   // DB DRIVER
   const {isLoaded} = useContext(DbLoaderContext);
 
-  // 1. Get stack list
+  // 1. Get fresh stack list
   useEffect(() => {
     // if(!activeSliceName) return setStack([]);
 
     (async () => {
-      const stack: Realm.List<SidewaysSnapshotRow> | [] =
+      const freshStack: Realm.List<SidewaysSnapshotRow> | [] =
         await dbDriver.getStack(activeSliceName);
-      setStack(stack);
+      setStack(freshStack);
     })();
   }, [isLoaded, activeSliceName]);
 

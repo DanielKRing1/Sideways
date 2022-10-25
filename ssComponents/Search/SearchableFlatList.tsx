@@ -12,11 +12,6 @@ export const SearchableFlatList: FC<SearchableFlatListProps> = props => {
 
   const flatListRef = useRef<FlatList>(null);
 
-  // Scroll to searchIndex, when it changes
-  useEffect(() => {
-    scrollToIndex(searchIndex, false);
-  }, [searchIndex]);
-
   // const getItemLayout = (data, index) => { return {length: 20, index, offset: 20 * index} };
 
   /**
@@ -44,6 +39,12 @@ export const SearchableFlatList: FC<SearchableFlatListProps> = props => {
     if (!!flatListRef.current)
       flatListRef.current.scrollToOffset({animated, offset});
   };
+
+  // EFFECTS
+  // Scroll to searchIndex, when it changes
+  useEffect(() => {
+    scrollToIndex(searchIndex, false);
+  }, [scrollToIndex, searchIndex]);
 
   return (
     <FlatList

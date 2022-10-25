@@ -20,7 +20,6 @@ import {
   SINGLE_KEY,
   SINGLE_TALLY_KEY,
 } from '../../../api/types';
-import {Dict} from '../../../../global';
 
 // RankedNodeMap UTILS
 

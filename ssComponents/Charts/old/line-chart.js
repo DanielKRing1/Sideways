@@ -26,11 +26,7 @@
 
 // #Implementation
 import * as React from 'react';
-import {TouchableOpacity, View} from 'react-native';
-
-import {Svg} from 'react-native-svg';
 import {
-  VictoryAxis,
   VictoryChart,
   VictoryLegend,
   VictoryLine,

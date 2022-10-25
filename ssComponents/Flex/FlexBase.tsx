@@ -1,4 +1,3 @@
-import React, {FC} from 'react';
 import {ViewProps} from 'react-native';
 import styled from 'styled-components/native';
 

@@ -10,8 +10,6 @@ import MyColorPicker, {
 } from 'ssComponents/ColorPicker/ColorPicker';
 
 const DecorationRowColorPicker: FC<MyColorPickerProps> = props => {
-  const {color, handleColorChange, handleColorSelected} = props;
-
   const {width, height} = useWindowDimensions();
 
   return (

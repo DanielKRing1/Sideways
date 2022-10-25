@@ -53,7 +53,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
   } = props;
 
   // HOOKS
-  const {height, width} = useWindowDimensions();
+  const {width} = useWindowDimensions();
   const theme = useTheme();
 
   // REDUX SELECTOR

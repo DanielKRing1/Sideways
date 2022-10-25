@@ -1,7 +1,5 @@
 import React, {FC, useMemo} from 'react';
 import {View} from 'react-native';
-import styled from 'styled-components/native';
-import {} from 'victory-core';
 import {useSelector, useDispatch} from 'react-redux';
 
 import MyText from 'ssComponents/ReactNative/MyText';
@@ -14,7 +12,7 @@ import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import {DECORATION_ROW_KEY, DECORATION_VALUE_KEY} from 'ssDatabase/api/types';
 
 type OutputHistogramProps = {};
-const OutputHistogram: FC<OutputHistogramProps> = props => {
+const OutputHistogram: FC<OutputHistogramProps> = () => {
   const {activeSliceName, histogramByMonth, monthIndex, fullDecorationMap} =
     useSelector((state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,

@@ -5,7 +5,7 @@
  */
 
 import React, {FC} from 'react';
-import {View, useWindowDimensions} from 'react-native';
+import {useWindowDimensions} from 'react-native';
 import ColorPicker from '@asianpersonn/rn-color-wheel';
 
 export type MyColorPickerProps = {
@@ -16,7 +16,7 @@ export type MyColorPickerProps = {
 const MyColorPicker: FC<MyColorPickerProps> = props => {
   const {color, onColorChange, onColorSelected} = props;
 
-  const {width, height} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   return (
     <ColorPicker

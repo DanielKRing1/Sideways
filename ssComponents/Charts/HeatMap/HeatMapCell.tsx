@@ -1,9 +1,5 @@
 import React, {FC, useMemo} from 'react';
-import {
-  TouchableOpacity,
-  TouchableOpacityProps,
-  useWindowDimensions,
-} from 'react-native';
+import {TouchableOpacityProps, useWindowDimensions} from 'react-native';
 import styled from 'styled-components/native';
 
 import {HeatMapCellProps} from './HeatMap';
@@ -12,7 +8,7 @@ import {Dimensions} from '../types';
 const HeatMapCell: FC<HeatMapCellProps> = props => {
   const {data, gridDim} = props;
 
-  const {height, width} = useWindowDimensions();
+  const {width} = useWindowDimensions();
   const margin = useMemo(() => {
     const lastRow: number = Math.floor(gridDim.y / gridDim.x);
     const bMargin: string =

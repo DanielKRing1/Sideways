@@ -24,10 +24,8 @@
 
 // // Implementation
 import * as React from 'react';
-import {TouchableOpacity, View} from 'react-native';
 
-import Svg from 'react-native-svg';
-import {VictoryContainer, VictoryChart, VictoryPie} from 'victory-native';
+import {VictoryContainer, VictoryPie} from 'victory-native';
 
 export const Pie = props => {
   const {radius, selectedRadius, innerRadius, data: rawData, colors} = props;

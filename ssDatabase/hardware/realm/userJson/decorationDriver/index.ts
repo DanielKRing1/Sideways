@@ -4,11 +4,8 @@ import {
   DEFAULT_REALM_JSON_META_REALM_PATH,
   DEFAULT_REALM_JSON_LOADABLE_REALM_PATH,
   DEFAULT_REALM_JSON_COLLECTION_NAME,
-  DEFAULT_REALM_JSON_INPUT_ROW_NAME,
-  DEFAULT_REALM_JSON_OUTPUT_ROW_NAME,
 } from '../config';
 
-import {Dict} from '../../../../../global';
 import {
   DecorationDriver,
   DecorationInfo,
@@ -17,6 +14,7 @@ import {
   DECORATION_ROW_KEY,
   UserJsonMap,
 } from 'ssDatabase/api/types';
+import {getDecorationJsonValue} from '../utils';
 
 // VARIABLES
 let isLoaded: boolean = false;
@@ -88,12 +86,10 @@ const saveDecorations = (newDecorations: DecorationInfo[]): void | never => {
     const decorationJsonRow: DecorationJson = allJson[decorationRowId];
 
     // 2.1. Create new json key/value pair
-    if (decorationJsonRow[entityId] === undefined)
-      decorationJsonRow[entityId] = {COLOR: '', ICON: ''};
-
-    // 2.2. Overwrite properties if not undefined
-    if (COLOR !== undefined) decorationJsonRow[entityId].COLOR = COLOR;
-    if (ICON !== undefined) decorationJsonRow[entityId].ICON = ICON;
+    decorationJsonRow[entityId] = getDecorationJsonValue(
+      entityId,
+      decorationJsonRow,
+    );
   }
 
   // 3. Overwrite existing json rows with new json rows
@@ -127,9 +123,8 @@ const rmDecorations = (decorationsToRm: DecorationInfo[]): void | never => {
   const jsonCollection: RealmJson = RealmJsonManager.getCollection(
     DEFAULT_REALM_JSON_COLLECTION_NAME,
   );
-  for (const rowId of Object.keys(keysToRm) as DECORATION_ROW_KEY[]) {
+  for (const rowId of Object.keys(keysToRm) as DECORATION_ROW_KEY[])
     jsonCollection.deleteEntries(rowId, keysToRm[rowId]!);
-  }
 };
 const getAllDecorations = (): DecorationJsonMap | never => {
   throwLoadError();

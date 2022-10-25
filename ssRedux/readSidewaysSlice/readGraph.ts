@@ -1,6 +1,4 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ThunkConfig} from '../types';
-import {createAsyncThunk} from '@reduxjs/toolkit';
 
 // INITIAL STATE
 
@@ -23,7 +21,6 @@ const initialState: ReadGraphState = {
 type SetInputSelectionAction = PayloadAction<string[]>;
 type SetOutputSelectionAction = PayloadAction<string[]>;
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
-type StartReadGraphFulfilled = PayloadAction<boolean>;
 
 // SLICE
 

@@ -8,7 +8,6 @@ import {AppDispatch, RootState} from '../../../ssRedux';
 import {
   setNewSliceName,
   startCreateSlice,
-  forceSignatureRerender,
 } from '../../../ssRedux/createSidewaysSlice';
 
 // NAVIGATION
@@ -35,17 +34,6 @@ const StyledTextInput = styled(MyTextInput)`
   paddinghorizontal: 10px;
 `;
 
-const createRenderItemComponent =
-  (handleChangeText: (newText: string, index: number) => void) =>
-  ({item, index}: any) =>
-    (
-      <StyledTextInput
-        placeholder={'Anotha one...'}
-        value={item.title}
-        onChangeText={(newText: string) => handleChangeText(newText, index)}
-      />
-    );
-
 const AddSliceScreen: FC<
   StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>
 > = props => {
@@ -59,7 +47,7 @@ const AddSliceScreen: FC<
   const {searchedSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const {createdSignature, possibleOutputs, newSliceName} = useSelector(
+  const {createdSignature} = useSelector(
     (state: RootState) => state.createSidewaysSlice,
   );
   const dispatch: AppDispatch = useDispatch();

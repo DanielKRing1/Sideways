@@ -7,15 +7,8 @@ import AutoCompleteDropdown, {
 import DecorationRow from './DecorationRow';
 import {DecorationJson, DECORATION_ROW_KEY} from 'ssDatabase/api/types';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {
-  startUpdateDecorationColor,
-  startUpdateDecorationIcon,
-  startUpdateDecorationText,
-} from 'ssRedux/userJson/decorationSlice';
-import {getDecorationMapValue} from 'ssDatabase/hardware/realm/userJson/utils';
 
 export type AutoCompleteDecorationProps<T> = {
   editable?: boolean;

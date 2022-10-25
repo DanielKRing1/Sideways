@@ -69,7 +69,7 @@ export const startAssureFreshness = createAsyncThunk<
   boolean,
   undefined,
   ThunkConfig
->('identityStatsSS/startAssureFreshness', async (undefined, thunkAPI) => {
+>('identityStatsSS/startAssureFreshness', async (undef, thunkAPI) => {
   const activeSliceName: string =
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
   const analyzedSliceName: string =
@@ -108,7 +108,7 @@ export const startAssureFreshness = createAsyncThunk<
 
 const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'identityStatsSS/startGetIdentityNodes',
-  async (undefined, thunkAPI) => {
+  async (undef, thunkAPI) => {
     const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const rawOutputs: string[] =

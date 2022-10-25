@@ -1,5 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ThunkConfig} from '../types';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 // INITIAL STATE
 

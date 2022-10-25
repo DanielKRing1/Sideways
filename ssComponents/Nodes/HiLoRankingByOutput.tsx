@@ -1,7 +1,5 @@
-import {RankedNode} from '@asianpersonn/realm-graph';
 import React, {FC} from 'react';
 import {HiLoRankingByOutput} from '../../ssDatabase/api/types';
-import NodeStats from '../../ssScreens/StackNav/TabView/AnayticsView/IdentityScreen/components/NodeStats';
 import {FlexCol, FlexRow} from '../Flex';
 import MyText from '../ReactNative/MyText';
 import HiLoRankingDisplay from './HiLoRanking';

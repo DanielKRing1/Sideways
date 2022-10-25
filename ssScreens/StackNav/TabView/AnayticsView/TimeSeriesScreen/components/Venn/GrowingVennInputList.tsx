@@ -1,6 +1,5 @@
 import React, {FC, useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import styled, {DefaultTheme} from 'styled-components/native';
 import {FlexRow} from '../../../../../../../ssComponents/Flex';
 
@@ -55,7 +54,7 @@ const createRenderItemComponent =
     );
 
 type GrowingVennInputListProps = {};
-const GrowingVennInputList: FC<GrowingVennInputListProps> = props => {
+const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
   // REDUX
   const {activeSliceName, vennNodeInputs} = useSelector((state: RootState) => ({
     ...state.readSidewaysSlice.toplevelReadReducer,
@@ -68,7 +67,7 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = props => {
       dbDriver
         .getAllNodes(activeSliceName)
         .map((node: Realm.Object & CGNode) => node.id),
-    [],
+    [activeSliceName],
   );
 
   // PROP VARIABLES

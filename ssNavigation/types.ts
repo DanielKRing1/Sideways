@@ -5,13 +5,11 @@ import {
   TABS_SCREEN_NAME,
 } from './constants';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   [TABS_SCREEN_NAME]: undefined;
   [PROFILE_SCREEN_NAME]: undefined; //{ userId: string };
   [SETTINGS_SCREEN_NAME]: undefined; //{ sort: 'latest' | 'top' } | undefined;
 };
 
-type Props<ScreenName extends keyof RootStackParamList> = StackScreenProps<
-  RootStackParamList,
-  ScreenName
->;
+export type Props<ScreenName extends keyof RootStackParamList> =
+  StackScreenProps<RootStackParamList, ScreenName>;

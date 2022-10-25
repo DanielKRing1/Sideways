@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import decorationDriver from 'ssDatabase/api/userJson/decoration';
+import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
 import {getDecorationMapValue} from 'ssDatabase/hardware/realm/userJson/utils';
 
 import {
@@ -42,7 +43,7 @@ export const startSetAllDecorations = createAsyncThunk<
   ThunkConfig
 >(
   'decorationSlice/startSetAllDecorations',
-  async (undefined: StartSetAllDecorationsArgs, thunkAPI) => {
+  async (undef: StartSetAllDecorationsArgs, thunkAPI) => {
     const fullDecorationMap: DecorationJsonMap =
       await decorationDriver.getAllDecorations();
 
@@ -163,7 +164,7 @@ export const startUpdateDecorationIcon = createAsyncThunk<
       ...fullDecorationMap[rowKey],
       [entityId]: {
         ...getDecorationMapValue(rowKey, entityId, fullDecorationMap),
-        ICON: newIcon,
+        ICON: newIcon as AvailableIcons,
       },
     };
 

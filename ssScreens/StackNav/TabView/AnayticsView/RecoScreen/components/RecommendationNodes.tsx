@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 
@@ -7,9 +7,9 @@ import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankingByOutput';
 
 type RecommendationNodesProps = {};
-const RecommendationNodes: FC<RecommendationNodesProps> = props => {
+const RecommendationNodes: FC<RecommendationNodesProps> = () => {
   const {recommendations, recommendationsSignature} = useSelector(
-    (state: RootState) => ({...state.recommendationStatsSlice}),
+    (state: RootState) => ({...state.analyticsSlice.recoStatsSlice}),
   );
 
   return (

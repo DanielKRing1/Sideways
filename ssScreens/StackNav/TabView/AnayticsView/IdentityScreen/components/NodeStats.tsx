@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
-import styled, {DefaultTheme, useTheme} from 'styled-components/native';
+import {DefaultTheme, useTheme} from 'styled-components/native';
 import {ID_KEY, RankedNode} from '@asianpersonn/realm-graph';
 
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
@@ -20,7 +20,7 @@ const NodeStats: FC<NodeStatsProps> = props => {
 
   return (
     <View>
-      {!!nodeStats ? (
+      {nodeStats !== undefined ? (
         <IconInput
           name={nodeStats.id}
           iconName={iconName}

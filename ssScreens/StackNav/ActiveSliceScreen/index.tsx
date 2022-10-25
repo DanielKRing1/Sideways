@@ -1,24 +1,19 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
 // REDUX
 import {AppDispatch, RootState} from '../../../ssRedux';
-import {
-  setActiveSliceName,
-  setSearchedSliceName,
-} from '../../../ssRedux/readSidewaysSlice';
+import {setActiveSliceName} from '../../../ssRedux/readSidewaysSlice';
 
 // NAVIGATION
 import {StackNavigatorProps} from '../../../ssNavigation/StackNavigator';
 import {
   ACTIVE_SLICE_SCREEN_NAME,
-  ADD_SLICE_SCREEN_NAME,
   TABS_SCREEN_NAME,
 } from '../../../ssNavigation/constants';
 
 // COMPONENTS
-import {SearchableDropdown} from '../../../ssComponents/Search/SearchableDropdown';
 import ExistingSliceList from './components/ExistingSliceList';
 
 // NAV
@@ -31,9 +26,9 @@ const ActiveSliceScreen: FC<
   const {navigation} = props;
 
   // REDUX HOOKS
-  const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
-    (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
-  );
+  const {readSSSignature} = useSelector((state: RootState) => ({
+    ...state.readSidewaysSlice.toplevelReadReducer,
+  }));
   // TODO: Anything need to be done to rerender when signature changes?
   const {deleteSSSignature} = useSelector(
     (state: RootState) => state.deleteSidewaysSlice,

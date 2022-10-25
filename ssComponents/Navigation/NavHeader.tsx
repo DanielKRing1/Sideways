@@ -1,9 +1,5 @@
 import React, {FC} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-
-// REDUX
-import {RootState} from '../../ssRedux';
 
 // NAVIGATION
 import {StackNavigatorNavigationProp} from '../../ssNavigation/StackNavigator';
@@ -22,7 +18,6 @@ import NavComponentCreator, {
   PROFILE_BUTTON,
   SETTINGS_BUTTON,
 } from './NavHeaderComponents';
-import {View} from 'react-native';
 
 type NavHeaderType = {
   children: React.ReactNode;

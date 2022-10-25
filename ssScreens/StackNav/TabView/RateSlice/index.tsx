@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import styled, {useTheme} from 'styled-components/native';
+import {useTheme} from 'styled-components/native';
 import FlexCol from '../../../../ssComponents/Flex/FlexCol';
 import {TabNavHeader} from '../../../../ssComponents/Navigation/NavHeader';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
@@ -11,7 +11,6 @@ import {AppDispatch, RootState} from '../../../../ssRedux';
 import {
   startRate,
   forceSignatureRerender,
-  RateInput,
 } from '../../../../ssRedux/rateSidewaysSlice';
 import GrowingInputsList from './components/GrowingInputsList';
 import GrowingOutputsList from './components/GrowingOutputsList';
@@ -34,7 +33,7 @@ const RateSliceScreen: FC<RateSliceScreenProps> = props => {
   const navigation = useNavigation<StackNavigatorNavigationProp<any>>();
 
   // REDUX
-  const {ratedSignature, inputs, outputs, rating} = useSelector(
+  const {ratedSignature} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,
   );
   const {activeSliceName, readSSSignature} = useSelector(
@@ -57,7 +56,7 @@ const RateSliceScreen: FC<RateSliceScreenProps> = props => {
 
         <RatingSlider />
 
-        {!!activeSliceName ? (
+        {activeSliceName === '' ? (
           <FlexCol alignItems="center">
             <MyButton
               style={{

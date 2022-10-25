@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
-import styled from 'styled-components/native';
 
 type VerticalSpaceProps = {
   spacing?: number;
@@ -8,7 +7,7 @@ type VerticalSpaceProps = {
 const VerticalSpace: FC<VerticalSpaceProps> = props => {
   const {spacing = 10} = props;
 
-  return <View style={{height: spacing}}></View>;
+  return <View style={{height: spacing}} />;
 };
 
 export default VerticalSpace;

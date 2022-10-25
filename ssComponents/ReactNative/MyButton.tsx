@@ -2,8 +2,6 @@ import React, {FC} from 'react';
 import {ButtonProps, ViewStyle} from 'react-native';
 import styled, {DefaultTheme} from 'styled-components/native';
 
-import {Dict} from '../../global';
-
 export type MyButtonProps = {
   children?: React.ReactNode;
   style?: ViewStyle;

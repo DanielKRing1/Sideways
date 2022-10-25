@@ -14,11 +14,10 @@ import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecor
 import {DECORATION_ROW_KEY} from 'ssDatabase/api/types';
 
 type NodeInputProps = {};
-const NodeInput: FC<NodeInputProps> = props => {
+const NodeInput: FC<NodeInputProps> = () => {
   const {
     activeSliceName,
     searchedNodeIdInput,
-    nodeIdInput,
     readSSSignature,
     inputStatsSignature,
   } = useSelector((state: RootState) => ({

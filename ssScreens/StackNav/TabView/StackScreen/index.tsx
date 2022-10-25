@@ -2,15 +2,9 @@ import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {SidewaysSnapshotRow} from 'ssDatabase/api/types';
-import Todo from '../../../../ssComponents/Dev/Todo';
 import {TabNavHeader} from '../../../../ssComponents/Navigation/NavHeader';
 
 import {AppDispatch, RootState} from '../../../../ssRedux';
-import {forceSignatureRerender} from '../../../../ssRedux/readSidewaysSlice';
-import {
-  setStartDate,
-  forceSignatureRerender as forceStackSignatureRerender,
-} from '../../../../ssRedux/readSidewaysSlice/readStack';
 import {
   startDeleteSnapshot,
   startUpdateSnapshot,

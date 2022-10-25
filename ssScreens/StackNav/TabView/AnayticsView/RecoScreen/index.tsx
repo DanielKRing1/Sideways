@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import styled, {useTheme} from 'styled-components/native';
+import {useTheme} from 'styled-components/native';
 
 // REDUX
 import {AppDispatch, RootState} from '../../../../../ssRedux';
@@ -13,7 +13,7 @@ import RecommendationNodes from './components/RecommendationNodes';
 import {TabNavHeader} from 'ssComponents/Navigation/NavHeader';
 
 type RecommendationScreenProps = {};
-const RecommendationScreen: FC<RecommendationScreenProps> = props => {
+const RecommendationScreen: FC<RecommendationScreenProps> = () => {
   // THEME
   const theme = useTheme();
 

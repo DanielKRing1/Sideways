@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from 'react';
-import {Keyboard, Text} from 'react-native';
+import {Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 import {useOnClickOutsideComponent} from 'rn-click-listener';
 

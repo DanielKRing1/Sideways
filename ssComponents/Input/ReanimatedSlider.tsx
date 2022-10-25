@@ -1,11 +1,6 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import React, {FC} from 'react';
+import {LayoutChangeEvent} from 'react-native';
+import Animated, {runOnJS, useSharedValue} from 'react-native-reanimated';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
@@ -90,7 +85,7 @@ const Slider: FC<SliderProps> = props => {
 
   return (
     <StyledView
-      onLayout={evt => {
+      onLayout={(evt: LayoutChangeEvent) => {
         const {width} = evt.nativeEvent.layout;
 
         left.value = 0;

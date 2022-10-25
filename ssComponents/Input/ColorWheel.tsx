@@ -9,7 +9,7 @@ type MyColorPickerProps = {
 const MyColorPicker: FC<MyColorPickerProps> = props => {
   const {handleColorChange, handleColorSelected} = props;
 
-  const {width, height} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   return (
     <ColorPicker

@@ -1,5 +1,5 @@
 import React, {FC, useMemo, useState} from 'react';
-import {Text, View, useWindowDimensions, ScrollView} from 'react-native';
+import {useWindowDimensions, ScrollView} from 'react-native';
 
 import {
   AvailableIcons,
@@ -81,8 +81,8 @@ const SelectableIcons: FC<SelectableIconsProps> = props => {
         justifyContent: 'center',
       }}>
       <Grid cols={[5, 4]}>
-        {iconProps.map((props: IconInputProps) => (
-          <IconInput key={props.iconName} {...props} />
+        {iconProps.map((iProps: IconInputProps) => (
+          <IconInput key={iProps.iconName} {...iProps} />
         ))}
       </Grid>
     </ScrollView>

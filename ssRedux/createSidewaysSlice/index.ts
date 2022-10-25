@@ -22,16 +22,11 @@ const initialState: CreateSSState = {
 
 // ASYNC THUNKS
 
-type CreateSSThunkArgs = {
-  newSliceName: string;
-  possibleOutputs: NewSliceOutput[];
-};
-
 export const startCreateSlice = createAsyncThunk<
   boolean,
   undefined,
   ThunkConfig
->('createSS/startCreateSlice', async (undefined, thunkAPI) => {
+>('createSS/startCreateSlice', async (undef, thunkAPI) => {
   const {newSliceName, possibleOutputs} =
     thunkAPI.getState().createSidewaysSlice;
 

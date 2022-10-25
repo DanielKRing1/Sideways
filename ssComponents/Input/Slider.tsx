@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {} from 'victory-native';
 import Slider from '@react-native-community/slider';
-import {Svg, Defs, LinearGradient, Stop} from 'react-native-svg';
+// import {Svg, Defs, LinearGradient, Stop} from 'react-native-svg';
 
 export type MySliderProps = {
   value: number;

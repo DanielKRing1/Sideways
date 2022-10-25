@@ -1,6 +1,5 @@
 import React, {FC, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import styled from 'styled-components/native';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState, AppDispatch} from 'ssRedux/index';
@@ -8,27 +7,24 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
 import {PartialHeatMapCell} from 'ssComponents/Charts/HeatMap/HeatMap';
 import {getDecorationMapSubsetList} from 'ssDatabase/hardware/realm/userJson/utils';
-import {
-  DECORATION_ROW_KEY,
-  DECORATION_VALUE_KEY,
-  StringMap,
-} from 'ssDatabase/api/types';
+import {DECORATION_ROW_KEY, DECORATION_VALUE_KEY} from 'ssDatabase/api/types';
 import {HeatMapDay} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 
 type OutputHeatMapProps = {};
-const OutputHeatMap: FC<OutputHeatMapProps> = props => {
+const OutputHeatMap: FC<OutputHeatMapProps> = () => {
   // LOCAL STATE
   const [selectedIndex, setSelectedIndex] = useState<number>();
 
   // REDUX
-  const {activeSliceName, heatMapByMonth, monthIndex, fullDecorationMap} =
-    useSelector((state: RootState) => ({
+  const {heatMapByMonth, monthIndex, fullDecorationMap} = useSelector(
+    (state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,
       ...state.analyticsSlice.timeseriesStatsSlice,
       ...state.userJsonSlice.decorationSlice,
-    }));
+    }),
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // FORMAT DATA

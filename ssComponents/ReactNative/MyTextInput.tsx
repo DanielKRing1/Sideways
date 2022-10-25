@@ -1,4 +1,4 @@
-import React, {FC, forwardRef} from 'react';
+import React, {forwardRef} from 'react';
 import {TextInput, TextInputProps} from 'react-native';
 import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 

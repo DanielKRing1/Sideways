@@ -9,7 +9,7 @@ import {RootState} from '../../../../../ssRedux';
 import {setRating} from '../../../../../ssRedux/rateSidewaysSlice';
 
 // COMPONENTS
-import Slider from '../../../../../ssComponents/Input/ReanimatedSlider';
+// import Slider from '../../../../../ssComponents/Input/ReanimatedSlider';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
 import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
 

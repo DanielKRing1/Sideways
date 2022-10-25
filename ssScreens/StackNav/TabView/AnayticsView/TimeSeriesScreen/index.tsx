@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useMemo} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import styled, {useTheme} from 'styled-components/native';
+import {useTheme} from 'styled-components/native';
 
 // REDUX
 import {AppDispatch, RootState} from '../../../../../ssRedux';
@@ -25,17 +25,18 @@ import FloatingSelectionButton from './components/Selection/FloatingSelectionBut
 import {TabNavHeader} from 'ssComponents/Navigation/NavHeader';
 
 type TimeseriesProps = {};
-const Timeseries: FC<TimeseriesProps> = props => {
+const Timeseries: FC<TimeseriesProps> = () => {
   // THEME
   const theme = useTheme();
 
   // REDUX
-  const {activeSliceName, selectedChart, readSSSignature, graphsSignature} =
-    useSelector((state: RootState) => ({
+  const {selectedChart, readSSSignature, graphsSignature} = useSelector(
+    (state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,
       ...state.readSidewaysSlice.toplevelReadReducer,
       ...state.analyticsSlice.timeseriesStatsSlice,
-    }));
+    }),
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // Assure chart freshness:

@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import {View} from 'react-native';
 import styled from 'styled-components/native';
 import MyButton, {MyButtonProps} from '../ReactNative/MyButton';
 

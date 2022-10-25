@@ -1,16 +1,12 @@
 import {combineReducers} from 'redux';
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import readGraphReducer, {
-  setInputSelections,
-  setOutputSelections,
   forceSignatureRerender as _forceGraphRerender,
 } from './readGraph';
 import readStackReducer, {
-  setStartDate,
   forceSignatureRerender as _forceStackRerender,
 } from './readStack';
-import {ThunkConfig} from '../types';
 
 // INITIAL STATE
 

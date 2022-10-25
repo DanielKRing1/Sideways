@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import {TouchableOpacity, Text, TextInput} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 // REDUX
@@ -27,7 +26,6 @@ import {
   ProfileButton,
   SettingsButton,
 } from '../../ssNavigation/components/Buttons';
-import {FlexRow} from '../Flex';
 import {useTheme} from 'styled-components';
 import HorizontalSpace, {
   HorizontalSpaceProps,

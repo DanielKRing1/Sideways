@@ -13,7 +13,7 @@ import {Dimensions} from 'ssComponents/Charts/types';
 const OutputHeatMapCell: FC<HeatMapCellProps> = props => {
   const {data, gridDim} = props;
 
-  const {height, width} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   // MARGINS
   const margin = useMemo(() => {
@@ -28,7 +28,7 @@ const OutputHeatMapCell: FC<HeatMapCellProps> = props => {
 
   // ANIMATION
   // Animation value
-  const [animVal, setAnimVal] = useState(new Animated.Value(0));
+  const [animVal] = useState(new Animated.Value(0));
   const [color, setColor] = useState({
     start: '#fff',
     end: '#fff',

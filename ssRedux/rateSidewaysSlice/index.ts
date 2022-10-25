@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as RateInput} from '../../ssComponents/Input/GrowingIdList';
-export type {GrowingIdText as RateInput} from '../../ssComponents/Input/GrowingIdList';
-import DbDriver from '../../ssDatabase/api/core/dbDriver';
+import {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
+export type {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
+import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE
@@ -35,7 +35,7 @@ type RateSSThunkArgs = {
 
 export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'rateSS/startRate',
-  async (undefined, thunkAPI) => {
+  async (undef, thunkAPI) => {
     const {activeSliceName} =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const {inputs, outputs, rating} = thunkAPI.getState().rateSidewaysSlice;

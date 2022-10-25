@@ -44,7 +44,7 @@ const createOutputsRenderItemComponent =
       </FlexRow>
     );
 
-const GrowingOutputsList: FC = props => {
+const GrowingOutputsList: FC = () => {
   // REDUX
   const {ratedSignature, outputs} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,

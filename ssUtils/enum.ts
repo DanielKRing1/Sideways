@@ -5,9 +5,7 @@ export function iterateEnum(
   cb: (enumValue: any) => void,
 ): void {
   for (let value in myEnum) {
-    if (isNaN(Number(value))) {
-      cb(value);
-    }
+    if (isNaN(Number(value))) cb(value);
   }
 }
 

@@ -1,20 +1,19 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {FC} from 'react';
 import {View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
-import {AppDispatch, RootState} from '../../../../../../ssRedux';
+import {RootState} from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankingByOutput';
 
 type IdentityNodesProps = {};
-const IdentityNodes: FC<IdentityNodesProps> = props => {
+const IdentityNodes: FC<IdentityNodesProps> = () => {
   const {identityNodes, readSSSignature, identityStatsSignature} = useSelector(
     (state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.identityStatsSlice,
+      ...state.analyticsSlice.identityStatsSlice,
     }),
   );
-  const dispatch: AppDispatch = useDispatch();
 
   return (
     <View>

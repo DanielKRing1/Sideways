@@ -1,5 +1,5 @@
-import React, {FC, useState} from 'react';
-import {Button, Text, TouchableOpacity} from 'react-native';
+import React, {FC} from 'react';
+import {TouchableOpacity} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import MyText from '../ReactNative/MyText';
 

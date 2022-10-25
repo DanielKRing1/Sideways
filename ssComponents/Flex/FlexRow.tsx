@@ -1,4 +1,4 @@
-import React, {FC, forwardRef} from 'react';
+import React, {forwardRef} from 'react';
 import {View} from 'react-native';
 
 import FlexBase, {FlexContainerProps} from './FlexBase';

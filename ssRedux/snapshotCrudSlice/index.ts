@@ -1,6 +1,5 @@
-import {combineReducers} from 'redux';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import dbDriver from '../../ssDatabase/dbDriver';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {ThunkConfig} from '../types';
 import {SidewaysSnapshotRow} from '../../ssDatabase/api/types';
 

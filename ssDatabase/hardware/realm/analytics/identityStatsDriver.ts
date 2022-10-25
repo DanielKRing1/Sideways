@@ -7,24 +7,14 @@ import RealmGraphManager, {
 import {
   GetNodeStatsArgs,
   GetNodeStatsByOutputArgs,
-  GetRecommendationsArgs,
   HiLoRanking,
   HiLoRankingByOutput,
   IdentityDriverType,
-  OutputKeyType,
   OUTPUT_KEYS,
-  PageRankArgs,
-  RankedNodesMap,
-  RecoDriverType,
   SINGLE_KEY,
 } from '../../../api/types';
 import {throwLoadError} from '../core/dbDriver';
-import {
-  filterCGEntityAttrs,
-  getDestinationNodeId,
-  sortRankedNodesMapByAllOutputs,
-  sortRankedNodesMapByOutput,
-} from './utils';
+import {filterCGEntityAttrs, getDestinationNodeId} from './utils';
 
 // GET IDENTITY STATS
 

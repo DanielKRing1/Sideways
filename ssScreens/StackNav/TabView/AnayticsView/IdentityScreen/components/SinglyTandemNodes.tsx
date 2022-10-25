@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 
@@ -7,7 +7,7 @@ import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankingByOutput';
 
 type SinglyTandemNodesProps = {};
-const SinglyTandemNodes: FC<SinglyTandemNodesProps> = props => {
+const SinglyTandemNodes: FC<SinglyTandemNodesProps> = () => {
   const {
     nodeIdInput,
     singlyTandemNodes,
@@ -15,7 +15,7 @@ const SinglyTandemNodes: FC<SinglyTandemNodesProps> = props => {
     identityStatsSignature,
   } = useSelector((state: RootState) => ({
     ...state.readSidewaysSlice.toplevelReadReducer,
-    ...state.identityStatsSlice,
+    ...state.analyticsSlice.identityStatsSlice,
   }));
 
   return (

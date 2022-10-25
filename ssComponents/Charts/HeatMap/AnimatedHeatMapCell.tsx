@@ -13,7 +13,7 @@ import {Dimensions} from '../types';
 const AnimatedHeatMapCell: FC<HeatMapCellProps> = props => {
   const {data, gridDim} = props;
 
-  const {height, width} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   // MARGINS
   const margin = useMemo(() => {

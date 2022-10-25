@@ -41,9 +41,9 @@ const SelectHeatMap = (dispatch: AppDispatch) => (
 );
 
 type FloatingSelectionButtonProps = {};
-const FloatingSelectionButton: FC<FloatingSelectionButtonProps> = props => {
+const FloatingSelectionButton: FC<FloatingSelectionButtonProps> = () => {
   // WINDOW DIMENSIONS
-  const {height, width} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   // REDUX
   const dispatch: AppDispatch = useDispatch();

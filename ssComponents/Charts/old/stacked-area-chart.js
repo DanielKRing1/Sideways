@@ -15,9 +15,7 @@
 
 // #Implementation
 import * as React from 'react';
-import {TouchableOpacity, View} from 'react-native';
 
-import {Svg} from 'react-native-svg';
 import {VictoryArea, VictoryStack} from 'victory-native';
 
 export const StackedAreaChart = props => {

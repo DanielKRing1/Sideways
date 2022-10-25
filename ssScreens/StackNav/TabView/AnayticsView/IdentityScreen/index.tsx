@@ -1,5 +1,4 @@
 import React, {FC, useEffect} from 'react';
-import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 
 import StickyScrollView from '../../../../../ssComponents/View/StickyScrollView';
 import {BoxShadow} from '../../../../../ssComponents/Shadow/BoxShadow';
@@ -16,8 +15,7 @@ import {View} from 'react-native';
 import {TabNavHeader} from 'ssComponents/Navigation/NavHeader';
 
 type StatsScreenProps = {};
-const StatsScreen: FC<StatsScreenProps> = props => {
-  const theme: DefaultTheme = useTheme();
+const StatsScreen: FC<StatsScreenProps> = () => {
   const dispatch: AppDispatch = useDispatch();
 
   // Assure chart freshness:

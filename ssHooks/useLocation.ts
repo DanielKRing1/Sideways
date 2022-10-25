@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import * as TaskManager from 'expo-task-manager';
 import Location from 'expo-location';
 
@@ -17,10 +17,8 @@ export const useLocation = (
   TaskManager.defineTask(
     taskName,
     async ({data: {locations}, error}: LocationTaskArgs) => {
-      if (error) {
-        // check `error.message` for more details.
-        return;
-      }
+      // check `error.message` for more details.
+      if (error) return;
 
       console.log('Received new locations', locations);
 

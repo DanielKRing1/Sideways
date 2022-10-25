@@ -90,7 +90,7 @@ export const startAssureFreshness = createAsyncThunk<
   boolean,
   undefined,
   ThunkConfig
->('timeseriesStatsSS/startAssureFreshness', async (undefined, thunkAPI) => {
+>('timeseriesStatsSS/startAssureFreshness', async (undef, thunkAPI) => {
   const activeSliceName: string =
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
   const analyzedSliceName: string =
@@ -180,7 +180,7 @@ const startGetAllTimeseriesStats = createAsyncThunk<
   ThunkConfig
 >(
   'timeseriesStatsSS/startGetTimeStats',
-  async (undefined: StartSetAllTimeStatsArgs, thunkAPI) => {
+  async (undef: StartSetAllTimeStatsArgs, thunkAPI) => {
     const p1: Promise<any> = thunkAPI.dispatch(startGetLineGraph());
     const p2: Promise<any> = thunkAPI.dispatch(startGetHistogram());
     const p3: Promise<any> = thunkAPI.dispatch(startGetVenn());
@@ -201,7 +201,7 @@ const startGetLineGraph = createAsyncThunk<
   ThunkConfig
 >(
   'timeseriesStatsSS/startGetLineGraph',
-  async (undefined: StartGetLineGraphArgs, thunkAPI) => {
+  async (undef: StartGetLineGraphArgs, thunkAPI) => {
     const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const rawOutputs: string[] =
@@ -225,7 +225,7 @@ const startGetHistogram = createAsyncThunk<
   ThunkConfig
 >(
   'timeseriesStatsSS/startGetHistogram',
-  async (undefined: StartGetHistogramArgs, thunkAPI) => {
+  async (undef: StartGetHistogramArgs, thunkAPI) => {
     const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const rawOutputs: string[] =
@@ -246,7 +246,7 @@ const startGetHistogram = createAsyncThunk<
 type StartGetVennArgs = undefined;
 const startGetVenn = createAsyncThunk<boolean, StartGetVennArgs, ThunkConfig>(
   'timeseriesStatsSS/startGetVenn',
-  async (undefined: StartGetVennArgs, thunkAPI) => {
+  async (undef: StartGetVennArgs, thunkAPI) => {
     const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const inputNodeIds: string[] = thunkAPI
@@ -274,7 +274,7 @@ const startGetHeatMap = createAsyncThunk<
   ThunkConfig
 >(
   'timeseriesStatsSS/startGetHeatMap',
-  async (undefined: StartGetHeatMapArgs, thunkAPI) => {
+  async (undef: StartGetHeatMapArgs, thunkAPI) => {
     const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
     const rawOutputs: string[] =
