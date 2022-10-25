@@ -23,7 +23,6 @@
       "ssScreens/*": ["ssScreens/*"],
       "ssTheme/*": ["ssTheme/*"],
       "ssUtils/*": ["ssUtils/*"],
-      "*": ["node_modules/*"],
     }
   }
 }
