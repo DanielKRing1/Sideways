@@ -19,10 +19,10 @@ import {
 } from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 // DECORATIONS
-import {DECORATION_ROW_KEY} from 'ssDatabase/api/types';
 import {CGNode} from '@asianpersonn/realm-graph';
 import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
+import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
 
 const createRenderItemComponent =
   (allInputIds: string[], deleteVennInput: (index: number) => void) =>

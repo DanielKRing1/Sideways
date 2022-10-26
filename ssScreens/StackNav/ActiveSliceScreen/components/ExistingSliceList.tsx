@@ -5,23 +5,23 @@ import {useSelector} from 'react-redux';
 
 // DB DRIVER
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import {DbLoaderContext} from '../../../../ssContexts/DbLoader/DbLoader';
+import {DbLoaderContext} from 'ssContexts/DbLoader/DbLoader';
 
 // REDUX
-import {RootState} from '../../../../ssRedux';
+import {RootState} from 'ssRedux/index';
 
 // COMPONENTS
-import {FlexRow} from '../../../../ssComponents/Flex';
+import {FlexRow} from 'ssComponents/Flex';
 
 // HOOKS
-import {useTrie} from '../../../../ssHooks/useTrie';
+import {useTrie} from 'ssHooks/useTrie';
 
 // UTILS
-import {abbrDate} from '../../../../ssUtils/date';
-import MyText from '../../../../ssComponents/ReactNative/MyText';
+import {abbrDate} from 'ssUtils/date';
+import MyText from 'ssComponents/ReactNative/MyText';
 import DateCard from './DateCard';
-import MyButton from '../../../../ssComponents/ReactNative/MyButton';
-import {ExistingSlice} from '../../../../ssDatabase/api/types';
+import MyButton from 'ssComponents/ReactNative/MyButton';
+import {ExistingSlice} from 'ssDatabase/api/core/types';
 
 type ExistingSliceCardProps = {
   item: ExistingSlice;

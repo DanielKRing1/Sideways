@@ -3,23 +3,21 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 
 // DB DRIVER
-import dbDriver from '../../../../../ssDatabase/api/core/dbDriver';
-import {DbLoaderContext} from '../../../../../ssContexts/DbLoader/DbLoader';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
+import {DbLoaderContext} from 'ssContexts/DbLoader/DbLoader';
 
 // REDUX
-import {RootState} from '../../../../../ssRedux';
+import {RootState} from 'ssRedux/index';
 
 // COMPONENTS
-import {FlexCol, FlexRow} from '../../../../../ssComponents/Flex';
-import {SearchableFlatList} from '../../../../../ssComponents/Search/SearchableFlatList';
-import MyText from '../../../../../ssComponents/ReactNative/MyText';
-import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
-import {
-  DECORATION_ROW_KEY,
-  SidewaysSnapshotRow,
-} from '../../../../../ssDatabase/api/types';
+import {FlexCol, FlexRow} from 'ssComponents/Flex';
+import {SearchableFlatList} from 'ssComponents/Search/SearchableFlatList';
+import MyText from 'ssComponents/ReactNative/MyText';
+import MyButton from 'ssComponents/ReactNative/MyButton';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import {ViewStyle} from 'react-native';
+import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
+import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
 
 type StackCardProps = {
   item: Realm.Object & SidewaysSnapshotRow;

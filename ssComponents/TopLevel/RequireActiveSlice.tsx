@@ -3,16 +3,16 @@ import React, {FC, useEffect} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 
-import dbDriver from '../../ssDatabase/api/core/dbDriver';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {
   ACTIVE_SLICE_SCREEN_NAME,
   ADD_SLICE_SCREEN_NAME,
-} from '../../ssNavigation/constants';
+} from 'ssNavigation/constants';
 import {
   StackNavigatorNavigationProp,
   StackNavigatorParamList,
-} from '../../ssNavigation/StackNavigator';
-import {RootState} from '../../ssRedux';
+} from 'ssNavigation/StackNavigator';
+import {RootState} from 'ssRedux/index';
 
 type RequireActiveSliceProps = {
   children: React.ReactNode;

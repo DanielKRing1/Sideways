@@ -18,7 +18,7 @@ import {
 import {GrowingIdText as RateInput} from '../../../../../ssComponents/Input/GrowingIdList';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
-import {DECORATION_ROW_KEY} from 'ssDatabase/api/types';
+import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
 
 const createOutputsRenderItemComponent =
   (deleteOutput: (index: number) => void) =>

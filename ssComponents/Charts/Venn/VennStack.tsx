@@ -8,7 +8,7 @@ import {
   VictoryStack,
 } from 'victory-native';
 import {CallbackArgs} from 'victory-core';
-import {ChartBar} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
+import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
 
 export type VennStackDataPoint = {
   x: number | Date;

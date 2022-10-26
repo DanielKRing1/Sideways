@@ -14,8 +14,11 @@ import {
   getDecorationMapValue,
   getDecorationMapSubsetList,
 } from 'ssDatabase/hardware/realm/userJson/utils';
-import {ChartBar} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
-import {DECORATION_ROW_KEY, DECORATION_VALUE_KEY} from 'ssDatabase/api/types';
+import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
+import {
+  DECORATION_ROW_KEY,
+  DECORATION_VALUE_KEY,
+} from 'ssDatabase/api/userJson/decoration/types';
 
 type InputVennProps = {};
 const InputVenn: FC<InputVennProps> = () => {

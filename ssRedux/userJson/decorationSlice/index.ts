@@ -4,13 +4,14 @@ import decorationDriver from 'ssDatabase/api/userJson/decoration';
 import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
 import {getDecorationMapValue} from 'ssDatabase/hardware/realm/userJson/utils';
 
+import {} from 'ssDatabase/api/types';
+import {ThunkConfig} from '../../types';
 import {
-  DecorationInfo,
-  DecorationJson,
   DecorationJsonMap,
   DECORATION_ROW_KEY,
-} from '../../../ssDatabase/api/types';
-import {ThunkConfig} from '../../types';
+  DecorationJson,
+  DecorationInfo,
+} from 'ssDatabase/api/userJson/decoration/types';
 
 // INITIAL STATE
 

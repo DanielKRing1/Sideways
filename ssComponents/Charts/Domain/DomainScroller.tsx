@@ -8,7 +8,7 @@ import {
 } from 'victory-native';
 import {CallbackArgs} from 'victory-core';
 import {XDomain} from '../types';
-import {LineGraph} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
+import {LineGraph} from 'ssDatabase/api/analytics/timeseries/types';
 
 export type DomainScrollerProps = {
   xDomain: XDomain;

@@ -31,14 +31,15 @@ import dbDriver from '../../../api/core/dbDriver';
 import {startCreateSlice} from '../../../../ssRedux/createSidewaysSlice';
 import {startRate} from '../../../../ssRedux/rateSidewaysSlice';
 
-import TimeseriesStatsDriver, {
-  ChartBar,
-  DailyOutput,
-  HeatMapByMonth,
-  HistogramByMonth,
+import TimeseriesStatsDriver from '../analytics/timeseries/timeseriesStatsDriver';
+import {
   LineGraph,
+  DailyOutput,
+  HistogramByMonth,
   VennByMonth,
-} from '../analytics/timeseriesStatsDriver';
+  ChartBar,
+  HeatMapByMonth,
+} from 'ssDatabase/api/analytics/timeseries/types';
 import {GrowingIdText as NewSliceOutput} from '../../../../ssComponents/Input/GrowingIdList';
 import {Dict} from '../../../../global';
 

@@ -1,19 +1,20 @@
 import {RankedNode} from '@asianpersonn/realm-graph';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import dbDriver from '../../../ssDatabase/api/core/dbDriver';
-import recommendationsDriver from '../../../ssDatabase/api/analytics/recommendationStatsDriver';
-import identityDriver from '../../../ssDatabase/api/analytics/identityStatsDriver';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
+import recommendationsDriver from 'ssDatabase/api/analytics/recommendation/recommendationStatsDriver';
+import identityDriver from 'ssDatabase/api/analytics/identity/identityStatsDriver';
+import {
+  HiLoRanking,
+  HiLoRankingByOutput,
+  GraphPropType,
+  GRAPH_PROP_KEYS,
+} from 'ssDatabase/api/types';
+import {ThunkConfig} from '../../types';
 import {
   GetNodeStatsArgs,
   GetNodeStatsByOutputArgs,
-  HiLoRanking,
-  HiLoRankingByOutput,
-  OutputKeyType,
-  OUTPUT_KEYS,
-  SINGLE_KEY,
-} from '../../../ssDatabase/api/types';
-import {ThunkConfig} from '../../types';
+} from 'ssDatabase/api/analytics/identity/types';
 
 // INITIAL STATE
 
@@ -114,7 +115,7 @@ const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
     const rawOutputs: string[] =
       dbDriver.getSlicePropertyNames(activeSliceName);
     const listLength: number = 5;
-    const outputType: OutputKeyType = OUTPUT_KEYS[SINGLE_KEY];
+    const outputType: GraphPropType = GRAPH_PROP_KEYS.SINGLE;
     const iterations: number = 20;
     const dampingFactor: number = 0.85;
 

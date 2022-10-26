@@ -7,7 +7,7 @@ import {
 } from 'victory-native';
 import {CallbackArgs, ForAxes, DomainTuple, PaddingType} from 'victory-core';
 import {Defs, LinearGradient, Stop} from 'react-native-svg';
-import {LineGraph} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
+import {LineGraph} from 'ssDatabase/api/analytics/timeseries/types';
 
 type GradientColor = {offset: string; color: string};
 export type MyLineGraphProps = {

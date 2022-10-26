@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as NewSliceOutput} from '../../ssComponents/Input/GrowingIdList';
-import DbDriver from '../../ssDatabase/api/core/dbDriver';
+import {GrowingIdText as NewSliceOutput} from 'ssComponents/Input/GrowingIdList';
+import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE

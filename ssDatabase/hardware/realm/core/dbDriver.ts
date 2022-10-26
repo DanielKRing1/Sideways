@@ -20,10 +20,10 @@ import {
 
 import {Dict} from '../../../../global';
 import {
-  DbDriverType,
   ExistingSlice,
   SidewaysSnapshotRow,
-} from '../../../api/types';
+  DbDriverType,
+} from 'ssDatabase/api/core/types';
 
 // VARIABLES
 let isLoaded = false;

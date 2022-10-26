@@ -1,13 +1,12 @@
 import RealmGraphManager, {RealmGraph} from '@asianpersonn/realm-graph';
 import {
   GetRecommendationsArgs,
-  HiLoRankingByOutput,
   PageRankArgs,
-  RankedNodesMap,
   RecoDriverType,
-} from '../../../api/types';
-import {throwLoadError} from '../core/dbDriver';
-import {sortRankedNodesMapByAllOutputs} from './utils';
+} from 'ssDatabase/api/analytics/recommendation/types';
+import {HiLoRankingByOutput, RankedNodesMap} from '../../../../api/types';
+import {throwLoadError} from '../../core/dbDriver';
+import {sortRankedNodesMapByAllOutputs} from '../utils';
 
 // GET GRAPH RECOMMENDATIONS
 
@@ -23,6 +22,8 @@ import {sortRankedNodesMapByAllOutputs} from './utils';
 const getRecommendations = ({
   graphName,
   inputNodeIds,
+  rawOutputs,
+  listLength,
   outputType,
   iterations = 20,
   dampingFactor = 1,
@@ -36,7 +37,12 @@ const getRecommendations = ({
       iterations,
       dampingFactor,
     );
-  return sortRankedNodesMapByAllOutputs(rankedNodes, outputType);
+  return sortRankedNodesMapByAllOutputs(
+    rankedNodes,
+    rawOutputs,
+    listLength,
+    outputType,
+  );
 };
 
 /**

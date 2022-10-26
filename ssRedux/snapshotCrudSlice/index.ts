@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
+import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
 import {ThunkConfig} from '../types';
-import {SidewaysSnapshotRow} from '../../ssDatabase/api/types';
 
 // INITIAL STATE
 

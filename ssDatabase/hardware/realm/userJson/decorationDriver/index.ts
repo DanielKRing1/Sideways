@@ -6,15 +6,16 @@ import {
   DEFAULT_REALM_JSON_COLLECTION_NAME,
 } from '../config';
 
-import {
-  DecorationDriver,
-  DecorationInfo,
-  DecorationJson,
-  DecorationJsonMap,
-  DECORATION_ROW_KEY,
-  UserJsonMap,
-} from 'ssDatabase/api/types';
+import {} from 'ssDatabase/api/types';
 import {getDecorationJsonValue} from '../utils';
+import {
+  DECORATION_ROW_KEY,
+  DecorationJson,
+  DecorationInfo,
+  UserJsonMap,
+  DecorationJsonMap,
+  DecorationDriver,
+} from 'ssDatabase/api/userJson/decoration/types';
 
 // VARIABLES
 let isLoaded: boolean = false;

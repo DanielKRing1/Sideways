@@ -11,7 +11,6 @@ import DecorationRowColorPicker from './components/ColorPicker';
 import SelectableIcons from 'ssComponents/IconInput/SelectableIcons';
 import ColorModalButton from './components/ColorModalButton';
 import IconModalButton from './components/IconModalButton';
-import {DecorationJsonValue, DECORATION_ROW_KEY} from 'ssDatabase/api/types';
 import {
   startUpdateDecorationText,
   startUpdateDecorationColor,
@@ -20,6 +19,10 @@ import {
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {getDecorationJsonValue} from 'ssDatabase/hardware/realm/userJson/utils';
 import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
+import {
+  DECORATION_ROW_KEY,
+  DecorationJsonValue,
+} from 'ssDatabase/api/userJson/decoration/types';
 
 type DecorationRowProps = {
   editable?: boolean;

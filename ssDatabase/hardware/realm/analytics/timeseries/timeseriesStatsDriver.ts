@@ -1,19 +1,20 @@
-import {Dict} from '../../../../global';
-import {floorDay, splitDay} from '../../../../ssUtils/date';
-import {deepCopy} from '../../../../ssUtils/object';
-import dbDriver from '../../../api/core/dbDriver';
 import {
+  HistogramByMonth,
+  VennByMonth,
+  ChartBar,
+  HeatMapByMonth,
+  HeatMapDay,
   GetNodeOverlapArgs,
   GetTimeseriesArgs,
-  SidewaysSnapshotRow,
   TimeseriesDriverType,
-} from '../../../api/types';
+  LineGraph,
+} from 'ssDatabase/api/analytics/timeseries/types';
+import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
+import {Dict} from '../../../../../global';
+import {floorDay, splitDay} from '../../../../../ssUtils/date';
+import {deepCopy} from '../../../../../ssUtils/object';
+import dbDriver from '../../../../api/core/dbDriver';
 
-export type LineGraph = DailyOutput[];
-export type DailyOutput = {
-  x: Date;
-  y: number;
-};
 const getDailyOutputLG = async ({
   sliceName,
   outputs,
@@ -47,15 +48,6 @@ const getDailyOutputLG = async ({
   return lineGraph;
 };
 
-export type HistogramByMonth = {
-  timestamp: Date;
-  histogram: ChartBar[];
-};
-export type ChartBar = {
-  x: number | Date;
-  y: number | Date;
-  y0?: number | Date;
-};
 const getMonthlyOutputHistogram = async ({
   sliceName,
   outputs,
@@ -135,11 +127,6 @@ const getMonthlyOutputHistogram = async ({
   return histogramByMonth;
 };
 
-export type VennByMonth = {
-  timestamp: Date;
-  venn: ChartBar[][];
-  outputs: string[][];
-};
 const getNodeOverlapVenn = async ({
   sliceName,
   nodeIds,
@@ -219,13 +206,6 @@ const getNodeOverlapVenn = async ({
   return vennByMonth;
 };
 
-export type HeatMapDay = {
-  outputs: string[];
-};
-export type HeatMapByMonth = {
-  timestamp: Date;
-  heatMap: HeatMapDay[];
-};
 const getDailyOutputHM = async ({
   sliceName,
 }: GetTimeseriesArgs): Promise<HeatMapByMonth[]> => {

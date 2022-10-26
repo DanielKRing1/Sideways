@@ -1,3 +1,3 @@
-export * from './recommendationStatsDriver';
-export * from './identityStatsDriver';
-export * from './timeseriesStatsDriver';
+export * from './recommendation/recommendationStatsDriver';
+export * from './identity/identityStatsDriver';
+export * from './timeseries/timeseriesStatsDriver';

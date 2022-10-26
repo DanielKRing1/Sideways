@@ -9,7 +9,10 @@ import {getDecorationMapSubsetList} from 'ssDatabase/hardware/realm/userJson/uti
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {GradientColor} from 'ssComponents/Charts/Histogram/Histogram';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
-import {DECORATION_ROW_KEY, DECORATION_VALUE_KEY} from 'ssDatabase/api/types';
+import {
+  DECORATION_ROW_KEY,
+  DECORATION_VALUE_KEY,
+} from 'ssDatabase/api/userJson/decoration/types';
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = () => {

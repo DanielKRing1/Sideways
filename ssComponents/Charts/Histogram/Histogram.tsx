@@ -7,7 +7,7 @@ import {
 } from 'victory-native';
 import {CallbackArgs} from 'victory-core';
 import {Defs, LinearGradient, Stop} from 'react-native-svg';
-import {ChartBar} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
+import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
 
 export type GradientColor = {offset: string; color: string};
 export type MyHistogramProps = {

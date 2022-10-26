@@ -4,7 +4,7 @@ import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import {FlexRow} from 'ssComponents/Flex';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
-import {DECORATION_ROW_KEY} from 'ssDatabase/api/types';
+import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
 import styled, {DefaultTheme} from 'styled-components/native';
 import GrowingIdList from '../../../../../ssComponents/Input/GrowingIdList';
 import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';

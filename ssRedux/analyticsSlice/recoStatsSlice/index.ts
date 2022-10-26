@@ -1,13 +1,11 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as RecoInput} from '../../../ssComponents/Input/GrowingIdList';
-export type {GrowingIdText as RecoInput} from '../../../ssComponents/Input/GrowingIdList';
-import recommendationsDriver from '../../../ssDatabase/api/analytics/recommendationStatsDriver';
-import {
-  GetRecommendationsArgs,
-  HiLoRankingByOutput,
-  OUTPUT_KEYS,
-} from '../../../ssDatabase/api/types';
+import {GrowingIdText as RecoInput} from 'ssComponents/Input/GrowingIdList';
+export type {GrowingIdText as RecoInput} from 'ssComponents/Input/GrowingIdList';
+import recommendationsDriver from 'ssDatabase/api/analytics/recommendation/recommendationStatsDriver';
+import {GetRecommendationsArgs} from 'ssDatabase/api/analytics/recommendation/types';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
+import {HiLoRankingByOutput, GRAPH_PROP_KEYS} from 'ssDatabase/api/types';
 import {ThunkConfig} from '../../types';
 
 // INITIAL STATE
@@ -30,7 +28,7 @@ const initialState: RecommendationsState = {
 
 type StartGetRecommendationsArgs = Omit<
   GetRecommendationsArgs,
-  'graphName' | 'inputNodeIds'
+  'listLength' | 'rawOutputs' | 'outputType' | 'graphName' | 'inputNodeIds'
 >;
 export const startGetRecommendations = createAsyncThunk<
   boolean,
@@ -42,8 +40,10 @@ export const startGetRecommendations = createAsyncThunk<
     {iterations, dampingFactor}: StartGetRecommendationsArgs,
     thunkAPI,
   ) => {
-    const graphName: string =
+    const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    const rawOutputs: string[] =
+      dbDriver.getSlicePropertyNames(activeSliceName);
     const inputNodeIds: string[] = thunkAPI
       .getState()
       .analyticsSlice.recoStatsSlice.recommendationInputs.map(
@@ -52,9 +52,11 @@ export const startGetRecommendations = createAsyncThunk<
 
     const recommendations: HiLoRankingByOutput =
       recommendationsDriver.getRecommendations({
-        graphName,
+        graphName: activeSliceName,
         inputNodeIds,
-        outputType: OUTPUT_KEYS.SINGLE,
+        rawOutputs,
+        outputType: GRAPH_PROP_KEYS.SINGLE,
+        listLength: 5,
         iterations,
         dampingFactor,
       });

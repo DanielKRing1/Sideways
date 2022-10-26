@@ -8,12 +8,13 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import BinnedLineGraph from 'ssComponents/Charts/Line/BinnedLineGraph';
 import {RootState} from 'ssRedux/index';
 import {getDecorationMapSubset} from 'ssDatabase/hardware/realm/userJson/utils';
+import {} from 'ssDatabase/api/types';
+import {XDomain} from 'ssComponents/Charts/types';
 import {
+  StringMap,
   DECORATION_ROW_KEY,
   DECORATION_VALUE_KEY,
-  StringMap,
-} from 'ssDatabase/api/types';
-import {XDomain} from 'ssComponents/Charts/types';
+} from 'ssDatabase/api/userJson/decoration/types';
 
 type OutputLineGraphProps = {};
 const OutputLineGraph: FC<OutputLineGraphProps> = () => {

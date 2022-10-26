@@ -5,10 +5,13 @@ import AutoCompleteDropdown, {
   DropdownRowProps,
 } from 'ssComponents/Search/AutoCompleteDropdown';
 import DecorationRow from './DecorationRow';
-import {DecorationJson, DECORATION_ROW_KEY} from 'ssDatabase/api/types';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from 'ssRedux/index';
+import {
+  DECORATION_ROW_KEY,
+  DecorationJson,
+} from 'ssDatabase/api/userJson/decoration/types';
 
 export type AutoCompleteDecorationProps<T> = {
   editable?: boolean;
@@ -37,7 +40,6 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps<any>> = props => {
   const {fullDecorationMap, decorationsSignature} = useSelector(
     (state: RootState) => state.userJsonSlice.decorationSlice,
   );
-  const dispatch: AppDispatch = useDispatch();
 
   const decorationDict: DecorationJson = useMemo(
     () => fullDecorationMap[decorationRowKey],

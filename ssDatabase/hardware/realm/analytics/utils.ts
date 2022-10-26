@@ -11,12 +11,12 @@ import {
 import DictUtils from '@asianpersonn/dict-utils';
 
 import {
+  HiLoRankingByOutput,
+  GraphPropType,
+  GRAPH_PROP_KEYS,
+  RankedNodesMap,
   COLLECTIVE_KEY,
   COLLECTIVE_TALLY_KEY,
-  HiLoRankingByOutput,
-  OutputKeyType,
-  OUTPUT_KEYS,
-  RankedNodesMap,
   SINGLE_KEY,
   SINGLE_TALLY_KEY,
 } from '../../../api/types';
@@ -44,7 +44,7 @@ export const rankedNodesMapToRankedNodes = (
 export const sortRankedNodesByOutput = (
   rankedNodes: RankedNode[],
   targetOutput: string,
-  outputType?: OutputKeyType,
+  outputType?: GraphPropType,
 ): RankedNode[] => {
   const targetOutputKey: string = getOutputKey(targetOutput, outputType);
 
@@ -66,7 +66,7 @@ export const sortRankedNodesByOutput = (
 export const sortRankedNodesMapByOutput = (
   rankedNodesMap: RankedNodesMap,
   targetOutput: string,
-  outputType?: OutputKeyType,
+  outputType?: GraphPropType,
 ): RankedNode[] => {
   const rankedNodes: RankedNode[] = rankedNodesMapToRankedNodes(rankedNodesMap);
 
@@ -92,7 +92,7 @@ export const sortRankedNodesByAllOutputs = (
   rankedNodes: RankedNode[],
   allOutputs: string[],
   listLength: number = 5,
-  outputType?: OutputKeyType,
+  outputType?: GraphPropType,
 ): HiLoRankingByOutput =>
   allOutputs.reduce<HiLoRankingByOutput>(
     (acc: HiLoRankingByOutput, output: string) => {
@@ -130,7 +130,7 @@ export const sortRankedNodesMapByAllOutputs = (
   rankedNodeMap: RankedNodesMap,
   allOutputs: string[],
   listLength: number = 5,
-  outputType?: OutputKeyType,
+  outputType?: GraphPropType,
 ): HiLoRankingByOutput => {
   const rankedNodes: RankedNode[] = rankedNodesMapToRankedNodes(rankedNodeMap);
 
@@ -155,7 +155,7 @@ export const sortRankedNodesMapByAllOutputs = (
 export const filterCGEntityAttrs = (
   cgentity: CGNode | CGEdge,
   outputs: string[],
-  outputType?: OutputKeyType,
+  outputType?: GraphPropType,
 ): RankedNode => {
   // 1. Get attr keys to keep
   const keysToKeep: string[] = getOutputKeys(outputs, outputType);
@@ -188,18 +188,18 @@ export const getDestinationNodeId = (
 
 // NAMING UTILS --------------------------------
 
-export const getOutputKey = (rawOutput: string, outputType?: OutputKeyType) => {
+export const getOutputKey = (rawOutput: string, outputType?: GraphPropType) => {
   switch (outputType) {
-    case OUTPUT_KEYS[SINGLE_KEY]:
+    case GRAPH_PROP_KEYS[SINGLE_KEY]:
       return genSingleAverageName(rawOutput);
 
-    case OUTPUT_KEYS[SINGLE_TALLY_KEY]:
+    case GRAPH_PROP_KEYS[SINGLE_TALLY_KEY]:
       return genSingleTallyName(rawOutput);
 
-    case OUTPUT_KEYS[COLLECTIVE_KEY]:
+    case GRAPH_PROP_KEYS[COLLECTIVE_KEY]:
       return genCollectiveAverageName(rawOutput);
 
-    case OUTPUT_KEYS[COLLECTIVE_TALLY_KEY]:
+    case GRAPH_PROP_KEYS[COLLECTIVE_TALLY_KEY]:
       return genCollectiveTallyName();
 
     default:
@@ -216,7 +216,7 @@ export const getOutputKey = (rawOutput: string, outputType?: OutputKeyType) => {
  */
 export const getOutputKeys = (
   outputs: string[],
-  outputType?: OutputKeyType,
+  outputType?: GraphPropType,
 ): string[] =>
   outputs.reduce((keysToKeep: string[], output: string) => {
     // 1. Gen key name to keep

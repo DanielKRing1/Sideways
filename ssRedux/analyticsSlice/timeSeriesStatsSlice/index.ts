@@ -1,18 +1,19 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as VennInput} from '../../../ssComponents/Input/GrowingIdList';
-export type {GrowingIdText as VennInput} from '../../../ssComponents/Input/GrowingIdList';
+import {GrowingIdText as VennInput} from 'ssComponents/Input/GrowingIdList';
+export type {GrowingIdText as VennInput} from 'ssComponents/Input/GrowingIdList';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import timeseriesDriver from '../../../ssDatabase/api/analytics/timeseriesStatsDriver';
+import timeseriesDriver from 'ssDatabase/api/analytics/timeseries/timeseriesStatsDriver';
 
 import {ThunkConfig} from '../../types';
-import {floorDay} from '../../../ssUtils/date';
+import {floorDay} from 'ssUtils/date';
+import {} from 'ssDatabase/hardware/realm/analytics/timeseries/timeseriesStatsDriver';
 import {
   LineGraph,
   HistogramByMonth,
   VennByMonth,
   HeatMapByMonth,
-} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
+} from 'ssDatabase/api/analytics/timeseries/types';
 
 // INITIAL STATE
 
@@ -280,11 +281,10 @@ const startGetHeatMap = createAsyncThunk<
     const rawOutputs: string[] =
       dbDriver.getSlicePropertyNames(activeSliceName);
 
-    const heatmap: HeatMapByMonth[] =
-      await timeseriesDriver.getMonthlyOutputHistogram({
-        sliceName: activeSliceName,
-        outputs: rawOutputs,
-      });
+    const heatmap: HeatMapByMonth[] = await timeseriesDriver.getDailyOutputHM({
+      sliceName: activeSliceName,
+      outputs: rawOutputs,
+    });
     // const heatmap: HeatMapByMonth[] = await timeseriesDriver.getDailyOutputHM({ sliceName: activeSliceName, outputs: rawOutputs });
 
     thunkAPI.dispatch(setHeatMap(heatmap));

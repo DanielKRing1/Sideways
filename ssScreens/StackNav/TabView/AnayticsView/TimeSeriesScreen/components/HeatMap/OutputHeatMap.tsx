@@ -7,10 +7,13 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
 import {PartialHeatMapCell} from 'ssComponents/Charts/HeatMap/HeatMap';
 import {getDecorationMapSubsetList} from 'ssDatabase/hardware/realm/userJson/utils';
-import {DECORATION_ROW_KEY, DECORATION_VALUE_KEY} from 'ssDatabase/api/types';
-import {HeatMapDay} from 'ssDatabase/hardware/realm/analytics/timeseriesStatsDriver';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
+import {HeatMapDay} from 'ssDatabase/api/analytics/timeseries/types';
+import {
+  DECORATION_ROW_KEY,
+  DECORATION_VALUE_KEY,
+} from 'ssDatabase/api/userJson/decoration/types';
 
 type OutputHeatMapProps = {};
 const OutputHeatMap: FC<OutputHeatMapProps> = () => {

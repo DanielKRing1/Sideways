@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {HiLoRankingByOutput} from '../../ssDatabase/api/types';
+import {HiLoRankingByOutput} from 'ssDatabase/api/types';
 import {FlexCol, FlexRow} from '../Flex';
 import MyText from '../ReactNative/MyText';
 import HiLoRankingDisplay from './HiLoRanking';

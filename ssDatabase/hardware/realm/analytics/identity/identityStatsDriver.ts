@@ -7,14 +7,16 @@ import RealmGraphManager, {
 import {
   GetNodeStatsArgs,
   GetNodeStatsByOutputArgs,
+  IdentityDriverType,
+} from 'ssDatabase/api/analytics/identity/types';
+import {
   HiLoRanking,
   HiLoRankingByOutput,
-  IdentityDriverType,
-  OUTPUT_KEYS,
+  GRAPH_PROP_KEYS,
   SINGLE_KEY,
-} from '../../../api/types';
-import {throwLoadError} from '../core/dbDriver';
-import {filterCGEntityAttrs, getDestinationNodeId} from './utils';
+} from '../../../../api/types';
+import {throwLoadError} from '../../core/dbDriver';
+import {filterCGEntityAttrs, getDestinationNodeId} from '../utils';
 
 // GET IDENTITY STATS
 
@@ -28,7 +30,7 @@ const getNodeStats = ({
 
   const cgnode: CGNode | undefined = realmGraph.getNode(nodeId);
   return cgnode !== undefined
-    ? filterCGEntityAttrs(cgnode, rawOutputs, OUTPUT_KEYS[SINGLE_KEY])
+    ? filterCGEntityAttrs(cgnode, rawOutputs, GRAPH_PROP_KEYS[SINGLE_KEY])
     : undefined;
 };
 
