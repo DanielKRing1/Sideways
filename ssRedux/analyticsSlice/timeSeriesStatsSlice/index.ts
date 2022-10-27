@@ -6,7 +6,7 @@ import dbDriver from 'ssDatabase/api/core/dbDriver';
 import timeseriesDriver from 'ssDatabase/api/analytics/timeseries/timeseriesStatsDriver';
 
 import {ThunkConfig} from '../../types';
-import {floorDay, serializeDate} from 'ssUtils/date';
+import {deserializeDate, floorDay, serializeDate} from 'ssUtils/date';
 import {} from 'ssDatabase/hardware/realm/analytics/timeseries/timeseriesStatsDriver';
 import {
   LineGraph,
@@ -333,38 +333,53 @@ export const timeseriesStatsSlice = createSlice({
     },
 
     // INPUTS
-    setGraphSelection: (
+    setChartSelection: (
       state: TimeStatsState,
       action: SetGraphSelectionAction,
     ) => {
-      state.graphsSignature = action.payload;
+      // 1. Set selected chart
+      state.selectedChart = action.payload;
+
+      // 2. Get next greater month index - 1, based on selected chart type
+      let dayInput: Date = deserializeDate(state.dayInput);
+      let monthIndex: number = state.monthIndex;
+
+      switch (state.selectedChart) {
+        case HISTOGRAM:
+          monthIndex =
+            state.histogramByMonth.findIndex(
+              ({timestamp}: HistogramByMonth) => timestamp > dayInput,
+            ) - 1;
+          break;
+        case VENN_PLOT:
+          monthIndex =
+            state.vennByMonth.findIndex(
+              ({timestamp}: VennByMonth) => timestamp > dayInput,
+            ) - 1;
+          break;
+        case HEAT_MAP:
+          monthIndex =
+            state.heatMapByMonth.findIndex(
+              ({timestamp}: HeatMapByMonth) => timestamp > dayInput,
+            ) - 1;
+          break;
+        default:
+          // Do nothing
+          break;
+      }
+
+      // 3. Update month index
+      state.monthIndex = monthIndex < 0 ? 0 : monthIndex;
     },
     setDayInput: (state: TimeStatsState, action: SetDayInputAction) => {
       // Serialize to string
       state.dayInput = serializeDate(action.payload);
     },
-    addVennInput: (state: TimeStatsState, action: AddVennInput) => {
-      state.vennNodeInputs = [...state.vennNodeInputs, action.payload];
-      // Force rerender/recalculate Venn (and all)
-      state.graphsSignature = {};
-    },
-    removeVennInput: (state: TimeStatsState, action: RemoveVennInput) => {
-      state.vennNodeInputs = [
-        ...state.vennNodeInputs.splice(action.payload, 1),
-      ];
-      // Force rerender/recalculate Venn (and all)
-      state.graphsSignature = {};
-    },
-    setVennInputs: (state: TimeStatsState, action: SetVennInputs) => {
-      state.vennNodeInputs = action.payload;
-      // Force rerender/recalculate Venn (and all)
-      state.graphsSignature = {};
-    },
     setMonthIndex: (state: TimeStatsState, action: SetMonthIndex) => {
       // 1. Set month index
       state.monthIndex = action.payload;
 
-      // 2. Also set dayInput Date, based on selected graph type
+      // 2. Also set dayInput Date, based on selected chart type
       switch (state.selectedChart) {
         case HISTOGRAM:
           state.dayInput = serializeDate(
@@ -383,6 +398,23 @@ export const timeseriesStatsSlice = createSlice({
           );
           break;
       }
+    },
+    addVennInput: (state: TimeStatsState, action: AddVennInput) => {
+      state.vennNodeInputs = [...state.vennNodeInputs, action.payload];
+      // Force rerender/recalculate Venn (and all)
+      state.graphsSignature = {};
+    },
+    removeVennInput: (state: TimeStatsState, action: RemoveVennInput) => {
+      state.vennNodeInputs = [
+        ...state.vennNodeInputs.splice(action.payload, 1),
+      ];
+      // Force rerender/recalculate Venn (and all)
+      state.graphsSignature = {};
+    },
+    setVennInputs: (state: TimeStatsState, action: SetVennInputs) => {
+      state.vennNodeInputs = action.payload;
+      // Force rerender/recalculate Venn (and all)
+      state.graphsSignature = {};
     },
 
     // CHARTS
@@ -447,7 +479,7 @@ const {
   resetNodesAndStats,
 } = timeseriesStatsSlice.actions;
 export const {
-  setGraphSelection,
+  setChartSelection,
   setDayInput,
   setMonthIndex,
   forceSignatureRerender,

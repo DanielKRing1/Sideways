@@ -11,31 +11,31 @@ import {
   HEAT_MAP,
   HISTOGRAM,
   LINE_GRAPH,
-  setGraphSelection,
+  setChartSelection,
   VENN_PLOT,
 } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 const SelectLineGraph = (dispatch: AppDispatch) => (
   <TouchableOpacity
-    onPress={() => dispatch(setGraphSelection(CHART_TYPES[LINE_GRAPH]))}>
+    onPress={() => dispatch(setChartSelection(CHART_TYPES[LINE_GRAPH]))}>
     <Text>Line Graph</Text>
   </TouchableOpacity>
 );
 const SelectHistogram = (dispatch: AppDispatch) => (
   <TouchableOpacity
-    onPress={() => dispatch(setGraphSelection(CHART_TYPES[HISTOGRAM]))}>
+    onPress={() => dispatch(setChartSelection(CHART_TYPES[HISTOGRAM]))}>
     <Text>Histogram</Text>
   </TouchableOpacity>
 );
 const SelectVenn = (dispatch: AppDispatch) => (
   <TouchableOpacity
-    onPress={() => dispatch(setGraphSelection(CHART_TYPES[VENN_PLOT]))}>
+    onPress={() => dispatch(setChartSelection(CHART_TYPES[VENN_PLOT]))}>
     <Text>Venn</Text>
   </TouchableOpacity>
 );
 const SelectHeatMap = (dispatch: AppDispatch) => (
   <TouchableOpacity
-    onPress={() => dispatch(setGraphSelection(CHART_TYPES[HEAT_MAP]))}>
+    onPress={() => dispatch(setChartSelection(CHART_TYPES[HEAT_MAP]))}>
     <Text>Heat Map</Text>
   </TouchableOpacity>
 );
