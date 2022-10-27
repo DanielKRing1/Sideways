@@ -9,13 +9,14 @@ import {
 import {} from 'ssDatabase/api/types';
 import {getDecorationJsonValue} from '../utils';
 import {
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DecorationJson,
   DecorationInfo,
   UserJsonMap,
   DecorationJsonMap,
   DecorationDriver,
 } from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_DELIM} from 'ssDatabase/api/userJson/decoration/constants';
 
 // VARIABLES
 let isLoaded: boolean = false;
@@ -25,18 +26,21 @@ let isLoaded: boolean = false;
 const load = async (): Promise<void> => {
   if (isLoaded) return;
 
+  // TODO Refactor DecorationJson dRowType = `${activeSliceName}-${dRowTypeConstant}`
+
   // 1. Try to create collection for first time (will fail if already exists)
   await RealmJsonManager.createCollection({
     metaRealmPath: DEFAULT_REALM_JSON_META_REALM_PATH,
     loadableRealmPath: DEFAULT_REALM_JSON_LOADABLE_REALM_PATH,
     collectionName: DEFAULT_REALM_JSON_COLLECTION_NAME,
   });
+  console.log('Should reach here, even upon fail');
   // 2. 'getJson' will create rows if they do not already exist
   const jsonCollection: RealmJson = RealmJsonManager.getCollection(
     DEFAULT_REALM_JSON_COLLECTION_NAME,
   );
-  jsonCollection.getJson(DECORATION_ROW_KEY.INPUT);
-  jsonCollection.getJson(DECORATION_ROW_KEY.OUTPUT);
+  jsonCollection.getJson(DECORATION_ROW_TYPE.INPUT);
+  jsonCollection.getJson(DECORATION_ROW_TYPE.OUTPUT);
 
   // 3. Load collection
   const jsonPromise = RealmJsonManager.loadCollections(
@@ -61,7 +65,8 @@ const throwLoadError = (): void | never => {
 };
 
 const setDecorationRow = (
-  rowKey: DECORATION_ROW_KEY,
+  activeSliceName: string,
+  dRowType: DECORATION_ROW_TYPE,
   newJson: DecorationJson,
 ): void | never => {
   throwLoadError();
@@ -69,10 +74,15 @@ const setDecorationRow = (
   const jsonCollection: RealmJson = RealmJsonManager.getCollection(
     DEFAULT_REALM_JSON_COLLECTION_NAME,
   );
+
+  const rowKey: string = genJsonRowKey(activeSliceName, dRowType);
   jsonCollection.setJson(rowKey, newJson);
 };
 
-const saveDecorations = (newDecorations: DecorationInfo[]): void | never => {
+const saveDecorations = (
+  activeSliceName: string,
+  newDecorations: DecorationInfo[],
+): void | never => {
   throwLoadError();
 
   // 1. Get existing json
@@ -83,10 +93,10 @@ const saveDecorations = (newDecorations: DecorationInfo[]): void | never => {
 
   // 2. Build new json
   for (const newDec of newDecorations) {
-    const {decorationRowId, entityId, COLOR, ICON} = newDec;
+    const {decorationRowId, entityId} = newDec;
     const decorationJsonRow: DecorationJson = allJson[decorationRowId];
 
-    // 2.1. Create new json key/value pair
+    // 2.1. Create new json key/value pair, using default if needed
     decorationJsonRow[entityId] = getDecorationJsonValue(
       entityId,
       decorationJsonRow,
@@ -95,12 +105,12 @@ const saveDecorations = (newDecorations: DecorationInfo[]): void | never => {
 
   // 3. Overwrite existing json rows with new json rows
   jsonCollection.setJson(
-    DECORATION_ROW_KEY.INPUT,
-    allJson[DECORATION_ROW_KEY.INPUT],
+    genJsonRowKey(activeSliceName, DECORATION_ROW_TYPE.INPUT),
+    allJson[DECORATION_ROW_TYPE.INPUT],
   );
   jsonCollection.setJson(
-    DECORATION_ROW_KEY.OUTPUT,
-    allJson[DECORATION_ROW_KEY.OUTPUT],
+    genJsonRowKey(activeSliceName, DECORATION_ROW_TYPE.OUTPUT),
+    allJson[DECORATION_ROW_TYPE.OUTPUT],
   );
 };
 const rmDecorations = (decorationsToRm: DecorationInfo[]): void | never => {
@@ -108,7 +118,7 @@ const rmDecorations = (decorationsToRm: DecorationInfo[]): void | never => {
 
   // 1. Organize keys to remove by rowId
   type KeysToRm = {
-    [key in DECORATION_ROW_KEY]?: string[];
+    [key in DECORATION_ROW_TYPE]?: string[];
   };
   const keysToRm: KeysToRm = decorationsToRm.reduce<KeysToRm>(
     (acc, {decorationRowId, entityId}: DecorationInfo) => {
@@ -124,7 +134,7 @@ const rmDecorations = (decorationsToRm: DecorationInfo[]): void | never => {
   const jsonCollection: RealmJson = RealmJsonManager.getCollection(
     DEFAULT_REALM_JSON_COLLECTION_NAME,
   );
-  for (const rowId of Object.keys(keysToRm) as DECORATION_ROW_KEY[])
+  for (const rowId of Object.keys(keysToRm) as DECORATION_ROW_TYPE[])
     jsonCollection.deleteEntries(rowId, keysToRm[rowId]!);
 };
 const getAllDecorations = (): DecorationJsonMap | never => {
@@ -134,15 +144,15 @@ const getAllDecorations = (): DecorationJsonMap | never => {
     DEFAULT_REALM_JSON_COLLECTION_NAME,
   );
   const inputDecorationMap: DecorationJson = jsonCollection.getJson(
-    DECORATION_ROW_KEY.INPUT,
+    DECORATION_ROW_TYPE.INPUT,
   ) as DecorationJson;
   const outputDecorationMap: DecorationJson = jsonCollection.getJson(
-    DECORATION_ROW_KEY.OUTPUT,
+    DECORATION_ROW_TYPE.OUTPUT,
   ) as DecorationJson;
 
   const decorationJsonMap: DecorationJsonMap = {
-    [DECORATION_ROW_KEY.INPUT]: inputDecorationMap,
-    [DECORATION_ROW_KEY.OUTPUT]: outputDecorationMap,
+    [DECORATION_ROW_TYPE.INPUT]: inputDecorationMap,
+    [DECORATION_ROW_TYPE.OUTPUT]: outputDecorationMap,
   };
 
   return decorationJsonMap;
@@ -160,3 +170,8 @@ const Driver: DecorationDriver = {
 };
 
 export default Driver;
+
+const genJsonRowKey = (
+  activeSliceName: string,
+  dRowType: DECORATION_ROW_TYPE,
+) => `${activeSliceName}${DECORATION_ROW_DELIM}${dRowType}`;

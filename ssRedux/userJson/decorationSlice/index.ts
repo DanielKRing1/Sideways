@@ -67,7 +67,10 @@ export const startUpdateDecorationRow = createAsyncThunk<
 >(
   'decorationSlice/startUpdateDecorationRow',
   async ({dRowType, newJson}: StartUpdateDecorationRow, thunkAPI) => {
-    await decorationDriver.setDecorationRow(dRowType, newJson);
+    const activeSliceName: string =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+
+    await decorationDriver.setDecorationRow(activeSliceName, dRowType, newJson);
 
     thunkAPI.dispatch(startSetAllDecorations());
 
@@ -110,7 +113,9 @@ export const startUpdateDecorationText = createAsyncThunk<
     delete fullDecorationMap[dRowType][oldText];
 
     // 3. Update db
-    await decorationDriver.setDecorationRow(dRowType, newJson);
+    const activeSliceName: string =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    await decorationDriver.setDecorationRow(activeSliceName, dRowType, newJson);
 
     // 4. Update Redux
     thunkAPI.dispatch(startSetAllDecorations());
@@ -142,7 +147,9 @@ export const startUpdateDecorationColor = createAsyncThunk<
     };
 
     // 2. Update db
-    await decorationDriver.setDecorationRow(dRowType, newJson);
+    const activeSliceName: string =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    await decorationDriver.setDecorationRow(activeSliceName, dRowType, newJson);
 
     // 3. Update Redux
     thunkAPI.dispatch(startSetAllDecorations());
@@ -174,7 +181,9 @@ export const startUpdateDecorationIcon = createAsyncThunk<
     };
 
     // 3. Update db
-    await decorationDriver.setDecorationRow(dRowType, newJson);
+    const activeSliceName: string =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    await decorationDriver.setDecorationRow(activeSliceName, dRowType, newJson);
 
     // 4. Update Redux
     thunkAPI.dispatch(startSetAllDecorations());
@@ -192,7 +201,9 @@ export const startAddDecorations = createAsyncThunk<
 >(
   'decorationSlice/startAddDecorations',
   async (newDecorations: StartAddDecorationsArgs, thunkAPI) => {
-    await decorationDriver.saveDecorations(newDecorations);
+    const activeSliceName: string =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    await decorationDriver.saveDecorations(activeSliceName, newDecorations);
 
     thunkAPI.dispatch(startSetAllDecorations());
 
