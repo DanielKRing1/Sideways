@@ -16,21 +16,21 @@ function genRandDecorationValue(): DecorationJsonValue {
   };
 }
 export function hasDecorationMapValue(
-  rowKey: DECORATION_ROW_TYPE,
+  dRowType: DECORATION_ROW_TYPE,
   entityId: string,
   decorationJsonMap: DecorationJsonMap,
 ): boolean {
   const value: DecorationJsonValue | undefined =
-    decorationJsonMap[rowKey][entityId];
+    decorationJsonMap[dRowType][entityId];
 
   return value !== undefined;
 }
 export function getDecorationMapValue(
-  rowKey: DECORATION_ROW_TYPE,
+  dRowType: DECORATION_ROW_TYPE,
   entityId: string,
   decorationJsonMap: DecorationJsonMap,
 ): DecorationJsonValue {
-  return getDecorationJsonValue(entityId, decorationJsonMap[rowKey]);
+  return getDecorationJsonValue(entityId, decorationJsonMap[dRowType]);
 }
 export function getDecorationJsonValue(
   entityId: string,

@@ -16,7 +16,7 @@ import {
 export type AutoCompleteDecorationProps<T> = {
   editable?: boolean;
   allEntityIds: string[];
-  decorationRowKey: DECORATION_ROW_TYPE;
+  dRowType: DECORATION_ROW_TYPE;
 
   onSelectEntityId: (entityId: string) => void;
 } & Omit<
@@ -31,7 +31,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps<any>> = props => {
     placeholder,
     inputValue,
     setInputValue,
-    decorationRowKey,
+    dRowType,
     allEntityIds,
     onSelectEntityId,
   } = props;
@@ -42,8 +42,8 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps<any>> = props => {
   );
 
   const decorationDict: DecorationJson = useMemo(
-    () => fullDecorationMap[decorationRowKey],
-    [decorationRowKey],
+    () => fullDecorationMap[dRowType],
+    [dRowType],
   );
 
   const DropdownRow: FC<DropdownRowProps<any>> = useMemo(
@@ -54,7 +54,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps<any>> = props => {
         <TouchableOpacity onPress={() => onSelectEntityId(entityId)}>
           <DecorationRow
             editable={editable}
-            rowKey={decorationRowKey}
+            dRowType={dRowType}
             entityId={entityId}
           />
         </TouchableOpacity>

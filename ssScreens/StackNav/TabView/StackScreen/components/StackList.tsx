@@ -103,7 +103,7 @@ const createStackCard =
               <DecorationRow
                 style={genInputStyle(input)}
                 editable={true}
-                rowKey={DECORATION_ROW_TYPE.INPUT}
+                dRowType={DECORATION_ROW_TYPE.INPUT}
                 entityId={input}
               />
               <MyButton onPress={() => toggleInputToRm(input)}>
@@ -130,7 +130,7 @@ const createStackCard =
               <DecorationRow
                 style={genOutputStyle(output)}
                 editable={true}
-                rowKey={DECORATION_ROW_TYPE.OUTPUT}
+                dRowType={DECORATION_ROW_TYPE.OUTPUT}
                 entityId={output}
               />
               <MyButton onPress={() => toggleOutputToRm(output)}>

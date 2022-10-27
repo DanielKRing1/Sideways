@@ -36,7 +36,7 @@ const createRenderItemComponent =
           allEntityIds={allInputIds}
           inputValue={item.text}
           setInputValue={(newText: string) => handleChangeText(newText, index)}
-          decorationRowKey={DECORATION_ROW_TYPE.INPUT}
+          dRowType={DECORATION_ROW_TYPE.INPUT}
           onSelectEntityId={(newText: string) =>
             handleChangeText(newText, index)
           }

@@ -49,7 +49,7 @@ export type DecorationDriver = {
   closeAll: () => Promise<void>;
 
   setDecorationRow: (
-    rowKey: DECORATION_ROW_TYPE,
+    dRowType: DECORATION_ROW_TYPE,
     newJson: DecorationJson,
   ) => void | never;
   saveDecorations: (newDecorations: DecorationInfo[]) => void | never;

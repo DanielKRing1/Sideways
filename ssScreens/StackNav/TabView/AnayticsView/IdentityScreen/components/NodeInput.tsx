@@ -46,7 +46,7 @@ const NodeInput: FC<NodeInputProps> = () => {
           .map((node: Realm.Object & CGNode) => node.id)}
         inputValue={searchedNodeIdInput}
         setInputValue={handleSetSearchedNodeId}
-        decorationRowKey={DECORATION_ROW_TYPE.INPUT}
+        dRowType={DECORATION_ROW_TYPE.INPUT}
         onSelectEntityId={handleSetNodeId}
       />
     </View>

@@ -28,7 +28,7 @@ const createOutputsRenderItemComponent =
       <FlexRow>
         <DecorationRow
           placeholder="Add an output..."
-          rowKey={DECORATION_ROW_TYPE.OUTPUT}
+          dRowType={DECORATION_ROW_TYPE.OUTPUT}
           entityId={item.text}
           onEditEntityId={(newText: string) => handleChangeText(newText, index)}
         />

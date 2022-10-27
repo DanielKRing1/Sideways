@@ -34,7 +34,7 @@ const createInputsRenderItemComponent =
       <FlexRow>
         <DecorationRow
           placeholder="Add an input..."
-          rowKey={DECORATION_ROW_TYPE.INPUT}
+          dRowType={DECORATION_ROW_TYPE.INPUT}
           entityId={item.text}
           onEditEntityId={(newText: string) => handleChangeText(newText, index)}
         />

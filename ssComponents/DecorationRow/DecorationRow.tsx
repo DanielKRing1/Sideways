@@ -28,7 +28,7 @@ type DecorationRowProps = {
   editable?: boolean;
   style?: ViewStyle;
 
-  rowKey: DECORATION_ROW_TYPE;
+  dRowType: DECORATION_ROW_TYPE;
   entityId: string;
   placeholder?: string;
 
@@ -44,7 +44,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
   const {
     editable = true,
     style = {},
-    rowKey,
+    dRowType,
     entityId,
     placeholder,
     onEditEntityId = () => {},
@@ -64,8 +64,8 @@ const DecorationRow: FC<DecorationRowProps> = props => {
     (state: RootState) => state.userJsonSlice.decorationSlice,
   );
   const decorationValue: DecorationJsonValue = useMemo(
-    () => getDecorationJsonValue(entityId, fullDecorationMap[rowKey]),
-    [entityId, fullDecorationMap, rowKey],
+    () => getDecorationJsonValue(entityId, fullDecorationMap[dRowType]),
+    [entityId, fullDecorationMap, dRowType],
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -99,7 +99,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
     // Redux
     dispatch(
       startUpdateDecorationText({
-        rowKey: DECORATION_ROW_TYPE[rowKey],
+        dRowType: DECORATION_ROW_TYPE[dRowType],
         entityId,
         newValue: newId,
       }),
@@ -111,7 +111,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
     // Redux
     dispatch(
       startUpdateDecorationColor({
-        rowKey: DECORATION_ROW_TYPE.INPUT,
+        dRowType: DECORATION_ROW_TYPE.INPUT,
         entityId,
         newValue: newColor,
       }),
@@ -123,7 +123,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
     // Redux
     dispatch(
       startUpdateDecorationIcon({
-        rowKey: DECORATION_ROW_TYPE.INPUT,
+        dRowType: DECORATION_ROW_TYPE.INPUT,
         entityId,
         newValue: newIconName,
       }),
