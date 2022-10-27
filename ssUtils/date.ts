@@ -7,10 +7,15 @@ export const isToday = (someDate: Date) => {
   );
 };
 
+// FORMAT
+
 export const abbrDate = (date: Date) => ({
   day: date.getDate(),
   month: date.toLocaleString('default', {month: 'short'}),
 });
+
+export const serializeDate = (date: Date) => date.toISOString();
+export const deserializeDate = (date: string) => new Date(date);
 
 /**
  * Subtract 'days' number of days from today's date

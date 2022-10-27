@@ -1,15 +1,16 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {serializeDate} from 'ssUtils/date';
 
 // INITIAL STATE
 
 export interface ReadStackState {
-  stackStartDate: Date;
+  stackStartDate: string;
 
   readStackSignature: {};
 }
 
 const initialState: ReadStackState = {
-  stackStartDate: new Date(),
+  stackStartDate: serializeDate(new Date()),
 
   readStackSignature: {},
 };
@@ -26,7 +27,7 @@ export const readStack = createSlice({
   initialState,
   reducers: {
     setStartDate: (state: ReadStackState, action: SetStartDateAction) => {
-      state.stackStartDate = action.payload;
+      state.stackStartDate = serializeDate(action.payload);
     },
     forceSignatureRerender: (
       state: ReadStackState,

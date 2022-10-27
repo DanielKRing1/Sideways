@@ -18,6 +18,7 @@ import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import {ViewStyle} from 'react-native';
 import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
 import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
+import {deserializeDate} from 'ssUtils/date';
 
 type StackCardProps = {
   item: Realm.Object & SidewaysSnapshotRow;
@@ -196,7 +197,7 @@ const StackList: FC<StackListProps> = props => {
     (async () => {
       let index: number = await dbDriver.searchStack(
         activeSliceName,
-        stackStartDate,
+        deserializeDate(stackStartDate),
       );
       setSearchIndex(index);
     })();

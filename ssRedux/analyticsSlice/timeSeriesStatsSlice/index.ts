@@ -6,7 +6,7 @@ import dbDriver from 'ssDatabase/api/core/dbDriver';
 import timeseriesDriver from 'ssDatabase/api/analytics/timeseries/timeseriesStatsDriver';
 
 import {ThunkConfig} from '../../types';
-import {floorDay} from 'ssUtils/date';
+import {floorDay, serializeDate} from 'ssUtils/date';
 import {} from 'ssDatabase/hardware/realm/analytics/timeseries/timeseriesStatsDriver';
 import {
   LineGraph,
@@ -41,7 +41,7 @@ export interface TimeStatsState {
   // Graph Selection
   selectedChart: SelectableGraph;
   // Date Selection
-  dayInput: Date; // Derive day/month-based stats date range from this day
+  dayInput: string; // Derive day/month-based stats date range from this day
   monthIndex: number;
   // Node Input
   vennNodeInputs: VennInput[];
@@ -65,7 +65,7 @@ const initialState: TimeStatsState = {
   // Graph Selection
   selectedChart: HEAT_MAP,
   // Date Selection
-  dayInput: floorDay(new Date()), // Set to today
+  dayInput: serializeDate(floorDay(new Date())), // Set to today
   monthIndex: 0,
   // Node Input
   vennNodeInputs: [],
@@ -340,7 +340,8 @@ export const timeseriesStatsSlice = createSlice({
       state.graphsSignature = action.payload;
     },
     setDayInput: (state: TimeStatsState, action: SetDayInputAction) => {
-      state.dayInput = action.payload;
+      // Serialize to string
+      state.dayInput = serializeDate(action.payload);
     },
     addVennInput: (state: TimeStatsState, action: AddVennInput) => {
       state.vennNodeInputs = [...state.vennNodeInputs, action.payload];
@@ -366,14 +367,20 @@ export const timeseriesStatsSlice = createSlice({
       // 2. Also set dayInput Date, based on selected graph type
       switch (state.selectedChart) {
         case HISTOGRAM:
-          state.dayInput = state.histogramByMonth[state.monthIndex].timestamp;
+          state.dayInput = serializeDate(
+            state.histogramByMonth[state.monthIndex].timestamp,
+          );
           break;
         case VENN_PLOT:
-          state.dayInput = state.vennByMonth[state.monthIndex].timestamp;
+          state.dayInput = serializeDate(
+            state.vennByMonth[state.monthIndex].timestamp,
+          );
           break;
         case HEAT_MAP:
         default:
-          state.dayInput = state.heatMapByMonth[state.monthIndex].timestamp;
+          state.dayInput = serializeDate(
+            state.heatMapByMonth[state.monthIndex].timestamp,
+          );
           break;
       }
     },

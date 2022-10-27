@@ -7,6 +7,7 @@ import DatePicker from '../../../../../ssComponents/Input/DatePicker';
 // REDUX
 import {setStartDate} from '../../../../../ssRedux/readSidewaysSlice/readStack';
 import {RootState} from '../../../../../ssRedux';
+import {deserializeDate} from 'ssUtils/date';
 
 const ALL_TIME_TEXT = 'All Time';
 
@@ -33,12 +34,12 @@ const StackDatePicker: FC<StackDatePickerProps> = props => {
 
   // REDUX
   const getDisplay = useCallback(
-    () =>
-      stackStartDate === null ? ALL_TIME_TEXT : stackStartDate.toDateString(),
+    () => (stackStartDate === null ? ALL_TIME_TEXT : stackStartDate),
     [stackStartDate],
   );
   const getDisplayDate = useCallback(
-    () => (stackStartDate === null ? new Date() : stackStartDate),
+    () =>
+      stackStartDate === null ? new Date() : deserializeDate(stackStartDate),
     [stackStartDate],
   );
   const handleSetDate = (newDate: Date) => {

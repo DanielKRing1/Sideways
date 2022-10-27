@@ -18,11 +18,12 @@ type StackViewScreenProps = {};
 const StackViewScreen: FC<StackViewScreenProps> = props => {
   const {} = props;
 
-  const {readSSSignature, activeSliceName, readStackSignature, stackStartDate} =
-    useSelector((state: RootState) => ({
+  const {readSSSignature, activeSliceName, readStackSignature} = useSelector(
+    (state: RootState) => ({
       ...state.readSidewaysSlice.internalReadReducer.readStackReducer,
       ...state.readSidewaysSlice.toplevelReadReducer,
-    }));
+    }),
+  );
   const {snapshotCrudSignature} = useSelector(
     (state: RootState) => state.snapshotCrudSlice,
   );
