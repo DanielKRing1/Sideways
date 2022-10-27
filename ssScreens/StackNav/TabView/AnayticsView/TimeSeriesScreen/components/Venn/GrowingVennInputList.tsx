@@ -22,7 +22,7 @@ import {
 import {CGNode} from '@asianpersonn/realm-graph';
 import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
 
 const createRenderItemComponent =
   (allInputIds: string[], deleteVennInput: (index: number) => void) =>
@@ -36,7 +36,7 @@ const createRenderItemComponent =
           allEntityIds={allInputIds}
           inputValue={item.text}
           setInputValue={(newText: string) => handleChangeText(newText, index)}
-          decorationRowKey={DECORATION_ROW_KEY.INPUT}
+          decorationRowKey={DECORATION_ROW_TYPE.INPUT}
           onSelectEntityId={(newText: string) =>
             handleChangeText(newText, index)
           }

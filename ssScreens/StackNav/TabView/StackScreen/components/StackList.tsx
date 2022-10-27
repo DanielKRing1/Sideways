@@ -17,7 +17,7 @@ import MyButton from 'ssComponents/ReactNative/MyButton';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import {ViewStyle} from 'react-native';
 import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
-import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
 import {deserializeDate} from 'ssUtils/date';
 
 type StackCardProps = {
@@ -103,7 +103,7 @@ const createStackCard =
               <DecorationRow
                 style={genInputStyle(input)}
                 editable={true}
-                rowKey={DECORATION_ROW_KEY.INPUT}
+                rowKey={DECORATION_ROW_TYPE.INPUT}
                 entityId={input}
               />
               <MyButton onPress={() => toggleInputToRm(input)}>
@@ -130,7 +130,7 @@ const createStackCard =
               <DecorationRow
                 style={genOutputStyle(output)}
                 editable={true}
-                rowKey={DECORATION_ROW_KEY.OUTPUT}
+                rowKey={DECORATION_ROW_TYPE.OUTPUT}
                 entityId={output}
               />
               <MyButton onPress={() => toggleOutputToRm(output)}>

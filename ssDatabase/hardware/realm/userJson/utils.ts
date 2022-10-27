@@ -2,7 +2,7 @@ import {DEFAULT_ICON} from 'ssDatabase/api/userJson/decoration/constants';
 import {
   DecorationJsonValue,
   DECORATION_VALUE_KEY,
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DecorationJsonMap,
   DecorationJson,
 } from 'ssDatabase/api/userJson/decoration/types';
@@ -16,7 +16,7 @@ function genRandDecorationValue(): DecorationJsonValue {
   };
 }
 export function hasDecorationMapValue(
-  rowKey: DECORATION_ROW_KEY,
+  rowKey: DECORATION_ROW_TYPE,
   entityId: string,
   decorationJsonMap: DecorationJsonMap,
 ): boolean {
@@ -26,7 +26,7 @@ export function hasDecorationMapValue(
   return value !== undefined;
 }
 export function getDecorationMapValue(
-  rowKey: DECORATION_ROW_KEY,
+  rowKey: DECORATION_ROW_TYPE,
   entityId: string,
   decorationJsonMap: DecorationJsonMap,
 ): DecorationJsonValue {
@@ -47,7 +47,7 @@ export function getDecorationJsonValue(
 //     2: 'yellow',
 //   }}
 export function getDecorationMapSubset<T>(
-  decorationRowId: DECORATION_ROW_KEY,
+  decorationRowId: DECORATION_ROW_TYPE,
   entityIds: string[],
   decorationValueKey: DECORATION_VALUE_KEY,
   decorationJsonMap: DecorationJsonMap,
@@ -71,7 +71,7 @@ export function getDecorationMapSubset<T>(
 //     { offset: "100%", color:"yellow" },
 //   ]}
 export function getDecorationMapSubsetList<T>(
-  decorationRowId: DECORATION_ROW_KEY,
+  decorationRowId: DECORATION_ROW_TYPE,
   entityIds: string[],
   decorationValueKey: DECORATION_VALUE_KEY,
   decorationJsonMap: DecorationJsonMap,

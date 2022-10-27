@@ -9,14 +9,14 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DecorationJson,
 } from 'ssDatabase/api/userJson/decoration/types';
 
 export type AutoCompleteDecorationProps<T> = {
   editable?: boolean;
   allEntityIds: string[];
-  decorationRowKey: DECORATION_ROW_KEY;
+  decorationRowKey: DECORATION_ROW_TYPE;
 
   onSelectEntityId: (entityId: string) => void;
 } & Omit<

@@ -8,7 +8,7 @@ import {} from 'ssDatabase/api/types';
 import {ThunkConfig} from '../../types';
 import {
   DecorationJsonMap,
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DecorationJson,
   DecorationInfo,
 } from 'ssDatabase/api/userJson/decoration/types';
@@ -26,8 +26,8 @@ export interface DecorationState {
 const initialState: DecorationState = {
   // DEACORATIONS
   fullDecorationMap: {
-    [DECORATION_ROW_KEY.INPUT]: {},
-    [DECORATION_ROW_KEY.OUTPUT]: {},
+    [DECORATION_ROW_TYPE.INPUT]: {},
+    [DECORATION_ROW_TYPE.OUTPUT]: {},
   },
 
   // RERENDER
@@ -57,7 +57,7 @@ export const startSetAllDecorations = createAsyncThunk<
 
 // UPDATE
 type StartUpdateDecorationRow = {
-  rowKey: DECORATION_ROW_KEY;
+  rowKey: DECORATION_ROW_TYPE;
   newJson: DecorationJson;
 };
 export const startUpdateDecorationRow = createAsyncThunk<
@@ -80,7 +80,7 @@ export const startUpdateDecorationRow = createAsyncThunk<
  * Creates new entityId if not exists
  */
 type StartUpdateDecorationValue = {
-  rowKey: DECORATION_ROW_KEY;
+  rowKey: DECORATION_ROW_TYPE;
   entityId: string;
   newValue: string;
 };

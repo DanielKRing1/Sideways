@@ -10,7 +10,7 @@ import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {GradientColor} from 'ssComponents/Charts/Histogram/Histogram';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import {
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DECORATION_VALUE_KEY,
 } from 'ssDatabase/api/userJson/decoration/types';
 
@@ -35,7 +35,7 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
     const outputHeight: number = 100 / rawOutputs.length;
 
     return getDecorationMapSubsetList<GradientColor>(
-      DECORATION_ROW_KEY.OUTPUT,
+      DECORATION_ROW_TYPE.OUTPUT,
       rawOutputs,
       DECORATION_VALUE_KEY.COLOR,
       fullDecorationMap,

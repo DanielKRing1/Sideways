@@ -16,7 +16,7 @@ import {
 } from 'ssDatabase/hardware/realm/userJson/utils';
 import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
 import {
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DECORATION_VALUE_KEY,
 } from 'ssDatabase/api/userJson/decoration/types';
 
@@ -42,7 +42,7 @@ const InputVenn: FC<InputVennProps> = () => {
 
     // 2. Convert nodeIds to colors
     return getDecorationMapSubsetList<string>(
-      DECORATION_ROW_KEY.INPUT,
+      DECORATION_ROW_TYPE.INPUT,
       vennNodeIds,
       DECORATION_VALUE_KEY.COLOR,
       fullDecorationMap,
@@ -65,7 +65,7 @@ const InputVenn: FC<InputVennProps> = () => {
         xLabels={vennByMonth[monthIndex].outputs}
         xLabelFill={({text}) =>
           getDecorationMapValue(
-            DECORATION_ROW_KEY.OUTPUT,
+            DECORATION_ROW_TYPE.OUTPUT,
             text[0],
             fullDecorationMap,
           )[DECORATION_VALUE_KEY.COLOR]

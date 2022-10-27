@@ -11,7 +11,7 @@ import {
 import MyText from 'ssComponents/ReactNative/MyText';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
-import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
@@ -46,7 +46,7 @@ const NodeInput: FC<NodeInputProps> = () => {
           .map((node: Realm.Object & CGNode) => node.id)}
         inputValue={searchedNodeIdInput}
         setInputValue={handleSetSearchedNodeId}
-        decorationRowKey={DECORATION_ROW_KEY.INPUT}
+        decorationRowKey={DECORATION_ROW_TYPE.INPUT}
         onSelectEntityId={handleSetNodeId}
       />
     </View>

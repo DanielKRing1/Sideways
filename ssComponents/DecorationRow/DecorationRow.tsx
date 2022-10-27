@@ -20,7 +20,7 @@ import {RootState, AppDispatch} from 'ssRedux/index';
 import {getDecorationJsonValue} from 'ssDatabase/hardware/realm/userJson/utils';
 import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
 import {
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DecorationJsonValue,
 } from 'ssDatabase/api/userJson/decoration/types';
 
@@ -28,7 +28,7 @@ type DecorationRowProps = {
   editable?: boolean;
   style?: ViewStyle;
 
-  rowKey: DECORATION_ROW_KEY;
+  rowKey: DECORATION_ROW_TYPE;
   entityId: string;
   placeholder?: string;
 
@@ -99,7 +99,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
     // Redux
     dispatch(
       startUpdateDecorationText({
-        rowKey: DECORATION_ROW_KEY[rowKey],
+        rowKey: DECORATION_ROW_TYPE[rowKey],
         entityId,
         newValue: newId,
       }),
@@ -111,7 +111,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
     // Redux
     dispatch(
       startUpdateDecorationColor({
-        rowKey: DECORATION_ROW_KEY.INPUT,
+        rowKey: DECORATION_ROW_TYPE.INPUT,
         entityId,
         newValue: newColor,
       }),
@@ -123,7 +123,7 @@ const DecorationRow: FC<DecorationRowProps> = props => {
     // Redux
     dispatch(
       startUpdateDecorationIcon({
-        rowKey: DECORATION_ROW_KEY.INPUT,
+        rowKey: DECORATION_ROW_TYPE.INPUT,
         entityId,
         newValue: newIconName,
       }),

@@ -4,7 +4,7 @@ import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import {FlexRow} from 'ssComponents/Flex';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
-import {DECORATION_ROW_KEY} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
 import styled, {DefaultTheme} from 'styled-components/native';
 import GrowingIdList from '../../../../../ssComponents/Input/GrowingIdList';
 import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
@@ -34,7 +34,7 @@ const createInputsRenderItemComponent =
       <FlexRow>
         <DecorationRow
           placeholder="Add an input..."
-          rowKey={DECORATION_ROW_KEY.INPUT}
+          rowKey={DECORATION_ROW_TYPE.INPUT}
           entityId={item.text}
           onEditEntityId={(newText: string) => handleChangeText(newText, index)}
         />

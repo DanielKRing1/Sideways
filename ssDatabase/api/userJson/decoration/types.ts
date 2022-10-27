@@ -18,7 +18,7 @@ export type UserJsonMap = DecorationJsonMap & {};
 
 // Enums
 // (Row Key)
-export enum DECORATION_ROW_KEY {
+export enum DECORATION_ROW_TYPE {
   INPUT = 'INPUT',
   OUTPUT = 'OUTPUT',
 }
@@ -29,8 +29,8 @@ export enum DECORATION_VALUE_KEY {
 }
 
 export type DecorationJsonMap = {
-  [DECORATION_ROW_KEY.INPUT]: DecorationJson;
-  [DECORATION_ROW_KEY.OUTPUT]: DecorationJson;
+  [DECORATION_ROW_TYPE.INPUT]: DecorationJson;
+  [DECORATION_ROW_TYPE.OUTPUT]: DecorationJson;
 };
 export type DecorationJson = Dict<DecorationJsonValue>;
 export type DecorationJsonValue = {
@@ -38,7 +38,7 @@ export type DecorationJsonValue = {
   [DECORATION_VALUE_KEY.ICON]: AvailableIcons;
 };
 export type DecorationInfo = {
-  decorationRowId: DECORATION_ROW_KEY;
+  decorationRowId: DECORATION_ROW_TYPE;
   entityId: string;
   [DECORATION_VALUE_KEY.COLOR]?: string;
   [DECORATION_VALUE_KEY.ICON]?: AvailableIcons;
@@ -49,7 +49,7 @@ export type DecorationDriver = {
   closeAll: () => Promise<void>;
 
   setDecorationRow: (
-    rowKey: DECORATION_ROW_KEY,
+    rowKey: DECORATION_ROW_TYPE,
     newJson: DecorationJson,
   ) => void | never;
   saveDecorations: (newDecorations: DecorationInfo[]) => void | never;

@@ -11,7 +11,7 @@ import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 import {HeatMapDay} from 'ssDatabase/api/analytics/timeseries/types';
 import {
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DECORATION_VALUE_KEY,
 } from 'ssDatabase/api/userJson/decoration/types';
 
@@ -37,7 +37,7 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
     // [ { value: [...colors], onPress: (i) => setSelectedIndex(i) }, ... ]
     return rawHeatMap.map((day: HeatMapDay) => ({
       value: getDecorationMapSubsetList<string>(
-        DECORATION_ROW_KEY.OUTPUT,
+        DECORATION_ROW_TYPE.OUTPUT,
         day.outputs,
         DECORATION_VALUE_KEY.COLOR,
         fullDecorationMap,

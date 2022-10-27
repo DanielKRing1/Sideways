@@ -12,7 +12,7 @@ import {} from 'ssDatabase/api/types';
 import {XDomain} from 'ssComponents/Charts/types';
 import {
   StringMap,
-  DECORATION_ROW_KEY,
+  DECORATION_ROW_TYPE,
   DECORATION_VALUE_KEY,
 } from 'ssDatabase/api/userJson/decoration/types';
 
@@ -36,7 +36,7 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
   const outputColorMap: StringMap = useMemo(
     () =>
       getDecorationMapSubset<string>(
-        DECORATION_ROW_KEY.OUTPUT,
+        DECORATION_ROW_TYPE.OUTPUT,
         dbDriver.getSlicePropertyNames(activeSliceName),
         DECORATION_VALUE_KEY.COLOR,
         fullDecorationMap,
