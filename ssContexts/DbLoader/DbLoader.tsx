@@ -24,6 +24,7 @@ type DbLoaderProviderType = {
 const DbLoaderProvider: FC<DbLoaderProviderType> = props => {
   const {children} = props;
 
+  // TODO Add useMemo?
   const {isLoaded, load, closeAll} = useDbDriverLoader();
 
   return (

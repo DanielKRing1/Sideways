@@ -20,9 +20,16 @@ type MyModalProps = {
   close: () => void;
   children?: React.ReactNode;
   contentContainerStyle?: ViewStyle;
+  backgroundStyle?: ViewStyle;
 };
 const MyModal: FC<MyModalProps> = props => {
-  const {isOpen, close, children, contentContainerStyle = {}} = props;
+  const {
+    isOpen,
+    close,
+    children,
+    contentContainerStyle = {},
+    backgroundStyle = {},
+  } = props;
 
   const {width, height} = useWindowDimensions();
 
@@ -41,6 +48,7 @@ const MyModal: FC<MyModalProps> = props => {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'rgba(0,0,0,0.5)',
+            ...backgroundStyle,
           }}>
           <View
             onStartShouldSetResponder={event => true}

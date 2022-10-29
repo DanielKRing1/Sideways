@@ -17,8 +17,6 @@ import GrowingOutputsList from './components/GrowingOutputsList';
 import RatingSlider from './components/RatingSlider';
 import MyButton from '../../../../ssComponents/ReactNative/MyButton';
 import VerticalSpace from '../../../../ssComponents/Spacing/VerticalSpace';
-import {useNavigation} from '@react-navigation/native';
-import {ACTIVE_SLICE_SCREEN_NAME} from '../../../../ssNavigation/constants';
 import {StackNavigatorNavigationProp} from '../../../../ssNavigation/StackNavigator';
 import {resetRealm} from '../../../../ssRealm/reset';
 
@@ -28,9 +26,6 @@ const RateSliceScreen: FC<RateSliceScreenProps> = props => {
 
   // THEME
   const theme = useTheme();
-
-  // NAVIGATION
-  const navigation = useNavigation<StackNavigatorNavigationProp<any>>();
 
   // REDUX
   const {ratedSignature} = useSelector(
@@ -49,43 +44,23 @@ const RateSliceScreen: FC<RateSliceScreenProps> = props => {
     <View>
       <FlexCol>
         <TabNavHeader />
-
         <GrowingInputsList />
         <VerticalSpace />
         <GrowingOutputsList />
-
         <RatingSlider />
-
-        {activeSliceName === '' ? (
-          <FlexCol alignItems="center">
-            <MyButton
-              style={{
-                borderWidth: 1,
-                borderRadius: 8,
-                padding: 10,
-                width: '80%',
-              }}
-              onPress={handleRate}>
-              <MyText>Rate .u.</MyText>
-            </MyButton>
-          </FlexCol>
-        ) : (
-          <FlexCol alignItems="center">
-            <MyButton
-              style={{
-                borderWidth: 1,
-                borderColor: theme.colors.grayBorder,
-                padding: 10,
-                width: '80%',
-              }}
-              onPress={() => navigation.navigate(ACTIVE_SLICE_SCREEN_NAME)}>
-              <MyText style={{color: theme.colors.darkRed}}>
-                Select a slice!
-              </MyText>
-            </MyButton>
-          </FlexCol>
-        )}
-
+        <FlexCol alignItems="center">
+          <MyButton
+            style={{
+              borderWidth: 1,
+              borderRadius: 8,
+              padding: 10,
+              width: '80%',
+            }}
+            onPress={handleRate}>
+            <MyText>Rate .u.</MyText>
+          </MyButton>
+        </FlexCol>
+        )
         <FlexCol alignItems="center">
           <MyButton
             style={{

@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {useContext} from 'react';
+import React from 'react';
 import {SafeAreaView} from 'react-native';
 
 import store from './ssRedux';
@@ -22,8 +22,11 @@ import {
   DbLoaderContext,
   DbLoaderProvider,
 } from './ssContexts/DbLoader/DbLoader';
+import {
+  AuthorizedNavContext,
+  AuthorizedNavProvider,
+} from './ssContexts/RequireActiveSlice/AuthorizedNavProvider';
 import MyThemeProvider from './ssTheme/ThemeProvider';
-import RequireActiveSlice from './ssComponents/TopLevel/RequireActiveSlice';
 import {resetRealm} from './ssRealm/reset';
 
 const NewApp = () => {
@@ -47,13 +50,11 @@ const NewApp = () => {
 export default NewApp;
 
 const AppContent = () => {
-  const {isLoaded} = useContext(DbLoaderContext);
-
   return (
     <DbLoaderProvider>
-      <RequireActiveSlice>
+      <AuthorizedNavProvider>
         <StackNavigator />
-      </RequireActiveSlice>
+      </AuthorizedNavProvider>
     </DbLoaderProvider>
   );
 };

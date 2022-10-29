@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 // NAVIGATION
@@ -18,6 +18,7 @@ import NavComponentCreator, {
   PROFILE_BUTTON,
   SETTINGS_BUTTON,
 } from './NavHeaderComponents';
+import {AuthorizedNavContext} from 'ssContexts/RequireActiveSlice/AuthorizedNavProvider';
 
 type NavHeaderType = {
   children: React.ReactNode;
@@ -37,23 +38,22 @@ const NavHeader: FC<NavHeaderType> = props => {
 
 type TabNavHeaderProps = {};
 export const TabNavHeader: FC<TabNavHeaderProps> = props => {
-  const navigation =
-    useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
+  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
 
   return (
     <NavHeader>
       {[
         <NavComponentCreator.PROFILE_BUTTON
           key={PROFILE_BUTTON}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
         <NavComponentCreator.ACTIVE_SLICE_BUTTON
           key={ACTIVE_SLICE_BUTTON}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
         <NavComponentCreator.SETTINGS_BUTTON
           key={SETTINGS_BUTTON}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
       ]}
     </NavHeader>
@@ -62,23 +62,22 @@ export const TabNavHeader: FC<TabNavHeaderProps> = props => {
 
 type ActiveSliceHeaderProps = {};
 export const ActiveSliceNavHeader: FC<ActiveSliceHeaderProps> = props => {
-  const navigation =
-    useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
+  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
 
   return (
     <NavHeader>
       {[
         <NavComponentCreator.GO_BACK_BUTTON
           key={GO_BACK_BUTTON}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
         <NavComponentCreator.ACTIVE_SLICE_INPUT
           key={ACTIVE_SLICE_INPUT}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
         <NavComponentCreator.ADD_SLICE_BUTTON
           key={ADD_SLICE_BUTTON}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
       ]}
     </NavHeader>
@@ -97,19 +96,18 @@ type AddSliceHeaderProps = {
 export const AddSliceNavHeader: FC<AddSliceHeaderProps> = props => {
   const {justifyContent = 'space-between'} = props;
 
-  const navigation =
-    useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
+  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
 
   return (
     <NavHeader justifyContent={justifyContent}>
       {[
         <NavComponentCreator.GO_BACK_BUTTON
           key={GO_BACK_BUTTON}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
         <NavComponentCreator.ADD_SLICE_INPUT
           key={ADD_SLICE_INPUT}
-          navigation={navigation}
+          navigation={authorizedStackNavigate}
         />,
         <NavComponentCreator.EMPTY_SPACE key={EMPTY_SPACE} />,
       ]}
@@ -129,8 +127,7 @@ type ProfileHeaderProps = {
 export const ProfileHeader: FC<ProfileHeaderProps> = props => {
   const {justifyContent = 'flex-start'} = props;
 
-  const navigation =
-    useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
+  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
 
   return (
     <NavHeader justifyContent={justifyContent}>
@@ -141,7 +138,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = props => {
             paddingTop: 15,
             paddingLeft: 15,
           }}
-          onPress={() => navigation.navigate(TABS_SCREEN_NAME)}
+          onPress={() => authorizedStackNavigate(TABS_SCREEN_NAME)}
         />,
       ]}
     </NavHeader>
@@ -160,8 +157,7 @@ type SettingsHeaderProps = {
 export const SettingsHeader: FC<SettingsHeaderProps> = props => {
   const {justifyContent = 'flex-start'} = props;
 
-  const navigation =
-    useNavigation<StackNavigatorNavigationProp<typeof TABS_SCREEN_NAME>>();
+  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
 
   return (
     <NavHeader justifyContent={justifyContent}>
@@ -172,7 +168,7 @@ export const SettingsHeader: FC<SettingsHeaderProps> = props => {
             paddingTop: 15,
             paddingLeft: 15,
           }}
-          onPress={() => navigation.navigate(TABS_SCREEN_NAME)}
+          onPress={() => authorizedStackNavigate(TABS_SCREEN_NAME)}
         />,
       ]}
     </NavHeader>
