@@ -44,6 +44,8 @@ export const startCreateSlice = createAsyncThunk<
 
   const results: [void, void] = await Promise.all([stackPromise, graphPromise]);
 
+  thunkAPI.dispatch(setPossibleOutputs([]));
+
   thunkAPI.dispatch(forceSignatureRerender());
 
   return true;

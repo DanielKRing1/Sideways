@@ -11,7 +11,10 @@ import {
 } from '../../../ssRedux/createSidewaysSlice';
 
 // NAVIGATION
-import {ADD_SLICE_SCREEN_NAME} from '../../../ssNavigation/constants';
+import {
+  ADD_SLICE_SCREEN_NAME,
+  TABS_SCREEN_NAME,
+} from '../../../ssNavigation/constants';
 import {StackNavigatorProps} from '../../../ssNavigation/StackNavigator';
 
 // COMPONENTS
@@ -52,14 +55,27 @@ const AddSliceScreen: FC<
   );
   const dispatch: AppDispatch = useDispatch();
 
-  // UPDATE REDUX STATE
-  useEffect(() => {
-    dispatch(setNewSliceName(searchedSliceName));
-  }, []);
+  const handleCreateSlice = () => {
+    // 1. Dispatch to Redux and reset setPossibleOutputs
+    dispatch(startCreateSlice());
+
+    // 2. Nav to Rate Screen
+    navigation.navigate(TABS_SCREEN_NAME);
+  };
+
+  // TODO Delete
+  // // UPDATE REDUX STATE
+  // useEffect(() => {
+  //   dispatch(setNewSliceName(searchedSliceName));
+  // }, []);
 
   return (
     <View>
       <AddSliceNavHeader />
+
+      <VerticalSpace />
+
+      <MyText>Add possible outputs...</MyText>
 
       <GrowingPossibleOutputs />
 
@@ -73,7 +89,7 @@ const AddSliceScreen: FC<
             borderColor: theme.colors.grayBorder,
             padding: 10,
           }}
-          onPress={() => dispatch(startCreateSlice())}>
+          onPress={handleCreateSlice}>
           <MyText>Create new slice!</MyText>
         </MyButton>
       </FlexCol>

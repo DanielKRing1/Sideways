@@ -60,7 +60,7 @@ const RateSliceScreen: FC<RateSliceScreenProps> = props => {
             <MyText>Rate .u.</MyText>
           </MyButton>
         </FlexCol>
-        )
+
         <FlexCol alignItems="center">
           <MyButton
             style={{

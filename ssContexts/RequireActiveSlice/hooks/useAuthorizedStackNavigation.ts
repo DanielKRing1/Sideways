@@ -28,7 +28,7 @@ export function useAuthorizedStackNavigation() {
   const [errStatus, setErrStatus] = useState<ErrorStatus>(ErrorStatus.NO_ERR);
 
   // TIMEOUT
-  const {createTimeout} = useTimeout();
+  const {createTO} = useTimeout();
 
   // RAW NAV
   const navigation =
@@ -39,39 +39,30 @@ export function useAuthorizedStackNavigation() {
   const {activeSliceName, activeSliceState} = useActiveSliceState();
 
   // NAV WRAPPER
-  // Authorizes navigation requests
+  // Authorizes navigation.navigate requests
   const authorizedStackNavigate = (
     screenName: keyof StackNavigatorParamList,
     params?: StackNavigatorParamList[keyof StackNavigatorParamList],
   ) => {
-    switch (activeSliceState) {
-      // Valid, can nav
-      case ActiveSliceState.VALID_ACTIVE_SLICE:
-        navigation.navigate(screenName, params);
-        break;
-
-      // Invalid, cannot nav
-      case ActiveSliceState.INVALID_ACTIVE_SLICE:
-        setErrStatus(ErrorStatus.INVALID_ACTIVE_SLICE);
-        break;
-
-      case ActiveSliceState.NO_AVAILABLE_SLICES:
-        setErrStatus(ErrorStatus.NO_AVAILABLE_SLICES);
-        break;
-      default:
-        break;
-    }
+    authorizeNavAction(() => navigation.navigate(screenName, params));
   };
 
-  // EFFECTS
+  // Authorizes navigation.goBack requests
+  const authorizedGoBack = () => {
+    authorizeNavAction(() => navigation.goBack());
+  };
+
+  const resetErrStatus = () => setErrStatus(ErrorStatus.NO_ERR);
+
+  // AUTOMATIC EFFECTS
   // Nav to Select Active Slice screen or
   // Add Slice screen on invalid activeSliceName
   useEffect(() => {
-    authorizeActiveSlice();
+    authorizeNavAction();
   }, [activeSliceState]);
 
-  const authorizeActiveSlice = () => {
-    const resetErrStatus = () => setErrStatus(ErrorStatus.NO_ERR);
+  const authorizeNavAction = (actionCb?: () => void) => {
+    if (!actionCb) actionCb = () => {};
 
     switch (activeSliceState) {
       // 1. INVALID
@@ -79,7 +70,8 @@ export function useAuthorizedStackNavigation() {
       case ActiveSliceState.INVALID_ACTIVE_SLICE:
         navigation.navigate(ACTIVE_SLICE_SCREEN_NAME);
 
-        createTimeout(resetErrStatus, 2000);
+        setErrStatus(ErrorStatus.INVALID_ACTIVE_SLICE);
+        createTO(resetErrStatus, 2000);
         break;
       // Or nav to Add Slice screen
       case ActiveSliceState.NO_AVAILABLE_SLICES:
@@ -88,18 +80,22 @@ export function useAuthorizedStackNavigation() {
           {inputSliceName: activeSliceName},
         );
 
-        createTimeout(resetErrStatus, 2000);
+        setErrStatus(ErrorStatus.NO_AVAILABLE_SLICES);
+        createTO(resetErrStatus, 2000);
         break;
 
       // 2. VALID
       default:
-        // Do nothing
+        actionCb();
+        resetErrStatus();
         break;
     }
   };
 
   return {
     authorizedStackNavigate,
+    authorizedGoBack,
+    resetErrStatus,
     activeSliceName,
     activeSliceState,
     errStatus,

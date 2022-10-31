@@ -9,7 +9,7 @@ export const useTimeout = () => {
     return () => clearTO();
   }, []);
 
-  const createTimeout = (cb: () => void, timeout: number) => {
+  const createTO = (cb: () => void, timeout: number) => {
     // 1. Clear old timeout
     clearTO();
 
@@ -23,6 +23,7 @@ export const useTimeout = () => {
   };
 
   return {
-    createTimeout,
+    createTO,
+    clearTO,
   };
 };

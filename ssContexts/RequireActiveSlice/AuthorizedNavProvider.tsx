@@ -28,9 +28,11 @@ type AuthorizedNavContextValueType = {
         }
       | undefined,
   ) => void;
+  authorizedGoBack: () => void;
 };
 const DEFAULT_CONTEXT_VALUE: AuthorizedNavContextValueType = {
   authorizedStackNavigate: (screenName: keyof StackNavigatorParamList) => {},
+  authorizedGoBack: () => {},
 };
 const AuthorizedNavContext: React.Context<AuthorizedNavContextValueType> =
   createContext<AuthorizedNavContextValueType>(DEFAULT_CONTEXT_VALUE);
@@ -43,20 +45,24 @@ const AuthorizedNavProvider: FC<AuthorizedNavProviderProps> = props => {
   const {children} = props;
 
   // AUTHORIZED NAV
-  const {authorizedStackNavigate, errStatus} = useAuthorizedStackNavigation();
+  const {authorizedStackNavigate, authorizedGoBack, errStatus, resetErrStatus} =
+    useAuthorizedStackNavigation();
 
   // MODAL
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     if (errStatus !== ErrorStatus.NO_ERR) setIsOpen(true);
+    else setIsOpen(false);
   }, [errStatus]);
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    resetErrStatus();
+  };
 
   return (
     <AuthorizedNavContext.Provider
       // @ts-ignore
       style={{flex: 1}}
-      value={{authorizedStackNavigate}}>
+      value={{authorizedStackNavigate, authorizedGoBack}}>
       <>
         {/* CONTENT */}
         {children}

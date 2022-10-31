@@ -1,8 +1,6 @@
 import React, {FC, useContext} from 'react';
-import {useNavigation} from '@react-navigation/native';
 
 // NAVIGATION
-import {StackNavigatorNavigationProp} from '../../ssNavigation/StackNavigator';
 import {TABS_SCREEN_NAME} from '../../ssNavigation/constants';
 
 // COMPONENTS
@@ -40,20 +38,22 @@ type TabNavHeaderProps = {};
 export const TabNavHeader: FC<TabNavHeaderProps> = props => {
   const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
 
+  console.log(authorizedStackNavigate);
+
   return (
     <NavHeader>
       {[
         <NavComponentCreator.PROFILE_BUTTON
           key={PROFILE_BUTTON}
-          navigation={authorizedStackNavigate}
+          authorizedNavigate={authorizedStackNavigate}
         />,
         <NavComponentCreator.ACTIVE_SLICE_BUTTON
           key={ACTIVE_SLICE_BUTTON}
-          navigation={authorizedStackNavigate}
+          authorizedNavigate={authorizedStackNavigate}
         />,
         <NavComponentCreator.SETTINGS_BUTTON
           key={SETTINGS_BUTTON}
-          navigation={authorizedStackNavigate}
+          authorizedNavigate={authorizedStackNavigate}
         />,
       ]}
     </NavHeader>
@@ -62,22 +62,23 @@ export const TabNavHeader: FC<TabNavHeaderProps> = props => {
 
 type ActiveSliceHeaderProps = {};
 export const ActiveSliceNavHeader: FC<ActiveSliceHeaderProps> = props => {
-  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
+  const {authorizedStackNavigate, authorizedGoBack} =
+    useContext(AuthorizedNavContext);
 
   return (
     <NavHeader>
       {[
         <NavComponentCreator.GO_BACK_BUTTON
           key={GO_BACK_BUTTON}
-          navigation={authorizedStackNavigate}
+          authorizedGoBack={authorizedGoBack}
         />,
         <NavComponentCreator.ACTIVE_SLICE_INPUT
           key={ACTIVE_SLICE_INPUT}
-          navigation={authorizedStackNavigate}
+          authorizedNavigate={authorizedStackNavigate}
         />,
         <NavComponentCreator.ADD_SLICE_BUTTON
           key={ADD_SLICE_BUTTON}
-          navigation={authorizedStackNavigate}
+          authorizedNavigate={authorizedStackNavigate}
         />,
       ]}
     </NavHeader>
@@ -96,18 +97,19 @@ type AddSliceHeaderProps = {
 export const AddSliceNavHeader: FC<AddSliceHeaderProps> = props => {
   const {justifyContent = 'space-between'} = props;
 
-  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
+  const {authorizedStackNavigate, authorizedGoBack} =
+    useContext(AuthorizedNavContext);
 
   return (
     <NavHeader justifyContent={justifyContent}>
       {[
         <NavComponentCreator.GO_BACK_BUTTON
           key={GO_BACK_BUTTON}
-          navigation={authorizedStackNavigate}
+          authorizedGoBack={authorizedGoBack}
         />,
         <NavComponentCreator.ADD_SLICE_INPUT
           key={ADD_SLICE_INPUT}
-          navigation={authorizedStackNavigate}
+          authorizedNavigate={authorizedStackNavigate}
         />,
         <NavComponentCreator.EMPTY_SPACE key={EMPTY_SPACE} />,
       ]}

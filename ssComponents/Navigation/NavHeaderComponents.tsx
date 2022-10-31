@@ -30,14 +30,22 @@ import {useTheme} from 'styled-components';
 import HorizontalSpace, {
   HorizontalSpaceProps,
 } from '../Spacing/HorizontalSpace';
+import {ViewStyle} from 'react-native';
 
 type ProfileNavButton<PreviousScreen extends keyof StackNavigatorParamList> = {
-  navigation: StackNavigatorNavigationProp<PreviousScreen>;
+  authorizedNavigate: (
+    screenName: keyof StackNavigatorParamList,
+    params?:
+      | {
+          inputSliceName: string;
+        }
+      | undefined,
+  ) => void;
 };
 const createProfileNavButton: FC<
   ProfileNavButton<keyof StackNavigatorParamList>
 > = props => {
-  const {navigation} = props;
+  const {authorizedNavigate} = props;
 
   const theme = useTheme();
 
@@ -45,7 +53,7 @@ const createProfileNavButton: FC<
     <ProfileButton
       alignItems="center"
       marginRight={10}
-      onPress={() => navigation.navigate(PROFILE_SCREEN_NAME)}>
+      onPress={() => authorizedNavigate(PROFILE_SCREEN_NAME)}>
       <MyText
         style={{
           fontWeight: 'bold',
@@ -61,12 +69,19 @@ const createProfileNavButton: FC<
 type ActiveSliceNavButtonProps<
   PreviousScreen extends keyof StackNavigatorParamList,
 > = {
-  navigation: StackNavigatorNavigationProp<PreviousScreen>;
+  authorizedNavigate: (
+    screenName: keyof StackNavigatorParamList,
+    params?:
+      | {
+          inputSliceName: string;
+        }
+      | undefined,
+  ) => void;
 };
 const createActiveSliceNavButton: FC<
   ActiveSliceNavButtonProps<keyof StackNavigatorParamList>
 > = props => {
-  const {navigation} = props;
+  const {authorizedNavigate} = props;
 
   const {activeSliceName, readSSSignature} = useSelector(
     (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
@@ -75,12 +90,9 @@ const createActiveSliceNavButton: FC<
   const theme = useTheme();
 
   return (
-    <MyButton onPress={() => navigation.navigate(ACTIVE_SLICE_SCREEN_NAME)}>
+    <MyButton onPress={() => authorizedNavigate(ACTIVE_SLICE_SCREEN_NAME)}>
       <MyText style={{fontWeight: 'bold', fontSize: theme.fontSizes.lg}}>
-        {activeSliceName || 'Choose Slice...'}
-      </MyText>
-      <MyText style={{fontWeight: 'bold', fontSize: theme.fontSizes.lg}}>
-        Search
+        {activeSliceName || 'Select Slice...'}
       </MyText>
     </MyButton>
   );
@@ -89,12 +101,19 @@ const createActiveSliceNavButton: FC<
 type ActiveSliceNavInputProps<
   PreviousScreen extends keyof StackNavigatorParamList,
 > = {
-  navigation: StackNavigatorNavigationProp<PreviousScreen>;
+  authorizedNavigate: (
+    screenName: keyof StackNavigatorParamList,
+    params?:
+      | {
+          inputSliceName: string;
+        }
+      | undefined,
+  ) => void;
 };
 const createActiveSliceNavInput: FC<
   ActiveSliceNavInputProps<keyof StackNavigatorParamList>
 > = props => {
-  const {navigation} = props;
+  const {authorizedNavigate} = props;
 
   const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
     (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
@@ -117,17 +136,24 @@ const createActiveSliceNavInput: FC<
 type AddSliceNavButtonProps<
   PreviousScreen extends keyof StackNavigatorParamList,
 > = {
-  navigation: StackNavigatorNavigationProp<PreviousScreen>;
+  authorizedNavigate: (
+    screenName: keyof StackNavigatorParamList,
+    params?:
+      | {
+          inputSliceName: string;
+        }
+      | undefined,
+  ) => void;
 };
 const createAddSliceNavButton: FC<
   AddSliceNavButtonProps<keyof StackNavigatorParamList>
 > = props => {
-  const {navigation} = props;
+  const {authorizedNavigate} = props;
 
   return (
     <PlusButton
       onPress={() =>
-        navigation.navigate(ADD_SLICE_SCREEN_NAME, {inputSliceName: '???'})
+        authorizedNavigate(ADD_SLICE_SCREEN_NAME, {inputSliceName: '???'})
       }
     />
   );
@@ -136,12 +162,19 @@ const createAddSliceNavButton: FC<
 type AddSliceNavInputProps<
   PreviousScreen extends keyof StackNavigatorParamList,
 > = {
-  navigation: StackNavigatorNavigationProp<PreviousScreen>;
+  authorizedNavigate: (
+    screenName: keyof StackNavigatorParamList,
+    params?:
+      | {
+          inputSliceName: string;
+        }
+      | undefined,
+  ) => void;
 };
 const createAddSliceNavInput: FC<
   AddSliceNavInputProps<keyof StackNavigatorParamList>
 > = props => {
-  const {navigation} = props;
+  const {authorizedNavigate} = props;
 
   const {newSliceName, possibleOutputs, createdSignature} = useSelector(
     (state: RootState) => ({...state.createSidewaysSlice}),
@@ -164,12 +197,19 @@ const createAddSliceNavInput: FC<
 type SettingsNavButtonProps<
   PreviousScreen extends keyof StackNavigatorParamList,
 > = {
-  navigation: StackNavigatorNavigationProp<PreviousScreen>;
+  authorizedNavigate: (
+    screenName: keyof StackNavigatorParamList,
+    params?:
+      | {
+          inputSliceName: string;
+        }
+      | undefined,
+  ) => void;
 };
 const createSettingsNavButton: FC<
   SettingsNavButtonProps<keyof StackNavigatorParamList>
 > = props => {
-  const {navigation} = props;
+  const {authorizedNavigate} = props;
 
   const theme = useTheme();
 
@@ -178,7 +218,7 @@ const createSettingsNavButton: FC<
       alignItems="center"
       marginLeft={10}
       front={false}
-      onPress={() => navigation.navigate(SETTINGS_SCREEN_NAME)}>
+      onPress={() => authorizedNavigate(SETTINGS_SCREEN_NAME)}>
       <MyText
         style={{
           fontWeight: 'bold',
@@ -191,26 +231,24 @@ const createSettingsNavButton: FC<
   );
 };
 
-type GoBackNavButtonProps<
-  PreviousScreen extends keyof StackNavigatorParamList,
-> = {
-  navigation: StackNavigatorNavigationProp<PreviousScreen>;
+type GoBackNavButtonProps = {
+  authorizedGoBack: () => void;
+  style?: ViewStyle;
 };
-const createGoBackNavButton: FC<
-  GoBackNavButtonProps<keyof StackNavigatorParamList>
-> = props => {
-  const {navigation} = props;
+const createGoBackNavButton: FC<GoBackNavButtonProps> = props => {
+  const {authorizedGoBack, style} = props;
 
-  return <BackButton onPress={() => navigation.goBack()} />;
+  return <BackButton onPress={authorizedGoBack} style={style} />;
 };
 
 type GoNavButtonProps = {
   onPress: () => void;
+  style?: ViewStyle;
 };
 const createGoNavButton: FC<GoNavButtonProps> = props => {
-  const {onPress} = props;
+  const {onPress, style} = props;
 
-  return <BackButton {...props} onPress={onPress} />;
+  return <BackButton {...props} onPress={onPress} style={style} />;
 };
 
 type EmptySpaceProps = {} & HorizontalSpaceProps;
@@ -241,7 +279,7 @@ type ComponentCreatorKeys =
   | typeof GO_NAV_BUTTON
   | typeof EMPTY_SPACE;
 
-const componentCreator: Record<ComponentCreatorKeys, FC<any>> = {
+const componentCreator = {
   [PROFILE_BUTTON]: createProfileNavButton,
   [ACTIVE_SLICE_BUTTON]: createActiveSliceNavButton,
   [ADD_SLICE_BUTTON]: createAddSliceNavButton,
