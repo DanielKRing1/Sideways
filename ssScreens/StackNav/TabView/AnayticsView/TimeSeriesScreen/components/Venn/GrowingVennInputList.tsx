@@ -19,9 +19,7 @@ import {
 } from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 // DECORATIONS
-import {CGNode} from '@asianpersonn/realm-graph';
 import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
-import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
 
 const createRenderItemComponent =
@@ -31,7 +29,7 @@ const createRenderItemComponent =
     (
       <FlexRow>
         <AutoCompleteDecoration
-          clickOutsideId="GrowingVennInputList"
+          clickOutsideId={`GrowingVennInputList-${item.id}`}
           placeholder="Search an input..."
           allEntityIds={allInputIds}
           inputValue={item.text}
@@ -56,19 +54,12 @@ const createRenderItemComponent =
 type GrowingVennInputListProps = {};
 const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
   // REDUX
-  const {activeSliceName, vennNodeInputs} = useSelector((state: RootState) => ({
-    ...state.readSidewaysSlice.toplevelReadReducer,
-    ...state.analyticsSlice.timeseriesStatsSlice,
-  }));
+  const {activeSliceName, vennNodeInputs, allDbInputs, allDbOutputs} =
+    useSelector((state: RootState) => ({
+      ...state.readSidewaysSlice.toplevelReadReducer,
+      ...state.analyticsSlice.timeseriesStatsSlice,
+    }));
   const dispatch: AppDispatch = useDispatch();
-
-  const allInputIds: string[] = useMemo(
-    () =>
-      dbDriver
-        .getAllNodes(activeSliceName)
-        .map((node: Realm.Object & CGNode) => node.id),
-    [activeSliceName],
-  );
 
   // PROP VARIABLES
   const keyExtractor = (dataPoint: VennInput) => `${dataPoint.id}`;
@@ -86,7 +77,7 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
     <GrowingIdList
       data={vennNodeInputs}
       createRenderItemComponent={createRenderItemComponent(
-        allInputIds,
+        allDbInputs,
         (index: number) => dispatch(startRmVennInput(index)),
       )}
       keyExtractor={keyExtractor}

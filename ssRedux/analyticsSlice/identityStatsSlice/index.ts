@@ -110,10 +110,8 @@ export const startAssureFreshness = createAsyncThunk<
 const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'identityStatsSS/startGetIdentityNodes',
   async (undef, thunkAPI) => {
-    const activeSliceName: string =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const rawOutputs: string[] =
-      dbDriver.getSlicePropertyNames(activeSliceName);
+    const {activeSliceName, allDbOutputs} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const listLength: number = 5;
     const outputType: GraphPropType = GRAPH_PROP_KEYS.SINGLE;
     const iterations: number = 20;
@@ -121,7 +119,7 @@ const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
 
     const hiLoRankings: HiLoRankingByOutput = recommendationsDriver.pageRank({
       graphName: activeSliceName,
-      rawOutputs,
+      rawOutputs: allDbOutputs,
       listLength,
       outputType,
       iterations,
@@ -149,26 +147,24 @@ export const startSetNodeIdInput = createAsyncThunk<
     thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
 
     // 2. Get state
-    const activeSliceName: string =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    const {activeSliceName, allDbOutputs} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const listLength: number =
       thunkAPI.getState().analyticsSlice.identityStatsSlice.listLength;
-    const rawOutputs: string[] =
-      dbDriver.getSlicePropertyNames(activeSliceName);
 
     // 3. Dispatch stats thunks
     const p1: Promise<any> = thunkAPI.dispatch(
       startGetNodeStats({
         graphName: activeSliceName,
         nodeId: nodeIdInput,
-        rawOutputs,
+        rawOutputs: allDbOutputs,
       }),
     );
     const p2: Promise<any> = thunkAPI.dispatch(
       startGetCollectivelyTandemNodes({
         graphName: activeSliceName,
         nodeId: nodeIdInput,
-        rawOutputs,
+        rawOutputs: allDbOutputs,
         listLength,
       }),
     );
@@ -176,7 +172,7 @@ export const startSetNodeIdInput = createAsyncThunk<
       startGetSinglyTandemNodes({
         graphName: activeSliceName,
         nodeId: nodeIdInput,
-        rawOutputs,
+        rawOutputs: allDbOutputs,
         listLength,
       }),
     );
@@ -184,7 +180,7 @@ export const startSetNodeIdInput = createAsyncThunk<
       startGetHighlyRatedTandemNodes({
         graphName: activeSliceName,
         nodeId: nodeIdInput,
-        rawOutputs,
+        rawOutputs: allDbOutputs,
         listLength,
       }),
     );

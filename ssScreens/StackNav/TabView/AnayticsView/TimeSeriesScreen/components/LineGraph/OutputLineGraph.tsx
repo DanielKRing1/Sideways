@@ -20,13 +20,12 @@ type OutputLineGraphProps = {};
 const OutputLineGraph: FC<OutputLineGraphProps> = () => {
   const [domain, setDomain] = React.useState<XDomain>({x: [0, 7]});
 
-  const {activeSliceName, lineGraph, fullDecorationMap} = useSelector(
-    (state: RootState) => ({
+  const {activeSliceName, allDbOutputs, lineGraph, fullDecorationMap} =
+    useSelector((state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,
       ...state.analyticsSlice.timeseriesStatsSlice,
       ...state.userJsonSlice.decorationSlice,
-    }),
-  );
+    }));
 
   // colorMap={{
   //     0: 'green',
@@ -37,7 +36,7 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
     () =>
       getDecorationMapSubset<string>(
         DECORATION_ROW_TYPE.OUTPUT,
-        dbDriver.getSlicePropertyNames(activeSliceName),
+        allDbOutputs,
         DECORATION_VALUE_KEY.COLOR,
         fullDecorationMap,
         (i: number) => i,

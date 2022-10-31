@@ -203,14 +203,12 @@ const startGetLineGraph = createAsyncThunk<
 >(
   'timeseriesStatsSS/startGetLineGraph',
   async (undef: StartGetLineGraphArgs, thunkAPI) => {
-    const activeSliceName: string =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const rawOutputs: string[] =
-      dbDriver.getSlicePropertyNames(activeSliceName);
+    const {activeSliceName, allDbOutputs} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
 
     const lineGraph: LineGraph = await timeseriesDriver.getDailyOutputLG({
       sliceName: activeSliceName,
-      outputs: rawOutputs,
+      outputs: allDbOutputs,
     });
 
     thunkAPI.dispatch(setLineGraph(lineGraph));
@@ -227,15 +225,13 @@ const startGetHistogram = createAsyncThunk<
 >(
   'timeseriesStatsSS/startGetHistogram',
   async (undef: StartGetHistogramArgs, thunkAPI) => {
-    const activeSliceName: string =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const rawOutputs: string[] =
-      dbDriver.getSlicePropertyNames(activeSliceName);
+    const {activeSliceName, allDbOutputs} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
 
     const histogram: HistogramByMonth[] =
       await timeseriesDriver.getMonthlyOutputHistogram({
         sliceName: activeSliceName,
-        outputs: rawOutputs,
+        outputs: allDbOutputs,
       });
 
     thunkAPI.dispatch(setHistogram(histogram));
@@ -276,14 +272,12 @@ const startGetHeatMap = createAsyncThunk<
 >(
   'timeseriesStatsSS/startGetHeatMap',
   async (undef: StartGetHeatMapArgs, thunkAPI) => {
-    const activeSliceName: string =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const rawOutputs: string[] =
-      dbDriver.getSlicePropertyNames(activeSliceName);
+    const {activeSliceName, allDbOutputs} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
 
     const heatmap: HeatMapByMonth[] = await timeseriesDriver.getDailyOutputHM({
       sliceName: activeSliceName,
-      outputs: rawOutputs,
+      outputs: allDbOutputs,
     });
     // const heatmap: HeatMapByMonth[] = await timeseriesDriver.getDailyOutputHM({ sliceName: activeSliceName, outputs: rawOutputs });
 

@@ -16,12 +16,17 @@ import {
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = () => {
-  const {activeSliceName, histogramByMonth, monthIndex, fullDecorationMap} =
-    useSelector((state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.timeseriesStatsSlice,
-      ...state.userJsonSlice.decorationSlice,
-    }));
+  const {
+    activeSliceName,
+    allDbOutputs,
+    histogramByMonth,
+    monthIndex,
+    fullDecorationMap,
+  } = useSelector((state: RootState) => ({
+    ...state.readSidewaysSlice.toplevelReadReducer,
+    ...state.analyticsSlice.timeseriesStatsSlice,
+    ...state.userJsonSlice.decorationSlice,
+  }));
   const dispatch: AppDispatch = useDispatch();
 
   // gradientColors={[
@@ -30,13 +35,11 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
   //     { offset: "100%", color:"yellow" },
   //   ]}
   const outputColorMap: GradientColor[] = useMemo(() => {
-    const rawOutputs: string[] =
-      dbDriver.getSlicePropertyNames(activeSliceName);
-    const outputHeight: number = 100 / rawOutputs.length;
+    const outputHeight: number = 100 / allDbOutputs.length;
 
     return getDecorationMapSubsetList<GradientColor>(
       DECORATION_ROW_TYPE.OUTPUT,
-      rawOutputs,
+      allDbOutputs,
       DECORATION_VALUE_KEY.COLOR,
       fullDecorationMap,
       (i: number, value: string) => ({

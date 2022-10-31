@@ -3,6 +3,10 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
 export type {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
 import DbDriver from 'ssDatabase/api/core/dbDriver';
+import {
+  startCacheAllDbInputs,
+  startCacheAllDbOutputs,
+} from 'ssRedux/readSidewaysSlice';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE
@@ -60,6 +64,11 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     );
     await Promise.all(promises);
 
+    // 3. Update all in/outputs
+    thunkAPI.dispatch(startCacheAllDbInputs());
+    thunkAPI.dispatch(startCacheAllDbOutputs());
+
+    // 4. Reset rating inputs
     thunkAPI.dispatch(setRating(0));
     thunkAPI.dispatch(setOutputs([]));
     thunkAPI.dispatch(forceSignatureRerender());

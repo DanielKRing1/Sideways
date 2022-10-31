@@ -19,9 +19,12 @@ import {GrowingIdText as RateInput} from '../../../../../ssComponents/Input/Grow
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
+import {useEffect} from 'react';
+import {useMemo} from 'react';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 
 const createOutputsRenderItemComponent =
-  (deleteOutput: (index: number) => void) =>
+  (rmOutput: (index: number) => void) =>
   (handleChangeText: (newText: string, index: number) => void) =>
   ({item, index}: {item: RateInput; index: number}) =>
     (
@@ -38,7 +41,7 @@ const createOutputsRenderItemComponent =
             onChangeText={(newText: string) => handleChangeText(newText, index)}
         /> */}
 
-        <MyButton onPress={() => deleteOutput(index)}>
+        <MyButton onPress={() => rmOutput(index)}>
           <MyText>X</MyText>
         </MyButton>
       </FlexRow>
@@ -49,25 +52,40 @@ const GrowingOutputsList: FC = () => {
   const {ratedSignature, outputs} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,
   );
+  const {activeSliceName, allDbOutputs} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
   const dispatch = useDispatch();
+
+  /*
+1. Record all in/outputs
+2. Allow duplicate inputs
+3. When adding an output, remove from allOutputs list
+4. When removing an output, add back to allOutputs list
+5. Input is trie dropdown of allInputs
+6. Output is trie dropdown of remainingOutputs, without text input
+  */
 
   // HANDLER METHODS
   const keyExtractor = (dataPoint: RateInput) => `${dataPoint.id}`;
   const genNextDataPlaceholder = (id: number) => ({id, text: ''});
   const handleAddOutput = (id: number, newOutputOption: string) => {
-    dispatch(addOutput({id, text: newOutputOption}));
+    // 1. Do not add an output if thereare no unique outputs left
+    if (outputs.length < allDbOutputs.length)
+      dispatch(addOutput({id, text: newOutputOption}));
   };
   const handleUpdateOutput = (newText: string, index: number) => {
     outputs[index].text = newText;
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
     dispatch(setOutputs(outputs));
   };
+  const handleRmOutput = (index: number) => dispatch(removeOutput(index));
 
   return (
     <GrowingIdList
       data={outputs}
       createRenderItemComponent={createOutputsRenderItemComponent(
-        (index: number) => dispatch(removeOutput(index)),
+        handleRmOutput,
       )}
       keyExtractor={keyExtractor}
       genNextDataPlaceholder={genNextDataPlaceholder}

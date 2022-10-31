@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import readGraphReducer, {
   forceSignatureRerender as _forceGraphRerender,
@@ -7,12 +7,19 @@ import readGraphReducer, {
 import readStackReducer, {
   forceSignatureRerender as _forceStackRerender,
 } from './readStack';
+import {RateInput, setRating, setOutputs} from 'ssRedux/rateSidewaysSlice';
+import {ThunkConfig} from 'ssRedux/types';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
+import {CGNode} from '@asianpersonn/realm-graph';
 
 // INITIAL STATE
 
 export interface ReadSSState {
   activeSliceName: string;
   searchedSliceName: string;
+
+  allDbInputs: string[];
+  allDbOutputs: string[];
 
   readSSSignature: {};
 }
@@ -21,14 +28,60 @@ const initialState: ReadSSState = {
   activeSliceName: '',
   searchedSliceName: '',
 
+  allDbInputs: [],
+  allDbOutputs: [],
+
   readSSSignature: {},
 };
+
+// THUNKS
+
+// CALL THESE 2 THUNKS WHENEVER IN/OUTPUTS ARE ADDED/REMOVED FROM DB
+// (Un/do Rate)
+export const startCacheAllDbInputs = createAsyncThunk<
+  boolean,
+  undefined,
+  ThunkConfig
+>('rateSS/startCacheAllDbInputs', async (undef, thunkAPI) => {
+  const {activeSliceName} =
+    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+
+  // 1. Get all inputs
+  const allDbInputs: string[] = dbDriver
+    .getAllNodes(activeSliceName)
+    .map((node: CGNode) => node.id);
+
+  // 2. Set all inputs
+  thunkAPI.dispatch(setAllDbInputs(allDbInputs));
+
+  return true;
+});
+
+export const startCacheAllDbOutputs = createAsyncThunk<
+  boolean,
+  undefined,
+  ThunkConfig
+>('rateSS/startCacheAllDbOutputs', async (undef, thunkAPI) => {
+  const {activeSliceName} =
+    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+
+  // 1. Get all outputs
+  const allDbOutputs: string[] =
+    dbDriver.getSlicePropertyNames(activeSliceName);
+
+  // 2. Set all outputs
+  thunkAPI.dispatch(setAllDbOutputs(allDbOutputs));
+
+  return true;
+});
 
 // ACTION TYPES
 
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetActiveSliceAction = PayloadAction<string>;
 type SetSearchedSliceAction = PayloadAction<string>;
+type SetAllOutputsAction = PayloadAction<string[]>;
+type SetAllInputsAction = PayloadAction<string[]>;
 
 // SLICE
 
@@ -36,6 +89,7 @@ export const readSS = createSlice({
   name: 'readSS',
   initialState,
   reducers: {
+    // ACTIVE SLICE NAME
     setActiveSliceName: (state: ReadSSState, action: SetActiveSliceAction) => {
       state.activeSliceName = action.payload;
       state.searchedSliceName = '';
@@ -46,6 +100,15 @@ export const readSS = createSlice({
     ) => {
       state.searchedSliceName = action.payload;
     },
+
+    // ALL IN/OUTPUT
+    setAllDbInputs: (state: ReadSSState, action: SetAllInputsAction) => {
+      state.allDbInputs = action.payload;
+    },
+    setAllDbOutputs: (state: ReadSSState, action: SetAllOutputsAction) => {
+      state.allDbOutputs = action.payload;
+    },
+
     forceSignatureRerender: (
       state: ReadSSState,
       action: ForceRatingsRerenderAction,
@@ -67,6 +130,7 @@ export const {
   setActiveSliceName,
   setSearchedSliceName,
 } = readSS.actions;
+const {setAllDbInputs, setAllDbOutputs} = readSS.actions;
 
 const internalReadReducer = combineReducers({
   readGraphReducer,

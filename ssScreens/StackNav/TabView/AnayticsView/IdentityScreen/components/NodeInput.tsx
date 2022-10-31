@@ -18,6 +18,8 @@ const NodeInput: FC<NodeInputProps> = () => {
   const {
     activeSliceName,
     searchedNodeIdInput,
+    allDbInputs,
+    allDbOutputs,
     readSSSignature,
     inputStatsSignature,
   } = useSelector((state: RootState) => ({
@@ -41,9 +43,7 @@ const NodeInput: FC<NodeInputProps> = () => {
       <AutoCompleteDecoration
         clickOutsideId="StatsNodeInput"
         placeholder="Choose a past input..."
-        allEntityIds={dbDriver
-          .getAllNodes(activeSliceName)
-          .map((node: Realm.Object & CGNode) => node.id)}
+        allEntityIds={allDbInputs}
         inputValue={searchedNodeIdInput}
         setInputValue={handleSetSearchedNodeId}
         dRowType={DECORATION_ROW_TYPE.INPUT}

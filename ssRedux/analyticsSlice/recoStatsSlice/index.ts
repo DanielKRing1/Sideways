@@ -40,10 +40,8 @@ export const startGetRecommendations = createAsyncThunk<
     {iterations, dampingFactor}: StartGetRecommendationsArgs,
     thunkAPI,
   ) => {
-    const activeSliceName: string =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const rawOutputs: string[] =
-      dbDriver.getSlicePropertyNames(activeSliceName);
+    const {activeSliceName, allDbOutputs} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const inputNodeIds: string[] = thunkAPI
       .getState()
       .analyticsSlice.recoStatsSlice.recommendationInputs.map(
@@ -54,7 +52,7 @@ export const startGetRecommendations = createAsyncThunk<
       recommendationsDriver.getRecommendations({
         graphName: activeSliceName,
         inputNodeIds,
-        rawOutputs,
+        rawOutputs: allDbOutputs,
         outputType: GRAPH_PROP_KEYS.SINGLE,
         listLength: 5,
         iterations,
