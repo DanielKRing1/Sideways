@@ -51,8 +51,7 @@ export const SearchableDropdown: FC<SearchableDropdownProps> = props => {
       {!!LeftComponent && <LeftComponent />}
 
       <FlexCol>
-        <StyledTextInput
-          bottomRounded={!shouldDisplayDropdown}
+        <MyTextInput
           placeholder={placeholder}
           value={inputValue}
           onChangeText={setInputValue}
@@ -74,19 +73,4 @@ export const SearchableDropdown: FC<SearchableDropdownProps> = props => {
 const StyledRow = styled(FlexRow)`
   bordercolor: black;
   borderwidth: 2;
-`;
-
-type StyledTextInputProps = {
-  bottomRounded: boolean;
-};
-const StyledTextInput = styled(MyTextInput)<StyledTextInputProps>`
-  padding: 0px 10px;
-
-  borderwidth: 1px;
-  borderradius: 10px;
-  ${({bottomRounded}: StyledTextInputProps) =>
-    bottomRounded ? `` : `borderBottomLeftRadius: 0px;`}
-  ${({bottomRounded}: StyledTextInputProps) =>
-    bottomRounded ? `` : `borderBottomRightRadius: 0px;`}
-    borderColor: #d0d0d0;
 `;
