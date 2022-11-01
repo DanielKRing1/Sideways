@@ -2,11 +2,11 @@ import type {StackScreenProps} from '@react-navigation/stack';
 import {
   PROFILE_SCREEN_NAME,
   SETTINGS_SCREEN_NAME,
-  TABS_SCREEN_NAME,
+  TAB_NAV_NAME,
 } from './constants';
 
 export type RootStackParamList = {
-  [TABS_SCREEN_NAME]: undefined;
+  [TAB_NAV_NAME]: undefined;
   [PROFILE_SCREEN_NAME]: undefined; //{ userId: string };
   [SETTINGS_SCREEN_NAME]: undefined; //{ sort: 'latest' | 'top' } | undefined;
 };

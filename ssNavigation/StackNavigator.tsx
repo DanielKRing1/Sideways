@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator, StackScreenProps} from '@react-navigation/stack';
 
 import {
-  TABS_SCREEN_NAME,
+  TAB_NAV_NAME,
   PROFILE_SCREEN_NAME,
   ACTIVE_SLICE_SCREEN_NAME,
   ADD_SLICE_SCREEN_NAME,
@@ -15,7 +15,7 @@ import ActiveSliceScreen from '../ssScreens/StackNav/ActiveSliceScreen';
 import AddSliceScreen from '../ssScreens/StackNav/AddSliceScreen';
 
 export type StackNavigatorParamList = {
-  [TABS_SCREEN_NAME]: undefined;
+  [TAB_NAV_NAME]: undefined;
   [PROFILE_SCREEN_NAME]: undefined;
   [SETTINGS_SCREEN_NAME]: undefined;
   [ACTIVE_SLICE_SCREEN_NAME]: undefined;
@@ -34,9 +34,9 @@ const Stack = createStackNavigator<StackNavigatorParamList>();
 
 const StackNavigator = () => (
   <Stack.Navigator
-    initialRouteName={TABS_SCREEN_NAME}
+    initialRouteName={TAB_NAV_NAME}
     screenOptions={{headerShown: false}}>
-    <Stack.Screen name={TABS_SCREEN_NAME} component={TabNavigator} />
+    <Stack.Screen name={TAB_NAV_NAME} component={TabNavigator} />
     <Stack.Screen name={PROFILE_SCREEN_NAME} component={ProfileScreen} />
     <Stack.Screen name={SETTINGS_SCREEN_NAME} component={SettingsScreen} />
     <Stack.Screen

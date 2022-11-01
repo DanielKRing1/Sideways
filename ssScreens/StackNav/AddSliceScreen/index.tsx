@@ -13,7 +13,7 @@ import {
 // NAVIGATION
 import {
   ADD_SLICE_SCREEN_NAME,
-  TABS_SCREEN_NAME,
+  TAB_NAV_NAME,
 } from '../../../ssNavigation/constants';
 import {StackNavigatorProps} from '../../../ssNavigation/StackNavigator';
 
@@ -60,7 +60,7 @@ const AddSliceScreen: FC<
     dispatch(startCreateSlice());
 
     // 2. Nav to Rate Screen
-    navigation.navigate(TABS_SCREEN_NAME);
+    navigation.navigate(TAB_NAV_NAME);
   };
 
   // TODO Delete

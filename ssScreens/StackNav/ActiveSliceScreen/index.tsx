@@ -10,7 +10,7 @@ import {setActiveSliceName} from '../../../ssRedux/readSidewaysSlice';
 import {StackNavigatorProps} from '../../../ssNavigation/StackNavigator';
 import {
   ACTIVE_SLICE_SCREEN_NAME,
-  TABS_SCREEN_NAME,
+  TAB_NAV_NAME,
 } from '../../../ssNavigation/constants';
 
 // COMPONENTS
@@ -39,7 +39,7 @@ const ActiveSliceScreen: FC<
   const handleSelectActiveSlice = (sliceName: string) => {
     dispatch(setActiveSliceName(sliceName));
 
-    navigation.navigate(TABS_SCREEN_NAME);
+    navigation.navigate(TAB_NAV_NAME);
   };
 
   const handleDeleteSlice = (sliceName: string) => {

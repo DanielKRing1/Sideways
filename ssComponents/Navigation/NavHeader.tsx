@@ -1,7 +1,7 @@
 import React, {FC, useContext} from 'react';
 
 // NAVIGATION
-import {TABS_SCREEN_NAME} from '../../ssNavigation/constants';
+import {TAB_NAV_NAME} from '../../ssNavigation/constants';
 
 // COMPONENTS
 import FlexRow from '../Flex/FlexRow';
@@ -140,7 +140,7 @@ export const ProfileHeader: FC<ProfileHeaderProps> = props => {
             paddingTop: 15,
             paddingLeft: 15,
           }}
-          onPress={() => authorizedStackNavigate(TABS_SCREEN_NAME)}
+          onPress={() => authorizedStackNavigate(TAB_NAV_NAME)}
         />,
       ]}
     </NavHeader>
@@ -170,7 +170,7 @@ export const SettingsHeader: FC<SettingsHeaderProps> = props => {
             paddingTop: 15,
             paddingLeft: 15,
           }}
-          onPress={() => authorizedStackNavigate(TABS_SCREEN_NAME)}
+          onPress={() => authorizedStackNavigate(TAB_NAV_NAME)}
         />,
       ]}
     </NavHeader>
