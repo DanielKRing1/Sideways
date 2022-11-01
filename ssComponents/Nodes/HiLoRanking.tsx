@@ -1,9 +1,10 @@
 import {RankedNode} from '@asianpersonn/realm-graph';
 import React, {FC} from 'react';
-import {HiLoRanking} from 'ssDatabase/api/types';
-import NodeStats from 'ssScreens/StackNav/TabView/AnayticsView/IdentityScreen/components/NodeStats';
-import {FlexCol} from '../Flex';
+
 import MyText from '../ReactNative/MyText';
+import {FlexCol} from '../Flex';
+import NodeStats from 'ssScreens/StackNav/TabView/AnayticsScreen/IdentityView/components/NodeStats';
+import {HiLoRanking} from 'ssDatabase/api/types';
 
 type HiLoRankingDisplayProps = {
   hiLoRanking: HiLoRanking;
