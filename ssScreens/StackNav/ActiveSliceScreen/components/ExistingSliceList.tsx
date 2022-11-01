@@ -91,6 +91,7 @@ const ExistingSliceList: FC<ExistingSliceListProps> = props => {
   );
 
   // DB DRIVER
+  // TODO Possibly remove this
   const {isLoaded} = useContext(DbLoaderContext);
 
   // 1. Get lastLogged slices
