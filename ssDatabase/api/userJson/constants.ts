@@ -57,11 +57,4 @@ export enum AvailableIcons {
   'question' = 'question',
 }
 
-export const DECORATION_ROW_DELIM: string = '_';
-
-export const DEFAULT_COLOR: string = '#fff';
-export const DEFAULT_ICON: AvailableIcons = AvailableIcons.circle;
-export const CONFIRM_SELECTION_ICON: AvailableIcons = AvailableIcons.question;
-
-export const getAvailableIcons = (): AvailableIcons[] =>
-  getEnumValues(AvailableIcons);
+export const getAvailableIcons = (): string[] => getEnumValues(AvailableIcons);

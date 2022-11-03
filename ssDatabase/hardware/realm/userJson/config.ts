@@ -1,4 +1,4 @@
-import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/category/types';
 
 export const DEFAULT_REALM_JSON_META_REALM_PATH: string =
   'REALM_JSON_META_REALM_PATH.path';

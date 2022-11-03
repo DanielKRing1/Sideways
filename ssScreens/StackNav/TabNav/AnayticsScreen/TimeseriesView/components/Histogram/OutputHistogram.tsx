@@ -12,7 +12,7 @@ import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import {
   DECORATION_ROW_TYPE,
   DECORATION_VALUE_KEY,
-} from 'ssDatabase/api/userJson/decoration/types';
+} from 'ssDatabase/api/userJson/category/types';
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = () => {

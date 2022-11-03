@@ -6,7 +6,7 @@ import MyButton, {MyButtonProps} from '../ReactNative/MyButton';
 import {FlexContainerProps} from '../Flex';
 import {useFlexContainer} from '../../ssHooks/useFlexContainer';
 import {RequiredExceptFor} from '../../global';
-import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
+import {AvailableIcons} from 'ssDatabase/api/userJson/category/constants';
 
 export type IconButtonProps = {
   iconName: AvailableIcons | string;

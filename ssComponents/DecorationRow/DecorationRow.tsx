@@ -18,11 +18,11 @@ import {
 } from 'ssRedux/userJson/decorationSlice';
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {getDecorationJsonValue} from 'ssDatabase/hardware/realm/userJson/utils';
-import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
+import {AvailableIcons} from 'ssDatabase/api/userJson/category/constants';
 import {
   DECORATION_ROW_TYPE,
   DecorationJsonValue,
-} from 'ssDatabase/api/userJson/decoration/types';
+} from 'ssDatabase/api/userJson/category/types';
 
 type DecorationRowProps = {
   editable?: boolean;

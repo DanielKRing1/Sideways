@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import decorationDriver from 'ssDatabase/api/userJson/decoration';
-import {AvailableIcons} from 'ssDatabase/api/userJson/decoration/constants';
+import decorationDriver from 'ssDatabase/api/userJson/category';
+import {AvailableIcons} from 'ssDatabase/api/userJson/category/constants';
 import {getDecorationMapValue} from 'ssDatabase/hardware/realm/userJson/utils';
 
 import {} from 'ssDatabase/api/types';
@@ -11,7 +11,7 @@ import {
   DECORATION_ROW_TYPE,
   DecorationJson,
   DecorationInfo,
-} from 'ssDatabase/api/userJson/decoration/types';
+} from 'ssDatabase/api/userJson/category/types';
 
 // INITIAL STATE
 

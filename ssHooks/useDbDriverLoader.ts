@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import decorationsDriver from 'ssDatabase/api/userJson/decoration';
+import decorationsDriver from 'ssDatabase/api/userJson/category';
 
 export const useDbDriverLoader = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(dbDriver.isLoaded);

@@ -13,7 +13,7 @@ import {HeatMapDay} from 'ssDatabase/api/analytics/timeseries/types';
 import {
   DECORATION_ROW_TYPE,
   DECORATION_VALUE_KEY,
-} from 'ssDatabase/api/userJson/decoration/types';
+} from 'ssDatabase/api/userJson/category/types';
 
 type OutputHeatMapProps = {};
 const OutputHeatMap: FC<OutputHeatMapProps> = () => {

@@ -14,7 +14,7 @@ import {
   StringMap,
   DECORATION_ROW_TYPE,
   DECORATION_VALUE_KEY,
-} from 'ssDatabase/api/userJson/decoration/types';
+} from 'ssDatabase/api/userJson/category/types';
 
 type OutputLineGraphProps = {};
 const OutputLineGraph: FC<OutputLineGraphProps> = () => {

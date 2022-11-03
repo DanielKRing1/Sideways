@@ -11,7 +11,7 @@ import {AppDispatch, RootState} from 'ssRedux/index';
 import {
   DECORATION_ROW_TYPE,
   DecorationJson,
-} from 'ssDatabase/api/userJson/decoration/types';
+} from 'ssDatabase/api/userJson/category/types';
 
 export type AutoCompleteDecorationProps<T> = {
   editable?: boolean;

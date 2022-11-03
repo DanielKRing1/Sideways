@@ -20,7 +20,7 @@ import {
 
 // DECORATIONS
 import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
-import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/category/types';
 
 const createRenderItemComponent =
   (allInputIds: string[], deleteVennInput: (index: number) => void) =>

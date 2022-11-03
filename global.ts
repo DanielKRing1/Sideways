@@ -6,3 +6,6 @@ export type RequiredExceptFor<T, TNotRequired extends keyof T> = Omit<
   TNotRequired
 > &
   Partial<Pick<T, TNotRequired>>;
+
+export type HexColor = `#${string}`;
+export type StringMap = Dict<string>;

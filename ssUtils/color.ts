@@ -4,3 +4,16 @@ export function genRandomColor() {
   for (var i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
   return color;
 }
+
+export const hashToColor = function (str: string) {
+  let hash = 0;
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  var color = '#';
+  for (var i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += ('00' + value.toString(16)).substr(-2);
+  }
+  return color;
+};

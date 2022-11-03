@@ -1,11 +1,11 @@
-import {DEFAULT_ICON} from 'ssDatabase/api/userJson/decoration/constants';
+import {DEFAULT_ICON} from 'ssDatabase/api/userJson/category/constants';
 import {
   DecorationJsonValue,
   DECORATION_VALUE_KEY,
   DECORATION_ROW_TYPE,
   DecorationJsonMap,
   DecorationJson,
-} from 'ssDatabase/api/userJson/decoration/types';
+} from 'ssDatabase/api/userJson/category/types';
 import {genRandomColor} from 'ssUtils/color';
 import {Dict} from '../../../../global';
 

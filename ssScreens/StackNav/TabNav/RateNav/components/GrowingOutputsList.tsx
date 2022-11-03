@@ -18,7 +18,7 @@ import {
 import {GrowingIdText as RateInput} from '../../../../../ssComponents/Input/GrowingIdList';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
-import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/category/types';
 import {useEffect} from 'react';
 import {useMemo} from 'react';
 import dbDriver from 'ssDatabase/api/core/dbDriver';

@@ -5,7 +5,7 @@ import {
   AvailableIcons,
   CONFIRM_SELECTION_ICON,
   getAvailableIcons,
-} from 'ssDatabase/api/userJson/decoration/constants';
+} from 'ssDatabase/api/userJson/category/constants';
 import IconInput, {IconInputProps} from 'ssComponents/IconInput/IconInput';
 import Grid from 'ssComponents/View/Grid';
 

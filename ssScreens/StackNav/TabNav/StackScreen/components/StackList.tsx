@@ -17,7 +17,7 @@ import MyButton from 'ssComponents/ReactNative/MyButton';
 import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
 import {ViewStyle} from 'react-native';
 import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
-import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/decoration/types';
+import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/category/types';
 import {deserializeDate} from 'ssUtils/date';
 
 type StackCardProps = {
