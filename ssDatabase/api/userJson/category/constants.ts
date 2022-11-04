@@ -2,7 +2,6 @@ import {AvailableIcons} from '../constants';
 
 export const CATEGORY_ROW_DELIM: string = '_';
 
-export const DEFAULT_COLOR: string = '#fff';
 export const DEFAULT_ICON: AvailableIcons = AvailableIcons.circle;
 export const CONFIRM_SELECTION_ICON: AvailableIcons = AvailableIcons.question;
 
@@ -62,3 +61,22 @@ export const ACTIVITY_JOURNAL_CATEGORIES = {
   //    Doing what makes you happy
   Fulfillment: 'Fulfillment',
 };
+
+/**
+ * ID MAPPINGS (GLOBAL)
+ * CategorySetId - CategorySetName
+ * CategoryId - CategoryName
+ * CategorySetId: {
+ *  CategoryId: {
+ *    icon: string;
+ *    color: string;
+ *  }
+ * }
+ *
+ * USER MAPPINGS (GLOBAL)
+ * SliceName - CategorySetId
+ *
+ * USER MAPPINGS (CATEGORY)
+ * InputName - CategoryId
+ *
+ */

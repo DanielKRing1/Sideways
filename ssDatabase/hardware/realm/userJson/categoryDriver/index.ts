@@ -11,7 +11,7 @@ import {
 } from '../config';
 
 import {
-  UJ_CategoryMap,
+  UJ_InputNameToCategoryIdMapping,
   UJ_CategoryInfo,
   UJ_CATEGORY_ROW_KEY,
   UJ_CategoryDriver,
@@ -40,7 +40,9 @@ const load = async (activeSliceName: string): Promise<void> => {
 
   // 1.3. Create Category json rows
   // 'getJson' will create rows if they do not already exist
-  jsonCollection.getJson(UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING);
+  jsonCollection.getJson(
+    UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+  );
 
   isLoaded = true;
 };
@@ -60,38 +62,14 @@ const throwLoadError = (): void | never => {
 
 /**
  * For an 'activeSliceName',
- * Overwrite the entire mapping for inputNames to categoryNames
- * (from globalJson.AllCategorySets.CategorySet.CategoryName)
- *
- * @param activeSliceName
- * @param newCategoryMap
- */
-const setActiveSliceCategories = (
-  activeSliceName: string,
-  newCategoryMap: UJ_CategoryMap,
-): void | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson =
-    RealmJsonManager.getCollection(activeSliceName);
-
-  // 2. Set Json Row
-  jsonCollection.setJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING,
-    newCategoryMap,
-  );
-};
-/**
- * For an 'activeSliceName',
  * Add to the mapping for inputName to categoryName
  *
  * @param activeSliceName
- * @param newInputCategories
+ * @param newInputCategory
  */
 const addInputCategories = (
   activeSliceName: string,
-  newInputCategories: UJ_CategoryInfo[],
+  categoryInfo: UJ_CategoryInfo,
 ): void | never => {
   throwLoadError();
 
@@ -100,18 +78,17 @@ const addInputCategories = (
     RealmJsonManager.getCollection(activeSliceName);
 
   // 2. Get Json Row
-  const inputToCategoryMapping: UJ_CategoryMap = jsonCollection.getJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING,
-  );
+  const inputToCategoryMapping: UJ_InputNameToCategoryIdMapping =
+    jsonCollection.getJson(
+      UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+    );
 
-  // 3. Save each newInputCategory
-  for (const categoryInfo of newInputCategories) {
-    inputToCategoryMapping[categoryInfo.inputId] = categoryInfo.categoryId;
-  }
+  // 3. Save newInputCategory
+  inputToCategoryMapping[categoryInfo.inputId] = categoryInfo.categoryId;
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING,
+    UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
     inputToCategoryMapping,
   );
 };
@@ -133,9 +110,10 @@ const rmInputCategories = (
     RealmJsonManager.getCollection(activeSliceName);
 
   // 2. Get Json Row
-  const inputToCategoryMapping: UJ_CategoryMap = jsonCollection.getJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING,
-  );
+  const inputToCategoryMapping: UJ_InputNameToCategoryIdMapping =
+    jsonCollection.getJson(
+      UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+    );
 
   // 3. Delete each inputId
   for (const inputId of inputIdsToRm) {
@@ -144,7 +122,7 @@ const rmInputCategories = (
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING,
+    UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
     inputToCategoryMapping,
   );
 };
@@ -157,7 +135,7 @@ const rmInputCategories = (
  */
 const getAllInputCategories = (
   activeSliceName: string,
-): UJ_CategoryMap | never => {
+): UJ_InputNameToCategoryIdMapping | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -165,9 +143,10 @@ const getAllInputCategories = (
     RealmJsonManager.getCollection(activeSliceName);
 
   // 2. Get Json Row
-  const inputToCategoryMapping: UJ_CategoryMap = jsonCollection.getJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING,
-  );
+  const inputToCategoryMapping: UJ_InputNameToCategoryIdMapping =
+    jsonCollection.getJson(
+      UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+    );
 
   return inputToCategoryMapping;
 };
@@ -177,7 +156,6 @@ const Driver: UJ_CategoryDriver = {
   load,
   closeAll,
 
-  setActiveSliceCategories,
   addInputCategories,
   rmInputCategories,
   getAllInputCategories,

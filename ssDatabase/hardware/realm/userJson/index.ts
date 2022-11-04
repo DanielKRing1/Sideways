@@ -4,10 +4,12 @@ import {UserJsonDriver, UserJsonMap} from 'ssDatabase/api/userJson/types';
 import GlobalJsonDriver from 'ssDatabase/hardware/realm/userJson/globalDriver';
 import CategoryJsonDriver from 'ssDatabase/hardware/realm/userJson/categoryDriver';
 import {
-  AllCategorySets,
-  SliceToCategorySetMapping,
-  UJ_CategoryMap,
+  GJ_CategoryMapping,
+  GJ_CategoryNameMapping,
+  GJ_CategorySetNameMapping,
+  GJ_SliceNameToCategorySetIdMapping,
   UJ_CATEGORY_ROW_KEY,
+  UJ_InputNameToCategoryIdMapping,
 } from 'ssDatabase/api/userJson/category/types';
 import {GLOBAL_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import {
@@ -71,19 +73,27 @@ const throwLoadError = (): void | never => {
 const getAllUserJson = (activeSlice: string): UserJsonMap | never => {
   throwLoadError();
 
-  const allCategorySets: AllCategorySets =
-    GlobalJsonDriver.getAllCategorySets();
-  const sliceToCategorySetMapping: SliceToCategorySetMapping =
+  const categoryMapping: GJ_CategoryMapping =
+    GlobalJsonDriver.getCategoryMapping();
+  const categorySetNameMapping: GJ_CategorySetNameMapping =
+    GlobalJsonDriver.getCategorySetNameMapping();
+  const categoryNameMapping: GJ_CategoryNameMapping =
+    GlobalJsonDriver.getCategoryNameMapping();
+  const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
     GlobalJsonDriver.getSliceToCategoryMapping();
 
-  const allInputCategories: UJ_CategoryMap =
+  const allInputCategories: UJ_InputNameToCategoryIdMapping =
     CategoryJsonDriver.getAllInputCategories(activeSlice);
 
   return {
-    [GLOBAL_COLLECTION_ROW_KEY.ALL_CATEGORY_SETS]: allCategorySets,
-    [GLOBAL_COLLECTION_ROW_KEY.SLICE_TO_CATEGORY_SET_MAPPING]:
+    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING]: categoryMapping,
+    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]:
+      categorySetNameMapping,
+    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: categoryNameMapping,
+    [GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]:
       sliceToCategorySetMapping,
-    [UJ_CATEGORY_ROW_KEY.INPUT_TO_CATEGORY_MAPPING]: allInputCategories,
+    [UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING]:
+      allInputCategories,
   };
 };
 

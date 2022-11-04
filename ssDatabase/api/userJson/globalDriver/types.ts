@@ -1,9 +1,9 @@
 import {
-  AllCategorySets,
-  CategorySet,
-  SliceToCategorySetMapping,
-  UJ_CategoryInfo,
-  UJ_CategoryMap,
+  GJ_CategorySetNameMapping,
+  GJ_CategoryNameMapping,
+  GJ_CategoryMapping,
+  GJ_SliceNameToCategorySetIdMapping,
+  GJ_CategorySet,
 } from '../category/types';
 
 /**
@@ -13,13 +13,17 @@ import {
 export const GLOBAL_COLLECTION_KEY = 'GLOBAL_DATA';
 export enum GLOBAL_COLLECTION_ROW_KEY {
   // CATEGORY SPECIFIC
-  ALL_CATEGORY_SETS = 'ALL_CATEGORY_SETS',
-  SLICE_TO_CATEGORY_SET_MAPPING = 'SLICE_TO_CATEGORY_SET_MAPPING',
+  CATEGORY_SET_NAME_MAPPING = 'CATEGORY_SET_NAME_MAPPING',
+  CATEGORY_NAME_MAPPING = 'CATEGORY_NAME_MAPPING',
+  CATEGORY_MAPPING = 'CATEGORY_MAPPING',
+  SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING = 'SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING',
 }
 
 export type GlobalCategoryJsonMap = {
-  [GLOBAL_COLLECTION_ROW_KEY.ALL_CATEGORY_SETS]: AllCategorySets;
-  [GLOBAL_COLLECTION_ROW_KEY.SLICE_TO_CATEGORY_SET_MAPPING]: SliceToCategorySetMapping;
+  [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]: GJ_CategorySetNameMapping;
+  [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: GJ_CategoryNameMapping;
+  [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING]: GJ_CategoryMapping;
+  [GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]: GJ_SliceNameToCategorySetIdMapping;
 };
 
 export type GlobalJsonDriver = {
@@ -27,20 +31,13 @@ export type GlobalJsonDriver = {
   load: () => Promise<void>;
   closeAll: () => Promise<void>;
 
-  addCategorySet: (
-    categorySetName: string,
-    categorySet: CategorySet,
-  ) => void | never;
-  rmCategorySet: (categorySetName: string) => void | never;
-  getAllCategorySets: () => AllCategorySets | never;
-
-  setSliceToCategoryMapping: (
-    newMapping: SliceToCategorySetMapping,
-  ) => void | never;
-  addSliceToCategoryMapping: (
-    sliceName: string,
-    categorySetName: string,
-  ) => void | never;
+  addCategorySet: (newCSName: string, newCS: GJ_CategorySet) => void | never;
+  rmCategorySet: (csId: string) => void | never;
+  addSliceToCategoryMapping: (sliceName: string, csId: string) => void | never;
   rmSliceToCategoryMapping: (sliceName: string) => void | never;
-  getSliceToCategoryMapping: () => SliceToCategorySetMapping | never;
+
+  getCategoryMapping: () => GJ_CategoryMapping | never;
+  getCategorySetNameMapping: () => GJ_CategorySetNameMapping | never;
+  getCategoryNameMapping: () => GJ_CategoryNameMapping | never;
+  getSliceToCategoryMapping: () => GJ_SliceNameToCategorySetIdMapping | never;
 };
