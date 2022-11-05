@@ -5,14 +5,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HistogramWSlider from 'ssComponents/Charts/Histogram/HistogramWSlider';
 import {RootState, AppDispatch} from 'ssRedux/index';
-import {getDecorationMapSubsetList} from 'ssDatabase/hardware/realm/userJson/utils';
-import dbDriver from 'ssDatabase/api/core/dbDriver';
+import {getOutputDecorationList} from 'ssDatabase/hardware/realm/userJson/utils';
 import {GradientColor} from 'ssComponents/Charts/Histogram/Histogram';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
-import {
-  DECORATION_ROW_TYPE,
-  DECORATION_VALUE_KEY,
-} from 'ssDatabase/api/userJson/category/types';
+import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = () => {
@@ -21,11 +17,11 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
     allDbOutputs,
     histogramByMonth,
     monthIndex,
-    fullDecorationMap,
+    fullUserJsonMap,
   } = useSelector((state: RootState) => ({
     ...state.readSidewaysSlice.toplevelReadReducer,
     ...state.analyticsSlice.timeseriesStatsSlice,
-    ...state.userJsonSlice.decorationSlice,
+    ...state.userJsonSlice,
   }));
   const dispatch: AppDispatch = useDispatch();
 
@@ -37,17 +33,15 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
   const outputColorMap: GradientColor[] = useMemo(() => {
     const outputHeight: number = 100 / allDbOutputs.length;
 
-    return getDecorationMapSubsetList<GradientColor>(
-      DECORATION_ROW_TYPE.OUTPUT,
+    return getOutputDecorationList<GradientColor>(
       allDbOutputs,
-      DECORATION_VALUE_KEY.COLOR,
-      fullDecorationMap,
-      (i: number, value: string) => ({
+      fullUserJsonMap,
+      (i: number, value: OutputDecoration) => ({
         offset: `${i * outputHeight}%`,
-        color: value,
+        color: value.color,
       }),
     );
-  }, [activeSliceName, fullDecorationMap]);
+  }, [activeSliceName, fullUserJsonMap]);
 
   // HANDLER METHODS
   const handleSelectMonth = (newMonthIndex: number) =>

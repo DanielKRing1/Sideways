@@ -11,22 +11,19 @@ import {
 } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import GrowingVennInputList from './GrowingVennInputList';
 import {
-  getDecorationMapValue,
-  getDecorationMapSubsetList,
+  getOutputDecorationValue,
+  getOutputDecorationList,
 } from 'ssDatabase/hardware/realm/userJson/utils';
 import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
-import {
-  DECORATION_ROW_TYPE,
-  DECORATION_VALUE_KEY,
-} from 'ssDatabase/api/userJson/category/types';
+import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 
 type InputVennProps = {};
 const InputVenn: FC<InputVennProps> = () => {
-  const {vennByMonth, vennNodeInputs, monthIndex, fullDecorationMap} =
+  const {vennByMonth, vennNodeInputs, monthIndex, fullUserJsonMap} =
     useSelector((state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,
       ...state.analyticsSlice.timeseriesStatsSlice,
-      ...state.userJsonSlice.decorationSlice,
+      ...state.userJsonSlice,
     }));
   const dispatch: AppDispatch = useDispatch();
 
@@ -41,14 +38,12 @@ const InputVenn: FC<InputVennProps> = () => {
     );
 
     // 2. Convert nodeIds to colors
-    return getDecorationMapSubsetList<string>(
-      DECORATION_ROW_TYPE.INPUT,
+    return getOutputDecorationList<string>(
       vennNodeIds,
-      DECORATION_VALUE_KEY.COLOR,
-      fullDecorationMap,
-      (i: number, value: string) => value,
+      fullUserJsonMap,
+      (i: number, value: OutputDecoration) => value.color,
     );
-  }, [vennNodeInputs, fullDecorationMap]);
+  }, [vennNodeInputs, fullUserJsonMap]);
 
   return (
     <View>
@@ -64,11 +59,7 @@ const InputVenn: FC<InputVennProps> = () => {
         )}
         xLabels={vennByMonth[monthIndex].outputs}
         xLabelFill={({text}) =>
-          getDecorationMapValue(
-            DECORATION_ROW_TYPE.OUTPUT,
-            text[0],
-            fullDecorationMap,
-          )[DECORATION_VALUE_KEY.COLOR]
+          getOutputDecorationValue(text[0], fullUserJsonMap).color
         }
         yValues={vennNodeInputs.map((nodeInput: VennInput) => nodeInput.text)}
         value={monthIndex}

@@ -2,7 +2,8 @@ import {AvailableIcons} from '../constants';
 
 export const CATEGORY_ROW_DELIM: string = '_';
 
-export const DEFAULT_ICON: AvailableIcons = AvailableIcons.circle;
+export const DEFAULT_CATEGORY_ICON: AvailableIcons = AvailableIcons.circle;
+export const DEFAULT_OUTPUT_ICON: AvailableIcons = AvailableIcons.circle;
 export const CONFIRM_SELECTION_ICON: AvailableIcons = AvailableIcons.question;
 
 // DEFAULT CATEGORIES

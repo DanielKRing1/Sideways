@@ -1,6 +1,9 @@
 /**
  * This Realm Driver reads/writes to/from an activeSliceName RealmJson collection
  * of activeSlice.inputName to categoryName mapping
+ *
+ * 'inputCategories' are a pool of strings, assigned to buckets of inputs
+ * 'outputCategories' are a pool of strings, associated with a snapshot/rating of inputs
  */
 
 import RealmJsonManager, {RealmJson} from '@asianpersonn/realm-json';
@@ -11,10 +14,12 @@ import {
 } from '../config';
 
 import {
-  UJ_InputNameToCategoryIdMapping,
-  UJ_CategoryInfo,
-  UJ_CATEGORY_ROW_KEY,
-  UJ_CategoryDriver,
+  ASJ_InputNameToCategoryIdMapping,
+  ASJ_CategoryInfo,
+  ASJ_CATEGORY_ROW_KEY,
+  ASJ_CategoryDriver,
+  ASJ_OutputDecorationInfo,
+  ASJ_OutputNameToDecorationMapping,
 } from 'ssDatabase/api/userJson/category/types';
 
 // VARIABLES
@@ -33,15 +38,15 @@ const load = async (activeSliceName: string): Promise<void> => {
     collectionName: activeSliceName,
   });
 
-  // 1.2. Get global json collection
+  // 1.2. Get activeSlice json collection
   // 'getJson' will create rows if they do not already exist
   const jsonCollection: RealmJson =
     RealmJsonManager.getCollection(activeSliceName);
 
-  // 1.3. Create Category json rows
+  // 1.3. Create InputCategory json rows
   // 'getJson' will create rows if they do not already exist
   jsonCollection.getJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+    ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
   );
 
   isLoaded = true;
@@ -60,6 +65,8 @@ const throwLoadError = (): void | never => {
     );
 };
 
+// INPUT CATEGORIES
+
 /**
  * For an 'activeSliceName',
  * Add to the mapping for inputName to categoryName
@@ -69,7 +76,7 @@ const throwLoadError = (): void | never => {
  */
 const addInputCategories = (
   activeSliceName: string,
-  categoryInfo: UJ_CategoryInfo,
+  categoryInfo: ASJ_CategoryInfo,
 ): void | never => {
   throwLoadError();
 
@@ -78,9 +85,9 @@ const addInputCategories = (
     RealmJsonManager.getCollection(activeSliceName);
 
   // 2. Get Json Row
-  const inputToCategoryMapping: UJ_InputNameToCategoryIdMapping =
+  const inputToCategoryMapping: ASJ_InputNameToCategoryIdMapping =
     jsonCollection.getJson(
-      UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+      ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     );
 
   // 3. Save newInputCategory
@@ -88,7 +95,7 @@ const addInputCategories = (
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+    ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     inputToCategoryMapping,
   );
 };
@@ -97,11 +104,11 @@ const addInputCategories = (
  * Remove inputName keys from the mapping for inputName to categoryName
  *
  * @param activeSliceName
- * @param inputIdsToRm
+ * @param inputNamesToRm
  */
 const rmInputCategories = (
   activeSliceName: string,
-  inputIdsToRm: string[],
+  inputNamesToRm: string[],
 ): void | never => {
   throwLoadError();
 
@@ -110,19 +117,19 @@ const rmInputCategories = (
     RealmJsonManager.getCollection(activeSliceName);
 
   // 2. Get Json Row
-  const inputToCategoryMapping: UJ_InputNameToCategoryIdMapping =
+  const inputToCategoryMapping: ASJ_InputNameToCategoryIdMapping =
     jsonCollection.getJson(
-      UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+      ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     );
 
   // 3. Delete each inputId
-  for (const inputId of inputIdsToRm) {
+  for (const inputId of inputNamesToRm) {
     delete inputToCategoryMapping[inputId];
   }
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+    ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     inputToCategoryMapping,
   );
 };
@@ -135,7 +142,7 @@ const rmInputCategories = (
  */
 const getAllInputCategories = (
   activeSliceName: string,
-): UJ_InputNameToCategoryIdMapping | never => {
+): ASJ_InputNameToCategoryIdMapping | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -143,15 +150,113 @@ const getAllInputCategories = (
     RealmJsonManager.getCollection(activeSliceName);
 
   // 2. Get Json Row
-  const inputToCategoryMapping: UJ_InputNameToCategoryIdMapping =
+  const inputToCategoryMapping: ASJ_InputNameToCategoryIdMapping =
     jsonCollection.getJson(
-      UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING,
+      ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     );
 
   return inputToCategoryMapping;
 };
 
-const Driver: UJ_CategoryDriver = {
+// OUTPUT DECORATIONS
+
+/**
+ * Get 'activeSliceName' collection, then
+ * Add to the mapping for outputName to OutputDecoration
+ *
+ * @param activeSliceName
+ * @param outputDecorationInfo
+ */
+const addOutputDecorations = (
+  activeSliceName: string,
+  outputDecorationInfo: ASJ_OutputDecorationInfo,
+): void | never => {
+  throwLoadError();
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson =
+    RealmJsonManager.getCollection(activeSliceName);
+
+  // 2. Get Json Row
+  const outputToDecorationMapping: ASJ_OutputNameToDecorationMapping =
+    jsonCollection.getJson(
+      ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING,
+    );
+
+  // 3. Save new outputDecorationInfo
+  outputToDecorationMapping[outputDecorationInfo.outputId] = {
+    icon: outputDecorationInfo.icon,
+    color: outputDecorationInfo.color,
+  };
+
+  // 4. Set Json Row
+  jsonCollection.setJson(
+    ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING,
+    outputToDecorationMapping,
+  );
+};
+
+/**
+ * Get 'activeSliceName' collection, then
+ * Remove outputName keys from the mapping for outputName to OutputDecoration
+ *
+ * @param activeSliceName
+ * @param outputDecorationInfo
+ */
+const rmOutputDecorations = (
+  activeSliceName: string,
+  outputIdsToRm: string[],
+): void | never => {
+  throwLoadError();
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson =
+    RealmJsonManager.getCollection(activeSliceName);
+
+  // 2. Get Json Row
+  const outputToDecorationMapping: ASJ_OutputNameToDecorationMapping =
+    jsonCollection.getJson(
+      ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING,
+    );
+
+  // 3. Delete each inputId
+  for (const outputId of outputIdsToRm) {
+    delete outputToDecorationMapping[outputId];
+  }
+
+  // 4. Set Json Row
+  jsonCollection.setJson(
+    ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING,
+    outputToDecorationMapping,
+  );
+};
+
+/**
+ * Get 'activeSliceName' collection, then
+ * Get the mapping for outputName to OutputDecoration
+ *
+ * @param activeSliceName
+ */
+// OutName - OutputDecoration
+const getAllOutputDecorations = (
+  activeSliceName: string,
+): ASJ_OutputNameToDecorationMapping | never => {
+  throwLoadError();
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson =
+    RealmJsonManager.getCollection(activeSliceName);
+
+  // 2. Get Json Row
+  const outputToCategoryMapping: ASJ_OutputNameToDecorationMapping =
+    jsonCollection.getJson(
+      ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING,
+    );
+
+  return outputToCategoryMapping;
+};
+
+const Driver: ASJ_CategoryDriver = {
   isLoaded,
   load,
   closeAll,
@@ -159,6 +264,10 @@ const Driver: UJ_CategoryDriver = {
   addInputCategories,
   rmInputCategories,
   getAllInputCategories,
+
+  addOutputDecorations,
+  rmOutputDecorations,
+  getAllOutputDecorations,
 };
 
 export default Driver;

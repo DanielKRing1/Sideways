@@ -1,19 +1,18 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import userJsonDriver from 'ssDatabase/api/userJson/';
-import {getUserJsonMapValue} from 'ssDatabase/hardware/realm/userJson/utils';
 
 import {ThunkConfig} from '../types';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
 import {
-  GJ_CategoryMapping,
+  GJ_CategoryDecorationMapping,
   GJ_CategoryNameMapping,
   GJ_CategorySetNameMapping,
   GJ_SliceNameToCategorySetIdMapping,
-  UJ_CATEGORY_ROW_KEY,
-  UJ_InputNameToCategoryIdMapping,
+  ASJ_CATEGORY_ROW_KEY,
+  ASJ_InputNameToCategoryIdMapping,
 } from 'ssDatabase/api/userJson/category/types';
-import {GLOBAL_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
+import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
 
 // INITIAL STATE
@@ -29,11 +28,12 @@ export interface UserJsonState {
 const initialState: UserJsonState = {
   // All User Json
   fullUserJsonMap: {
-    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]: {},
-    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: {},
-    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING]: {},
-    [GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]: {},
-    [UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING]: {},
+    [GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]: {},
+    [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: {},
+    [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: {},
+    [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]: {},
+    [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]: {},
+    [ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING]: {},
   },
 
   // RERENDER
@@ -73,14 +73,14 @@ export const startRefreshCategoryMapping = createAsyncThunk<
   const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
 
   // 2. Get fresh fullUserJsonMap
-  const freshCategoryMapping: GJ_CategoryMapping =
-    await globalDriver.getCategoryMapping();
+  const freshCategoryMapping: GJ_CategoryDecorationMapping =
+    await globalDriver.getCategoryDecorationMapping();
 
   // 3. Update fullUserJsonMap
   thunkAPI.dispatch(
     setFullUserJsonMap({
       ...fullUserJsonMap,
-      [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING]: freshCategoryMapping,
+      [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: freshCategoryMapping,
     }),
   );
   thunkAPI.dispatch(forceSignatureRerender());
@@ -107,7 +107,7 @@ export const startRefreshCategorySetNameMapping = createAsyncThunk<
     thunkAPI.dispatch(
       setFullUserJsonMap({
         ...fullUserJsonMap,
-        [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]:
+        [GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]:
           freshCategorySetNameMapping,
       }),
     );
@@ -134,8 +134,7 @@ export const startRefreshCategoryNameMapping = createAsyncThunk<
   thunkAPI.dispatch(
     setFullUserJsonMap({
       ...fullUserJsonMap,
-      [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]:
-        freshCategoryNameMapping,
+      [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: freshCategoryNameMapping,
     }),
   );
   thunkAPI.dispatch(forceSignatureRerender());
@@ -162,7 +161,7 @@ export const startRefreshSliceToCategoryMapping = createAsyncThunk<
     thunkAPI.dispatch(
       setFullUserJsonMap({
         ...fullUserJsonMap,
-        [GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]:
+        [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]:
           freshSliceToCategoryMapping,
       }),
     );
@@ -173,7 +172,7 @@ export const startRefreshSliceToCategoryMapping = createAsyncThunk<
 );
 
 type StartRefreshInputNameToCategoryNameMappingArgs = undefined;
-export const startRefreshInputeNameToCategoryNameMapping = createAsyncThunk<
+export const startRefreshInputNameToCategoryNameMapping = createAsyncThunk<
   boolean,
   StartRefreshInputNameToCategoryNameMappingArgs,
   ThunkConfig
@@ -184,14 +183,14 @@ export const startRefreshInputeNameToCategoryNameMapping = createAsyncThunk<
     const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
 
     // 2. Get fresh inputNameToCategoryNameMapping
-    const freshInputNameToCategoryNameMapping: UJ_InputNameToCategoryIdMapping =
+    const freshInputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping =
       await globalDriver.getSliceToCategoryMapping();
 
     // 3. Update fullUserJsonMap
     thunkAPI.dispatch(
       setFullUserJsonMap({
         ...fullUserJsonMap,
-        [UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING]:
+        [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]:
           freshInputNameToCategoryNameMapping,
       }),
     );

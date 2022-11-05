@@ -6,14 +6,11 @@ import {RootState, AppDispatch} from 'ssRedux/index';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
 import {PartialHeatMapCell} from 'ssComponents/Charts/HeatMap/HeatMap';
-import {getDecorationMapSubsetList} from 'ssDatabase/hardware/realm/userJson/utils';
+import {getOutputDecorationList} from 'ssDatabase/hardware/realm/userJson/utils';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 import {HeatMapDay} from 'ssDatabase/api/analytics/timeseries/types';
-import {
-  DECORATION_ROW_TYPE,
-  DECORATION_VALUE_KEY,
-} from 'ssDatabase/api/userJson/category/types';
+import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 
 type OutputHeatMapProps = {};
 const OutputHeatMap: FC<OutputHeatMapProps> = () => {
@@ -21,11 +18,11 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>();
 
   // REDUX
-  const {heatMapByMonth, monthIndex, fullDecorationMap} = useSelector(
+  const {heatMapByMonth, monthIndex, fullUserJsonMap} = useSelector(
     (state: RootState) => ({
       ...state.readSidewaysSlice.toplevelReadReducer,
       ...state.analyticsSlice.timeseriesStatsSlice,
-      ...state.userJsonSlice.decorationSlice,
+      ...state.userJsonSlice,
     }),
   );
   const dispatch: AppDispatch = useDispatch();
@@ -36,16 +33,14 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
 
     // [ { value: [...colors], onPress: (i) => setSelectedIndex(i) }, ... ]
     return rawHeatMap.map((day: HeatMapDay) => ({
-      value: getDecorationMapSubsetList<string>(
-        DECORATION_ROW_TYPE.OUTPUT,
+      value: getOutputDecorationList<string>(
         day.outputs,
-        DECORATION_VALUE_KEY.COLOR,
-        fullDecorationMap,
-        (i: number, v: string) => v,
+        fullUserJsonMap,
+        (i: number, v: OutputDecoration) => v.color,
       ),
       onPress: (index: number) => setSelectedIndex(index),
     }));
-  }, [heatMapByMonth, monthIndex, fullDecorationMap]);
+  }, [heatMapByMonth, monthIndex, fullUserJsonMap]);
 
   // HANDLER METHODS
   const handleSelectMonth = (newMonthIndex: number) =>

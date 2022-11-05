@@ -4,14 +4,15 @@ import {UserJsonDriver, UserJsonMap} from 'ssDatabase/api/userJson/types';
 import GlobalJsonDriver from 'ssDatabase/hardware/realm/userJson/globalDriver';
 import CategoryJsonDriver from 'ssDatabase/hardware/realm/userJson/categoryDriver';
 import {
-  GJ_CategoryMapping,
+  GJ_CategoryDecorationMapping,
   GJ_CategoryNameMapping,
   GJ_CategorySetNameMapping,
   GJ_SliceNameToCategorySetIdMapping,
-  UJ_CATEGORY_ROW_KEY,
-  UJ_InputNameToCategoryIdMapping,
+  ASJ_CATEGORY_ROW_KEY,
+  ASJ_InputNameToCategoryIdMapping,
+  ASJ_OutputNameToDecorationMapping,
 } from 'ssDatabase/api/userJson/category/types';
-import {GLOBAL_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
+import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import {
   DEFAULT_REALM_JSON_META_REALM_PATH,
   DEFAULT_REALM_JSON_LOADABLE_REALM_PATH,
@@ -73,8 +74,8 @@ const throwLoadError = (): void | never => {
 const getAllUserJson = (activeSlice: string): UserJsonMap | never => {
   throwLoadError();
 
-  const categoryMapping: GJ_CategoryMapping =
-    GlobalJsonDriver.getCategoryMapping();
+  const cdMapping: GJ_CategoryDecorationMapping =
+    GlobalJsonDriver.getCategoryDecorationMapping();
   const categorySetNameMapping: GJ_CategorySetNameMapping =
     GlobalJsonDriver.getCategorySetNameMapping();
   const categoryNameMapping: GJ_CategoryNameMapping =
@@ -82,18 +83,22 @@ const getAllUserJson = (activeSlice: string): UserJsonMap | never => {
   const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
     GlobalJsonDriver.getSliceToCategoryMapping();
 
-  const allInputCategories: UJ_InputNameToCategoryIdMapping =
+  const inputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping =
     CategoryJsonDriver.getAllInputCategories(activeSlice);
+  const outputNameToDecorationMapping: ASJ_OutputNameToDecorationMapping =
+    CategoryJsonDriver.getAllOutputDecorations(activeSlice);
 
   return {
-    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING]: categoryMapping,
-    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]:
-      categorySetNameMapping,
-    [GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: categoryNameMapping,
-    [GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]:
+    [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: cdMapping,
+    [GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]: categorySetNameMapping,
+    [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: categoryNameMapping,
+    [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]:
       sliceToCategorySetMapping,
-    [UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING]:
-      allInputCategories,
+
+    [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]:
+      inputNameToCategoryNameMapping,
+    [ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING]:
+      outputNameToDecorationMapping,
   };
 };
 

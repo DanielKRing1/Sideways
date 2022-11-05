@@ -6,7 +6,7 @@ import {AvailableIcons} from '../constants';
 
 /*
 ALL SETS OF CATEGORIES
-    [rowKey] GLOBAL_COLLECTION_ROW_KEY.ALL_CATEGORY_SETS: {
+    [rowKey] GJ_COLLECTION_ROW_KEY.ALL_CATEGORY_SETS: {
         SetName1: {
             CategoryName1: {
                 icon,
@@ -63,7 +63,7 @@ export type GJ_CategoryNameMapping = IdMapping;
 //      color: string;
 //    }
 // }
-export type GJ_CategoryMapping = Dict<GJ_CategorySet>;
+export type GJ_CategoryDecorationMapping = Dict<GJ_CategorySet>;
 export type GJ_CategorySet = Dict<GJ_Category>;
 export type GJ_Category = {
   icon: AvailableIcons;
@@ -72,7 +72,7 @@ export type GJ_Category = {
 
 /*
     SLICE-TO-CATEGORY_SCHEMA MAPPING
-        [rowKey] GLOBAL_COLLECTION_ROW_KEY.SLICE_TO_CATEGORY_SET_MAPPING: {
+        [rowKey] GJ_COLLECTION_ROW_KEY.SLICE_TO_CATEGORY_SET_MAPPING: {
             sliceName1: CategorySchemas.SetName1,
             sliceName2: CategorySchemas.SetName1,
             sliceName3: CategorySchemas.SetName2,
@@ -84,17 +84,19 @@ export type GJ_SliceNameToCategorySetIdMapping = AssociationMapping;
 
 // USER JSON MAP
 
-export enum UJ_CATEGORY_ROW_KEY {
-  INPUT_NAME_TO_CATEGORY_NAME_MAPPING = 'INPUT_NAME_TO_CATEGORY_NAME_MAPPING',
+export enum ASJ_CATEGORY_ROW_KEY {
+  INPUT_NAME_TO_CATEGORY_ID_MAPPING = 'INPUT_NAME_TO_CATEGORY_ID_MAPPING',
+  OUTPUT_NAME_TO_DECORATION_MAPPING = 'OUTPUT_NAME_TO_DECORATION_MAPPING',
 }
 
 export type CategoryJsonMap = {
-  [UJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_NAME_MAPPING]: UJ_InputNameToCategoryIdMapping;
+  [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]: ASJ_InputNameToCategoryIdMapping;
+  [ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING]: ASJ_OutputNameToDecorationMapping;
 };
 
 /*
 INPUT-TO-CATEGORY MAPPING
-    [rowKey] UJ_CATEGORY_ROW_KEY.CATEGORY: {
+    [rowKey] ASJ_CATEGORY_ROW_KEY.CATEGORY: {
     inputName1: categoryName1,
     inputName2: categoryName1,
     inputName3: categoryName2,
@@ -102,25 +104,37 @@ INPUT-TO-CATEGORY MAPPING
   }
 */
 // InputName - CategoryId
-export type UJ_InputNameToCategoryIdMapping = Dict<string>;
+export type ASJ_InputNameToCategoryIdMapping = Dict<string>;
+// OutputName - Decoration
+export type ASJ_OutputNameToDecorationMapping = Dict<OutputDecoration>;
+export type OutputDecoration = {
+  icon: AvailableIcons;
+  color: HexColor;
+};
 
 // CATEGORY DRIVER
 
-export type UJ_CategoryInfo = {
+export type ASJ_CategoryInfo = {
   inputId: string;
   categoryId: string;
   icon?: AvailableIcons;
   color?: HexColor;
 };
 
-export type UJ_CategoryDriver = {
+export type ASJ_OutputDecorationInfo = {
+  outputId: string;
+  icon: AvailableIcons;
+  color: HexColor;
+};
+
+export type ASJ_CategoryDriver = {
   isLoaded: boolean;
   load: (activeSliceName: string) => Promise<void>;
   closeAll: () => Promise<void>;
 
   addInputCategories: (
     activeSliceName: string,
-    categoryInfo: UJ_CategoryInfo,
+    categoryInfo: ASJ_CategoryInfo,
   ) => void | never;
   rmInputCategories: (
     activeSliceName: string,
@@ -129,5 +143,18 @@ export type UJ_CategoryDriver = {
   // InputName - CategoryId
   getAllInputCategories: (
     activeSliceName: string,
-  ) => UJ_InputNameToCategoryIdMapping | never;
+  ) => ASJ_InputNameToCategoryIdMapping | never;
+
+  addOutputDecorations: (
+    activeSliceName: string,
+    outputDecorationInfo: ASJ_OutputDecorationInfo,
+  ) => void | never;
+  rmOutputDecorations: (
+    activeSliceName: string,
+    outputIdsToRm: string[],
+  ) => void | never;
+  // InputName - CategoryId
+  getAllOutputDecorations: (
+    activeSliceName: string,
+  ) => ASJ_OutputNameToDecorationMapping | never;
 };

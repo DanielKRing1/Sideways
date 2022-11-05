@@ -12,13 +12,13 @@ import {
 import {
   GlobalJsonDriver,
   GLOBAL_COLLECTION_KEY,
-  GLOBAL_COLLECTION_ROW_KEY,
+  GJ_COLLECTION_ROW_KEY,
 } from 'ssDatabase/api/userJson/globalDriver/types';
 import {
   GJ_CategorySet,
   GJ_CategorySetNameMapping,
   GJ_CategoryNameMapping,
-  GJ_CategoryMapping,
+  GJ_CategoryDecorationMapping,
   GJ_SliceNameToCategorySetIdMapping,
 } from 'ssDatabase/api/userJson/category/types';
 import {getUniqueId} from 'ssUtils/id';
@@ -48,19 +48,19 @@ const load = async (): Promise<void> => {
   // 1.3. Create global json rows
   // 'getJson' will create rows if they do not already exist
   // CategorySetId - CategorySetName
-  jsonCollection.getJson(GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING);
+  jsonCollection.getJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING);
   // CategoryId: CategoryName
-  jsonCollection.getJson(GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING);
+  jsonCollection.getJson(GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING);
   // CategorySetId: {
   //  CategoryId: {
   //    icon: string;
   //    color: string;
   //  }
   // }
-  jsonCollection.getJson(GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING);
+  jsonCollection.getJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING);
   // SliceName - CategorySetId
   jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
   );
 
   isLoaded = true;
@@ -100,19 +100,19 @@ const addCategorySet = (
 
   // 2. Get Json Rows
   const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
   );
   const cNameMapping: GJ_CategoryNameMapping = jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
   );
-  const cMapping: GJ_CategoryMapping = jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING,
+  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
   );
 
   // 3.1. Add/Overwrite CategorySet id mapping key
   const allCSIds: Set<string> = new Set(Object.keys(csNameMapping));
   const newCSId: string = getUniqueId(5, allCSIds);
-  jsonCollection.setJson(GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
+  jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
     ...csNameMapping,
     [newCSId]: newCSName,
   });
@@ -135,13 +135,13 @@ const addCategorySet = (
 
   // 3.3. Save new cNameMapping
   jsonCollection.setJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
     cNameMapping,
   );
 
   // 3.4. Save new id-mapped category
-  jsonCollection.setJson(GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING, {
-    ...cMapping,
+  jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
+    ...cdMapping,
     [newCSId]: idMappedCS,
   });
 };
@@ -160,15 +160,18 @@ const rmCategorySet = (csId: string): void | never => {
   );
 
   // 2. Get Json Row
-  const cMapping: GJ_CategoryMapping = jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING,
+  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
   );
 
-  // 3. Remove CategorySet id from cMapping
-  delete cMapping[csId];
+  // 3. Remove CategorySet id from cdMapping
+  delete cdMapping[csId];
 
-  // 4. Set Json Row, new cMapping
-  jsonCollection.setJson(GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING, cMapping);
+  // 4. Set Json Row, new cdMapping
+  jsonCollection.setJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
+    cdMapping,
+  );
 };
 
 /**
@@ -176,7 +179,9 @@ const rmCategorySet = (csId: string): void | never => {
  *
  * @returns
  */
-const getCategoryMapping = (): GJ_CategoryMapping | never => {
+const getCategoryDecorationMapping = ():
+  | GJ_CategoryDecorationMapping
+  | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -185,11 +190,11 @@ const getCategoryMapping = (): GJ_CategoryMapping | never => {
   );
 
   // 2. Get Json Row
-  const cMapping: GJ_CategoryMapping = jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_MAPPING,
+  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
   );
 
-  return cMapping;
+  return cdMapping;
 };
 
 /**
@@ -207,7 +212,7 @@ const getCategorySetNameMapping = (): GJ_CategorySetNameMapping | never => {
 
   // 2. Get Json Row
   const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
   );
 
   return csNameMapping;
@@ -228,7 +233,7 @@ const getCategoryNameMapping = (): GJ_CategoryNameMapping | never => {
 
   // 2. Get Json Row
   const cNameMapping: GJ_CategoryNameMapping = jsonCollection.getJson(
-    GLOBAL_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
   );
 
   return cNameMapping;
@@ -253,7 +258,7 @@ const addSliceToCategoryMapping = (
   // 2. Json Row
   const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
-      GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
     );
 
   // 3. Add/Overwrite Json key, sliceName to csName
@@ -261,7 +266,7 @@ const addSliceToCategoryMapping = (
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
     sliceToCategorySetMapping,
   );
 };
@@ -282,7 +287,7 @@ const rmSliceToCategoryMapping = (sliceName: string): void | never => {
   // 2.Json Row
   const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
-      GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
     );
 
   // 3. Delete Json key
@@ -290,7 +295,7 @@ const rmSliceToCategoryMapping = (sliceName: string): void | never => {
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
     sliceToCategorySetMapping,
   );
 };
@@ -313,7 +318,7 @@ const getSliceToCategoryMapping = ():
   // 2. Get Json Row
   const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
-      GLOBAL_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
     );
 
   return sliceToCategorySetMapping;
@@ -329,7 +334,7 @@ const Driver: GlobalJsonDriver = {
   addSliceToCategoryMapping,
   rmSliceToCategoryMapping,
 
-  getCategoryMapping,
+  getCategoryDecorationMapping,
   getCategorySetNameMapping,
   getCategoryNameMapping,
   getSliceToCategoryMapping,
