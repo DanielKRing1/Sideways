@@ -1,20 +1,15 @@
 import React, {FC} from 'react';
 import {Text, View, useWindowDimensions} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
-import {AppDispatch, RootState} from 'ssRedux/index';
-import {startRate} from 'ssRedux/rateSidewaysSlice';
+import {RootState} from 'ssRedux/index';
 
 import RatingInputList from './components/InputList';
-import {FlexCol} from 'ssComponents/Flex';
-import MyButton from 'ssComponents/ReactNative/MyButton';
-import MyText from 'ssComponents/ReactNative/MyText';
 
-import NoInputsDisplay from './components/NoInputsDisplay';
 import Accordion from 'ssComponents/View/Collapsible/Accordion';
+import NoInputsDisplay from './components/NoInputsDisplay';
 import RatingInput from '../components/RatingSlider';
 import RatingOutputOptions from './components/OutputOptions';
-import {DefaultTheme, useTheme} from 'styled-components/native';
 import RateButton from './components/RateButton';
 
 type RateHomeScreenProps = {};
