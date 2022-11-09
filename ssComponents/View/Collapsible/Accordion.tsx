@@ -5,7 +5,7 @@ import RawCollapsible from './RawCollapsible';
 
 type AccordionProps = {
   headerProps: any;
-  Header: FC<{}>;
+  Header: FC<any>;
 
   initiallyOpen?: number;
   duration?: number;
