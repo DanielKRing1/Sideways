@@ -1,57 +1,57 @@
 import React, {FC} from 'react';
-import {ScrollView} from 'react-native';
+import {Text, View, useWindowDimensions} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
 
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {startRate} from 'ssRedux/rateSidewaysSlice';
+
 import RatingInputList from './components/InputList';
-import NoInputsDisplay from './components/NoInputsDisplay';
 import {FlexCol} from 'ssComponents/Flex';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
+
+import NoInputsDisplay from './components/NoInputsDisplay';
+import Accordion from 'ssComponents/View/Collapsible/Accordion';
 import RatingInput from '../components/RatingSlider';
 import RatingOutputOptions from './components/OutputOptions';
+import {DefaultTheme, useTheme} from 'styled-components/native';
+import RateButton from './components/RateButton';
 
 type RateHomeScreenProps = {};
 const RateHomeScreen: FC<RateHomeScreenProps> = props => {
-  // NAVIGATION
-  const navigator = useNavigation();
-
   // REDUX
   const {inputs, outputs, rating, ratedSignature} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,
   );
-  const dispatch: AppDispatch = useDispatch();
 
-  // HANDLERS
-  const handleRate = async () => {
-    dispatch(startRate());
-  };
+  // HOOKS
+  const {width, height} = useWindowDimensions();
 
   return (
-    <ScrollView>
-      {/* INPUTS */}
-      {inputs.length > 0 ? <RatingInputList /> : <NoInputsDisplay />}
+    <View
+      style={{
+        height,
+        maxHeight: (height * 90) / 100,
+      }}>
+      <Accordion
+        headerProps={new Array(3).fill(undefined).map((v, i) => {
+          index: i;
+        })}
+        Header={({index}: {index: number}) => <Text>Header {index}</Text>}
+        initiallyOpen={0}
+        duration={400}>
+        {/* INPUTS */}
+        {inputs.length > 0 ? <RatingInputList /> : <NoInputsDisplay />}
 
-      {/* OUTPUTS */}
-      <RatingOutputOptions />
+        {/* OUTPUTS */}
+        <RatingOutputOptions />
 
-      {/* RATING */}
-      <RatingInput />
-      <FlexCol alignItems="center">
-        <MyButton
-          style={{
-            borderWidth: 1,
-            borderRadius: 8,
-            padding: 10,
-            width: '80%',
-          }}
-          onPress={handleRate}>
-          <MyText>Rate .u.</MyText>
-        </MyButton>
-      </FlexCol>
-    </ScrollView>
+        {/* RATING */}
+        <RatingInput />
+      </Accordion>
+
+      <RateButton />
+    </View>
   );
 };
 
