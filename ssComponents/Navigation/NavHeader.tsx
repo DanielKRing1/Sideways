@@ -1,22 +1,28 @@
 import React, {FC, useContext} from 'react';
 
 // NAVIGATION
-import {TAB_NAV_NAME} from '../../ssNavigation/constants';
+import {
+  PROFILE_SCREEN_NAME,
+  SETTINGS_SCREEN_NAME,
+  TAB_NAV_NAME,
+} from '../../ssNavigation/constants';
 
 // COMPONENTS
 import FlexRow from '../Flex/FlexRow';
-import NavComponentCreator, {
-  ACTIVE_SLICE_BUTTON,
-  ACTIVE_SLICE_INPUT,
-  ADD_SLICE_BUTTON,
-  ADD_SLICE_INPUT,
-  EMPTY_SPACE,
-  GO_BACK_BUTTON,
-  GO_NAV_BUTTON,
-  PROFILE_BUTTON,
-  SETTINGS_BUTTON,
+import {
+  ActiveSliceNavButton,
+  ActiveSliceNavInput,
+  AddSliceNavButton,
+  AddSliceNavInput,
+  EmptySpace,
+  GoBackNavButton,
+  GoNavButton,
+  ProfileNavButton,
+  SettingsNavButton,
 } from './NavHeaderComponents';
-import {AuthorizedNavContext} from 'ssContexts/RequireActiveSlice/AuthorizedNavProvider';
+import {RequireActiveSliceContext} from 'ssContexts/RequireActiveSlice/RequireActiveSlice';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigatorNavigationProp} from 'ssNavigation/StackNavigator';
 
 type NavHeaderType = {
   children: React.ReactNode;
@@ -36,51 +42,26 @@ const NavHeader: FC<NavHeaderType> = props => {
 
 type TabNavHeaderProps = {};
 export const TabNavHeader: FC<TabNavHeaderProps> = props => {
-  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
-
-  console.log(authorizedStackNavigate);
+  const navigation: StackNavigatorNavigationProp = useNavigation();
 
   return (
     <NavHeader>
-      {[
-        <NavComponentCreator.PROFILE_BUTTON
-          key={PROFILE_BUTTON}
-          authorizedNavigate={authorizedStackNavigate}
-        />,
-        <NavComponentCreator.ACTIVE_SLICE_BUTTON
-          key={ACTIVE_SLICE_BUTTON}
-          authorizedNavigate={authorizedStackNavigate}
-        />,
-        <NavComponentCreator.SETTINGS_BUTTON
-          key={SETTINGS_BUTTON}
-          authorizedNavigate={authorizedStackNavigate}
-        />,
-      ]}
+      <ProfileNavButton />
+      <ActiveSliceNavButton />
+      <SettingsNavButton />
     </NavHeader>
   );
 };
 
 type ActiveSliceHeaderProps = {};
 export const ActiveSliceNavHeader: FC<ActiveSliceHeaderProps> = props => {
-  const {authorizedStackNavigate, authorizedGoBack} =
-    useContext(AuthorizedNavContext);
+  const {} = useContext(RequireActiveSliceContext);
 
   return (
     <NavHeader>
-      {[
-        <NavComponentCreator.GO_BACK_BUTTON
-          key={GO_BACK_BUTTON}
-          authorizedGoBack={authorizedGoBack}
-        />,
-        <NavComponentCreator.ACTIVE_SLICE_INPUT
-          key={ACTIVE_SLICE_INPUT}
-          authorizedNavigate={authorizedStackNavigate}
-        />,
-        <NavComponentCreator.ADD_SLICE_BUTTON
-          key={ADD_SLICE_BUTTON}
-          authorizedNavigate={authorizedStackNavigate}
-        />,
-      ]}
+      <GoBackNavButton />
+      <ActiveSliceNavInput />
+      <AddSliceNavButton />
     </NavHeader>
   );
 };
@@ -97,22 +78,13 @@ type AddSliceHeaderProps = {
 export const AddSliceNavHeader: FC<AddSliceHeaderProps> = props => {
   const {justifyContent = 'space-between'} = props;
 
-  const {authorizedStackNavigate, authorizedGoBack} =
-    useContext(AuthorizedNavContext);
+  const {} = useContext(RequireActiveSliceContext);
 
   return (
     <NavHeader justifyContent={justifyContent}>
-      {[
-        <NavComponentCreator.GO_BACK_BUTTON
-          key={GO_BACK_BUTTON}
-          authorizedGoBack={authorizedGoBack}
-        />,
-        <NavComponentCreator.ADD_SLICE_INPUT
-          key={ADD_SLICE_INPUT}
-          authorizedNavigate={authorizedStackNavigate}
-        />,
-        <NavComponentCreator.EMPTY_SPACE key={EMPTY_SPACE} />,
-      ]}
+      <GoBackNavButton />
+      <AddSliceNavInput />
+      <EmptySpace />
     </NavHeader>
   );
 };
@@ -129,20 +101,14 @@ type ProfileHeaderProps = {
 export const ProfileHeader: FC<ProfileHeaderProps> = props => {
   const {justifyContent = 'flex-start'} = props;
 
-  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
-
   return (
     <NavHeader justifyContent={justifyContent}>
-      {[
-        <NavComponentCreator.GO_NAV_BUTTON
-          key={GO_NAV_BUTTON}
-          style={{
-            paddingTop: 15,
-            paddingLeft: 15,
-          }}
-          onPress={() => authorizedStackNavigate(TAB_NAV_NAME)}
-        />,
-      ]}
+      <GoBackNavButton
+        style={{
+          paddingTop: 15,
+          paddingLeft: 15,
+        }}
+      />
     </NavHeader>
   );
 };
@@ -159,20 +125,14 @@ type SettingsHeaderProps = {
 export const SettingsHeader: FC<SettingsHeaderProps> = props => {
   const {justifyContent = 'flex-start'} = props;
 
-  const {authorizedStackNavigate} = useContext(AuthorizedNavContext);
-
   return (
     <NavHeader justifyContent={justifyContent}>
-      {[
-        <NavComponentCreator.GO_NAV_BUTTON
-          key={GO_NAV_BUTTON}
-          style={{
-            paddingTop: 15,
-            paddingLeft: 15,
-          }}
-          onPress={() => authorizedStackNavigate(TAB_NAV_NAME)}
-        />,
-      ]}
+      <GoBackNavButton
+        style={{
+          paddingTop: 15,
+          paddingLeft: 15,
+        }}
+      />
     </NavHeader>
   );
 };
