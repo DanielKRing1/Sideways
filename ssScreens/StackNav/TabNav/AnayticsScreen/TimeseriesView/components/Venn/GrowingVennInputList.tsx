@@ -19,22 +19,20 @@ import {
 } from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 // DECORATIONS
-import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
-import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/category/types';
+import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
+import {ListRenderItemInfo} from 'react-native';
 
 const createRenderItemComponent =
-  (allInputIds: string[], deleteVennInput: (index: number) => void) =>
+  (deleteVennInput: (index: number) => void) =>
   (handleChangeText: (newText: string, index: number) => void) =>
-  ({item, index}: {item: VennInput; index: number}) =>
+  ({item, index}: ListRenderItemInfo<VennInput>) =>
     (
       <FlexRow>
-        <AutoCompleteDecoration
+        <AutoCompleteCategory
           clickOutsideId={`GrowingVennInputList-${item.id}`}
           placeholder="Search an input..."
-          allEntityIds={allInputIds}
           inputValue={item.text}
           setInputValue={(newText: string) => handleChangeText(newText, index)}
-          dRowType={DECORATION_ROW_TYPE.INPUT}
           onSelectEntityId={(newText: string) =>
             handleChangeText(newText, index)
           }
@@ -54,11 +52,9 @@ const createRenderItemComponent =
 type GrowingVennInputListProps = {};
 const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
   // REDUX
-  const {activeSliceName, vennNodeInputs, allDbInputs, allDbOutputs} =
-    useSelector((state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.timeseriesStatsSlice,
-    }));
+  const {vennNodeInputs} = useSelector(
+    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // PROP VARIABLES
@@ -76,9 +72,8 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
   return (
     <GrowingIdList
       data={vennNodeInputs}
-      createRenderItemComponent={createRenderItemComponent(
-        allDbInputs,
-        (index: number) => dispatch(startRmVennInput(index)),
+      createRenderItemComponent={createRenderItemComponent((index: number) =>
+        dispatch(startRmVennInput(index)),
       )}
       keyExtractor={keyExtractor}
       genNextDataPlaceholder={genNextDataPlaceholder}

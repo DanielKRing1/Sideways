@@ -24,25 +24,33 @@ let isLoaded: boolean = false;
 // LOAD/CLOSE ----
 
 const load = async (activeSliceName: string): Promise<void> => {
-  if (isLoaded) return;
+  console.log('userJson about to load');
 
-  // 1. Load GlobalJsonDriver/Create schemas for first
-  const loadGlobalPromise: Promise<any> = GlobalJsonDriver.load();
-  // 2. Load CategoryJsonDriver/Create schemas for first
-  const loadCategoryPromise: Promise<any> =
-    CategoryJsonDriver.load(activeSliceName);
+  const promises: Promise<any>[] = [];
 
-  // 3. Load all saved collections
-  const loadAllCollectionsPromise = RealmJsonManager.loadCollections(
-    DEFAULT_REALM_JSON_META_REALM_PATH,
-    DEFAULT_REALM_JSON_LOADABLE_REALM_PATH,
-  );
+  // 1. Load CategoryJsonDriver/Create schemas for the first time
+  promises.push(CategoryJsonDriver.load(activeSliceName));
 
-  await Promise.all([
-    loadGlobalPromise,
-    loadCategoryPromise,
-    loadAllCollectionsPromise,
-  ]);
+  // 2. Load GlobalJsonDriver/Create schemas for the first time
+  // No need to reload, will return early if already loaded
+  promises.push(GlobalJsonDriver.load());
+
+  // No need to reload
+  if (!isLoaded) {
+    // 3. Load all saved collections
+    // This may not be necessary, since the needed collections are loaded from GlobalDriver and CategoryDriver
+    // And CategoryDriver reloads 'activeSlice' collections as they are requested
+    promises.push(
+      RealmJsonManager.loadCollections(
+        DEFAULT_REALM_JSON_META_REALM_PATH,
+        DEFAULT_REALM_JSON_LOADABLE_REALM_PATH,
+      ),
+    );
+  }
+
+  await Promise.all(promises);
+
+  console.log('userJson loaded');
 
   isLoaded = true;
 };
@@ -75,24 +83,24 @@ const getAllUserJson = (activeSlice: string): UserJsonMap | never => {
   throwLoadError();
 
   const cdMapping: GJ_CategoryDecorationMapping =
-    GlobalJsonDriver.getCategoryDecorationMapping();
+    GlobalJsonDriver.getCDMapping();
   const categorySetNameMapping: GJ_CategorySetNameMapping =
-    GlobalJsonDriver.getCategorySetNameMapping();
+    GlobalJsonDriver.getCSNameMapping();
   const categoryNameMapping: GJ_CategoryNameMapping =
     GlobalJsonDriver.getCategoryNameMapping();
   const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
     GlobalJsonDriver.getSliceToCategoryMapping();
 
   const inputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping =
-    CategoryJsonDriver.getAllInputCategories(activeSlice);
+    CategoryJsonDriver.getAllInputCategories();
   const outputNameToDecorationMapping: ASJ_OutputNameToDecorationMapping =
-    CategoryJsonDriver.getAllOutputDecorations(activeSlice);
+    CategoryJsonDriver.getAllOutputDecorations();
 
   return {
     [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: cdMapping,
     [GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]: categorySetNameMapping,
     [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: categoryNameMapping,
-    [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]:
+    [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING]:
       sliceToCategorySetMapping,
 
     [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]:

@@ -1,8 +1,20 @@
-import React, {FC} from 'react';
-import {FlatList, View, ListRenderItem, ListRenderItemInfo} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import React, {FC, useMemo} from 'react';
+import {
+  FlatList,
+  ListRenderItem,
+  ListRenderItemInfo,
+  ViewStyle,
+} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useDispatch, useSelector} from 'react-redux';
+import {FlexRow} from 'ssComponents/Flex';
+import MyBorder from 'ssComponents/ReactNative/MyBorder';
+import MyText from 'ssComponents/ReactNative/MyText';
 
-import {RootState, AppDispatch} from 'ssRedux/index';
+import {AppDispatch, RootState} from 'ssRedux/index';
+import {setOutputs} from 'ssRedux/rateSidewaysSlice';
+import {useTheme} from 'styled-components';
+import {DefaultTheme} from 'styled-components/native';
 
 type RatingOutputOptionsProps = {};
 const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
@@ -10,17 +22,27 @@ const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
   const {allDbOutputs} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const {inputs, outputs, rating, ratedSignature} = useSelector(
-    (state: RootState) => state.rateSidewaysSlice,
-  );
+  const {outputs} = useSelector((state: RootState) => state.rateSidewaysSlice);
   const dispatch: AppDispatch = useDispatch();
 
   // LOCAL STATE
-  const outputsSet: Set<string> = new Set(outputs.map(({text}) => text));
+  const selectedOutputs: Set<string> = new Set(outputs);
+  const toggleSelected = (output: string) => {
+    // 1. Toggle selected outputs
+    if (!selectedOutputs.has(output)) selectedOutputs.add(output);
+    else selectedOutputs.delete(output);
+
+    // 2. Set Redux outputs
+    dispatch(setOutputs(Array.from(selectedOutputs)));
+  };
 
   // RENDER ITEM
   const renderItem: ListRenderItem<string> = itemInfo => (
-    <OutputOption itemInfo={itemInfo} outputsSet={outputsSet} />
+    <OutputOption
+      itemInfo={itemInfo}
+      selectedOutputs={selectedOutputs}
+      toggleSelected={toggleSelected}
+    />
   );
 
   return (
@@ -36,10 +58,42 @@ export default RatingOutputOptions;
 
 type OutputOptionProps = {
   itemInfo: ListRenderItemInfo<string>;
-  outputsSet: Set<string>;
+  selectedOutputs: Set<string>;
+  toggleSelected: (output: string) => void;
 };
 const OutputOption: FC<OutputOptionProps> = props => {
-  const {itemInfo, outputsSet} = props;
+  const {itemInfo, selectedOutputs, toggleSelected} = props;
+  const output = itemInfo.item;
 
-  return <View></View>;
+  const isSelected: boolean = useMemo(
+    () => selectedOutputs.has(output),
+    [output, selectedOutputs],
+  );
+
+  // THEME
+  const theme: DefaultTheme = useTheme();
+
+  // HANDLERS
+  const handleToggleSelected = () => {
+    toggleSelected(output);
+  };
+
+  const borderStyle: ViewStyle = useMemo(
+    () =>
+      isSelected
+        ? {borderColor: theme.border.color.accent}
+        : {borderColor: theme.border.color.main},
+    [isSelected],
+  );
+
+  return (
+    <TouchableOpacity onPress={handleToggleSelected}>
+      <MyBorder style={borderStyle}>
+        <FlexRow justifyContent="space-between">
+          <MyText>{output}</MyText>
+          {isSelected && <MyText>Yes</MyText>}
+        </FlexRow>
+      </MyBorder>
+    </TouchableOpacity>
+  );
 };

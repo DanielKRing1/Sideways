@@ -8,7 +8,15 @@ type MyTextInputProps = {
   style?: Dict<number | string>;
 } & TextInputProps;
 const MyTextInput = forwardRef<TextInput, MyTextInputProps>((props, ref) => {
-  const {style, placeholder, value, onChangeText, onFocus, onBlur} = props;
+  const {
+    style,
+    placeholder,
+    value,
+    onChangeText,
+    onFocus,
+    onBlur,
+    onSubmitEditing,
+  } = props;
 
   const theme = useTheme();
 

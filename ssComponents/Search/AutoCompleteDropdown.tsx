@@ -5,6 +5,7 @@ import {
   SearchableDropdown,
   SearchableDropdownProps,
 } from 'ssComponents/Search/SearchableDropdown';
+import {useAutoComplete} from 'ssHooks/useAutoComplete';
 import {useTrie} from 'ssHooks/useTrie';
 
 export type DropdownRowProps<T> = {
@@ -22,34 +23,16 @@ const AutoCompleteDropdown: FC<AutoCompleteDropdownProps<any>> = props => {
     placeholder,
     inputValue,
     setInputValue,
-    allSuggestions: _allSuggestions,
+    allSuggestions,
     getSuggestionText = (suggestion: string) => suggestion,
     DropdownRow,
   } = props;
 
-  const [allSuggestions, setAllSuggestions] = useState<string[]>([]);
-
-  const {
-    setValues: setTrieValues,
-    search,
-    autoComplete,
-  } = useTrie<any>(getSuggestionText);
-
-  // TRIE EFFECTS
-  // 1. Set allSuggestions
-  useEffect(() => {
-    setAllSuggestions(_allSuggestions);
-  }, [_allSuggestions]);
-
-  // 2. Set up Trie
-  useEffect(() => {
-    setTrieValues(inputValue, allSuggestions);
-  }, [allSuggestions]);
-
-  // 3. Get autoComplete list, based on searched inputValue
-  useEffect(() => {
-    search(inputValue);
-  }, [inputValue]);
+  const {autoComplete} = useAutoComplete(
+    inputValue,
+    allSuggestions,
+    getSuggestionText,
+  );
 
   const Dropdown: FC<{}> = () => (
     <FlexCol>

@@ -42,12 +42,13 @@ const createExistingSliceCard =
 
     return (
       <StyledTouchableOpacity onPress={() => onSelectSlice(item.sliceName)}>
-        <FlexRow justifyContent="space-around">
+        <FlexRow justifyContent="space-between">
           {month === undefined || day === undefined ? (
             <MyText>Unused</MyText>
           ) : (
             <DateCard month={month} day={day} />
           )}
+
           <MyText>{item.sliceName}</MyText>
 
           <MyButton onPress={() => onDeleteSlice(item.sliceName)}>

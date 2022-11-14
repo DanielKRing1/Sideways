@@ -1,12 +1,13 @@
 import React, {FC} from 'react';
-import {View, useWindowDimensions} from 'react-native';
+import {View, ViewStyle, useWindowDimensions} from 'react-native';
 import {DefaultTheme, useTheme} from 'styled-components/native';
 
 type MyBorderProps = {
   children?: React.ReactNode;
+  style?: ViewStyle;
 };
 const MyBorder: FC<MyBorderProps> = props => {
-  const {children} = props;
+  const {children, style = {}} = props;
 
   const theme: DefaultTheme = useTheme();
   const {width} = useWindowDimensions();
@@ -24,6 +25,7 @@ const MyBorder: FC<MyBorderProps> = props => {
         paddingRight: width / theme.paddingDivisors.sm,
 
         marginTop: width / theme.paddingDivisors.sm,
+        ...style,
       }}>
       {children}
     </View>

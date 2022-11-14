@@ -41,7 +41,7 @@ const EditableText: FC<EditableTextProps> = props => {
 
   // Local state
   const [isEditing, setIsEditing] = useState(false);
-  const [editableText, setEditableText] = useState('');
+  const [editableText, setEditableText] = useState(text);
 
   // useRef
   const textInputRef = useRef<TextInput>(null);

@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {useWindowDimensions} from 'react-native';
 import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -6,7 +7,7 @@ import MyButton, {MyButtonProps} from '../ReactNative/MyButton';
 import {FlexContainerProps} from '../Flex';
 import {useFlexContainer} from '../../ssHooks/useFlexContainer';
 import {RequiredExceptFor} from '../../global';
-import {AvailableIcons} from 'ssDatabase/api/userJson/category/constants';
+import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 
 export type IconButtonProps = {
   iconName: AvailableIcons | string;
@@ -24,11 +25,13 @@ export type IconButtonProps = {
 } & MyButtonProps &
   RequiredExceptFor<FlexContainerProps, 'children'>;
 const IconButton: FC<IconButtonProps> = props => {
+  // HOOKS
   const theme = useTheme();
+  const {width} = useWindowDimensions();
 
   const {
     iconName,
-    size = theme.iconSizes.md,
+    size = width / theme.iconSizeDivisors.md,
     color = theme.colors.darkRed,
     style = {},
     marginTop = 0,

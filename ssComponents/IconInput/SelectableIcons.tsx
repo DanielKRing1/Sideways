@@ -1,13 +1,13 @@
 import React, {FC, useMemo, useState} from 'react';
 import {useWindowDimensions, ScrollView} from 'react-native';
 
-import {
-  AvailableIcons,
-  CONFIRM_SELECTION_ICON,
-  getAvailableIcons,
-} from 'ssDatabase/api/userJson/category/constants';
+import {CONFIRM_SELECTION_ICON} from 'ssDatabase/api/userJson/category/constants';
 import IconInput, {IconInputProps} from 'ssComponents/IconInput/IconInput';
 import Grid from 'ssComponents/View/Grid';
+import {
+  AvailableIcons,
+  getAvailableIcons,
+} from 'ssDatabase/api/userJson/constants';
 
 type SelectableIconsProps = {
   onConfirmSelection: (iconName: AvailableIcons) => void;

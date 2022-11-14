@@ -15,6 +15,8 @@ import {
   ViewStyle,
 } from 'react-native';
 
+import StopPropagationView from './StopPropagationView';
+
 type MyModalProps = {
   isOpen: boolean;
   close: () => void;
@@ -50,17 +52,13 @@ const MyModal: FC<MyModalProps> = props => {
             backgroundColor: 'rgba(0,0,0,0.5)',
             ...backgroundStyle,
           }}>
-          <View
-            onStartShouldSetResponder={event => true}
-            onTouchEnd={e => {
-              e.stopPropagation();
-            }}
+          <StopPropagationView
             style={{
               backgroundColor: '#fff',
               ...contentContainerStyle,
             }}>
             <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
-          </View>
+          </StopPropagationView>
         </View>
       </TouchableWithoutFeedback>
     </Modal>

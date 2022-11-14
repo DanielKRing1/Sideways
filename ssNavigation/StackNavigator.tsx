@@ -26,9 +26,9 @@ export type StackNavigatorParamList = {
 export type StackNavigatorProps<
   ScreenName extends keyof StackNavigatorParamList,
 > = StackScreenProps<StackNavigatorParamList, ScreenName>;
-export type StackNavigatorNavigationProp<
-  ScreenName extends keyof StackNavigatorParamList,
-> = StackNavigatorProps<ScreenName>['navigation'];
+export type StackNavigatorNavigationProp = StackNavigatorProps<
+  keyof StackNavigatorParamList
+>['navigation'];
 
 const Stack = createStackNavigator<StackNavigatorParamList>();
 

@@ -22,9 +22,9 @@ export type RateNavigatorParamList = {
 export type RateNavigatorProps<
   ScreenName extends keyof RateNavigatorParamList,
 > = StackScreenProps<RateNavigatorParamList, ScreenName>;
-export type StackNavigatorNavigationProp<
-  ScreenName extends keyof RateNavigatorParamList,
-> = RateNavigatorProps<ScreenName>['navigation'];
+export type RateNavigatorNavigationProp = RateNavigatorProps<
+  keyof RateNavigatorParamList
+>['navigation'];
 
 const Stack = createStackNavigator<RateNavigatorParamList>();
 

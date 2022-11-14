@@ -9,23 +9,15 @@ import {
   startSetNodeIdInput,
 } from 'ssRedux/analyticsSlice/identityStatsSlice';
 import MyText from 'ssComponents/ReactNative/MyText';
-import dbDriver from 'ssDatabase/api/core/dbDriver';
-import AutoCompleteDecoration from 'ssComponents/DecorationRow/AutoCompleteDecoration';
-import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/category/types';
+import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
-  const {
-    activeSliceName,
-    searchedNodeIdInput,
-    allDbInputs,
-    allDbOutputs,
-    readSSSignature,
-    inputStatsSignature,
-  } = useSelector((state: RootState) => ({
-    ...state.readSidewaysSlice.toplevelReadReducer,
-    ...state.analyticsSlice.identityStatsSlice,
-  }));
+  const {searchedNodeIdInput, inputStatsSignature} = useSelector(
+    (state: RootState) => ({
+      ...state.analyticsSlice.identityStatsSlice,
+    }),
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // HANDLERS
@@ -40,13 +32,11 @@ const NodeInput: FC<NodeInputProps> = () => {
     <View>
       <MyText>Choose an Input Node</MyText>
 
-      <AutoCompleteDecoration
+      <AutoCompleteCategory
         clickOutsideId="StatsNodeInput"
         placeholder="Choose a past input..."
-        allEntityIds={allDbInputs}
         inputValue={searchedNodeIdInput}
         setInputValue={handleSetSearchedNodeId}
-        dRowType={DECORATION_ROW_TYPE.INPUT}
         onSelectEntityId={handleSetNodeId}
       />
     </View>

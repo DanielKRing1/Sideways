@@ -57,4 +57,5 @@ export enum AvailableIcons {
   'question' = 'question',
 }
 
-export const getAvailableIcons = (): string[] => getEnumValues(AvailableIcons);
+export const getAvailableIcons = (): AvailableIcons[] =>
+  getEnumValues(AvailableIcons);

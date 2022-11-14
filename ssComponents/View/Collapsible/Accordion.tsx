@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import RawCollapsible from './RawCollapsible';
 
 type AccordionProps = {
-  headerProps: any;
+  headerProps: any[];
   Header: FC<any>;
 
   initiallyOpen?: number;
@@ -51,7 +51,7 @@ const Accordion: FC<AccordionProps> = props => {
   // MEMOS
   const headerComponents: FC<{}>[] = useMemo(
     () =>
-      new Array(headerProps.length).fill(undefined).map((v, i) => () => (
+      headerProps.map((v, i) => () => (
         <View
           onLayout={event => {
             const {x, y, width, height} = event.nativeEvent.layout;
@@ -59,7 +59,7 @@ const Accordion: FC<AccordionProps> = props => {
             headerHeights[i] = height;
             setHeaderHeights([...headerHeights]);
           }}>
-          <Header {...headerProps} />
+          <Header {...headerProps[i]} />
         </View>
       )),
     [headerProps, Header],

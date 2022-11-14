@@ -1,4 +1,4 @@
-import React, {createContext, FC} from 'react';
+import React, {createContext, FC, useEffect} from 'react';
 
 import {useDbDriverLoader} from '../../ssHooks/useDbDriverLoader';
 import {LoadingComponent} from './components/LoadingComponent';
@@ -26,6 +26,10 @@ const DbLoaderProvider: FC<DbLoaderProviderType> = props => {
 
   // TODO Add useMemo?
   const {isLoaded, load, closeAll} = useDbDriverLoader();
+
+  useEffect(() => {
+    console.log(`DbLoader.isLoaded: ${isLoaded}`);
+  }, [isLoaded]);
 
   return (
     <DbLoaderContext.Provider

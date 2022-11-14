@@ -7,10 +7,10 @@ import readGraphReducer, {
 import readStackReducer, {
   forceSignatureRerender as _forceStackRerender,
 } from './readStack';
-import {RateInput, setRating, setOutputs} from 'ssRedux/rateSidewaysSlice';
 import {ThunkConfig} from 'ssRedux/types';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {CGNode} from '@asianpersonn/realm-graph';
+import {NO_ACTIVE_SLICE_NAME} from 'ssDatabase/api/userJson/category/constants';
 
 // INITIAL STATE
 
@@ -25,7 +25,7 @@ export interface ReadSSState {
 }
 
 const initialState: ReadSSState = {
-  activeSliceName: '',
+  activeSliceName: NO_ACTIVE_SLICE_NAME,
   searchedSliceName: '',
 
   allDbInputs: [],

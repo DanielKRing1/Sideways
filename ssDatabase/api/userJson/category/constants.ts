@@ -2,9 +2,12 @@ import {AvailableIcons} from '../constants';
 
 export const CATEGORY_ROW_DELIM: string = '_';
 
+export const DEFAULT_CATEGORY_SET_NAME: string = '';
+export const DEFAULT_CATEGORY_NAME: string = '';
 export const DEFAULT_CATEGORY_ICON: AvailableIcons = AvailableIcons.circle;
 export const DEFAULT_OUTPUT_ICON: AvailableIcons = AvailableIcons.circle;
 export const CONFIRM_SELECTION_ICON: AvailableIcons = AvailableIcons.question;
+export const NO_ACTIVE_SLICE_NAME: string = 'NO_ACTIVE_SLICE';
 
 // DEFAULT CATEGORIES
 

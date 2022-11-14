@@ -1,10 +1,9 @@
 import React, {FC} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import DecorationRow from 'ssComponents/DecorationRow/DecorationRow';
+import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import {FlexRow} from 'ssComponents/Flex';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
-import {DECORATION_ROW_TYPE} from 'ssDatabase/api/userJson/category/types';
 import styled, {DefaultTheme} from 'styled-components/native';
 import GrowingIdList from '../../../../../ssComponents/Input/GrowingIdList';
 import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
@@ -15,8 +14,8 @@ import {
   addInput,
   setInputs,
   removeInput,
-  forceSignatureRerender,
   RateInput,
+  forceSignatureRerender,
 } from '../../../../../ssRedux/rateSidewaysSlice';
 
 const StyledTextInput = styled(MyTextInput)`
@@ -32,11 +31,12 @@ const createInputsRenderItemComponent =
   ({item, index}: {item: RateInput; index: number}) =>
     (
       <FlexRow>
-        <DecorationRow
-          placeholder="Add an input..."
-          dRowType={DECORATION_ROW_TYPE.INPUT}
-          entityId={item.text}
-          onEditEntityId={(newText: string) => handleChangeText(newText, index)}
+        <DbCategoryRow
+          inputName={item.text}
+          onCommitInputName={(newText: string) =>
+            handleChangeText(newText, index)
+          }
+          onDeleteCategoryRow={() => deleteInput(index)}
         />
         {/* <StyledTextInput
             placeholder={'Anotha input...'}
@@ -52,7 +52,7 @@ const createInputsRenderItemComponent =
 
 const GrowingInputList: FC = () => {
   // REDUX
-  const {ratedSignature, inputs} = useSelector(
+  const {inputs, ratedSignature} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,
   );
   const dispatch = useDispatch();

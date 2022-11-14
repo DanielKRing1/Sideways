@@ -12,14 +12,22 @@ import {ThunkConfig} from '../types';
 // INITIAL STATE
 
 export interface RateSSState {
+  // Current input
+  typingInput: string;
+
+  // Final values
   inputs: RateInput[];
-  outputs: RateInput[];
+  outputs: string[];
   rating: number;
 
   ratedSignature: {};
 }
 
 const initialState: RateSSState = {
+  // Current input
+  typingInput: '',
+
+  // Final values
   inputs: [],
   outputs: [],
   rating: 0,
@@ -53,10 +61,10 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
 
     // 2. Rate Graph
     const inputTexts: string[] = inputs.map((input: RateInput) => input.text);
-    const promises: Promise<any>[] = outputs.map((output: RateInput) =>
+    const promises: Promise<any>[] = outputs.map((output: string) =>
       DbDriver.rateGraph(
         activeSliceName,
-        output.text,
+        output,
         inputTexts,
         rating,
         new Array(inputs.length).fill(1 / inputs.length / outputs.length),
@@ -84,8 +92,8 @@ type SetRatingAction = PayloadAction<number>;
 type SetInputsAction = PayloadAction<RateInput[]>;
 type AddInputAction = PayloadAction<RateInput>;
 type RmInputAction = PayloadAction<number>;
-type SetOutputAction = PayloadAction<RateInput[]>;
-type AddOutputAction = PayloadAction<RateInput>;
+type SetOutputAction = PayloadAction<string[]>;
+type AddOutputAction = PayloadAction<string>;
 type RmOutputAction = PayloadAction<number>;
 type StartRateSSFulfilled = PayloadAction<boolean>;
 

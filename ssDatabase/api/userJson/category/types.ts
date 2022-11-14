@@ -4,30 +4,6 @@ import {AvailableIcons} from '../constants';
 
 // GLOBAL JSON PROPERTIES
 
-/*
-ALL SETS OF CATEGORIES
-    [rowKey] GJ_COLLECTION_ROW_KEY.ALL_CATEGORY_SETS: {
-        SetName1: {
-            CategoryName1: {
-                icon,
-                color,
-            },
-            CategoryName2: {
-                icon,
-                color,
-            },
-            CategoryName3: {
-                icon,
-                color,
-            },
-            ...
-        },
-        SetName2: {
-            ...
-        }
-    }
- */
-
 /**
  * ID MAPPINGS (GLOBAL)
  * CategorySetId - CategorySetName
@@ -46,6 +22,7 @@ ALL SETS OF CATEGORIES
  *
  * USER MAPPINGS (CATEGORY)
  * InputName - CategoryId
+ * OutputName - { icon: string; color: string; }
  *
  */
 
@@ -64,21 +41,20 @@ export type GJ_CategoryNameMapping = IdMapping;
 //    }
 // }
 export type GJ_CategoryDecorationMapping = Dict<GJ_CategorySet>;
-export type GJ_CategorySet = Dict<GJ_Category>;
-export type GJ_Category = {
+export type GJ_CategorySet = Dict<GJ_CategoryDecoration>;
+export type GJ_CategoryDecoration = {
   icon: AvailableIcons;
   color: HexColor;
 };
+export type GJ_CategoryWName = {
+  categoryName: string;
+} & GJ_CategoryDecoration;
+export type GJ_CDInfo = {
+  categoryId: string;
+  icon?: AvailableIcons;
+  color?: HexColor;
+};
 
-/*
-    SLICE-TO-CATEGORY_SCHEMA MAPPING
-        [rowKey] GJ_COLLECTION_ROW_KEY.SLICE_TO_CATEGORY_SET_MAPPING: {
-            sliceName1: CategorySchemas.SetName1,
-            sliceName2: CategorySchemas.SetName1,
-            sliceName3: CategorySchemas.SetName2,
-            ...
-        }
-     */
 // SliceName - CategorySetId
 export type GJ_SliceNameToCategorySetIdMapping = AssociationMapping;
 
@@ -103,8 +79,12 @@ INPUT-TO-CATEGORY MAPPING
     ...
   }
 */
-// InputName - CategoryId
-export type ASJ_InputNameToCategoryIdMapping = Dict<string>;
+// InputName - { CategoryId, counter }
+export type ASJ_InputValue = {
+  categoryId: string;
+  counter: number;
+};
+export type ASJ_InputNameToCategoryIdMapping = Dict<ASJ_InputValue>;
 // OutputName - Decoration
 export type ASJ_OutputNameToDecorationMapping = Dict<OutputDecoration>;
 export type OutputDecoration = {
@@ -114,11 +94,9 @@ export type OutputDecoration = {
 
 // CATEGORY DRIVER
 
-export type ASJ_CategoryInfo = {
+export type ASJ_InputInfo = {
   inputId: string;
   categoryId: string;
-  icon?: AvailableIcons;
-  color?: HexColor;
 };
 
 export type ASJ_OutputDecorationInfo = {
@@ -132,29 +110,18 @@ export type ASJ_CategoryDriver = {
   load: (activeSliceName: string) => Promise<void>;
   closeAll: () => Promise<void>;
 
-  addInputCategories: (
-    activeSliceName: string,
-    categoryInfo: ASJ_CategoryInfo,
-  ) => void | never;
-  rmInputCategories: (
-    activeSliceName: string,
-    inputIdsToRm: string[],
-  ) => void | never;
+  addInputCategory: (categoryInfo: ASJ_InputInfo) => void | never;
+  rmInputCategories: (inputIdsToRm: string[]) => void | never;
   // InputName - CategoryId
-  getAllInputCategories: (
-    activeSliceName: string,
-  ) => ASJ_InputNameToCategoryIdMapping | never;
+  getAllInputCategories: () => ASJ_InputNameToCategoryIdMapping | never;
 
   addOutputDecorations: (
-    activeSliceName: string,
     outputDecorationInfo: ASJ_OutputDecorationInfo,
   ) => void | never;
-  rmOutputDecorations: (
-    activeSliceName: string,
-    outputIdsToRm: string[],
-  ) => void | never;
+  rmOutputDecorations: (outputIdsToRm: string[]) => void | never;
   // InputName - CategoryId
-  getAllOutputDecorations: (
-    activeSliceName: string,
-  ) => ASJ_OutputNameToDecorationMapping | never;
+  getAllOutputDecorations: () => ASJ_OutputNameToDecorationMapping | never;
+  editOutputDecoration: (
+    outputDecorationInfo: ASJ_OutputDecorationInfo,
+  ) => void | never;
 };

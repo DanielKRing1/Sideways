@@ -23,9 +23,9 @@ import {
   DbLoaderProvider,
 } from './ssContexts/DbLoader/DbLoader';
 import {
-  AuthorizedNavContext,
-  AuthorizedNavProvider,
-} from './ssContexts/RequireActiveSlice/AuthorizedNavProvider';
+  RequireActiveSliceContext,
+  RequireActiveSliceProvider,
+} from './ssContexts/RequireActiveSlice/RequireActiveSlice';
 import MyThemeProvider from './ssTheme/ThemeProvider';
 import {resetRealm} from './ssRealm/reset';
 
@@ -52,9 +52,9 @@ export default NewApp;
 const AppContent = () => {
   return (
     <DbLoaderProvider>
-      <AuthorizedNavProvider>
+      <RequireActiveSliceProvider>
         <StackNavigator />
-      </AuthorizedNavProvider>
+      </RequireActiveSliceProvider>
     </DbLoaderProvider>
   );
 };

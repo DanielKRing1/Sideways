@@ -14,6 +14,7 @@ import {
 } from 'ssDatabase/api/userJson/category/types';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
+import categoryDriver from 'ssDatabase/api/userJson/category';
 
 // INITIAL STATE
 
@@ -31,7 +32,7 @@ const initialState: UserJsonState = {
     [GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]: {},
     [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: {},
     [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: {},
-    [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]: {},
+    [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING]: {},
     [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]: {},
     [ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING]: {},
   },
@@ -74,7 +75,7 @@ export const startRefreshCategoryMapping = createAsyncThunk<
 
   // 2. Get fresh fullUserJsonMap
   const freshCategoryMapping: GJ_CategoryDecorationMapping =
-    await globalDriver.getCategoryDecorationMapping();
+    await globalDriver.getCDMapping();
 
   // 3. Update fullUserJsonMap
   thunkAPI.dispatch(
@@ -101,7 +102,7 @@ export const startRefreshCategorySetNameMapping = createAsyncThunk<
 
     // 2. Get fresh categorySetNameMapping
     const freshCategorySetNameMapping: GJ_CategorySetNameMapping =
-      await globalDriver.getCategorySetNameMapping();
+      await globalDriver.getCSNameMapping();
 
     // 3. Update fullUserJsonMap
     thunkAPI.dispatch(
@@ -161,7 +162,7 @@ export const startRefreshSliceToCategoryMapping = createAsyncThunk<
     thunkAPI.dispatch(
       setFullUserJsonMap({
         ...fullUserJsonMap,
-        [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING]:
+        [GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING]:
           freshSliceToCategoryMapping,
       }),
     );
@@ -179,12 +180,14 @@ export const startRefreshInputNameToCategoryNameMapping = createAsyncThunk<
 >(
   'userJsonSlice/startRefreshInputNameToCategoryNameMapping',
   async (undef, thunkAPI) => {
-    // 1. Get fullUserJsonMap
+    // 1. Get activeSliceName + fullUserJsonMap
+    const {activeSliceName} =
+      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
 
     // 2. Get fresh inputNameToCategoryNameMapping
     const freshInputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping =
-      await globalDriver.getSliceToCategoryMapping();
+      await categoryDriver.getAllInputCategories();
 
     // 3. Update fullUserJsonMap
     thunkAPI.dispatch(

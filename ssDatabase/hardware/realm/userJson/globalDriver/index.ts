@@ -20,6 +20,8 @@ import {
   GJ_CategoryNameMapping,
   GJ_CategoryDecorationMapping,
   GJ_SliceNameToCategorySetIdMapping,
+  GJ_CategoryDecoration,
+  GJ_CDInfo,
 } from 'ssDatabase/api/userJson/category/types';
 import {getUniqueId} from 'ssUtils/id';
 
@@ -60,7 +62,7 @@ const load = async (): Promise<void> => {
   jsonCollection.getJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING);
   // SliceName - CategorySetId
   jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
   );
 
   isLoaded = true;
@@ -87,10 +89,7 @@ const throwLoadError = (): void | never => {
  * @param newCSName
  * @param newCS
  */
-const addCategorySet = (
-  newCSName: string,
-  newCS: GJ_CategorySet,
-): void | never => {
+const addCS = (newCSName: string, newCS: GJ_CategorySet): void | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -151,7 +150,7 @@ const addCategorySet = (
  *
  * @param csId
  */
-const rmCategorySet = (csId: string): void | never => {
+const rmCS = (csId: string): void | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -174,14 +173,48 @@ const rmCategorySet = (csId: string): void | never => {
   );
 };
 
+const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
+  throwLoadError();
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
+    GLOBAL_COLLECTION_KEY,
+  );
+
+  // 2. Get Json Rows
+  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
+  );
+
+  // 2. Get CategorySet
+  const cs: GJ_CategorySet = cdMapping[csId];
+
+  try {
+    // 3. Get CategoryDecoation
+    const cd: GJ_CategoryDecoration = cs[cdInfo.categoryId];
+
+    // 4. Edit CategoryDecoation
+    if (cdInfo.color !== undefined) cd.color = cdInfo.color;
+    if (cdInfo.icon !== undefined) cd.icon = cdInfo.icon;
+
+    // 5. Save new id-mapped category
+    jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
+      ...cdMapping,
+      [csId]: {
+        [cdInfo.categoryId]: cd,
+      },
+    });
+  } catch (err) {
+    // 6. CSId.CId does not exist
+  }
+};
+
 /**
  * Get the CategoryMapping indexed by CategorySetId.CategoryId
  *
  * @returns
  */
-const getCategoryDecorationMapping = ():
-  | GJ_CategoryDecorationMapping
-  | never => {
+const getCDMapping = (): GJ_CategoryDecorationMapping | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -202,7 +235,7 @@ const getCategoryDecorationMapping = ():
  *
  * @returns
  */
-const getCategorySetNameMapping = (): GJ_CategorySetNameMapping | never => {
+const getCSNameMapping = (): GJ_CategorySetNameMapping | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -244,10 +277,7 @@ const getCategoryNameMapping = (): GJ_CategoryNameMapping | never => {
  *
  * @param sliceName
  */
-const addSliceToCategoryMapping = (
-  sliceName: string,
-  csId: string,
-): void | never => {
+const addSliceToCSMapping = (sliceName: string, csId: string): void | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -256,18 +286,18 @@ const addSliceToCategoryMapping = (
   );
 
   // 2. Json Row
-  const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
+  const sliceToCSMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
-      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     );
 
   // 3. Add/Overwrite Json key, sliceName to csName
-  sliceToCategorySetMapping[sliceName] = csId;
+  sliceToCSMapping[sliceName] = csId;
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
-    sliceToCategorySetMapping,
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
+    sliceToCSMapping,
   );
 };
 
@@ -276,7 +306,7 @@ const addSliceToCategoryMapping = (
  *
  * @param sliceName
  */
-const rmSliceToCategoryMapping = (sliceName: string): void | never => {
+const rmSliceToCSMapping = (sliceName: string): void | never => {
   throwLoadError();
 
   // 1. Get Json Table
@@ -285,18 +315,18 @@ const rmSliceToCategoryMapping = (sliceName: string): void | never => {
   );
 
   // 2.Json Row
-  const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
+  const sliceToCSMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
-      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     );
 
   // 3. Delete Json key
-  delete sliceToCategorySetMapping[sliceName];
+  delete sliceToCSMapping[sliceName];
 
   // 4. Set Json Row
   jsonCollection.setJson(
-    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
-    sliceToCategorySetMapping,
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
+    sliceToCSMapping,
   );
 };
 
@@ -316,12 +346,12 @@ const getSliceToCategoryMapping = ():
   );
 
   // 2. Get Json Row
-  const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
+  const sliceToCSMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
-      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_NAME_MAPPING,
+      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     );
 
-  return sliceToCategorySetMapping;
+  return sliceToCSMapping;
 };
 
 const Driver: GlobalJsonDriver = {
@@ -329,13 +359,14 @@ const Driver: GlobalJsonDriver = {
   load,
   closeAll,
 
-  addCategorySet,
-  rmCategorySet,
-  addSliceToCategoryMapping,
-  rmSliceToCategoryMapping,
+  addCS,
+  rmCS,
+  editCD,
+  addSliceToCSMapping,
+  rmSliceToCSMapping,
 
-  getCategoryDecorationMapping,
-  getCategorySetNameMapping,
+  getCDMapping,
+  getCSNameMapping,
   getCategoryNameMapping,
   getSliceToCategoryMapping,
 };
