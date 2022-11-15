@@ -8,19 +8,19 @@ import {
 
 type CircleImageProps = {
   source: ImageSourcePropType;
+  diameter: number;
   style?: ImageStyle;
 };
 const CircleImage: FC<CircleImageProps> = props => {
-  const {source, style} = props;
-
-  const {width: windowWidth} = useWindowDimensions();
-  const width: number = (windowWidth * 2) / 3;
+  const {source, diameter, style} = props;
 
   return (
     <Image
       source={source}
       style={{
-        borderRadius: width / 2,
+        height: diameter,
+        width: diameter,
+        borderRadius: diameter / 2,
         ...style,
       }}
     />
