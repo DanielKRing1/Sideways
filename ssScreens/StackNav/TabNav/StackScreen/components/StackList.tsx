@@ -1,4 +1,5 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
+import {ListRenderItemInfo} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 
@@ -21,10 +22,126 @@ import {deserializeDate} from 'ssUtils/date';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
 
 type StackCardProps = {
-  item: Realm.Object & SidewaysSnapshotRow;
-  index: number;
+  itemInfo: ListRenderItemInfo<Realm.Object & SidewaysSnapshotRow>;
+  updateSnapshot: (
+    oldSnapshot: Realm.Object & SidewaysSnapshotRow,
+    newInputs: string[],
+    newOutputs: string[],
+    newRating: number,
+  ) => Promise<void>;
+  deleteSnapshot: (
+    snapshot: Realm.Object & SidewaysSnapshotRow,
+    index: number,
+  ) => void;
 };
-const createStackCard =
+const StackCard: FC<StackCardProps> = props => {
+  const {itemInfo, updateSnapshot, deleteSnapshot} = props;
+  const {item, index} = itemInfo;
+
+  const [inputsToRm, setInputsToRm] = useState<Set<string>>(new Set());
+  const [outputsToRm, setOutputsToRm] = useState<Set<string>>(new Set());
+
+  const toggleInputToRm = (input: string) => {
+    if (inputsToRm.has(input)) inputsToRm.delete(input);
+    else inputsToRm.add(input);
+
+    setInputsToRm(new Set([...inputsToRm]));
+  };
+
+  const toggleOutputToRm = (output: string) => {
+    if (outputsToRm.has(output)) inputsToRm.delete(output);
+    else outputsToRm.add(output);
+
+    setOutputsToRm(new Set([...outputsToRm]));
+  };
+
+  const _updateSnapshot = async () => {
+    const inputsToKeep: string[] = item.inputs.filter(
+      input => !inputsToRm.has(input),
+    );
+    const outputsToKeep: string[] = item.outputs.filter(
+      output => !outputsToRm.has(output),
+    );
+
+    await updateSnapshot(item, inputsToKeep, outputsToKeep, item.rating);
+  };
+
+  // STYLES
+  const genInputStyle = (input: string): ViewStyle => ({
+    borderColor: !inputsToRm.has(input) ? 'green' : 'red',
+  });
+  const genOutputStyle = (output: string): ViewStyle => ({
+    borderColor: !outputsToRm.has(output) ? 'green' : 'red',
+  });
+
+  return (
+    <TouchableOpacity onPress={() => {}}>
+      <FlexCol>
+        <MyButton onPress={() => deleteSnapshot(item, index)}>
+          <MyText>Delete Stack Snapshot X</MyText>
+        </MyButton>
+
+        <MyText>{item.timestamp.toDateString()}</MyText>
+        <MyText>{item.rating}</MyText>
+
+        <MyText>Inputs:</MyText>
+        {/* TODO Remove */}
+        {/* {item.inputs.map((input: string) => (
+            <FlexRow>
+              <MyText style={genStyle(input)}>
+                {input}
+              </MyText>
+              <MyButton onPress={() => toggleInputToRm(input)}>
+                <MyText>X</MyText>
+              </MyButton>
+            </FlexRow>
+          ))} */}
+        {item.inputs.map((input: string) => (
+          <FlexRow>
+            <DbCategoryRow
+              inputName={input}
+              onCommitInputName={() => {}}
+              onDeleteCategoryRow={() => {}}
+            />
+            <MyButton onPress={() => toggleInputToRm(input)}>
+              <MyText>X</MyText>
+            </MyButton>
+          </FlexRow>
+        ))}
+
+        <MyText>Outputs:</MyText>
+        {/* TODO Remove */}
+        {/* {item.outputs.map((output: string) => (
+            <FlexRow>
+              <MyText
+                style={{color: !outputsToRm.has(output) ? 'green' : 'red'}}>
+                {output}
+              </MyText>
+              <MyButton onPress={() => toggleOutputToRm(output)}>
+                <MyText>X</MyText>
+              </MyButton>
+            </FlexRow>
+          ))} */}
+        {item.outputs.map((output: string) => (
+          <TouchableOpacity onPress={() => toggleOutputToRm(output)}>
+            <MyBorder>
+              <FlexRow justifyContent="space-between">
+                <MyText>{output}</MyText>
+                {outputsToRm.has(output) && <MyText>Yes</MyText>}
+              </FlexRow>
+            </MyBorder>
+          </TouchableOpacity>
+        ))}
+
+        <MyButton onPress={_updateSnapshot}>
+          <MyText>Update Stack Snapshot</MyText>
+        </MyButton>
+      </FlexCol>
+    </TouchableOpacity>
+  );
+};
+
+const createRenderItem =
   (
     updateSnapshot: (
       oldSnapshot: Realm.Object & SidewaysSnapshotRow,
@@ -36,112 +153,15 @@ const createStackCard =
       snapshot: Realm.Object & SidewaysSnapshotRow,
       index: number,
     ) => void,
-  ): FC<StackCardProps> =>
-  props => {
-    const {item, index} = props;
-
-    const [inputsToRm, setInputsToRm] = useState<Set<string>>(new Set());
-    const [outputsToRm, setOutputsToRm] = useState<Set<string>>(new Set());
-
-    const toggleInputToRm = (input: string) => {
-      if (inputsToRm.has(input)) inputsToRm.delete(input);
-      else inputsToRm.add(input);
-
-      setInputsToRm(new Set([...inputsToRm]));
-    };
-
-    const toggleOutputToRm = (output: string) => {
-      if (outputsToRm.has(output)) inputsToRm.delete(output);
-      else outputsToRm.add(output);
-
-      setOutputsToRm(new Set([...outputsToRm]));
-    };
-
-    const _updateSnapshot = async () => {
-      const inputsToKeep: string[] = item.inputs.filter(
-        input => !inputsToRm.has(input),
-      );
-      const outputsToKeep: string[] = item.outputs.filter(
-        output => !outputsToRm.has(output),
-      );
-
-      await updateSnapshot(item, inputsToKeep, outputsToKeep, item.rating);
-    };
-
-    // STYLES
-    const genInputStyle = (input: string): ViewStyle => ({
-      borderColor: !inputsToRm.has(input) ? 'green' : 'red',
-    });
-    const genOutputStyle = (output: string): ViewStyle => ({
-      borderColor: !outputsToRm.has(output) ? 'green' : 'red',
-    });
-
-    return (
-      <TouchableOpacity onPress={() => {}}>
-        <FlexCol>
-          <MyButton onPress={() => deleteSnapshot(item, index)}>
-            <MyText>Delete Stack Snapshot X</MyText>
-          </MyButton>
-
-          <MyText>{item.timestamp.toDateString()}</MyText>
-          <MyText>{item.rating}</MyText>
-
-          <MyText>Inputs:</MyText>
-          {/* TODO Remove */}
-          {/* {item.inputs.map((input: string) => (
-            <FlexRow>
-              <MyText style={genStyle(input)}>
-                {input}
-              </MyText>
-              <MyButton onPress={() => toggleInputToRm(input)}>
-                <MyText>X</MyText>
-              </MyButton>
-            </FlexRow>
-          ))} */}
-          {item.inputs.map((input: string) => (
-            <FlexRow>
-              <DbCategoryRow
-                inputName={input}
-                onCommitInputName={() => {}}
-                onDeleteCategoryRow={() => {}}
-              />
-              <MyButton onPress={() => toggleInputToRm(input)}>
-                <MyText>X</MyText>
-              </MyButton>
-            </FlexRow>
-          ))}
-
-          <MyText>Outputs:</MyText>
-          {/* TODO Remove */}
-          {/* {item.outputs.map((output: string) => (
-            <FlexRow>
-              <MyText
-                style={{color: !outputsToRm.has(output) ? 'green' : 'red'}}>
-                {output}
-              </MyText>
-              <MyButton onPress={() => toggleOutputToRm(output)}>
-                <MyText>X</MyText>
-              </MyButton>
-            </FlexRow>
-          ))} */}
-          {item.outputs.map((output: string) => (
-            <TouchableOpacity onPress={() => toggleOutputToRm(output)}>
-              <MyBorder>
-                <FlexRow justifyContent="space-between">
-                  <MyText>{output}</MyText>
-                  {outputsToRm.has(output) && <MyText>Yes</MyText>}
-                </FlexRow>
-              </MyBorder>
-            </TouchableOpacity>
-          ))}
-
-          <MyButton onPress={_updateSnapshot}>
-            <MyText>Update Stack Snapshot</MyText>
-          </MyButton>
-        </FlexCol>
-      </TouchableOpacity>
+  ) =>
+  (itemInfo: ListRenderItemInfo<Realm.Object & SidewaysSnapshotRow>) =>
+    (
+      <StackCard
+        itemInfo={itemInfo}
+        updateSnapshot={updateSnapshot}
+        deleteSnapshot={deleteSnapshot}
+      />
     );
-  };
 
 type StackListProps = {
   updateSnapshot: (
@@ -200,7 +220,7 @@ const StackList: FC<StackListProps> = props => {
   }, [stackStartDate, stack]);
 
   // LIST COMPONENT
-  const StackCard = createStackCard(updateSnapshot, deleteSnapshot);
+  const renderItem = createRenderItem(updateSnapshot, deleteSnapshot);
 
   console.log(searchIndex);
   console.log('searchIndex');
@@ -211,7 +231,7 @@ const StackList: FC<StackListProps> = props => {
       // @ts-ignore
       // TODO: See if this works
       data={stack}
-      renderItem={StackCard}
+      renderItem={renderItem}
       keyExtractor={(item: SidewaysSnapshotRow): string =>
         item.timestamp.toISOString()
       }
