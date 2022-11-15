@@ -43,7 +43,8 @@ export const SearchableFlatList: FC<SearchableFlatListProps> = props => {
   // EFFECTS
   // Scroll to searchIndex, when it changes
   useEffect(() => {
-    scrollToIndex(searchIndex, false);
+    if (searchIndex > -1 && searchIndex < data.length)
+      scrollToIndex(searchIndex, false);
   }, [scrollToIndex, searchIndex]);
 
   return (
