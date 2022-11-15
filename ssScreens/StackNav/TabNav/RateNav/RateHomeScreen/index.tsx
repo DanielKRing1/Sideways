@@ -8,17 +8,19 @@ import RatingInputSelection from './components/Input/RatingInputSelection';
 import RatingOutputOptions from './components/OutputOptions';
 import RatingSlider from '../components/RatingSlider';
 import RateButton from './components/RateButton';
+import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 
 type RateHomeScreenProps = {};
 const RateHomeScreen: FC<RateHomeScreenProps> = props => {
   // HOOKS
-  const {width, height} = useWindowDimensions();
+  const {height: screenHeight} = useWindowDimensions();
+  const {barHeight} = useTabBarHeight();
 
   return (
     <View
       style={{
-        height,
-        maxHeight: (height * 90) / 100,
+        height: screenHeight,
+        maxHeight: ((screenHeight - barHeight) * 90) / 100,
       }}>
       <Accordion
         headerProps={[{title: 'Inputs'}, {title: 'Outputs'}, {title: 'Rating'}]}
