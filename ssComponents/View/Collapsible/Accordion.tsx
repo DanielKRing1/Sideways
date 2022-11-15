@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import RawCollapsible from './RawCollapsible';
 
 type AccordionProps = {
-  headerProps: any[];
+  headerProps: ({id: number | string} & any)[];
   Header: FC<any>;
 
   initiallyOpen?: number;
@@ -80,6 +80,7 @@ const Accordion: FC<AccordionProps> = props => {
       {children !== null &&
         (children as any[]).map((child: React.ReactNode, i: number) => (
           <RawCollapsible
+            key={headerProps[i].id}
             Header={headerComponents[i]}
             isOpen={areOpen[i]}
             setIsOpen={(isOpen: boolean) => handleSetIsOpen(isOpen, i)}

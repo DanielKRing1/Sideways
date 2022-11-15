@@ -23,7 +23,11 @@ const RateHomeScreen: FC<RateHomeScreenProps> = props => {
         maxHeight: ((screenHeight - barHeight) * 90) / 100,
       }}>
       <Accordion
-        headerProps={[{title: 'Inputs'}, {title: 'Outputs'}, {title: 'Rating'}]}
+        headerProps={[
+          {id: 'Inputs', title: 'Inputs'},
+          {id: 'Outputs', title: 'Outputs'},
+          {id: 'Rating', title: 'Rating'},
+        ]}
         Header={({title}: {title: string}) => <MyText>{title}</MyText>}
         initiallyOpen={0}
         duration={400}>
