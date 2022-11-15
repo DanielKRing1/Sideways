@@ -19,6 +19,7 @@ import MyButton from '../../../../ssComponents/ReactNative/MyButton';
 import VerticalSpace from '../../../../ssComponents/Spacing/VerticalSpace';
 import {StackNavigatorNavigationProp} from '../../../../ssNavigation/StackNavigator';
 import {resetRealm} from '../../../../ssRealm/reset';
+import RateHomeScreen from './RateHomeScreen';
 
 type RateSliceScreenProps = {};
 const RateSliceScreen: FC<RateSliceScreenProps> = props => {
@@ -40,44 +41,45 @@ const RateSliceScreen: FC<RateSliceScreenProps> = props => {
     dispatch(startRate());
   };
 
-  return (
-    <View>
-      <FlexCol>
-        <TabNavHeader />
-        <GrowingInputsList />
-        <VerticalSpace />
-        <GrowingOutputsList />
-        <RatingSlider />
-        <FlexCol alignItems="center">
-          <MyButton
-            style={{
-              borderWidth: 1,
-              borderRadius: 8,
-              padding: 10,
-              width: '80%',
-            }}
-            onPress={handleRate}>
-            <MyText>Rate .u.</MyText>
-          </MyButton>
-        </FlexCol>
+  return <RateHomeScreen />;
+  // (
+  //   <View>
+  //     <FlexCol>
+  //       <TabNavHeader />
+  //       <GrowingInputsList />
+  //       <VerticalSpace />
+  //       <GrowingOutputsList />
+  //       <RatingSlider />
+  //       <FlexCol alignItems="center">
+  //         <MyButton
+  //           style={{
+  //             borderWidth: 1,
+  //             borderRadius: 8,
+  //             padding: 10,
+  //             width: '80%',
+  //           }}
+  //           onPress={handleRate}>
+  //           <MyText>Rate .u.</MyText>
+  //         </MyButton>
+  //       </FlexCol>
 
-        <FlexCol alignItems="center">
-          <MyButton
-            style={{
-              borderWidth: 1,
-              borderColor: theme.colors.grayBorder,
-              padding: 10,
-              width: '80%',
-            }}
-            onPress={resetRealm}>
-            <MyText style={{color: theme.colors.darkRed}}>
-              Delete entire Realm
-            </MyText>
-          </MyButton>
-        </FlexCol>
-      </FlexCol>
-    </View>
-  );
+  //       <FlexCol alignItems="center">
+  //         <MyButton
+  //           style={{
+  //             borderWidth: 1,
+  //             borderColor: theme.colors.grayBorder,
+  //             padding: 10,
+  //             width: '80%',
+  //           }}
+  //           onPress={resetRealm}>
+  //           <MyText style={{color: theme.colors.darkRed}}>
+  //             Delete entire Realm
+  //           </MyText>
+  //         </MyButton>
+  //       </FlexCol>
+  //     </FlexCol>
+  //   </View>
+  // );
 };
 
 export default RateSliceScreen;
