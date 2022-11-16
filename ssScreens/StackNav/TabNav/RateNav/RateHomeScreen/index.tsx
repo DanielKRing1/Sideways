@@ -9,6 +9,7 @@ import RatingOutputOptions from './components/OutputOptions';
 import RatingSlider from '../components/RatingSlider';
 import RateButton from './components/RateButton';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
+import Header from './components/Header';
 
 type RateHomeScreenProps = {};
 const RateHomeScreen: FC<RateHomeScreenProps> = props => {
@@ -28,7 +29,7 @@ const RateHomeScreen: FC<RateHomeScreenProps> = props => {
           {id: 'Outputs', title: 'Outputs'},
           {id: 'Rating', title: 'Rating'},
         ]}
-        Header={({title}: {title: string}) => <MyText>{title}</MyText>}
+        Header={({title}: {title: string}) => <Header title={title} />}
         initiallyOpen={0}
         duration={400}>
         {/* INPUTS */}
