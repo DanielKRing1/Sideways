@@ -133,13 +133,13 @@ type StyledAnimationProps = {
 };
 const StyledAnimation = styled(Animated.View)<StyledAnimationProps>`
   position: absolute;
-  alignitems: center;
-  justifycontent: center;
-  alignself: center;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
 
   height: ${({radius}: StyledAnimationProps) => radius * 2};
   width: ${({radius}: StyledAnimationProps) => radius * 2};
-  borderradius: ${({radius}: StyledAnimationProps) => radius};
+  border-radius: ${({radius}: StyledAnimationProps) => radius};
 
   ${BoxShadowStyles}
 

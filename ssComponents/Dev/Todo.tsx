@@ -48,7 +48,7 @@ export default Todo;
 const StyledText = styled(MyText)<StyleProps>`
   color: ${({color}) => color};
 
-  fontsize: ${({fontSize}) => fontSize};
+  font-size: ${({fontSize}) => fontSize};
 `;
 
 const StyledTouchableOpacity = styled.TouchableOpacity<StyleProps>`

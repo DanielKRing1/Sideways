@@ -74,7 +74,7 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
 export default GrowingRecoInputs;
 
 const StyledTextInput = styled(MyTextInput)`
-  borderwidth: 1px;
+  border-width: 1px;
   bordercolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.grayBorder};
   paddingvertical: 25px;
   paddinghorizontal: 10px;

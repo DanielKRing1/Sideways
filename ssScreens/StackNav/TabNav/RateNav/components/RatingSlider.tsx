@@ -94,6 +94,6 @@ type StyledTextProps = {
   isSelected: boolean;
 };
 const StyledText = styled(MyText)<StyledTextProps>`
-  backgroundcolor: ${({theme, isSelected}: StyledTextProps) =>
+  background-color: ${({theme, isSelected}: StyledTextProps) =>
     isSelected ? theme.colors.pastelPurple : theme.colors.grayBorder};
 `;

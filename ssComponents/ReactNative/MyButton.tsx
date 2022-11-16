@@ -14,9 +14,9 @@ export default MyButton;
 const StyledTouchableOpacity = styled.TouchableOpacity<DefaultTheme>`
   bordercolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.grayBorder};
 
-  backgroundcolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
+  background-color: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
   color: ${({theme}: {theme: DefaultTheme}) => theme.colors.blackText};
 
-  justifycontent: center;
-  alignitems: center;
+  justify-content: center;
+  align-items: center;
 `;

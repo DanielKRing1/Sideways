@@ -107,5 +107,5 @@ export {};
 // export default Slider;
 
 // const StyledView = styled.View`
-//   backgroundcolor: grey;
+//   background-color: grey;
 // `;

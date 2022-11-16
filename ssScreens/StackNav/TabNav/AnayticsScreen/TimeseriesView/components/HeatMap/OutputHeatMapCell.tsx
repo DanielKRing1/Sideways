@@ -82,7 +82,7 @@ type ColoredCellProps = {
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 const ColoredCell = styled(AnimatedTouchableOpacity)<ColoredCellProps>`
-  borderradius: 10%;
+  border-radius: 10%;
   height: ${({dim}: ColoredCellProps) => `${dim.y}px`};
   width: ${({dim}: ColoredCellProps) => `${dim.x}px`};
   margin: ${({margin}: ColoredCellProps) => margin};

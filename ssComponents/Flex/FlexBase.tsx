@@ -17,10 +17,10 @@ type FlexBaseProps = {
 const FlexBase = styled.View<FlexBaseProps>`
   display: flex;
 
-  justifycontent: ${({justifyContent = 'flex-start'}: FlexBaseProps) =>
+  justify-content: ${({justifyContent = 'flex-start'}: FlexBaseProps) =>
     justifyContent};
   flexdirection: ${({flexDirection}: FlexBaseProps) => flexDirection};
-  alignitems: ${({alignItems = 'stretch'}: FlexBaseProps) => alignItems};
+  align-items: ${({alignItems = 'stretch'}: FlexBaseProps) => alignItems};
 `;
 
 export default FlexBase;

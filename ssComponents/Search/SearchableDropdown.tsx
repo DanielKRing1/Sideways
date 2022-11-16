@@ -72,5 +72,5 @@ export const SearchableDropdown: FC<SearchableDropdownProps> = props => {
 
 const StyledRow = styled(FlexRow)`
   bordercolor: black;
-  borderwidth: 2;
+  border-width: 2;
 `;

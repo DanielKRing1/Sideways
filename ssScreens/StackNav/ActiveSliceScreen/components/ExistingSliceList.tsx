@@ -61,8 +61,8 @@ const createExistingSliceCard =
 
 const StyledTouchableOpacity = styled.TouchableOpacity`
   bordercolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.darkRed};
-  borderwidth: 1px;
-  borderradius: 5px;
+  border-width: 1px;
+  border-radius: 5px;
 
   marginleft: 25px;
   marginright: 25px;

@@ -10,9 +10,9 @@ const CircleButton: FC<CircleButtonProps> = props => {
 export default CircleButton;
 
 const StyledMyButton = styled(MyButton)`
-  borderradius: 50px;
-  borderwidth: 2px;
+  border-radius: 50px;
+  border-width: 2px;
 
-  justifycontent: center;
-  alignitems: center;
+  justify-content: center;
+  align-items: center;
 `;

@@ -73,12 +73,12 @@ const IconButton: FC<IconButtonProps> = props => {
 export default IconButton;
 
 const StyledMyButton = styled(MyButton)`
-  justifycontent: center;
-  alignitems: center;
+  justify-content: center;
+  align-items: center;
 
   padding: 5px;
   marginright: 3px;
 
-  backgroundcolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
+  background-color: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
   color: ${({theme}: {theme: DefaultTheme}) => theme.colors.darkRed};
 `;
