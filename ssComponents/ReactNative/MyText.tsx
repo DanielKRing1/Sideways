@@ -17,12 +17,22 @@ const MyText: FC<MyTextProps> = props => {
 
   const fontSize: number = getFontSize(size, width, theme);
 
-  // @ts-ignore
-  return <StyledText {...props} style={{fontSize, ...style}} />;
+  return (
+    <StyledText
+      {...props}
+      style={{
+        fontSize,
+        // @ts-ignore
+        ...style,
+      }}
+    />
+  );
 };
 export default MyText;
 
 const StyledText = styled.Text<DefaultTheme>`
-  backgroundcolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
+  align-items: center;
+  justify-content: center;
+
   color: ${({theme}: {theme: DefaultTheme}) => theme.colors.blackText};
 `;

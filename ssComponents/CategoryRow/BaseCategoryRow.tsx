@@ -159,6 +159,7 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
       alignItems="center"
       justifyContent="space-between"
       style={{
+        flex: 1,
         paddingLeft: (width * 1) / 20,
         paddingRight: (width * 1) / 20,
         borderColor: theme.colors.blackText,
@@ -168,28 +169,18 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
       }}>
       {/* DISPLAYED IN ROW */}
 
-      <View>
-        {/* TODO Add 'editable' prop to EditableText */}
-        {editable ? (
-          <EditableText
-            textStyle={{
-              borderBottomWidth: 3,
-              borderColor: theme.colors.grayBorder,
-            }}
-            placeholder={placeholder}
-            text={inputName}
-            onEditText={handleEditInputName}
-            onCommitText={handleCommitInputName}
-          />
-        ) : (
-          <MyText>{inputName}</MyText>
-        )}
-      </View>
+      <EditableText
+        editable={editable}
+        containerStyle={{flex: 0.7}}
+        placeholder={placeholder}
+        text={inputName}
+        onEditText={handleEditInputName}
+        onCommitText={handleCommitInputName}
+      />
 
-      <StopPropagationView>
-        <FlexRow style={{flex: 0.3}} justifyContent={'space-between'}>
+      <StopPropagationView style={{flex: 0.3}}>
+        <FlexRow justifyContent={'space-around'}>
           <IconModalButton
-            style={{flex: 0.1}}
             color={categoryDecoration.color}
             iconName={categoryDecoration.icon}
             onPress={() => {
@@ -199,7 +190,6 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
           />
 
           <ColorModalButton
-            style={{flex: 0.1}}
             color={categoryDecoration.color}
             onPress={() => {
               // If category is selected

@@ -20,10 +20,11 @@ import {
 
 import MyText from 'ssComponents/ReactNative/MyText';
 import MyTextInput from 'ssComponents/ReactNative/MyTextInput';
+import MyTouchableOpacity from 'ssComponents/ReactNative/MyTouchableOpacity';
 
 type EditableTextProps = {
-  style?: ViewStyle;
-  textStyle?: TextStyle;
+  editable?: boolean;
+  containerStyle?: TextStyle;
   placeholder?: string;
   text: string;
   onEditText?: (newText: string) => void;
@@ -31,8 +32,8 @@ type EditableTextProps = {
 };
 const EditableText: FC<EditableTextProps> = props => {
   const {
-    style = {},
-    textStyle = {},
+    editable = false,
+    containerStyle = {},
     placeholder,
     text,
     onEditText = () => {},
@@ -48,6 +49,7 @@ const EditableText: FC<EditableTextProps> = props => {
 
   // useEffect
   useEffect(() => {
+    // Reset the editable text
     if (isEditing === true) setEditableText(text);
   }, [isEditing]);
   useEffect(() => {
@@ -55,6 +57,10 @@ const EditableText: FC<EditableTextProps> = props => {
   }, [textInputRef.current]);
 
   // HANDLERS
+
+  const handleStartEditing = () => {
+    if (editable) setIsEditing(true);
+  };
 
   // Called every keystroke
   const handleChangeText = (newText: string) => {
@@ -71,13 +77,17 @@ const EditableText: FC<EditableTextProps> = props => {
   };
 
   return (
-    <View style={style}>
+    <View style={containerStyle}>
       {!isEditing ? (
-        <TouchableOpacity onPress={() => setIsEditing(true)}>
-          <MyText style={textStyle}>{text || placeholder}</MyText>
-        </TouchableOpacity>
+        <MyTouchableOpacity onPress={handleStartEditing}>
+          <MyText style={{width: '100%'}}>{text || placeholder}</MyText>
+        </MyTouchableOpacity>
       ) : (
         <MyTextInput
+          style={{
+            borderWidth: 1,
+            borderColor: 'black',
+          }}
           ref={textInputRef}
           onBlur={handleBlur}
           placeholder={placeholder}

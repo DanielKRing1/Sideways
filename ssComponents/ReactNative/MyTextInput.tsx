@@ -1,14 +1,22 @@
 import React, {forwardRef} from 'react';
-import {TextInput, TextInputProps} from 'react-native';
+import {
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  useWindowDimensions,
+} from 'react-native';
+import {getFontSize} from 'ssTheme/utils';
 import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 
-import {Dict} from '../../global';
+import {DISPLAY_SIZE} from '../../global';
 
 type MyTextInputProps = {
-  style?: Dict<number | string>;
+  size?: DISPLAY_SIZE;
+  style?: TextStyle;
 } & TextInputProps;
 const MyTextInput = forwardRef<TextInput, MyTextInputProps>((props, ref) => {
   const {
+    size = DISPLAY_SIZE.md,
     style,
     placeholder,
     value,
@@ -18,19 +26,29 @@ const MyTextInput = forwardRef<TextInput, MyTextInputProps>((props, ref) => {
     onSubmitEditing,
   } = props;
 
-  const theme = useTheme();
+  const theme: DefaultTheme = useTheme();
+  const {width} = useWindowDimensions();
+
+  const fontSize: number = getFontSize(size, width, theme);
 
   return (
     <StyledTextInput
       ref={ref}
       placeholderTextColor={theme.colors.lightText}
       {...props}
+      style={{
+        fontSize,
+        // @ts-ignore
+        ...style,
+      }}
     />
   );
 });
 export default MyTextInput;
 
 const StyledTextInput = styled.TextInput<DefaultTheme>`
-  backgroundcolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
+  margin: 0;
+  padding: 0;
+  background-color: ${({theme}: {theme: DefaultTheme}) => theme.colors.whiteBg};
   color: ${({theme}: {theme: DefaultTheme}) => theme.colors.blackText};
 `;
