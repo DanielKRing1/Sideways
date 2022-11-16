@@ -9,3 +9,14 @@ export type RequiredExceptFor<T, TNotRequired extends keyof T> = Omit<
 
 export type HexColor = `#${string}`;
 export type StringMap = Dict<string>;
+
+export enum DISPLAY_SIZE {
+  sm,
+  md,
+  lg,
+}
+export type DisplaySizeOptions = {
+  sm: number;
+  md: number;
+  lg: number;
+};

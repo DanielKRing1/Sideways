@@ -37,9 +37,9 @@ export const theme: DefaultTheme = {
     fallback: 'Roboto',
   },
   fontSizeDivisors: {
-    sm: 45,
-    md: 35,
-    lg: 25,
+    sm: 42,
+    md: 32,
+    lg: 22,
   },
   iconSizeDivisors: {
     sm: 17,
