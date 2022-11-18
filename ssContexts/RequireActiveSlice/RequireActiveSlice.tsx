@@ -39,12 +39,6 @@ const RequireActiveSliceProvider: FC<
 > = props => {
   const {children} = props;
 
-  // REDUX
-  const {activeSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
-  );
-  const dispatch: AppDispatch = useDispatch();
-
   // NAVIGATION
   const navigation: StackNavigatorNavigationProp = useNavigation();
 
@@ -66,11 +60,6 @@ const RequireActiveSliceProvider: FC<
         break;
     }
   }, [activeSliceState]);
-
-  // Refresh UserJsonMap
-  useEffect(() => {
-    dispatch(startRefreshAllUserJson());
-  }, [activeSliceName]);
 
   // MODAL
   // TODO: Add Modal to explain navigation limitations

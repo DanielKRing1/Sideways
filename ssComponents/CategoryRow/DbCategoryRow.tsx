@@ -1,5 +1,7 @@
 /**
  * This DbCategoryRow writes directly to the Db for each commit
+ *
+ * On mount, it executes handleCommitInputName, which removes the 'inputName' then readds it via CategoryDriver
  */
 
 /**
@@ -17,7 +19,7 @@
  * 4. Upon clicking out of EditableText, commit 'localInputName' to Db
  */
 
-import React, {FC, memo, useMemo} from 'react';
+import React, {FC, memo, useEffect, useMemo} from 'react';
 
 import CategoryDriver from 'ssDatabase/api/userJson/category';
 import GlobalDriver from 'ssDatabase/api/userJson/globalDriver';
@@ -52,6 +54,11 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
   );
   const dispatch: AppDispatch = useDispatch();
 
+  // EFFECTS
+  useEffect(() => {
+    handleUpdateInputCategory(inputName);
+  }, []);
+
   // MEMO
   // Do we want ton change the category when the user changes the input name??
   const categoryId: string = useMemo(
@@ -60,22 +67,29 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
   );
 
   // HANDLERS
-  const handleCommitInputName = (newInputName: string) => {
+  const handleUpdateInputCategory = (newInputName: string) => {
     // Db
     // 1. Decrement original inputName counter (and delete if counter <= 0)
+    console.log(1);
     CategoryDriver.rmInputCategories([inputName]);
     // 2. Add new inputName
     // **Will not add inputName if inputName === ''
+    console.log(2);
     CategoryDriver.addInputCategory({
       inputId: newInputName,
       categoryId,
     });
+  };
+  const handleCommitInputName = (newInputName: string) => {
+    handleUpdateInputCategory(newInputName);
 
     // 3. Update inputName in parent component
+    console.log(3);
     onCommitInputName(newInputName);
 
     // Redux
     // 4. Update UserJsonMap
+    console.log(4);
     dispatch(startRefreshInputNameToCategoryNameMapping());
   };
 

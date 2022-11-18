@@ -110,19 +110,21 @@ export const rateSS = createSlice({
       state.inputs = action.payload;
     },
     addInput: (state: RateSSState, action: AddInputAction) => {
-      state.inputs = [...state.inputs, action.payload];
+      state.inputs.push(action.payload);
     },
     removeInput: (state: RateSSState, action: RmInputAction) => {
-      state.inputs = [...state.inputs.splice(action.payload, 1)];
+      // Do not need to set state bcus Redux Toolkit uses Immer, which
+      // applies mutations to the state
+      state.inputs.splice(action.payload, 1);
     },
     setOutputs: (state: RateSSState, action: SetOutputAction) => {
       state.outputs = action.payload;
     },
     addOutput: (state: RateSSState, action: AddOutputAction) => {
-      state.outputs = [...state.outputs, action.payload];
+      state.outputs.push(action.payload);
     },
     removeOutput: (state: RateSSState, action: RmOutputAction) => {
-      state.outputs = [...state.outputs.splice(action.payload, 1)];
+      state.outputs.splice(action.payload, 1);
     },
     forceSignatureRerender: (
       state: RateSSState,

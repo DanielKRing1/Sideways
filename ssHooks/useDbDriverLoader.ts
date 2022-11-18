@@ -1,8 +1,9 @@
 import {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import userJsonDriver from 'ssDatabase/api/userJson';
-import {RootState} from 'ssRedux/index';
+import {AppDispatch, RootState} from 'ssRedux/index';
+import {startRefreshAllUserJson} from 'ssRedux/userJson';
 
 export const useDbDriverLoader = () => {
   // LOCAL STATE
@@ -12,7 +13,9 @@ export const useDbDriverLoader = () => {
   const {activeSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
+  const dispatch: AppDispatch = useDispatch();
 
+  // LOAD
   const load = async (): Promise<void> => {
     console.log('load 0');
 
@@ -57,7 +60,14 @@ export const useDbDriverLoader = () => {
 
   // Reload everytime activeSliceName changes
   useEffect(() => {
-    load();
+    const asyncEffect = async () => {
+      await load();
+
+      // Refresh UserJsonMap
+      dispatch(startRefreshAllUserJson());
+    };
+
+    asyncEffect();
   }, [activeSliceName]);
 
   return {

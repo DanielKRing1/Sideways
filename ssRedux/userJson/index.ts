@@ -50,6 +50,8 @@ export const startRefreshAllUserJson = createAsyncThunk<
   StartRefreshAllUserJsonArgs,
   ThunkConfig
 >('userJsonSlice/startSetAllUserJson', async (undef, thunkAPI) => {
+  console.log('REFRESHING ALL USERJSON');
+
   // 1. Get activeSliceName
   const {activeSliceName} =
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
@@ -57,6 +59,9 @@ export const startRefreshAllUserJson = createAsyncThunk<
   const fullUserJsonMap: UserJsonMap = await userJsonDriver.getAllUserJson(
     activeSliceName,
   );
+
+  console.log('FULL USER JSON:');
+  console.log(fullUserJsonMap);
 
   thunkAPI.dispatch(setFullUserJsonMap(fullUserJsonMap));
   thunkAPI.dispatch(forceSignatureRerender());
@@ -158,6 +163,8 @@ export const startRefreshSliceToCategoryMapping = createAsyncThunk<
     const freshSliceToCategoryMapping: GJ_SliceNameToCategorySetIdMapping =
       await globalDriver.getSliceToCategoryMapping();
 
+    // TODO: Since ReduxToolkit uses Immer, do i need to mutate the object here or
+    // can i just destructure the top level in the reducer?
     // 3. Update fullUserJsonMap
     thunkAPI.dispatch(
       setFullUserJsonMap({

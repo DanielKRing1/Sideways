@@ -1,3 +1,10 @@
+/**
+ * Does not interact with CategoryDriver.
+ *
+ * Instead, when a new input is added, a new InputList renderItem/DbCategoryRow renders and
+ * on mount, DbCategoryRow calls CategoryDriver via handleCommitInputName
+ */
+
 import React, {FC, useState} from 'react';
 
 import SearchInput from './Search/SearchInput';

@@ -93,18 +93,13 @@ export const recommendationStatsSlice = createSlice({
       state: RecommendationsState,
       action: AddRecommendationInput,
     ) => {
-      state.recommendationInputs = [
-        ...state.recommendationInputs,
-        action.payload,
-      ];
+      state.recommendationInputs.push(action.payload);
     },
     removeRecommendationInput: (
       state: RecommendationsState,
       action: RemoveRecommendationInput,
     ) => {
-      state.recommendationInputs = [
-        ...state.recommendationInputs.splice(action.payload, 1),
-      ];
+      state.recommendationInputs.splice(action.payload, 1);
     },
     setRecommendations: (
       state: RecommendationsState,

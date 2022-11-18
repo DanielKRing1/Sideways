@@ -79,15 +79,15 @@ export const createSS = createSlice({
       state: CreateSSState,
       action: AddPossibleOutputAction,
     ) => {
-      state.possibleOutputs = [...state.possibleOutputs, action.payload];
+      state.possibleOutputs.push(action.payload);
     },
     removePossibleOutput: (
       state: CreateSSState,
       action: RmPossibleOutputAction,
     ) => {
-      state.possibleOutputs = [
-        ...state.possibleOutputs.splice(action.payload, 1),
-      ];
+      // Do not need to set state bcus Redux Toolkit uses Immer, which
+      // applies mutations to the state
+      state.possibleOutputs.splice(action.payload, 1);
     },
     forceSignatureRerender: (
       state: CreateSSState,

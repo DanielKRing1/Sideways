@@ -394,14 +394,14 @@ export const timeseriesStatsSlice = createSlice({
       }
     },
     addVennInput: (state: TimeStatsState, action: AddVennInput) => {
-      state.vennNodeInputs = [...state.vennNodeInputs, action.payload];
+      state.vennNodeInputs.push(action.payload);
       // Force rerender/recalculate Venn (and all)
       state.graphsSignature = {};
     },
     removeVennInput: (state: TimeStatsState, action: RemoveVennInput) => {
-      state.vennNodeInputs = [
-        ...state.vennNodeInputs.splice(action.payload, 1),
-      ];
+      // Do not need to set state bcus Redux Toolkit uses Immer, which
+      // applies mutations to the state
+      state.vennNodeInputs.splice(action.payload, 1);
       // Force rerender/recalculate Venn (and all)
       state.graphsSignature = {};
     },

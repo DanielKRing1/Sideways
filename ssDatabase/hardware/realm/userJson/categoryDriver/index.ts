@@ -49,7 +49,11 @@ let loadedActiveSliceName: string = NO_ACTIVE_SLICE_NAME;
  * @returns
  */
 const load = async (activeSliceName: string): Promise<void> => {
+  console.log('ENTERED LOAD');
+
   if (loadedActiveSliceName === activeSliceName) return;
+
+  console.log('ABOUT TO LOAD');
 
   // 1. LOAD ActiveSlice COLLECTION
   // 1.1. Try to create collection for first time (will fail if already exists)
@@ -71,6 +75,8 @@ const load = async (activeSliceName: string): Promise<void> => {
 
   isLoaded = true;
   loadedActiveSliceName = activeSliceName;
+
+  console.log('LOADED');
 };
 
 const closeAll = async (): Promise<void> => {
@@ -152,8 +158,14 @@ const rmInputCategories = (inputNamesToRm: string[]): void | never => {
       ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     );
 
+  console.log('BEFORE');
+  console.log(inputToCategoryMapping);
   // 3.1. Decrement each inputName's occurenceCounter
   for (const inputName of inputNamesToRm) {
+    console.log('REMOVING');
+    console.log(inputName);
+
+    console.log(inputToCategoryMapping[inputName]);
     if (inputToCategoryMapping[inputName] !== undefined) {
       inputToCategoryMapping[inputName].counter--;
 
@@ -162,11 +174,20 @@ const rmInputCategories = (inputNamesToRm: string[]): void | never => {
         delete inputToCategoryMapping[inputName];
     }
   }
+  console.log('AFTER');
+  console.log(inputToCategoryMapping);
 
   // 4. Set Json Row
   jsonCollection.setJson(
     ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     inputToCategoryMapping,
+  );
+
+  console.log('CHECK THISSSSS');
+  console.log(
+    jsonCollection.getJson(
+      ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
+    ),
   );
 };
 /**
