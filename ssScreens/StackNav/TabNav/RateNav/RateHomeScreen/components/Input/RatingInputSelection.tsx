@@ -1,11 +1,13 @@
 /**
- * Does not interact with CategoryDriver.
+ * On submit, SearchInput component adds to CategoryDriver
  *
- * Instead, when a new input is added, a new InputList renderItem/DbCategoryRow renders and
- * on mount, DbCategoryRow calls CategoryDriver via handleCommitInputName
+ * When a new input is added, a new InputList renderItem/DbCategoryRow renders.
+ * It composes DbCategoryRow, which removes from and adds to CategoryDriver via handleCommitInputName
  */
 
 import React, {FC, useState} from 'react';
+
+import CategoryDriver from 'ssDatabase/api/userJson/category';
 
 import SearchInput from './Search/SearchInput';
 import SearchSuggestions from './Search/SearchSuggestions';
@@ -14,6 +16,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {addInput} from 'ssRedux/rateSidewaysSlice';
+import {DEFAULT_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 
 type RatingInputSelectionProps = {};
 const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
@@ -36,20 +39,31 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   const handleFocus = () => setIsSearching(true);
   const handleBlur = () => setIsSearching(false);
   const handleSubmitSearchInput = () => {
-    // 1. Create new id
-    const newId: number = popId();
-    // 2. Add the Redux InputList
-    dispatch(addInput({id: newId, text: searchInput}));
-
-    // 3. Reset newInput
-    setSearchInput('');
+    handleAddInput(searchInput);
   };
 
   // SearchSuggestions
   const handleSelectSuggestion = (selectedInputName: string) => {
-    setSearchInput(selectedInputName);
+    handleAddInput(selectedInputName);
+  };
 
-    handleSubmitSearchInput();
+  const handleAddInput = (newInputName: string) => {
+    // REDUX
+    // 1. Create new id
+    const newId: number = popId();
+    // 2. Add the Redux InputList
+    dispatch(addInput({id: newId, text: newInputName}));
+
+    // 3. Reset searchInput
+    setSearchInput('');
+
+    // DB
+    // 4. Add new inputName
+    // **Will not add inputName if inputName === ''
+    CategoryDriver.addInputCategory({
+      inputId: newInputName,
+      categoryId: DEFAULT_CATEGORY_ID,
+    });
   };
 
   return (

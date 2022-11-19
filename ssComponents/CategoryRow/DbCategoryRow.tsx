@@ -1,7 +1,6 @@
 /**
  * This DbCategoryRow writes directly to the Db for each commit
  *
- * On mount, it executes handleCommitInputName, which removes the 'inputName' then readds it via CategoryDriver
  */
 
 /**
@@ -55,9 +54,6 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
   const dispatch: AppDispatch = useDispatch();
 
   // EFFECTS
-  useEffect(() => {
-    handleUpdateInputCategory(inputName);
-  }, []);
 
   // MEMO
   // Do we want ton change the category when the user changes the input name??
