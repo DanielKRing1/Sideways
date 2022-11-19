@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 import userJsonDriver from 'ssDatabase/api/userJson/';
 
 import {ThunkConfig} from '../types';
@@ -15,6 +16,7 @@ import {
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
 import categoryDriver from 'ssDatabase/api/userJson/category';
+import {CGNode} from '@asianpersonn/realm-graph';
 
 // INITIAL STATE
 
@@ -42,6 +44,40 @@ const initialState: UserJsonState = {
 };
 
 // THUNKS
+
+// REMOVE INPUTS THAT DO NOT EXIST IN GRAPH
+type StartCleanInputCategories = undefined;
+export const startCleanInputCategories = createAsyncThunk<
+  boolean,
+  StartCleanInputCategories,
+  ThunkConfig
+>('userJsonSlice/startCleanInputCategories', async (undef, thunkAPI) => {
+  // 1. Get activeSliceName
+  const {activeSliceName} =
+    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+
+  // 2. Get all Graph inputs
+  const allDbInputs: string[] = dbDriver
+    .getAllNodes(activeSliceName)
+    .map((node: CGNode) => node.id);
+
+  // 3. Get inputCategories
+  const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =
+    categoryDriver.getAllInputCategories();
+
+  // 4. Keep Graph inputs
+  const newMapping: ASJ_InputNameToCategoryIdMapping =
+    allDbInputs.reduce<ASJ_InputNameToCategoryIdMapping>((acc, dbInput) => {
+      acc[dbInput] = inToCIdMapping[dbInput];
+
+      return acc;
+    }, {});
+
+  // 5. Set inputCategories
+  categoryDriver.setAllInputCategories(newMapping);
+
+  return true;
+});
 
 // SET ALL
 type StartRefreshAllUserJsonArgs = undefined;

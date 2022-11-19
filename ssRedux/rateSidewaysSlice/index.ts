@@ -7,6 +7,7 @@ import {
   startCacheAllDbInputs,
   startCacheAllDbOutputs,
 } from 'ssRedux/readSidewaysSlice';
+import {startCleanInputCategories} from 'ssRedux/userJson';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE
@@ -72,11 +73,14 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     );
     await Promise.all(promises);
 
-    // 3. Update all in/outputs
+    // 3. Clean input to category mapping
+    thunkAPI.dispatch(startCleanInputCategories());
+
+    // 4. Update all in/outputs
     thunkAPI.dispatch(startCacheAllDbInputs());
     thunkAPI.dispatch(startCacheAllDbOutputs());
 
-    // 4. Reset rating inputs
+    // 5. Reset rating inputs
     thunkAPI.dispatch(setRating(0));
     thunkAPI.dispatch(setOutputs([]));
     thunkAPI.dispatch(forceSignatureRerender());
