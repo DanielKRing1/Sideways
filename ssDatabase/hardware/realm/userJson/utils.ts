@@ -1,7 +1,7 @@
 import {
   DEFAULT_CATEGORY_ICON,
+  DEFAULT_CATEGORY_ID,
   DEFAULT_CATEGORY_NAME,
-  DEFAULT_CATEGORY_SET_NAME,
   DEFAULT_OUTPUT_ICON,
 } from 'ssDatabase/api/userJson/category/constants';
 import {
@@ -127,7 +127,7 @@ export function inToLastCId(
   inputName: string,
   userJsonMap: UserJsonMap,
 ): string {
-  let cId: string = '';
+  let cId: string = DEFAULT_CATEGORY_ID;
 
   try {
     // 1. Get submaps of Json
