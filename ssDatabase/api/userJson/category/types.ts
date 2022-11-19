@@ -114,6 +114,9 @@ export type ASJ_CategoryDriver = {
   rmInputCategories: (inputIdsToRm: string[]) => void | never;
   // InputName - CategoryId
   getAllInputCategories: () => ASJ_InputNameToCategoryIdMapping | never;
+  setAllInputCategories: (
+    inToCIdMapping: ASJ_InputNameToCategoryIdMapping,
+  ) => void | never;
 
   addOutputDecorations: (
     outputDecorationInfo: ASJ_OutputDecorationInfo,

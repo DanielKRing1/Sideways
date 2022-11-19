@@ -21,7 +21,6 @@ import {
   ASJ_OutputDecorationInfo,
   ASJ_OutputNameToDecorationMapping,
   GJ_CategoryDecorationMapping,
-  GJ_CategoryDecoration,
   GJ_CDInfo,
   GJ_SliceNameToCategorySetIdMapping,
 } from 'ssDatabase/api/userJson/category/types';
@@ -252,6 +251,28 @@ const getAllInputCategories = (): ASJ_InputNameToCategoryIdMapping | never => {
 
   return inputToCategoryMapping;
 };
+/**
+ * For an 'loadedActiveSliceName',
+ * Set the mapping for inputName to categoryName
+ *
+ * @returns
+ */
+const setAllInputCategories = (
+  inToCIdMapping: ASJ_InputNameToCategoryIdMapping,
+): void | never => {
+  throwLoadError();
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
+    loadedActiveSliceName,
+  );
+
+  // 2. Set Json Row
+  jsonCollection.setJson(
+    ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
+    inToCIdMapping,
+  );
+};
 
 // OUTPUT DECORATIONS
 
@@ -390,6 +411,7 @@ const Driver: ASJ_CategoryDriver = {
   addInputCategory,
   rmInputCategories,
   getAllInputCategories,
+  setAllInputCategories,
 
   addOutputDecorations,
   rmOutputDecorations,
