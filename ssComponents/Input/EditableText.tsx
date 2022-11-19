@@ -44,17 +44,11 @@ const EditableText: FC<EditableTextProps> = props => {
   const [isEditing, setIsEditing] = useState(false);
   const [editableText, setEditableText] = useState(text);
 
-  // useRef
-  const textInputRef = useRef<TextInput>(null);
-
   // useEffect
   useEffect(() => {
     // Reset the editable text
     if (isEditing === true) setEditableText(text);
   }, [isEditing]);
-  useEffect(() => {
-    if (textInputRef.current) textInputRef.current.focus();
-  }, [textInputRef.current]);
 
   // HANDLERS
 
@@ -84,11 +78,11 @@ const EditableText: FC<EditableTextProps> = props => {
         </MyTouchableOpacity>
       ) : (
         <MyTextInput
+          autoFocus={true}
           style={{
             borderWidth: 1,
             borderColor: 'black',
           }}
-          ref={textInputRef}
           onBlur={handleBlur}
           placeholder={placeholder}
           value={editableText}
