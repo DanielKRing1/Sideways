@@ -33,11 +33,6 @@ const RatingInputList: FC<RatingInputListProps> = props => {
     dispatch(setInputs(inputsCopy));
   };
 
-  useEffect(() => {
-    console.log('INPUTS CHANGED!');
-    console.log(inputs);
-  }, [inputs]);
-
   return (
     <>
       {inputs.length > 0 ? (
@@ -80,7 +75,6 @@ const RatingInput: FC<RatingInputProps> = props => {
   };
 
   const handleDeleteCategoryRow = () => {
-    console.log('HANDLE DELETE');
     dispatch(removeInput(index));
   };
 
