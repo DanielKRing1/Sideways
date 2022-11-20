@@ -139,9 +139,6 @@ export function inToLastCId(
     // Category Id
     cId = inToCIdMapping[inputName].categoryId;
   } catch (err) {
-    console.log(
-      userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING],
-    );
     console.log('Error was caught, and this is acceptable behavior');
     console.log(err);
   }
