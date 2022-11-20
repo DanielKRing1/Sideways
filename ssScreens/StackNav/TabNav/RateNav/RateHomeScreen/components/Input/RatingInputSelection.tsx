@@ -17,6 +17,7 @@ import {useCounterId} from 'ssHooks/useCounterId';
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {addInput} from 'ssRedux/rateSidewaysSlice';
 import {DEFAULT_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
+import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
 
 type RatingInputSelectionProps = {};
 const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
@@ -64,6 +65,8 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
       inputId: newInputName,
       categoryId: DEFAULT_CATEGORY_ID,
     });
+
+    dispatch(startRefreshInputNameToCategoryNameMapping());
   };
 
   return (
