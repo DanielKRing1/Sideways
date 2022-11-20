@@ -135,7 +135,7 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
   };
   const handleCommitCategoryIcon = (newIconName: AvailableIcons) => {
     // No change
-    if (categoryDecoration.icon !== localIconName) return;
+    if (categoryDecoration.icon === localIconName) return;
 
     onCommitIcon(newIconName);
   };
