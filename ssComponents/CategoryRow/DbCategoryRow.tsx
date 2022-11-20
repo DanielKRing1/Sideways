@@ -76,6 +76,7 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
       categoryId,
     });
   };
+  // So this component's interaction with the db is entirely self-sufficient
   const handleCommitInputName = (newInputName: string) => {
     handleUpdateInputCategory(newInputName);
 
