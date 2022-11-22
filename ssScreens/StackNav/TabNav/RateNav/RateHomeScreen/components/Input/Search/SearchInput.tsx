@@ -1,4 +1,5 @@
-import React, {FC} from 'react';
+import React, {forwardRef} from 'react';
+import {TextInput} from 'react-native';
 
 import MyTextInput from 'ssComponents/ReactNative/MyTextInput';
 
@@ -9,12 +10,13 @@ type SearchInputProps = {
   onBlur: () => void;
   onSubmitSearchInput: () => void;
 };
-const SearchInput: FC<SearchInputProps> = props => {
+const SearchInput = forwardRef<TextInput, SearchInputProps>((props, ref) => {
   const {searchInput, setSearchInput, onFocus, onBlur, onSubmitSearchInput} =
     props;
 
   return (
     <MyTextInput
+      ref={ref}
       placeholder={'Add an input...'}
       value={searchInput}
       onChangeText={setSearchInput}
@@ -23,6 +25,6 @@ const SearchInput: FC<SearchInputProps> = props => {
       onFocus={onFocus}
     />
   );
-};
+});
 
 export default SearchInput;

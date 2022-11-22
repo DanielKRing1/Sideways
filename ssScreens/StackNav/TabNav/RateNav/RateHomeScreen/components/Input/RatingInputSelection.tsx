@@ -5,7 +5,8 @@
  * It composes DbCategoryRow, which removes from and adds to CategoryDriver via handleCommitInputName
  */
 
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useRef} from 'react';
+import {TextInput} from 'react-native';
 
 import CategoryDriver from 'ssDatabase/api/userJson/category';
 
@@ -18,6 +19,8 @@ import {RootState, AppDispatch} from 'ssRedux/index';
 import {addInput} from 'ssRedux/rateSidewaysSlice';
 import {DEFAULT_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
+import CircleButton from 'ssComponents/Button/CircleButton';
+import MyText from 'ssComponents/ReactNative/MyText';
 
 type RatingInputSelectionProps = {};
 const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
@@ -72,6 +75,7 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   return (
     <>
       <SearchInput
+        ref={null}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         onFocus={handleFocus}

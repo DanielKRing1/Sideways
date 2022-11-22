@@ -23,6 +23,7 @@ const NoInputsDisplay: FC<NoInputsDisplayProps> = props => {
           borderTopRightRadius: 0,
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
+          zIndex: 0,
         }}
       />
       <AbsoluteView>
