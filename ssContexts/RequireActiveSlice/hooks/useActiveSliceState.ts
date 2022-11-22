@@ -1,13 +1,14 @@
 /**
- * For use exclusively in useAuthorizedStackNavigation
+ * For use exclusively in RequireActiveSlice
  */
 
 import {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {ActiveSliceState} from 'ssContexts/constants';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import {RootState} from 'ssRedux/index';
+import {AppDispatch, RootState} from 'ssRedux/index';
+import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
 
 export function useActiveSliceState() {
   // LOCAL STATE
@@ -19,23 +20,28 @@ export function useActiveSliceState() {
   const {activeSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
+  const dispatch: AppDispatch = useDispatch();
 
   // CONTROL NAV ON 'activeSliceName' CHANGE
   useEffect(() => {
+    // 1. UPDATE SLICE (IN/VALID) STATE
     // If no active slice selected or
     // not a valid slice name
     if (
       activeSliceName === '' ||
       !dbDriver.getSliceNames().includes(activeSliceName)
     ) {
-      // 1. Invalid
+      // 1.1. Invalid
       if (dbDriver.getSliceNames().length > 0)
         setActiveSliceState(ActiveSliceState.INVALID_ACTIVE_SLICE);
-      // 2. No available
+      // 1.2. No available
       else setActiveSliceState(ActiveSliceState.NO_AVAILABLE_SLICES);
     }
-    // 3. Valid
+    // 1.3. Valid
     else setActiveSliceState(ActiveSliceState.VALID_ACTIVE_SLICE);
+
+    // 2. UPDATE IN/OUTPUT CACHE
+    dispatch(startCacheAllDbInputsOutputs());
   }, [activeSliceName]);
 
   return {

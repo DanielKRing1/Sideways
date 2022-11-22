@@ -37,6 +37,25 @@ const initialState: ReadSSState = {
 // THUNKS
 
 // CALL THESE 2 THUNKS WHENEVER IN/OUTPUTS ARE ADDED/REMOVED FROM DB
+
+// CALL THIS THUNK WHENEVER ACTIVE SLICE CHANGES
+export const startCacheAllDbInputsOutputs = createAsyncThunk<
+  boolean,
+  undefined,
+  ThunkConfig
+>('rateSS/startCacheAllDbInputsOutputs', async (undef, thunkAPI) => {
+  const {activeSliceName} =
+    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+
+  // 1. Inputs
+  thunkAPI.dispatch(startCacheAllDbInputs());
+  // 2. Outputs
+  thunkAPI.dispatch(startCacheAllDbOutputs());
+
+  return true;
+});
+
+// CALL THIS THUNK WHENEVER INPUTS ARE ADDED/REMOVED FROM DB
 // (Un/do Rate)
 export const startCacheAllDbInputs = createAsyncThunk<
   boolean,
@@ -56,7 +75,6 @@ export const startCacheAllDbInputs = createAsyncThunk<
 
   return true;
 });
-
 export const startCacheAllDbOutputs = createAsyncThunk<
   boolean,
   undefined,
