@@ -41,8 +41,12 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
   }));
   const dispatch = useDispatch();
 
-  const onChangeValue = (newText: string) => {
-    const newNum: number = parseInt(newText);
+  const onChangeValue = (numStr: string) => {
+    // Deleted number, so value should now be '0'
+    // @ts-ignore
+    if (numStr === '' || isNaN(numStr)) return dispatch(setRating(0));
+
+    const newNum: number = parseInt(numStr);
 
     console.log(`New value: ${newNum}`);
     dispatch(setRating(newNum));

@@ -17,7 +17,7 @@ const initialState: ReadStackState = {
 
 // ACTION TYPES
 
-type SetStartDateAction = PayloadAction<Date>;
+type SetStartDateAction = PayloadAction<string>;
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
@@ -27,7 +27,7 @@ export const readStack = createSlice({
   initialState,
   reducers: {
     setStartDate: (state: ReadStackState, action: SetStartDateAction) => {
-      state.stackStartDate = serializeDate(action.payload);
+      state.stackStartDate = action.payload;
     },
     forceSignatureRerender: (
       state: ReadStackState,

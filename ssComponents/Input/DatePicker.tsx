@@ -29,7 +29,7 @@ const MyDatePicker: FC<MyDatePickerProps> = props => {
   return (
     <>
       <TouchableOpacity onPress={() => open()}>
-        <MyText>{buttonText}</MyText>
+        <MyText>Select Date: {buttonText}</MyText>
       </TouchableOpacity>
 
       <DatePicker
