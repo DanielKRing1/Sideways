@@ -77,8 +77,9 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     thunkAPI.dispatch(startCacheAllDbInputsOutputs());
 
     // 5. Reset rating inputs
-    thunkAPI.dispatch(setRating(0));
+    thunkAPI.dispatch(setInputs([]));
     thunkAPI.dispatch(setOutputs([]));
+    thunkAPI.dispatch(setRating(0));
     thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
