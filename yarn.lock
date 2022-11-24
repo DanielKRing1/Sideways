@@ -31,15 +31,15 @@
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
 
-"@asianpersonn/realm-graph@^2.0.14":
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.14.tgz#e1d4516fbc1f02e15db43f30a46cc9813a4f1795"
-  integrity sha512-NPdYDkFer7RB8N0BFllfLzbL87vGXDlZo/8/qApP63hX3aM97dGgVdFxqdG7TJiFIZXy/niEmMdPk6BJ6wBf1Q==
+"@asianpersonn/realm-graph@^2.0.15":
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.15.tgz#f5aa9e620dea1d10416fe1ff1b6c495161798832"
+  integrity sha512-QpgUsgQM2VoFtsg4EuRdeBT3uuD4vGdInOOse1poXkUMF0w2NMJ/jto/5ajLGpauSKUMN6Zx8YT4EbZXDSgxhQ==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
     "@asianpersonn/metarealm" "^1.0.4"
     "@asianpersonn/pagerank" "^1.0.7"
-    catalyst-graph "^1.0.22"
+    catalyst-graph "^1.0.23"
     realm "^10.13.0"
 
 "@asianpersonn/realm-json@^1.0.4":
@@ -2586,10 +2586,10 @@ caseless@~0.12.0:
   resolved "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz"
   integrity sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==
 
-catalyst-graph@^1.0.22:
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/catalyst-graph/-/catalyst-graph-1.0.22.tgz#75ace534e9db03b5839d50723431775f72b0d6a5"
-  integrity sha512-6tnvAnRAz7tM2ooVbdAVI4DSfLtrMNavPuy06zZBEr5PbFRGZDIx4CgP+cV82v2xuUFeXJYvmagQZ/SHCPQ31w==
+catalyst-graph@^1.0.23:
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/catalyst-graph/-/catalyst-graph-1.0.23.tgz#18472b69d142cec40d3201cf70cf2d428f4acca2"
+  integrity sha512-E6LjbU5/o2ll8I5HVXgMQb1A/wsGWnusUCG/t/iq80h3GYlraDLwC9clUOVoobCjW2avnqSugwNkyAS+meyzwg==
   dependencies:
     typescript "^4.6.3"
 
