@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {GrowingIdText as NewSliceOutput} from 'ssComponents/Input/GrowingIdList';
 import DbDriver from 'ssDatabase/api/core/dbDriver';
+import {setActiveSliceName} from 'ssRedux/readSidewaysSlice';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE
@@ -44,7 +45,11 @@ export const startCreateSlice = createAsyncThunk<
 
   const results: [void, void] = await Promise.all([stackPromise, graphPromise]);
 
+  // 3. Reset ouputs
   thunkAPI.dispatch(setPossibleOutputs([]));
+
+  // 4. Select created alice as active slice
+  thunkAPI.dispatch(setActiveSliceName(newSliceName));
 
   thunkAPI.dispatch(forceSignatureRerender());
 
