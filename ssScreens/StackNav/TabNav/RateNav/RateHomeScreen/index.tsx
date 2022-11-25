@@ -10,6 +10,7 @@ import RatingSlider from '../components/RatingSlider';
 import RateButton from './components/RateButton';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 import Header from './components/Header';
+import DismissKeyboardView from 'ssComponents/View/DismissKeyboardView';
 
 type RateHomeScreenProps = {};
 const RateHomeScreen: FC<RateHomeScreenProps> = props => {
@@ -18,7 +19,7 @@ const RateHomeScreen: FC<RateHomeScreenProps> = props => {
   const {barHeight} = useTabBarHeight();
 
   return (
-    <View
+    <DismissKeyboardView
       style={{
         height: screenHeight,
         maxHeight: ((screenHeight - barHeight) * 90) / 100,
@@ -43,7 +44,7 @@ const RateHomeScreen: FC<RateHomeScreenProps> = props => {
       </Accordion>
 
       <RateButton />
-    </View>
+    </DismissKeyboardView>
   );
 };
 
