@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
+import MyPadding from 'ssComponents/ReactNative/MyPadding';
+import {DISPLAY_SIZE} from '../../../../../../../../global';
 
 type SearchSuggestionsProps = {
   searchInput: string;
@@ -65,13 +67,18 @@ const SuggestionItem: FC<SuggestionItemProps> = props => {
 
   return (
     <TouchableOpacity onPress={selectInputName}>
-      <DbCategoryRow
-        editable={false}
-        deletable={false}
-        inputName={inputName}
-        onCommitInputName={handleCommitInputName}
-        onDeleteCategoryRow={() => handleDeleteCategoryRow()}
-      />
+      <MyPadding
+        baseSize={DISPLAY_SIZE.sm}
+        rightSize={DISPLAY_SIZE.sm}
+        leftSize={DISPLAY_SIZE.sm}>
+        <DbCategoryRow
+          editable={false}
+          deletable={false}
+          inputName={inputName}
+          onCommitInputName={handleCommitInputName}
+          onDeleteCategoryRow={() => handleDeleteCategoryRow()}
+        />
+      </MyPadding>
     </TouchableOpacity>
   );
 };
