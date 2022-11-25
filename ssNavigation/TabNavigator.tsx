@@ -1,4 +1,5 @@
 import React from 'react';
+import {View, useWindowDimensions} from 'react-native';
 import {
   createMaterialBottomTabNavigator,
   MaterialBottomTabScreenProps,
@@ -32,14 +33,22 @@ const Tab = createMaterialBottomTabNavigator<TabNavigatorParamList>();
 const TabNavigator = () => {
   const {barHeight} = useTabBarHeight();
 
+  const {height, width} = useWindowDimensions();
+
   return (
-    <Tab.Navigator
-      initialRouteName={RATE_NAVIGATOR_NAME}
-      barStyle={{height: barHeight}}>
-      <Tab.Screen name={ANALYTICS_SCREEN_NAME} component={GraphViewScreen} />
-      <Tab.Screen name={RATE_NAVIGATOR_NAME} component={RateNavigator} />
-      <Tab.Screen name={STACK_SCREEN_NAME} component={StackViewScreen} />
-    </Tab.Navigator>
+    <View
+      style={{
+        width,
+        height,
+      }}>
+      <Tab.Navigator
+        initialRouteName={RATE_NAVIGATOR_NAME}
+        barStyle={{height: barHeight}}>
+        <Tab.Screen name={ANALYTICS_SCREEN_NAME} component={GraphViewScreen} />
+        <Tab.Screen name={RATE_NAVIGATOR_NAME} component={RateNavigator} />
+        <Tab.Screen name={STACK_SCREEN_NAME} component={StackViewScreen} />
+      </Tab.Navigator>
+    </View>
   );
 };
 
