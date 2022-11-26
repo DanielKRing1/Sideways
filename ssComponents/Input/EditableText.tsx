@@ -73,7 +73,7 @@ const EditableText: FC<EditableTextProps> = props => {
   return (
     <View style={containerStyle}>
       {!isEditing ? (
-        <MyTouchableOpacity onPress={handleStartEditing}>
+        <MyTouchableOpacity disabled={!editable} onPress={handleStartEditing}>
           <MyText style={{width: '100%'}}>{text || placeholder}</MyText>
         </MyTouchableOpacity>
       ) : (
