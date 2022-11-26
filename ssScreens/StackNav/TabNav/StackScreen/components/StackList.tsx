@@ -1,6 +1,5 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
-import {ListRenderItemInfo} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ListRenderItemInfo, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 
 // DB DRIVER

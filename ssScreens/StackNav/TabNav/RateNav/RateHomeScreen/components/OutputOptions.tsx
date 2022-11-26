@@ -3,9 +3,9 @@ import {
   FlatList,
   ListRenderItem,
   ListRenderItemInfo,
+  TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
 import {FlexRow} from 'ssComponents/Flex';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';

@@ -4,7 +4,7 @@ import AutoCompleteDropdown, {
   AutoCompleteDropdownProps,
   DropdownRowProps,
 } from 'ssComponents/Search/AutoCompleteDropdown';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from 'ssRedux/index';
 import DbCategoryRow from './DbCategoryRow';
