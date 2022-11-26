@@ -1,14 +1,14 @@
 import React, {FC} from 'react';
-import {useSelector} from 'react-redux';
-
-import {RootState} from 'ssRedux/index';
-import {useAutoComplete} from 'ssHooks/useAutoComplete';
-import {FlatList} from 'react-native-gesture-handler';
 import {
+  FlatList,
   ListRenderItem,
   ListRenderItemInfo,
   TouchableOpacity,
 } from 'react-native';
+import {useSelector} from 'react-redux';
+
+import {RootState} from 'ssRedux/index';
+import {useAutoComplete} from 'ssHooks/useAutoComplete';
 
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
@@ -34,7 +34,13 @@ const SearchSuggestions: FC<SearchSuggestionsProps> = props => {
   );
 
   return (
-    <FlatList data={autoComplete} renderItem={renderItem(onSelectSuggestion)} />
+    <FlatList
+      keyboardShouldPersistTaps="always"
+      data={autoComplete}
+      // TODO: Prevent duplicate inputs?
+      keyExtractor={input => input}
+      renderItem={renderItem(onSelectSuggestion)}
+    />
   );
 };
 
