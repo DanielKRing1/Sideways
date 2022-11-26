@@ -7,6 +7,8 @@ import {removeInput, setInputs} from 'ssRedux/rateSidewaysSlice';
 import {GrowingIdText} from 'ssComponents/Input/GrowingIdList';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import NoInputsDisplay from './NoInputsDisplay';
+import MyPadding from 'ssComponents/ReactNative/MyPadding';
+import {DISPLAY_SIZE} from '../../../../../../../../global';
 
 type RatingInputListProps = {};
 const RatingInputList: FC<RatingInputListProps> = props => {
@@ -79,10 +81,15 @@ const RatingInput: FC<RatingInputProps> = props => {
   };
 
   return (
-    <DbCategoryRow
-      inputName={item.text}
-      onCommitInputName={newInputName => handleCommitInputName(newInputName)}
-      onDeleteCategoryRow={handleDeleteCategoryRow}
-    />
+    <MyPadding
+      baseSize={DISPLAY_SIZE.xs}
+      rightSize={DISPLAY_SIZE.sm}
+      leftSize={DISPLAY_SIZE.sm}>
+      <DbCategoryRow
+        inputName={item.text}
+        onCommitInputName={newInputName => handleCommitInputName(newInputName)}
+        onDeleteCategoryRow={handleDeleteCategoryRow}
+      />
+    </MyPadding>
   );
 };

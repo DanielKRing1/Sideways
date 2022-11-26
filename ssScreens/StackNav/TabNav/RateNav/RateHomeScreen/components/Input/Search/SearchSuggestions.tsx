@@ -74,7 +74,7 @@ const SuggestionItem: FC<SuggestionItemProps> = props => {
   return (
     <TouchableOpacity onPress={selectInputName}>
       <MyPadding
-        baseSize={DISPLAY_SIZE.sm}
+        baseSize={DISPLAY_SIZE.xs}
         rightSize={DISPLAY_SIZE.sm}
         leftSize={DISPLAY_SIZE.sm}>
         <DbCategoryRow
