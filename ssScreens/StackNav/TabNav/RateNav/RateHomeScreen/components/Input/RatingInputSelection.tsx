@@ -5,22 +5,19 @@
  * It composes DbCategoryRow, which removes from and adds to CategoryDriver via handleCommitInputName
  */
 
-import React, {FC, useState, useRef} from 'react';
-import {TextInput} from 'react-native';
+import React, {FC, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 
 import CategoryDriver from 'ssDatabase/api/userJson/category';
 
 import SearchInput from './Search/SearchInput';
 import SearchSuggestions from './Search/SearchSuggestions';
 import InputList from './List/InputList';
-import {useSelector, useDispatch} from 'react-redux';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {addInput} from 'ssRedux/rateSidewaysSlice';
 import {DEFAULT_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
-import CircleButton from 'ssComponents/Button/CircleButton';
-import MyText from 'ssComponents/ReactNative/MyText';
 
 type RatingInputSelectionProps = {};
 const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
@@ -42,6 +39,7 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   // SearchInput
   const handleFocus = () => setIsSearching(true);
   const handleBlur = () => setIsSearching(false);
+  // SearchInput
   const handleSubmitSearchInput = () => {
     handleAddInput(searchInput);
   };
@@ -52,6 +50,9 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   };
 
   const handleAddInput = (newInputName: string) => {
+    // Do not add an empty string as an input
+    if (newInputName === '') return;
+
     // REDUX
     // 1. Create new id
     const newId: number = popId();
