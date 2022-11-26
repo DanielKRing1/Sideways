@@ -4,11 +4,13 @@ declare module 'styled-components' {
   export interface DefaultTheme {
     border: {
       widthDivisors: {
+        xs: number;
         sm: number;
         md: number;
         lg: number;
       };
       radiusDivisors: {
+        xs: number;
         sm: number;
         md: number;
         lg: number;
@@ -38,16 +40,19 @@ declare module 'styled-components' {
       fallback: string;
     };
     fontSizeDivisors: {
+      xs: number;
       sm: number;
       md: number;
       lg: number;
     };
     iconSizeDivisors: {
+      xs: number;
       sm: number;
       md: number;
       lg: number;
     };
     paddingDivisors: {
+      xs: number;
       sm: number;
       md: number;
       lg: number;

@@ -11,11 +11,13 @@ export type HexColor = `#${string}`;
 export type StringMap = Dict<string>;
 
 export enum DISPLAY_SIZE {
+  xs,
   sm,
   md,
   lg,
 }
 export type DisplaySizeOptions = {
+  xs: number;
   sm: number;
   md: number;
   lg: number;

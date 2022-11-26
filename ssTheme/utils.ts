@@ -10,6 +10,9 @@ const getDisplaySizeStyle = (
   let fontSizeDivisor: number;
 
   switch (size) {
+    case DISPLAY_SIZE.xs:
+      fontSizeDivisor = divisorOptions.xs;
+      break;
     case DISPLAY_SIZE.sm:
       fontSizeDivisor = divisorOptions.sm;
       break;
