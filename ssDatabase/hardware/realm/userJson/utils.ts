@@ -22,12 +22,9 @@ import {UserJsonMap} from 'ssDatabase/api/userJson/types';
 import {hashToColor} from 'ssUtils/color';
 import {Dict} from '../../../../global';
 
-// INPUT UTILS
+// CATEGORY SET UTILS
 
-function getASJValue(key: ASJ_CATEGORY_ROW_KEY, userJsonMap: UserJsonMap) {
-  return userJsonMap[key];
-}
-
+// CATEGORY SET IDS
 export function getCSIds(userJsonMap: UserJsonMap): string[] {
   // 1. Get submaps of Json
   // CategorySet Id - Category Name
@@ -39,21 +36,94 @@ export function getCSIds(userJsonMap: UserJsonMap): string[] {
 
   return csIds;
 }
-export function csIdsToCSNames(
-  csIds: string[],
-  userJsonMap: UserJsonMap,
-): string[] {
+// CATEGORY SET ID -> CATEGORY IDS
+export function getCSCIds(csId: string, userJsonMap: UserJsonMap) {
+  // 1. Get submaps of Json
+  // Category Set Id - Category Decoration
+  const cdMapping: GJ_CategoryDecorationMapping =
+    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
+
+  // 2. Get category set
+  // Get Category Set
+  const cdCS: GJ_CategorySet = cdMapping[csId];
+
+  // 3. Get Category Ids (CategorySet keys)
+  const cIds: string[] = Object.keys(cdCS);
+
+  return cIds;
+}
+// CATEGORY SET IDS -> NAMES
+export function csIdToCSName(csId: string, userJsonMap: UserJsonMap): string {
   // 1. Get submaps of Json
   // CategorySet Id - Category Name
   const csNameMapping: GJ_CategorySetNameMapping =
     userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING];
 
   // 2. Get CategorySet names
-  const csNames: string[] = csIds.map((csId: string) => csNameMapping[csId]);
+  const csName: string = csNameMapping[csId];
+
+  return csName;
+}
+export function csIdsToCSNames(
+  csIds: string[],
+  userJsonMap: UserJsonMap,
+): string[] {
+  // 1. Get CategorySet names
+  const csNames: string[] = csIds.map((csId: string) =>
+    csIdToCSName(csId, userJsonMap),
+  );
 
   return csNames;
 }
+// ACTIVE SLICE NAME -> CATEGORY SET NAMES
+export function snToCSId(
+  activeSliceName: string,
+  userJsonMap: UserJsonMap,
+): string | never {
+  // 1. Get submaps of Json
+  // Slice Name - Category Set Id
+  const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
+    userJsonMap[GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING];
 
+  // 2. Get Category Set Id
+  const csId: string | undefined = snToCSIdMapping[activeSliceName];
+
+  if (csId === undefined)
+    throw new Error(
+      `Slice name ${activeSliceName} does not map to any Category Set id (thrown from 'snToCSId method)`,
+    );
+
+  return csId;
+  // || DEFAULT_CATEGORY_SET_ID;
+}
+
+// CATEGORY UTILS
+
+// CATEGORY IDS -> NAMES
+export function cIdToCName(cId: string, userJsonMap: UserJsonMap): string {
+  // 1. Get submaps of Json
+  const cIdToCNameMapping: GJ_CategoryNameMapping =
+    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING];
+
+  // 2. Convert SliceName - CSId and InputName - CId
+  // Category Id
+  const cName: string = cIdToCNameMapping[cId];
+
+  return cName;
+}
+export function cIdsToCNames(
+  cIds: string[],
+  userJsonMap: UserJsonMap,
+): string[] | undefined {
+  // 1. Get Category Names
+  const cNames: string[] = cIds.map((cId: string) =>
+    cIdToCName(cId, userJsonMap),
+  );
+
+  return cNames;
+  // || [];
+}
+// ACTIVE SLICE -> CATEGORY IDS
 /**
  * Get the Category ids of the provided activeSlice's CategorySet
  *
@@ -61,106 +131,18 @@ export function csIdsToCSNames(
  * @param userJsonMap
  * @returns
  */
-export function getCSCIds(
+export function snToCIds(
   activeSliceName: string,
   userJsonMap: UserJsonMap,
 ): string[] | undefined {
-  // 1. Get submaps of Json
-  // Slice Name - Category Set Id
-  const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING];
-  // Category Set Id - Category Decoration
-  const cdMapping: GJ_CategoryDecorationMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
-
-  // 2. Get CategorySet
+  // 1. Get CategorySet
   // Get Category Set id
-  const csId: string = snToCSIdMapping[activeSliceName];
-  // Get Category Set
-  const cs: GJ_CategorySet = cdMapping[csId];
+  const csId: string = snToCSId(activeSliceName, userJsonMap);
 
-  // 3. Get Category Ids (CategorySet keys)
-  const cIds: string[] = Object.keys(cs);
-
-  return cIds;
-  // || [];
+  // 2. Get Category Ids (CategorySet keys)
+  return getCSCIds(csId, userJsonMap);
 }
-export function cIdsToCNames(
-  cIds: string[],
-  userJsonMap: UserJsonMap,
-): string[] | undefined {
-  // 1. Get submaps of Json
-  // Category Set Id - Category Decoration
-  const cNameMapping: GJ_CategoryNameMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING];
-
-  // 2. Get Category Names
-  const cNames: string[] = cIds.map((cId: string) => cNameMapping[cId]);
-
-  return cNames;
-  // || [];
-}
-
-export function snToCSName(
-  activeSliceName: string,
-  userJsonMap: UserJsonMap,
-): string | undefined {
-  // 1. Get submaps of Json
-  // Slice Name - Category Set Id
-  const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING];
-  // Category Set Id - Category Set Name
-  const csIdToCSNameMapping: GJ_SliceNameToCategorySetIdMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING];
-
-  // 2. Get Category Set Id
-  const csId: string = snToCSIdMapping[activeSliceName];
-
-  // 3. Get Category Set Name
-  const cName: string = csIdToCSNameMapping[csId];
-
-  return cName;
-  // || DEFAULT_CATEGORY_SET_NAME;
-}
-
-export function inToLastCId(
-  inputName: string,
-  userJsonMap: UserJsonMap,
-): string {
-  let cId: string = DEFAULT_CATEGORY_ID;
-
-  try {
-    // 1. Get submaps of Json
-    // Input Name - Category Id
-    const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =
-      userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
-
-    // 2. Convert SliceName - CSId and InputName - CId
-    // Category Id
-    cId = inToCIdMapping[inputName].categoryId;
-  } catch (err) {
-    console.log('Error was caught, and this is acceptable behavior');
-    console.log(err);
-  }
-
-  return cId;
-}
-
-export function cIdToCName(
-  categoryId: string,
-  userJsonMap: UserJsonMap,
-): string {
-  // 1. Get submaps of Json
-  const cIdToCNameMapping: GJ_CategoryNameMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING];
-
-  // 2. Convert SliceName - CSId and InputName - CId
-  // Category Id
-  const cName: string = cIdToCNameMapping[categoryId];
-
-  return cName;
-}
-
+// CATEGORY ID -> CATEGORY DECORATION OBJ
 export function cIdToCD(
   activeSliceName: string,
   categoryId: string,
@@ -183,6 +165,29 @@ export function cIdToCD(
     // CategorySetId.CategoryId does not exist
     return genDefaultCategoryDecoration(categoryId);
   }
+}
+// INPUT NAME -> CATEGORY ID
+export function inToLastCId(
+  inputName: string,
+  userJsonMap: UserJsonMap,
+): string {
+  let cId: string = DEFAULT_CATEGORY_ID;
+
+  try {
+    // 1. Get submaps of Json
+    // Input Name - Category Id
+    const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =
+      userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
+
+    // 2. Convert SliceName - CSId and InputName - CId
+    // Category Id
+    cId = inToCIdMapping[inputName].categoryId;
+  } catch (err) {
+    console.log('Error was caught, and this is acceptable behavior');
+    console.log(err);
+  }
+
+  return cId;
 }
 
 export function getInputCategoryWName(
@@ -213,8 +218,8 @@ export function getInputCategoryWName(
     // 3. Get Category
     const cdMapping: GJ_CategoryDecorationMapping =
       userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
-    const categorySet: GJ_CategorySet = cdMapping[csId];
-    const category: GJ_CategoryDecoration = categorySet[cId];
+    const cdCategorySet: GJ_CategorySet = cdMapping[csId];
+    const category: GJ_CategoryDecoration = cdCategorySet[cId];
 
     // 4. CategoryId did not exist
     if (category !== undefined)

@@ -26,10 +26,7 @@ import GlobalDriver from 'ssDatabase/api/userJson/globalDriver';
 import BaseCategoryRow, {BaseCategoryRowProps} from './BaseCategoryRow';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {
-  inToLastCId,
-  snToCSName,
-} from 'ssDatabase/hardware/realm/userJson/utils';
+import {inToLastCId, snToCSId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {
   startRefreshCategoryMapping,
   startRefreshInputNameToCategoryNameMapping,
@@ -106,7 +103,7 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
   const handleCommitCategoryColor = (newColor: HexColor) => {
     // Db
     // 1. Update CategoryDecortion.color
-    GlobalDriver.editCD(snToCSName(activeSliceName, fullUserJsonMap)!, {
+    GlobalDriver.editCD(snToCSId(activeSliceName, fullUserJsonMap)!, {
       categoryId,
       color: newColor,
     });
@@ -118,7 +115,7 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
   const handleCommitCategoryIcon = (newIconName: AvailableIcons) => {
     // Db
     // 1. Update CategoryDecortion.icon
-    GlobalDriver.editCD(snToCSName(activeSliceName, fullUserJsonMap)!, {
+    GlobalDriver.editCD(snToCSId(activeSliceName, fullUserJsonMap)!, {
       categoryId,
       icon: newIconName,
     });
