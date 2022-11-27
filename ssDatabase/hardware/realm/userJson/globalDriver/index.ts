@@ -82,15 +82,47 @@ const throwLoadError = (): void | never => {
 };
 
 /**
- * Add/Overwrite an entire CategorySet to a csId key in the AllCategorySets mapping
+ * If GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING
+ *    contains 'csName' as a value,
+ *    return true
+ * else
+ *    return false
  *
- * Takes 'names' as input, must convert to 'ids'
+ * @param csName
+ */
+const hasCS = (csName: string): boolean => {
+  throwLoadError();
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
+    GLOBAL_COLLECTION_KEY,
+  );
+
+  // 2. Get Json Rows
+  const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
+  );
+
+  // 3. Get CategorySet id -> name mapping
+  const allCSIds: Set<string> = new Set(Object.keys(csNameMapping));
+
+  // 4. Check if csName already exists
+  return allCSIds.has(csName);
+};
+
+/**
+ * Add (will not overwrite) an entire CategorySet to a csId key in the AllCategorySets mapping
+ *
+ * Takes 'names' as input, must convert to unique 'ids'
  *
  * @param newCSName
  * @param newCS
  */
 const addCS = (newCSName: string, newCS: GJ_CategorySet): void | never => {
   throwLoadError();
+
+  // 0. Do not add duplicate CategorySet
+  if (hasCS(newCSName)) return;
 
   // 1. Get Json Table
   const jsonCollection: RealmJson = RealmJsonManager.getCollection(
@@ -108,7 +140,7 @@ const addCS = (newCSName: string, newCS: GJ_CategorySet): void | never => {
     GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
   );
 
-  // 3.1. Add/Overwrite CategorySet id mapping key
+  // 3.1. Add CategorySet id mapping key
   const allCSIds: Set<string> = new Set(Object.keys(csNameMapping));
   const newCSId: string = getUniqueId(5, allCSIds);
   jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
@@ -206,7 +238,21 @@ const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
     });
   } catch (err) {
     // 6. CSId.CId does not exist
+    console.log(err);
   }
+  console.log('LOOK AT THIIIIIIS');
+  console.log(JSON.stringify(cdMapping));
+  console.log(csId);
+  console.log(cs);
+  console.log(cdInfo);
+
+  // const cd: GJ_CategoryDecoration = cs[cdInfo.categoryId];
+  // console.log({
+  //   ...cdMapping,
+  //   [csId]: {
+  //     [cdInfo.categoryId]: cd,
+  //   },
+  // });
 };
 
 /**
@@ -359,6 +405,7 @@ const Driver: GlobalJsonDriver = {
   load,
   closeAll,
 
+  hasCS,
   addCS,
   rmCS,
   editCD,

@@ -32,6 +32,7 @@ export type GlobalJsonDriver = {
   load: () => Promise<void>;
   closeAll: () => Promise<void>;
 
+  hasCS: (csName: string) => boolean | never;
   addCS: (newCSName: string, newCS: GJ_CategorySet) => void | never;
   rmCS: (csId: string) => void | never;
   editCD: (csId: string, cdInfo: GJ_CDInfo) => void | never;
