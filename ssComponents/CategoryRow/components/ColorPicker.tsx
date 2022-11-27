@@ -19,8 +19,6 @@ const DecorationRowColorPicker: FC<MyColorPickerProps> = props => {
         height: (height * 2) / 3,
         paddingRight: (width * 1) / 20,
         paddingLeft: (width * 1) / 20,
-        alignItems: 'center',
-        justifyContent: 'center',
       }}>
       <MyColorPicker {...props} />
     </View>
