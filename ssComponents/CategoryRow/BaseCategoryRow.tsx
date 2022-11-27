@@ -108,11 +108,11 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
     // Local
     setLocalColor(newColor);
   };
-  const handleEditCategoryIcon = (newIcon: AvailableIcons) => {
+  const handleEditCategoryIcon = (newIconName: AvailableIcons) => {
     // Props
-    onEditIcon(newIcon);
+    onEditIcon(newIconName);
     // Local
-    setLocalIconName(newIcon);
+    setLocalIconName(newIconName);
   };
 
   // COMMIT HANDLERS
