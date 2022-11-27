@@ -7,6 +7,13 @@ export function genRandomColor() {
   return color;
 }
 
+/**
+ * Hashes a given string to a hex color, not including '#000000'
+ * Instead, '#000000' is replaced with '#ffffff'
+ *
+ * @param str
+ * @returns
+ */
 export const hashToColor = function (str: string = ''): HexColor {
   let hash = 0;
   for (var i = 0; i < str.length; i++) {
@@ -17,5 +24,5 @@ export const hashToColor = function (str: string = ''): HexColor {
     const value = (hash >> (i * 8)) & 0xff;
     color += ('00' + value.toString(16)).substr(-2);
   }
-  return color;
+  return color === '#000000' ? '#ffffff' : color;
 };
