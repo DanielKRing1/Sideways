@@ -120,8 +120,6 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
     console.log('HANDLER: handleCommitInputName');
     console.log(newInputName);
     console.log(inputName);
-    // No change
-    if (newInputName === inputName) return;
 
     // No inputName
     if (newInputName === '') onDeleteCategoryRow();
