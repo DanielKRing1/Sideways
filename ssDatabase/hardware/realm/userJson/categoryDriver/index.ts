@@ -189,46 +189,7 @@ const rmInputCategories = (inputNamesToRm: string[]): void | never => {
     ),
   );
 };
-/**
- * For an 'loadedActiveSliceName',
- * Edit a categoryId's decoration
- *
- * @param categoryInfo
- */
-const editCategoryDecoration = (categoryInfo: GJ_CDInfo): void | never => {
-  throwLoadError();
 
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    loadedActiveSliceName,
-  );
-
-  // 2. Get Json Row
-  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-  );
-  const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    jsonCollection.getJson(
-      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
-    );
-
-  // 3. Get associated CategorySet
-  const csId: string = snToCSIdMapping[loadedActiveSliceName];
-
-  try {
-    // 4. Update CategoryDecoration values
-    if (categoryInfo.color !== undefined)
-      cdMapping[csId][categoryInfo.categoryId].color = categoryInfo.color;
-    if (categoryInfo.icon !== undefined)
-      cdMapping[csId][categoryInfo.categoryId].icon = categoryInfo.icon;
-
-    // 5. Set Json Row
-    jsonCollection.setJson(
-      GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-      cdMapping,
-    );
-  } catch (err) {}
-};
 /**
  * For an 'loadedActiveSliceName',
  * Get the mapping for inputName to categoryName
