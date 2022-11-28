@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import {nanoid} from 'nanoid';
 
 export const getId = (length: number = 5): string => nanoid(length);
