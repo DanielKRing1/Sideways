@@ -10,7 +10,6 @@
 
 import {useNavigation} from '@react-navigation/native';
 import React, {createContext, FC, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import MyModal from 'ssComponents/View/Modal';
 import {ActiveSliceState} from 'ssContexts/constants';
@@ -20,8 +19,6 @@ import {
 } from 'ssNavigation/constants';
 
 import {StackNavigatorNavigationProp} from 'ssNavigation/StackNavigator';
-import {AppDispatch, RootState} from 'ssRedux/index';
-import {startRefreshAllUserJson} from 'ssRedux/userJson';
 import {useActiveSliceState} from './hooks/useActiveSliceState';
 
 // CONTEXT
@@ -46,6 +43,7 @@ const RequireActiveSliceProvider: FC<
   const {activeSliceState} = useActiveSliceState();
 
   // EFFECTS
+
   // activeSliceName is no longer valid
   useEffect(() => {
     switch (activeSliceState) {
