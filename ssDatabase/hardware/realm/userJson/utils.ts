@@ -3,6 +3,7 @@ import {
   DEFAULT_CATEGORY_ID,
   DEFAULT_CATEGORY_NAME,
   DEFAULT_OUTPUT_ICON,
+  genDefaultCategoryDecoration,
 } from 'ssDatabase/api/userJson/category/constants';
 import {
   ASJ_InputNameToCategoryIdMapping,
@@ -188,59 +189,6 @@ export function inToLastCId(
   }
 
   return cId;
-}
-
-export function getInputCategoryWName(
-  activeSliceName: string,
-  inputName: string,
-  userJsonMap: UserJsonMap,
-): GJ_CategoryWName {
-  // 1. Get submaps of Json
-  // Slice Name - Category Set Id
-  const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING];
-  // Input Name - Category Id
-  const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =
-    userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
-  // Category Id - Category Name
-  const cIdToCNameMapping: GJ_CategoryNameMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING];
-
-  // 2. Convert SliceName - CSId and InputName - CId
-  // Category Set Id
-  const csId: string = snToCSIdMapping[activeSliceName];
-  // Category Id
-  const cId: string = inToCIdMapping[inputName].categoryId;
-  // Category Name
-  const cName: string = cIdToCNameMapping[cId];
-
-  try {
-    // 3. Get Category
-    const cdMapping: GJ_CategoryDecorationMapping =
-      userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
-    const cdCategorySet: GJ_CategorySet = cdMapping[csId];
-    const category: GJ_CategoryDecoration = cdCategorySet[cId];
-
-    // 4. CategoryId did not exist
-    if (category !== undefined)
-      return {
-        categoryName: cName,
-        ...category,
-      };
-  } catch (err) {
-    // 5. CategorySetId did not exist
-  }
-
-  // 6. Return default
-  return genDefaultCategoryDecoration(cId);
-}
-
-function genDefaultCategoryDecoration(cId: string): GJ_CategoryWName {
-  return {
-    categoryName: DEFAULT_CATEGORY_NAME,
-    icon: DEFAULT_CATEGORY_ICON,
-    color: hashToColor(cId),
-  };
 }
 
 // OUTPUT UTILS

@@ -1,4 +1,6 @@
+import {hashToColor} from 'ssUtils/color';
 import {AvailableIcons} from '../constants';
+import {GJ_CategoryDecoration, GJ_CategorySet} from './types';
 
 export const CATEGORY_ROW_DELIM: string = '_';
 
@@ -11,11 +13,31 @@ export const DEFAULT_OUTPUT_ICON: AvailableIcons = AvailableIcons.circle;
 export const CONFIRM_SELECTION_ICON: AvailableIcons = AvailableIcons.question;
 export const NO_ACTIVE_SLICE_NAME: string = 'NO_ACTIVE_SLICE';
 
-// DEFAULT CATEGORIES
+/**
+ * Generate a default CategoryDecoration +
+ * Hash cId to a color
+ *
+ * @param cId
+ * @returns
+ */
+export function genDefaultCategoryDecoration(
+  cId: string,
+): GJ_CategoryDecoration {
+  return {
+    icon: DEFAULT_CATEGORY_ICON,
+    color: hashToColor(cId),
+  };
+}
+
+// DEFAULT CATEGORY SETS
+export type DefinedCategorySet = {
+  name: string;
+  cs: GJ_CategorySet;
+};
 
 // ACTIVITY JOURNAL
 // Maslow Inspired
-export const ACTIVITY_JOURNAL_CATEGORIES = {
+const DAILY_JOURNAL_CATEGORIES = {
   // ESSENTIAL NEEDS
   //    Basic Health/Essential, Habitual Daily Activities:
   //    Eat, Dress, Brush Teeth + Shower, Pump Gas, Thaw Frozen Food ...
@@ -66,6 +88,19 @@ export const ACTIVITY_JOURNAL_CATEGORIES = {
   Travel: 'Travel',
   //    Doing what makes you happy
   Fulfillment: 'Fulfillment',
+};
+export const DAILY_JOURNAL_CATEGORY_SET = {
+  name: 'Daily Journal',
+  // Use cName, bcus no cId yet
+  // cId will be generated when adding category set
+  cs: Object.keys(DAILY_JOURNAL_CATEGORIES).reduce<GJ_CategorySet>(
+    (acc, cName: string) => {
+      acc[cName] = genDefaultCategoryDecoration(cName);
+
+      return acc;
+    },
+    {},
+  ),
 };
 
 /**
