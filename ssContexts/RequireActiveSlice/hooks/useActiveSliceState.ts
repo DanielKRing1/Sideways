@@ -3,12 +3,11 @@
  */
 
 import {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import {ActiveSliceState} from 'ssContexts/constants';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import {AppDispatch, RootState} from 'ssRedux/index';
-import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
+import {RootState} from 'ssRedux/index';
 
 export function useActiveSliceState() {
   // LOCAL STATE
@@ -20,7 +19,6 @@ export function useActiveSliceState() {
   const {activeSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const dispatch: AppDispatch = useDispatch();
 
   // CONTROL NAV ON 'activeSliceName' CHANGE
   useEffect(() => {
@@ -39,9 +37,6 @@ export function useActiveSliceState() {
     }
     // 1.3. Valid
     else setActiveSliceState(ActiveSliceState.VALID_ACTIVE_SLICE);
-
-    // 2. UPDATE IN/OUTPUT CACHE
-    dispatch(startCacheAllDbInputsOutputs());
   }, [activeSliceName]);
 
   return {
