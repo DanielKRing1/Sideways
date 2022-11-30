@@ -81,8 +81,8 @@ const ExistingSliceList: FC<ExistingSliceListProps> = props => {
     setValues: setTrieValues,
     search,
     autoComplete,
-  } = useTrie<ExistingSlice>(
-    (existingSlice: ExistingSlice) => existingSlice.sliceName,
+  } = useTrie<ExistingSlice>((existingSlice: ExistingSlice) =>
+    existingSlice.sliceName.toLocaleLowerCase(),
   );
   const [lastLogged, setLastLogged] = useState<ExistingSlice[]>([]);
 
@@ -105,12 +105,12 @@ const ExistingSliceList: FC<ExistingSliceListProps> = props => {
 
   // 2. Fill lastLogged slices into Trie
   useEffect(() => {
-    setTrieValues(searchedSliceName, lastLogged);
+    setTrieValues(searchedSliceName.toLocaleLowerCase(), lastLogged);
   }, [lastLogged]);
 
   // 3. Get autoComplete list, based on searchedSliceName
   useEffect(() => {
-    search(searchedSliceName);
+    search(searchedSliceName.toLocaleLowerCase());
   }, [searchedSliceName]);
 
   // LIST COMPONENT
