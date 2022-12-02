@@ -36,8 +36,8 @@ const Grid: FC<GridProps> = props => {
         width: '100%',
         ...style,
       }}>
-      {childrenRows.map((row: React.ReactNode) => (
-        <FlexRow>{row}</FlexRow>
+      {childrenRows.map((row: React.ReactNode, i: number) => (
+        <FlexRow key={i}>{row}</FlexRow>
       ))}
     </View>
   );
