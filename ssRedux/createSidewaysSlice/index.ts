@@ -2,6 +2,8 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {GrowingIdText as NewSliceOutput} from 'ssComponents/Input/GrowingIdList';
 import DbDriver from 'ssDatabase/api/core/dbDriver';
+import {DAILY_JOURNAL_CATEGORY_SET} from 'ssDatabase/api/userJson/category/constants';
+import globalDriver from 'ssDatabase/api/userJson/globalDriver';
 import {setActiveSliceName} from 'ssRedux/readSidewaysSlice';
 import {ThunkConfig} from '../types';
 
@@ -10,6 +12,7 @@ import {ThunkConfig} from '../types';
 export interface CreateSSState {
   newSliceName: string;
   possibleOutputs: NewSliceOutput[];
+  csId: string;
 
   createdSignature: {};
 }
@@ -17,6 +20,7 @@ export interface CreateSSState {
 const initialState: CreateSSState = {
   newSliceName: '',
   possibleOutputs: [],
+  csId: DAILY_JOURNAL_CATEGORY_SET.csId,
 
   createdSignature: {},
 };
@@ -28,7 +32,7 @@ export const startCreateSlice = createAsyncThunk<
   undefined,
   ThunkConfig
 >('createSS/startCreateSlice', async (undef, thunkAPI) => {
-  const {newSliceName, possibleOutputs} =
+  const {newSliceName, possibleOutputs, csId} =
     thunkAPI.getState().createSidewaysSlice;
 
   // 1. Create Stack (also reloads stack LoadableRealm)
@@ -43,12 +47,15 @@ export const startCreateSlice = createAsyncThunk<
     outputTextList,
   );
 
+  // 3. Add SLICE NAME -> CATEGORY SET mapping
+  globalDriver.addSliceToCSMapping(newSliceName, csId);
+
   const results: [void, void] = await Promise.all([stackPromise, graphPromise]);
 
-  // 3. Reset ouputs
-  thunkAPI.dispatch(setPossibleOutputs([]));
+  // 4. Reset newSliceName, ouputs, csId
+  thunkAPI.dispatch(reset());
 
-  // 4. Select created alice as active slice
+  // 5. Select created alice as active slice
   thunkAPI.dispatch(setActiveSliceName(newSliceName));
 
   thunkAPI.dispatch(forceSignatureRerender());
@@ -59,10 +66,12 @@ export const startCreateSlice = createAsyncThunk<
 // ACTION TYPES
 
 type ForceSSRerenderAction = PayloadAction<undefined>;
-type SetnewSliceNameAction = PayloadAction<string>;
+type SetNewSliceNameAction = PayloadAction<string>;
+type SetCSIdAction = PayloadAction<string>;
 type SetPossibleOutputsAction = PayloadAction<NewSliceOutput[]>;
 type AddPossibleOutputAction = PayloadAction<NewSliceOutput>;
 type RmPossibleOutputAction = PayloadAction<number>;
+type ResetAction = PayloadAction<undefined>;
 type StartCreateSSFulfilled = PayloadAction<boolean>;
 
 // SLICE
@@ -71,8 +80,11 @@ export const createSS = createSlice({
   name: 'createSS',
   initialState,
   reducers: {
-    setNewSliceName: (state: CreateSSState, action: SetnewSliceNameAction) => {
+    setNewSliceName: (state: CreateSSState, action: SetNewSliceNameAction) => {
       state.newSliceName = action.payload;
+    },
+    setCSId: (state: CreateSSState, action: SetCSIdAction) => {
+      state.csId = action.payload;
     },
     setPossibleOutputs: (
       state: CreateSSState,
@@ -93,6 +105,11 @@ export const createSS = createSlice({
       // Do not need to set state bcus Redux Toolkit uses Immer, which
       // applies mutations to the state
       state.possibleOutputs.splice(action.payload, 1);
+    },
+    reset: (state: CreateSSState, action: ResetAction) => {
+      state.newSliceName = '';
+      state.possibleOutputs = [];
+      state.csId = DAILY_JOURNAL_CATEGORY_SET.csId;
     },
     forceSignatureRerender: (
       state: CreateSSState,
@@ -126,10 +143,13 @@ export const createSS = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   setNewSliceName,
+  setCSId,
   setPossibleOutputs,
   addPossibleOutput,
   removePossibleOutput,
   forceSignatureRerender,
 } = createSS.actions;
+
+const {reset} = createSS.actions;
 
 export default createSS.reducer;

@@ -27,6 +27,7 @@ import MyText from '../../../ssComponents/ReactNative/MyText';
 import {FlexCol} from '../../../ssComponents/Flex';
 import VerticalSpace from '../../../ssComponents/Spacing/VerticalSpace';
 import GrowingPossibleOutputs from './components/GrowingPossibleOutputs';
+import CategorySetOptions from './components/CategorySetOptions';
 
 // Possible outputs
 
@@ -78,6 +79,10 @@ const AddSliceScreen: FC<
       <MyText>Add possible outputs...</MyText>
 
       <GrowingPossibleOutputs />
+
+      <VerticalSpace />
+
+      <CategorySetOptions />
 
       <VerticalSpace />
 
