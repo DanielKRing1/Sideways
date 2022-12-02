@@ -1,4 +1,8 @@
 /**
+ * This driver needs to be reloaded everytime the active slice name changes, so
+ * it can load relevant active slice category data,
+ *    eg [input name -> category id] mapping
+ *
  * This Realm Driver reads/writes to/from an activeSliceName RealmJson collection
  * of activeSlice.inputName to categoryName mapping
  *
@@ -21,7 +25,6 @@ import {
   ASJ_OutputDecorationInfo,
   ASJ_OutputNameToDecorationMapping,
   GJ_CategoryDecorationMapping,
-  GJ_CDInfo,
   GJ_SliceNameToCategorySetIdMapping,
 } from 'ssDatabase/api/userJson/category/types';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
@@ -48,11 +51,13 @@ let loadedActiveSliceName: string = NO_ACTIVE_SLICE_NAME;
  * @returns
  */
 const load = async (activeSliceName: string): Promise<void> => {
-  console.log('ENTERED LOAD');
+  console.log('entered categoryJson.load()');
+  console.log(activeSliceName);
+  console.log(loadedActiveSliceName);
 
   if (loadedActiveSliceName === activeSliceName) return;
 
-  console.log('ABOUT TO LOAD');
+  console.log('categoryJson about to load');
 
   // 1. LOAD ActiveSlice COLLECTION
   // 1.1. Try to create collection for first time (will fail if already exists)
@@ -75,7 +80,7 @@ const load = async (activeSliceName: string): Promise<void> => {
   isLoaded = true;
   loadedActiveSliceName = activeSliceName;
 
-  console.log('LOADED');
+  console.log('categoryJson loaded');
 };
 
 const closeAll = async (): Promise<void> => {
@@ -143,6 +148,9 @@ const addInputCategory = (inputInfo: ASJ_InputInfo): void | never => {
  * @param inputNamesToRm
  *
  */
+// TODO: Only 'add' input (counter = 0) when adding to input list
+//        'Commit' (increment counter++) when submitting rating
+//        Check that deleting a rating input 'decrements' counter
 const rmInputCategories = (inputNamesToRm: string[]): void | never => {
   throwLoadError();
 
@@ -188,6 +196,53 @@ const rmInputCategories = (inputNamesToRm: string[]): void | never => {
       ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     ),
   );
+};
+/**
+ * Change the categoryId that an inputName maps to
+ * If does not exist yet, simply creates a new [key-value], [input name-category id] pair
+ *
+ * @param newInputCategory
+ */
+const editInputCategory = (inputInfo: ASJ_InputInfo): void | never => {
+  throwLoadError();
+
+  // Do not add empty InputName
+  if (inputInfo.inputId === '')
+    return console.log('Empty inputId in categoryDriver.addInputCategory');
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
+    loadedActiveSliceName,
+  );
+
+  // 2. Get Json Row
+  const inputToCategoryMapping: ASJ_InputNameToCategoryIdMapping =
+    jsonCollection.getJson(
+      ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
+    );
+
+  console.log('editInputCategory():');
+  console.log(inputToCategoryMapping);
+  console.log(inputInfo);
+
+  // 3. Upsert
+  // 3.1. Save newInputCategory
+  if (inputToCategoryMapping[inputInfo.inputId] === undefined)
+    inputToCategoryMapping[inputInfo.inputId] = {
+      categoryId: inputInfo.categoryId,
+      counter: 1,
+    };
+  // 3.2. Change categoryId
+  else
+    inputToCategoryMapping[inputInfo.inputId].categoryId = inputInfo.categoryId;
+
+  // 4. Set Json Row
+  jsonCollection.setJson(
+    ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
+    inputToCategoryMapping,
+  );
+
+  console.log(inputToCategoryMapping);
 };
 
 /**
@@ -371,6 +426,7 @@ const Driver: ASJ_CategoryDriver = {
 
   addInputCategory,
   rmInputCategories,
+  editInputCategory,
   getAllInputCategories,
   setAllInputCategories,
 
