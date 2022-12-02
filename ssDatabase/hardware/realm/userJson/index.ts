@@ -19,7 +19,8 @@ import {
 } from './config';
 
 // VARIABLES
-let isLoaded: boolean = false;
+let isLoaded = (): boolean =>
+  GlobalJsonDriver.isLoaded && CategoryJsonDriver.isLoaded;
 
 // LOAD/CLOSE ----
 
@@ -51,8 +52,6 @@ const load = async (activeSliceName: string): Promise<void> => {
   await Promise.all(promises);
 
   console.log('userJson loaded');
-
-  isLoaded = true;
 };
 
 const closeAll = async (): Promise<void> => {
@@ -61,8 +60,6 @@ const closeAll = async (): Promise<void> => {
   const categoryClosePromise = RealmJsonManager.closeAllCollections();
 
   Promise.all([userClosePromise, globalClosePromise, categoryClosePromise]);
-
-  isLoaded = false;
 };
 
 const throwLoadError = (): void | never => {
@@ -91,10 +88,22 @@ const getAllUserJson = (activeSlice: string): UserJsonMap | never => {
   const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
     GlobalJsonDriver.getSliceToCategoryMapping();
 
-  const inputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping =
-    CategoryJsonDriver.getAllInputCategories();
-  const outputNameToDecorationMapping: ASJ_OutputNameToDecorationMapping =
-    CategoryJsonDriver.getAllOutputDecorations();
+  let inputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping = {};
+  let outputNameToDecorationMapping: ASJ_OutputNameToDecorationMapping = {};
+  try {
+    inputNameToCategoryNameMapping = CategoryJsonDriver.getAllInputCategories();
+    outputNameToDecorationMapping =
+      CategoryJsonDriver.getAllOutputDecorations();
+  } catch (err) {
+    console.log(err);
+    console.log(
+      'CategoryJsonDriver threw this error. This is acceptable behavior in the case that:\
+      \n1. The user is selecting an active slice for this session (maybe it is the first time they are opening the app), so\
+      \n2. There is no active slice selected for this session yet, so\
+      \n3. CategoryJsonDriver has not yet loaded properly, but\
+      \n4. The GlobalJsonDriver data should still be available',
+    );
+  }
 
   return {
     [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: cdMapping,

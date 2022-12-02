@@ -14,7 +14,7 @@ export type UserJsonMap = GlobalCategoryJsonMap & CategoryJsonMap;
 
 // DRIVER
 export type UserJsonDriver = {
-  isLoaded: boolean;
+  isLoaded: () => boolean;
   load: (activeSlice: string) => Promise<void>;
   closeAll: () => Promise<void>;
 
