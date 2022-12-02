@@ -104,7 +104,7 @@ const hasCS = (csName: string): boolean => {
   );
 
   // 3. Get CategorySet id -> name mapping
-  const allCSIds: Set<string> = new Set(Object.keys(csNameMapping));
+  const allCSIds: Set<string> = new Set(Object.values(csNameMapping));
 
   // 4. Check if csName already exists
   return allCSIds.has(csName);
@@ -116,13 +116,22 @@ const hasCS = (csName: string): boolean => {
  * Takes 'names' as input, must convert to unique 'ids'
  *
  * @param newCSName
- * @param newCS
+ * @param newCS The category ids are actually just category names, so ids will be created for each of them
+ * @param newCSId
+ * @returns
  */
-const addCS = (newCSName: string, newCS: GJ_CategorySet): void | never => {
+const addCS = (
+  newCSName: string,
+  newCS: GJ_CategorySet,
+  newCSId?: string,
+): void | never => {
   throwLoadError();
 
   // 0. Do not add duplicate CategorySet
   if (hasCS(newCSName)) return;
+
+  console.log('HASSS???');
+  console.log(hasCS(newCSName));
 
   // 1. Get Json Table
   const jsonCollection: RealmJson = RealmJsonManager.getCollection(
@@ -142,7 +151,8 @@ const addCS = (newCSName: string, newCS: GJ_CategorySet): void | never => {
 
   // 3.1. Add CategorySet id mapping key
   const allCSIds: Set<string> = new Set(Object.keys(csNameMapping));
-  const newCSId: string = getUniqueId(5, allCSIds);
+  // Create new csId only if one is not provided (pre-defined Category Sets will have their own csIds)
+  if (newCSId === undefined) newCSId = getUniqueId(5, allCSIds);
   jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
     ...csNameMapping,
     [newCSId]: newCSName,
@@ -223,17 +233,18 @@ const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
 
   try {
     // 3. Get CategoryDecoation
-    const cd: GJ_CategoryDecoration = cs[cdInfo.categoryId];
+    const cd: GJ_CategoryDecoration = cs[cdInfo.cId];
 
     // 4. Edit CategoryDecoation
     if (cdInfo.color !== undefined) cd.color = cdInfo.color;
-    if (cdInfo.icon !== undefined) cd.icon = cdInfo.icon;
+    if (cdInfo.cId !== undefined) cd.cId = cdInfo.cId;
 
     // 5. Save new id-mapped category
     jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
       ...cdMapping,
       [csId]: {
-        [cdInfo.categoryId]: cd,
+        ...cdMapping[csId],
+        [cdInfo.cId]: cd,
       },
     });
   } catch (err) {
@@ -277,7 +288,7 @@ const getCDMapping = (): GJ_CategoryDecorationMapping | never => {
 };
 
 /**
- * Get all CategorySet ids (not names)
+ * Get all CategorySet id -> name
  *
  * @returns
  */
@@ -332,18 +343,18 @@ const addSliceToCSMapping = (sliceName: string, csId: string): void | never => {
   );
 
   // 2. Json Row
-  const sliceToCSMapping: GJ_SliceNameToCategorySetIdMapping =
+  const sliceToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
       GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     );
 
   // 3. Add/Overwrite Json key, sliceName to csName
-  sliceToCSMapping[sliceName] = csId;
+  sliceToCSIdMapping[sliceName] = csId;
 
   // 4. Set Json Row
   jsonCollection.setJson(
     GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
-    sliceToCSMapping,
+    sliceToCSIdMapping,
   );
 };
 
@@ -361,18 +372,18 @@ const rmSliceToCSMapping = (sliceName: string): void | never => {
   );
 
   // 2.Json Row
-  const sliceToCSMapping: GJ_SliceNameToCategorySetIdMapping =
+  const sliceToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
       GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     );
 
   // 3. Delete Json key
-  delete sliceToCSMapping[sliceName];
+  delete sliceToCSIdMapping[sliceName];
 
   // 4. Set Json Row
   jsonCollection.setJson(
     GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
-    sliceToCSMapping,
+    sliceToCSIdMapping,
   );
 };
 
@@ -392,12 +403,12 @@ const getSliceToCategoryMapping = ():
   );
 
   // 2. Get Json Row
-  const sliceToCSMapping: GJ_SliceNameToCategorySetIdMapping =
+  const sliceToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
     jsonCollection.getJson(
       GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     );
 
-  return sliceToCSMapping;
+  return sliceToCSIdMapping;
 };
 
 const Driver: GlobalJsonDriver = {
