@@ -96,7 +96,7 @@ const StackCard: FC<StackCardProps> = props => {
             </FlexRow>
           ))} */}
         {item.inputs.map((input: string) => (
-          <FlexRow>
+          <FlexRow key={input}>
             <DbCategoryRow
               inputName={input}
               onCommitInputName={() => {}}
@@ -122,7 +122,9 @@ const StackCard: FC<StackCardProps> = props => {
             </FlexRow>
           ))} */}
         {item.outputs.map((output: string) => (
-          <TouchableOpacity onPress={() => toggleOutputToRm(output)}>
+          <TouchableOpacity
+            key={output}
+            onPress={() => toggleOutputToRm(output)}>
             <MyBorder>
               <FlexRow justifyContent="space-between">
                 <MyText>{output}</MyText>
