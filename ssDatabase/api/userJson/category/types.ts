@@ -43,6 +43,7 @@ export type GJ_CategoryNameMapping = IdMapping;
 export type GJ_CategoryDecorationMapping = Dict<GJ_CategorySet>;
 export type GJ_CategorySet = Dict<GJ_CategoryDecoration>;
 export type GJ_CategoryDecoration = {
+  cId: string;
   icon: AvailableIcons;
   color: HexColor;
 };
@@ -50,7 +51,7 @@ export type GJ_CategoryWName = {
   categoryName: string;
 } & GJ_CategoryDecoration;
 export type GJ_CDInfo = {
-  categoryId: string;
+  cId: string;
   icon?: AvailableIcons;
   color?: HexColor;
 };
@@ -112,6 +113,7 @@ export type ASJ_CategoryDriver = {
 
   addInputCategory: (categoryInfo: ASJ_InputInfo) => void | never;
   rmInputCategories: (inputIdsToRm: string[]) => void | never;
+  editInputCategory: (categoryInfo: ASJ_InputInfo) => void | never;
   // InputName - CategoryId
   getAllInputCategories: () => ASJ_InputNameToCategoryIdMapping | never;
   setAllInputCategories: (

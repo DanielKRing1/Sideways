@@ -16,7 +16,7 @@ import InputList from './List/InputList';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {addInput} from 'ssRedux/rateSidewaysSlice';
-import {DEFAULT_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
+import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
 
 type RatingInputSelectionProps = {};
@@ -67,7 +67,7 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
     // **Will not add inputName if inputName === ''
     CategoryDriver.addInputCategory({
       inputId: newInputName,
-      categoryId: DEFAULT_CATEGORY_ID,
+      categoryId: UNASSIGNED_CATEGORY_ID,
     });
 
     dispatch(startRefreshInputNameToCategoryNameMapping());

@@ -1,6 +1,6 @@
 import {
   DEFAULT_CATEGORY_ICON,
-  DEFAULT_CATEGORY_ID,
+  UNASSIGNED_CATEGORY_ID,
   DEFAULT_CATEGORY_NAME,
   DEFAULT_OUTPUT_ICON,
   genDefaultCategoryDecoration,
@@ -47,6 +47,11 @@ export function getCSCIds(csId: string, userJsonMap: UserJsonMap) {
   // 2. Get category set
   // Get Category Set
   const cdCS: GJ_CategorySet = cdMapping[csId];
+  console.log('getCSCIds():');
+  console.log(userJsonMap);
+  console.log(cdMapping);
+  console.log(csId);
+  console.log(cdCS);
 
   // 3. Get Category Ids (CategorySet keys)
   const cIds: string[] = Object.keys(cdCS);
@@ -88,6 +93,9 @@ export function snToCSId(
 
   // 2. Get Category Set Id
   const csId: string | undefined = snToCSIdMapping[activeSliceName];
+
+  console.log(activeSliceName);
+  console.log(userJsonMap);
 
   if (csId === undefined)
     throw new Error(
@@ -149,6 +157,9 @@ export function cIdToCD(
   categoryId: string,
   userJsonMap: UserJsonMap,
 ): GJ_CategoryDecoration {
+  if (categoryId === UNASSIGNED_CATEGORY_ID)
+    return genDefaultCategoryDecoration(categoryId);
+
   // 1. Get submaps of Json
   const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
     userJsonMap[GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING];
@@ -161,8 +172,14 @@ export function cIdToCD(
   try {
     // Get CategoryDecoration from CategorySliceId.CategoryId
     const cd: GJ_CategoryDecoration = cdMapping[csId][categoryId];
+    console.log('DID NOT THROW AN ERROR');
+    console.log(csId);
+    console.log(categoryId);
+    console.log(cd);
     return cd;
   } catch (err) {
+    console.log('SHOULD GO HEERRREEE');
+    console.log(err);
     // CategorySetId.CategoryId does not exist
     return genDefaultCategoryDecoration(categoryId);
   }
@@ -172,7 +189,7 @@ export function inToLastCId(
   inputName: string,
   userJsonMap: UserJsonMap,
 ): string {
-  let cId: string = DEFAULT_CATEGORY_ID;
+  let cId: string = UNASSIGNED_CATEGORY_ID;
 
   try {
     // 1. Get submaps of Json
@@ -180,9 +197,13 @@ export function inToLastCId(
     const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =
       userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
 
+    console.log('inToLastCId():');
+    console.log(inToCIdMapping);
+
     // 2. Convert SliceName - CSId and InputName - CId
     // Category Id
     cId = inToCIdMapping[inputName].categoryId;
+    console.log(cId);
   } catch (err) {
     console.log('Error was caught, and this is acceptable behavior');
     console.log(err);
