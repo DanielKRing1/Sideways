@@ -40,6 +40,7 @@ const FloatingActionButton: FC<FloatingActionButtonProps> = props => {
       {/* Secondary */}
       {Components.map((Component: FC<{}>, i: number) => (
         <StyledAnimation
+          key={i}
           style={[
             getTranslateY(animation, secondaryRadius, i),
             getOpacity(animation),
@@ -125,8 +126,8 @@ const AbsoluteContainer = styled.View<AbsoluteContainerProps>`
 
   position: absolute;
 
-  right: ${({position}: AbsoluteContainerProps) => position.x};
-  bottom: ${({position}: AbsoluteContainerProps) => position.y};
+  right: ${({position}: AbsoluteContainerProps) => position.x}px;
+  bottom: ${({position}: AbsoluteContainerProps) => position.y}px;
 `;
 type StyledAnimationProps = {
   radius: number;
@@ -137,9 +138,9 @@ const StyledAnimation = styled(Animated.View)<StyledAnimationProps>`
   justify-content: center;
   align-self: center;
 
-  height: ${({radius}: StyledAnimationProps) => radius * 2};
-  width: ${({radius}: StyledAnimationProps) => radius * 2};
-  border-radius: ${({radius}: StyledAnimationProps) => radius};
+  height: ${({radius}: StyledAnimationProps) => radius * 2}px;
+  width: ${({radius}: StyledAnimationProps) => radius * 2}px;
+  border-radius: ${({radius}: StyledAnimationProps) => radius}px;
 
   ${BoxShadowStyles}
 
