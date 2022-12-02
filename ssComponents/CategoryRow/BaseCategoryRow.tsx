@@ -106,12 +106,12 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
   const [cIdPickerOpen, setCIdPickerOpen] = useState(false);
   // Color
   const [localColor, setLocalColor] = useState<HexColor>(
-    cIdToCD(activeSliceName, categoryId, fullUserJsonMap).color,
+    categoryDecoration.color,
   );
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   // Icon
   const [localIcon, setLocalIcon] = useState<AvailableIcons>(
-    cIdToCD(activeSliceName, categoryId, fullUserJsonMap).icon,
+    categoryDecoration.icon,
   );
   const [iconPickerOpen, setIconPickerOpen] = useState(false);
 
