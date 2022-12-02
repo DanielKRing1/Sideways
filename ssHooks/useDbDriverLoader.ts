@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import userJsonDriver from 'ssDatabase/api/userJson';
+import {NO_ACTIVE_SLICE_NAME} from 'ssDatabase/api/userJson/category/constants';
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {startRefreshAllUserJson} from 'ssRedux/userJson';
 
@@ -24,13 +25,11 @@ export const useDbDriverLoader = () => {
     console.log('load 1');
 
     // Core
-    if (!dbDriver.isLoaded) loadPromises.push(dbDriver.load());
+    loadPromises.push(dbDriver.load());
 
     console.log('load 2');
 
     // Decorations
-    if (!userJsonDriver.isLoaded) console.log('load 2.1.');
-
     loadPromises.push(userJsonDriver.load(activeSliceName));
 
     console.log('load 3');
@@ -60,14 +59,13 @@ export const useDbDriverLoader = () => {
 
   // Reload everytime activeSliceName changes
   useEffect(() => {
-    const asyncEffect = async () => {
+    (async () => {
       await load();
 
-      // Refresh UserJsonMap
-      dispatch(startRefreshAllUserJson());
-    };
-
-    asyncEffect();
+      // 1. Refresh UserJsonMap after switching active slices
+      if (activeSliceName !== NO_ACTIVE_SLICE_NAME)
+        dispatch(startRefreshAllUserJson());
+    })();
   }, [activeSliceName]);
 
   return {
