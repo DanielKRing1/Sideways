@@ -100,24 +100,33 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
     dispatch(startRefreshInputNameToCategoryNameMapping());
   };
 
-  const handleCommitCategoryColor = (newColor: HexColor) => {
+  const handleCommitCId = (newCId: string) => {
+    // Db
+    // 1. Update input name -> categoryId mapping
+    CategoryDriver.editInputCategory({inputId: inputName, categoryId: newCId});
+
+    // Redux
+    // 2. Update UserJsonMap
+    dispatch(startRefreshInputNameToCategoryNameMapping());
+  };
+  const handleCommitIcon = (newIcon: AvailableIcons) => {
     // Db
     // 1. Update CategoryDecortion.color
     GlobalDriver.editCD(snToCSId(activeSliceName, fullUserJsonMap)!, {
-      categoryId,
-      color: newColor,
+      cId: categoryId,
+      icon: newIcon,
     });
 
     // Redux
     // 2. Update UserJsonMap
     dispatch(startRefreshCategoryMapping());
   };
-  const handleCommitCategoryIcon = (newIconName: AvailableIcons) => {
+  const handleCommitColor = (newColor: HexColor) => {
     // Db
-    // 1. Update CategoryDecortion.icon
+    // 1. Update CategoryDecortion.color
     GlobalDriver.editCD(snToCSId(activeSliceName, fullUserJsonMap)!, {
-      categoryId,
-      icon: newIconName,
+      cId: categoryId,
+      color: newColor,
     });
 
     // Redux
@@ -133,8 +142,9 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
       fullUserJsonMap={fullUserJsonMap}
       onCommitInputName={handleCommitInputName}
       onDeleteCategoryRow={handleDeleteCategoryRow}
-      onCommitColor={handleCommitCategoryColor}
-      onCommitIcon={handleCommitCategoryIcon}
+      onCommitCId={handleCommitCId}
+      onCommitColor={handleCommitColor}
+      onCommitIcon={handleCommitIcon}
     />
   );
 };
