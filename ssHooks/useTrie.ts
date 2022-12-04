@@ -1,10 +1,9 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import createTrie, {TrieTree} from '@asianpersonn/trie';
 
 export function useTrie<T>(getKey: (value: T) => string) {
   const [trie] = useState<TrieTree<T>>(createTrie());
   const [autoComplete, setAutoComplete] = useState<T[]>([]);
-  const [cachedValues, setCachedValues] = useState<T[]>([]);
 
   /**
    * Set Trie values and update autocomplete values
@@ -23,10 +22,7 @@ export function useTrie<T>(getKey: (value: T) => string) {
     trie.clear();
     trie.addAll(trieValues);
 
-    // 3. Cache values
-    setCachedValues(values);
-
-    // 4. Redo search
+    // 3. Redo search
     search(targetStr);
   };
 
@@ -38,9 +34,8 @@ export function useTrie<T>(getKey: (value: T) => string) {
    */
   const search = (targetStr: string): void => {
     // Show all if no search input
-    if (targetStr === '') setAutoComplete(cachedValues);
     // Else show autocomplete list based on search input
-    else setAutoComplete(trie.search(targetStr));
+    setAutoComplete(trie.search(targetStr));
   };
 
   return {
