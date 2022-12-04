@@ -4,7 +4,7 @@ import createTrie, {TrieTree} from '@asianpersonn/trie';
 export function useTrie<T>(getKey: (value: T) => string) {
   const [trie] = useState<TrieTree<T>>(createTrie());
   const [autoComplete, setAutoComplete] = useState<T[]>([]);
-  let cachedValues: T[] = [];
+  const [cachedValues, setCachedValues] = useState<T[]>([]);
 
   /**
    * Set Trie values and update autocomplete values
@@ -24,7 +24,7 @@ export function useTrie<T>(getKey: (value: T) => string) {
     trie.addAll(trieValues);
 
     // 3. Cache values
-    cachedValues = values;
+    setCachedValues(values);
 
     // 4. Redo search
     search(targetStr);
