@@ -15,12 +15,15 @@ type OutputLineGraphProps = {};
 const OutputLineGraph: FC<OutputLineGraphProps> = () => {
   const [domain, setDomain] = React.useState<XDomain>({x: [0, 7]});
 
-  const {activeSliceName, allDbOutputs, lineGraph, fullUserJsonMap} =
-    useSelector((state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.timeseriesStatsSlice,
-      ...state.userJsonSlice,
-    }));
+  const {activeSliceName, allDbOutputs} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
+  const {lineGraph} = useSelector(
+    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+  );
+  const {fullUserJsonMap} = useSelector(
+    (state: RootState) => state.userJsonSlice,
+  );
 
   // colorMap={{
   //     0: 'green',

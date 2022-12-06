@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -67,8 +67,11 @@ const StickyScrollView: FC<StickyScrollViewProps> = props => {
     }
   };
 
+  console.log('STICKSCROLLVIEW RERENDER');
+
   return (
     <ScrollView
+      {...props}
       stickyHeaderIndices={stickyHeaderIndices}
       showsVerticalScrollIndicator={false}
       onScroll={event => {
@@ -83,4 +86,4 @@ const StickyScrollView: FC<StickyScrollViewProps> = props => {
   );
 };
 
-export default StickyScrollView;
+export default memo(StickyScrollView);

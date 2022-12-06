@@ -25,6 +25,9 @@ export const GrowingList: FC<GrowingListProps> = props => {
   const [, forceUpdate] = React.useState<Object>({});
 
   const handleChangeText = (newText: string, index: number) => {
+    console.log('HANDLECHANGETEXT------------------------');
+    console.log(newText);
+    console.log(index);
     if (index < data.length) {
       handleUpdateInput(newText, index);
     } else {
@@ -35,9 +38,10 @@ export const GrowingList: FC<GrowingListProps> = props => {
   };
 
   // Memoize
-  const renderItem = useMemo(
-    () => createRenderItemComponent(handleChangeText),
-    [data],
+  const RenderItem = createRenderItemComponent(handleChangeText);
+
+  const renderItem = ({item, index}: any) => (
+    <RenderItem item={item} index={index} />
   );
   // const renderItem = createRenderItemComponent(handleChangeText);
 
@@ -46,6 +50,7 @@ export const GrowingList: FC<GrowingListProps> = props => {
 
   return (
     <FlatList
+      keyboardShouldPersistTaps="always"
       data={grownData}
       renderItem={renderItem}
       keyExtractor={keyExtractor}

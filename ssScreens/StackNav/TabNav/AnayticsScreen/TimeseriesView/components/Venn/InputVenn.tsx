@@ -19,12 +19,13 @@ import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 
 type InputVennProps = {};
 const InputVenn: FC<InputVennProps> = () => {
-  const {vennByMonth, vennNodeInputs, monthIndex, fullUserJsonMap} =
-    useSelector((state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.timeseriesStatsSlice,
-      ...state.userJsonSlice,
-    }));
+  const {vennByMonth, vennNodeInputs, monthIndex} = useSelector(
+    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+  );
+  const {fullUserJsonMap} = useSelector(
+    (state: RootState) => state.userJsonSlice,
+  );
+
   const dispatch: AppDispatch = useDispatch();
 
   // HANDLER METHODS

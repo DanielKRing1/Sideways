@@ -55,7 +55,7 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
   // MEMO
   // Do we want ton change the category when the user changes the input name??
   const categoryId: string = useMemo(
-    () => inToLastCId(inputName, fullUserJsonMap),
+    () => inToLastCId(inputName, fullUserJsonMap, 'dbcategoryrow'),
     [inputName, fullUserJsonMap],
   );
 
@@ -132,6 +132,8 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
     // Redux
     // 2. Update UserJsonMap
     dispatch(startRefreshCategoryMapping());
+
+    console.log('DBCATEGORYROW RERENDERED');
   };
 
   return (

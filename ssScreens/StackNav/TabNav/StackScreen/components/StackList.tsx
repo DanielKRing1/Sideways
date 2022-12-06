@@ -185,12 +185,11 @@ const StackList: FC<StackListProps> = props => {
 
   // REDUX
   const {activeSliceName, readSSSignature} = useSelector(
-    (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
   const {stackStartDate, readStackSignature} = useSelector(
-    (state: RootState) => ({
-      ...state.readSidewaysSlice.internalReadReducer.readStackReducer,
-    }),
+    (state: RootState) =>
+      state.readSidewaysSlice.internalReadReducer.readStackReducer,
   );
 
   // DB DRIVER

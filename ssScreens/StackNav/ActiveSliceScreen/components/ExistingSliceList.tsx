@@ -88,7 +88,7 @@ const ExistingSliceList: FC<ExistingSliceListProps> = props => {
 
   // REDUX
   const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
-    (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
 
   // DB DRIVER

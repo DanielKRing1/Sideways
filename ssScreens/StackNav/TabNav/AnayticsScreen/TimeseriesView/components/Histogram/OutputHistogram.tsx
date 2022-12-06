@@ -12,17 +12,15 @@ import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = () => {
-  const {
-    activeSliceName,
-    allDbOutputs,
-    histogramByMonth,
-    monthIndex,
-    fullUserJsonMap,
-  } = useSelector((state: RootState) => ({
-    ...state.readSidewaysSlice.toplevelReadReducer,
-    ...state.analyticsSlice.timeseriesStatsSlice,
-    ...state.userJsonSlice,
-  }));
+  const {activeSliceName, allDbOutputs} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
+  const {histogramByMonth, monthIndex} = useSelector(
+    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+  );
+  const {fullUserJsonMap} = useSelector(
+    (state: RootState) => state.userJsonSlice,
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // gradientColors={[

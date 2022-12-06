@@ -32,7 +32,7 @@ const NodeStats: FC<NodeStatsProps> = props => {
     // NOTE: If id becomes a uuid and is no longer the input name, then get the input name differently
     const inputName: string = nodeStats !== undefined ? nodeStats.id : '';
 
-    const cId: string = inToLastCId(inputName, fullUserJsonMap);
+    const cId: string = inToLastCId(inputName, fullUserJsonMap, 'nodestats');
     const cd: GJ_CategoryDecoration = cIdToCD(
       activeSliceName,
       cId,
@@ -41,6 +41,8 @@ const NodeStats: FC<NodeStatsProps> = props => {
 
     return cd.icon;
   }, [fullUserJsonMap]);
+
+  console.log('NODESTATS RERENDERED');
 
   return (
     <View>

@@ -1,7 +1,6 @@
-import React, {FC} from 'react';
+import React, {FC, memo, useCallback} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {CGNode} from '@asianpersonn/realm-graph';
 
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {
@@ -13,24 +12,25 @@ import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory'
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
-  const {searchedNodeIdInput, inputStatsSignature} = useSelector(
-    (state: RootState) => ({
-      ...state.analyticsSlice.identityStatsSlice,
-    }),
+  const {searchedNodeIdInput, nodeIdInput, inputStatsSignature} = useSelector(
+    (state: RootState) => state.analyticsSlice.identityStatsSlice,
   );
   const dispatch: AppDispatch = useDispatch();
 
   // HANDLERS
-  const handleSetSearchedNodeId = (nodeId: string): void => {
+  const handleSetSearchedNodeId = useCallback((nodeId: string): void => {
     dispatch(setSearchNodeIdInput(nodeId));
-  };
-  const handleSetNodeId = (nodeId: string): void => {
+  }, []);
+  const handleSetNodeId = useCallback((nodeId: string): void => {
     dispatch(startSetNodeIdInput(nodeId));
-  };
+  }, []);
+
+  console.log('NODEINPUT RERENDERED');
 
   return (
     <View>
       <MyText>Choose an Input Node</MyText>
+      <MyText>{nodeIdInput}</MyText>
 
       <AutoCompleteCategory
         clickOutsideId="StatsNodeInput"
@@ -43,4 +43,4 @@ const NodeInput: FC<NodeInputProps> = () => {
   );
 };
 
-export default NodeInput;
+export default memo(NodeInput);

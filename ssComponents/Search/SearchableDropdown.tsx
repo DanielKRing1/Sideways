@@ -1,11 +1,9 @@
-import React, {FC, useEffect} from 'react';
-import {Keyboard} from 'react-native';
+import React, {FC, useState, forwardRef, useMemo, useCallback} from 'react';
+import {Keyboard, TextInput} from 'react-native';
 import styled from 'styled-components/native';
-import {useOnClickOutsideComponent} from 'rn-click-listener';
 
 import {FlexCol, FlexRow} from '../Flex';
 import MyTextInput from '../ReactNative/MyTextInput';
-import MyText from '../ReactNative/MyText';
 
 export type SearchableDropdownProps = {
   clickOutsideId: string;
@@ -16,7 +14,10 @@ export type SearchableDropdownProps = {
   DropdownComponent?: FC | undefined;
   RightComponent?: FC | undefined;
 };
-export const SearchableDropdown: FC<SearchableDropdownProps> = props => {
+export const SearchableDropdown = forwardRef<
+  TextInput,
+  SearchableDropdownProps
+>((props, ref) => {
   const {
     clickOutsideId,
     placeholder,
@@ -27,50 +28,44 @@ export const SearchableDropdown: FC<SearchableDropdownProps> = props => {
     RightComponent,
   } = props;
 
-  const {ref, clickedInside, registerClickInside, reset} =
-    useOnClickOutsideComponent(`${clickOutsideId}/searchable-dropdown`);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const shouldDisplayDropdown = !!clickedInside && !!DropdownComponent;
+  const shouldDisplayDropdown = isFocused && !!DropdownComponent;
 
   const handleFocus = () => {
-    registerClickInside();
+    setIsFocused(true);
   };
 
   const handleBlur = () => {
-    reset();
+    setIsFocused(false);
     Keyboard.dismiss();
   };
 
-  useEffect(() => {
-    if (!clickedInside) handleBlur();
-  }, [clickedInside]);
+  console.log('SEARCHABLEDROPDOWN RERENDERED');
 
   return (
-    <StyledRow ref={ref}>
-      <MyText>Start</MyText>
+    <StyledRow>
       {!!LeftComponent && <LeftComponent />}
 
-      <FlexCol>
+      <FlexCol style={{width: '100%'}}>
         <MyTextInput
+          ref={ref}
           placeholder={placeholder}
           value={inputValue}
           onChangeText={setInputValue}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          // @ts-ignore
-          keyboardShouldPersistTaps="always"
         />
 
         {shouldDisplayDropdown && <DropdownComponent />}
       </FlexCol>
 
       {!!RightComponent && <RightComponent />}
-      <MyText>End</MyText>
     </StyledRow>
   );
-};
+});
 
 const StyledRow = styled(FlexRow)`
   bordercolor: black;
-  border-width: 2;
+  border-width: 2px;
 `;

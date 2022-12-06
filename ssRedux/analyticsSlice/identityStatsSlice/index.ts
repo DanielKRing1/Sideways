@@ -1,7 +1,6 @@
 import {RankedNode} from '@asianpersonn/realm-graph';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import dbDriver from 'ssDatabase/api/core/dbDriver';
 import recommendationsDriver from 'ssDatabase/api/analytics/recommendation/recommendationStatsDriver';
 import identityDriver from 'ssDatabase/api/analytics/identity/identityStatsDriver';
 import {
@@ -81,18 +80,17 @@ export const startAssureFreshness = createAsyncThunk<
   // 1. 'activeSliceName' changed
   if (activeSliceName !== analyzedSliceName) {
     // Recompute identityNodes + reset stats bcus inputNode is now unknown
-    thunkAPI.dispatch(startGetIdentityNodes());
     thunkAPI.dispatch(resetNodesAndStats());
+    thunkAPI.dispatch(startGetIdentityNodes());
   }
   // 2. Freshness changed (rate, undo rate, ...)
   else if (!isFresh) {
     // Recompute identityNodes + Recompute inputNode stats + Rerender identity and input stats
     thunkAPI.dispatch(startGetIdentityNodes());
-    thunkAPI.dispatch(
-      startSetNodeIdInput(
-        thunkAPI.getState().analyticsSlice.identityStatsSlice.nodeIdInput,
-      ),
-    );
+    const nodeIdInput: string =
+      thunkAPI.getState().analyticsSlice.identityStatsSlice.nodeIdInput;
+    thunkAPI.dispatch(startSetNodeIdInput(nodeIdInput));
+
     thunkAPI.dispatch(forceIdentityStatsSignatureRerender());
     thunkAPI.dispatch(forceInputStatsSignatureRerender());
   }
@@ -110,6 +108,7 @@ export const startAssureFreshness = createAsyncThunk<
 const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'identityStatsSS/startGetIdentityNodes',
   async (undef, thunkAPI) => {
+    console.log('in startGetIdentityNodes');
     const {activeSliceName, allDbOutputs} =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const listLength: number = 5;
@@ -126,6 +125,8 @@ const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
       dampingFactor,
     });
 
+    console.log(hiLoRankings);
+
     thunkAPI.dispatch(setIdentityNodes(hiLoRankings));
     thunkAPI.dispatch(forceIdentityStatsSignatureRerender());
 
@@ -141,7 +142,7 @@ export const startSetNodeIdInput = createAsyncThunk<
   StartSetNodeIdInputArgs,
   ThunkConfig
 >(
-  'identityStatsSS/startGetNodeStats',
+  'identityStatsSS/startSetNodeStats',
   async (nodeIdInput: StartSetNodeIdInputArgs, thunkAPI) => {
     // 1. Set node id input
     thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
@@ -202,6 +203,7 @@ export const startGetNodeStats = createAsyncThunk<
 >(
   'identityStatsSS/startGetNodeStats',
   async ({graphName, nodeId, rawOutputs}: GetNodeStatsArgs, thunkAPI) => {
+    const t0 = new Date().getTime();
     const nodeStats: RankedNode | undefined = identityDriver.getNodeStats({
       graphName,
       nodeId,
@@ -210,6 +212,10 @@ export const startGetNodeStats = createAsyncThunk<
     if (nodeStats === undefined) return false;
 
     thunkAPI.dispatch(setNodeStats(nodeStats));
+    const t1 = new Date().getTime();
+    console.log('startGetNodeStats');
+    console.log('HEEEEERRRREEEEE-----------------------------');
+    console.log(t1 - t0);
 
     return true;
   },
@@ -224,6 +230,7 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
     {graphName, nodeId, rawOutputs, listLength}: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
+    const t0 = new Date().getTime();
     const hiLoRankings: HiLoRanking =
       await identityDriver.getCollectivelyTandemNodes({
         graphName,
@@ -233,6 +240,10 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
       });
 
     thunkAPI.dispatch(setCollectivelyTandemNode(hiLoRankings));
+    const t1 = new Date().getTime();
+    console.log('startGetCollectivelyTandemNodes');
+    console.log('HEEEEERRRREEEEE-----------------------------');
+    console.log(t1 - t0);
 
     return true;
   },
@@ -247,6 +258,7 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
     {graphName, nodeId, rawOutputs, listLength}: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
+    const t0 = new Date().getTime();
     const hiLoRankings: HiLoRankingByOutput =
       await identityDriver.getSinglyTandemNodes({
         graphName,
@@ -256,6 +268,10 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
       });
 
     thunkAPI.dispatch(setSinglyTandemNodes(hiLoRankings));
+    const t1 = new Date().getTime();
+    console.log('startGetSinglyTandemNodes');
+    console.log('HEEEEERRRREEEEE-----------------------------');
+    console.log(t1 - t0);
 
     return true;
   },
@@ -270,6 +286,7 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
     {graphName, nodeId, rawOutputs, listLength}: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
+    const t0 = new Date().getTime();
     const hiLoRankings: HiLoRankingByOutput =
       await identityDriver.getHighlyRatedTandemNodes({
         graphName,
@@ -279,6 +296,10 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
       });
 
     thunkAPI.dispatch(setHighlyRatedTandemNodes(hiLoRankings));
+    const t1 = new Date().getTime();
+    console.log('startGetHighlyRatedTandemNodes');
+    console.log('HEEEEERRRREEEEE-----------------------------');
+    console.log(t1 - t0);
 
     return true;
   },
@@ -333,7 +354,10 @@ export const identityStatsSlice = createSlice({
       state: IdentityStatsState,
       action: SetNodeIdInputAction,
     ) => {
+      console.log('setNodeInput');
+      console.log(state.nodeIdInput);
       state.nodeIdInput = action.payload;
+      console.log(state.nodeIdInput);
     },
     setListLength: (state: IdentityStatsState, action: SetListLengthAction) => {
       state.listLength = action.payload;
@@ -344,7 +368,10 @@ export const identityStatsSlice = createSlice({
       state: IdentityStatsState,
       action: SetIdentityNodesAction,
     ) => {
+      console.log('Identity Nodes about to change');
+      console.log(state.identityNodes);
       state.identityNodes = action.payload;
+      console.log(state.identityNodes);
     },
     setNodeStats: (state: IdentityStatsState, action: SetNodeStatsAction) => {
       state.nodeStats = action.payload;
@@ -373,6 +400,7 @@ export const identityStatsSlice = createSlice({
       state: IdentityStatsState,
       action: ResetNodesAndStatsAction,
     ) => {
+      console.log('RESET');
       // Input
       state.searchedNodeIdInput = '';
       state.nodeIdInput = '';

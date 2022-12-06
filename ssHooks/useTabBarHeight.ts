@@ -12,5 +12,6 @@ export const useTabBarHeight = () => {
 
   return {
     barHeight,
+    remainingHeight: screenHeight - barHeight,
   };
 };

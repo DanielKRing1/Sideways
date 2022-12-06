@@ -72,7 +72,7 @@ const Accordion: FC<AccordionProps> = props => {
 
   return (
     <View
-      style={{height: '100%'}}
+      style={{flex: 1, height: '100%'}}
       onLayout={event => {
         const {x, y, width, height} = event.nativeEvent.layout;
         setTotalHeight(height);

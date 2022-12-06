@@ -1,4 +1,5 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, forwardRef, memo} from 'react';
+import {TextInput} from 'react-native';
 
 import {FlexCol} from 'ssComponents/Flex';
 import {
@@ -6,7 +7,6 @@ import {
   SearchableDropdownProps,
 } from 'ssComponents/Search/SearchableDropdown';
 import {useAutoComplete} from 'ssHooks/useAutoComplete';
-import {useTrie} from 'ssHooks/useTrie';
 
 export type DropdownRowProps<T> = {
   suggestion: T;
@@ -17,7 +17,10 @@ export type AutoCompleteDropdownProps<T> = {
 
   DropdownRow: FC<DropdownRowProps<T>>;
 } & Omit<SearchableDropdownProps, 'DropdownComponent'>;
-const AutoCompleteDropdown: FC<AutoCompleteDropdownProps<any>> = props => {
+const AutoCompleteDropdown = forwardRef<
+  TextInput,
+  AutoCompleteDropdownProps<any>
+>((props, ref) => {
   const {
     clickOutsideId,
     placeholder,
@@ -34,11 +37,32 @@ const AutoCompleteDropdown: FC<AutoCompleteDropdownProps<any>> = props => {
     getSuggestionText,
   );
 
-  const Dropdown: FC<{}> = () => (
+  return (
+    <SearchableDropdown
+      ref={ref}
+      clickOutsideId={`${clickOutsideId}/autocomplete-dropdown`}
+      placeholder={placeholder}
+      inputValue={inputValue}
+      setInputValue={setInputValue}
+      DropdownComponent={() => (
+        <Dropdown
+          autoComplete={autoComplete}
+          DropdownRow={DropdownRow}
+          inputValue={inputValue}
+        />
+      )}
+    />
+  );
+});
+
+const Dropdown: FC<any> = ({autoComplete, DropdownRow, inputValue}) => {
+  console.log('DROPDOWN RERENDERED');
+
+  return (
     <FlexCol>
       {autoComplete.length > 0 ? (
         autoComplete.map((suggestion: any) => (
-          <DropdownRow suggestion={suggestion} />
+          <DropdownRow key={suggestion} suggestion={suggestion} />
         ))
       ) : (
         // No suggestions
@@ -46,16 +70,6 @@ const AutoCompleteDropdown: FC<AutoCompleteDropdownProps<any>> = props => {
       )}
     </FlexCol>
   );
-
-  return (
-    <SearchableDropdown
-      clickOutsideId={`${clickOutsideId}/autocomplete-dropdown`}
-      placeholder={placeholder}
-      inputValue={inputValue}
-      setInputValue={setInputValue}
-      DropdownComponent={Dropdown}
-    />
-  );
 };
 
-export default AutoCompleteDropdown;
+export default memo(AutoCompleteDropdown);

@@ -16,13 +16,13 @@ type RateHomeScreenProps = {};
 const RateHomeScreen: FC<RateHomeScreenProps> = props => {
   // HOOKS
   const {height: screenHeight} = useWindowDimensions();
-  const {barHeight} = useTabBarHeight();
+  const {remainingHeight} = useTabBarHeight();
 
   return (
     <DismissKeyboardView
       style={{
         height: screenHeight,
-        maxHeight: ((screenHeight - barHeight) * 90) / 100,
+        maxHeight: (remainingHeight * 100) / 100,
       }}>
       <Accordion
         headerProps={[

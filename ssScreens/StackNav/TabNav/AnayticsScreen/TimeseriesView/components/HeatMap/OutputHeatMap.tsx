@@ -18,18 +18,21 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>();
 
   // REDUX
-  const {heatMapByMonth, monthIndex, fullUserJsonMap} = useSelector(
-    (state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.timeseriesStatsSlice,
-      ...state.userJsonSlice,
-    }),
+  const {heatMapByMonth, monthIndex} = useSelector(
+    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+  );
+  const {fullUserJsonMap} = useSelector(
+    (state: RootState) => state.userJsonSlice,
   );
   const dispatch: AppDispatch = useDispatch();
 
   // FORMAT DATA
   const heatMap: PartialHeatMapCell[] = useMemo(() => {
-    const rawHeatMap: HeatMapDay[] = heatMapByMonth[monthIndex].heatMap;
+    console.log(heatMapByMonth);
+    console.log(monthIndex);
+    const rawHeatMap: HeatMapDay[] = heatMapByMonth[monthIndex]
+      ? heatMapByMonth[monthIndex].heatMap
+      : [];
 
     // [ { value: [...colors], onPress: (i) => setSelectedIndex(i) }, ... ]
     return rawHeatMap.map((day: HeatMapDay) => ({

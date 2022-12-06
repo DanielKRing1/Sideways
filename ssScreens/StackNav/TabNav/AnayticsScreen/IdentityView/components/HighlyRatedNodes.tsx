@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 
@@ -8,15 +8,11 @@ import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankin
 
 type HighlyRatedTandemNodesProps = {};
 const HighlyRatedTandemNodes: FC<HighlyRatedTandemNodesProps> = () => {
-  const {
-    nodeIdInput,
-    highlyRatedTandemNodes,
-    readSSSignature,
-    identityStatsSignature,
-  } = useSelector((state: RootState) => ({
-    ...state.readSidewaysSlice.toplevelReadReducer,
-    ...state.analyticsSlice.identityStatsSlice,
-  }));
+  const {readSSSignature} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
+  const {nodeIdInput, highlyRatedTandemNodes, identityStatsSignature} =
+    useSelector((state: RootState) => state.analyticsSlice.identityStatsSlice);
 
   return (
     <View>
@@ -27,4 +23,4 @@ const HighlyRatedTandemNodes: FC<HighlyRatedTandemNodesProps> = () => {
   );
 };
 
-export default HighlyRatedTandemNodes;
+export default memo(HighlyRatedTandemNodes);

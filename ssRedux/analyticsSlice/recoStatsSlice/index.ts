@@ -70,6 +70,7 @@ export const startGetRecommendations = createAsyncThunk<
 
 // Input
 type SetRecommendationInputs = PayloadAction<RecoInput[]>;
+type EditRecommendationInputs = PayloadAction<{index: number; text: string}>;
 type AddRecommendationInput = PayloadAction<RecoInput>;
 type RemoveRecommendationInput = PayloadAction<number>;
 // Recommendations
@@ -94,6 +95,13 @@ export const recommendationStatsSlice = createSlice({
       action: AddRecommendationInput,
     ) => {
       state.recommendationInputs.push(action.payload);
+    },
+    editRecommendationInputs: (
+      state: RecommendationsState,
+      action: EditRecommendationInputs,
+    ) => {
+      const {index, text} = action.payload;
+      state.recommendationInputs[index].text = text;
     },
     removeRecommendationInput: (
       state: RecommendationsState,
@@ -126,6 +134,7 @@ const {setRecommendations} = recommendationStatsSlice.actions;
 export const {
   setRecommendationInputs,
   addRecommendationInput,
+  editRecommendationInputs,
   removeRecommendationInput,
   forceSignatureRerender,
 } = recommendationStatsSlice.actions;

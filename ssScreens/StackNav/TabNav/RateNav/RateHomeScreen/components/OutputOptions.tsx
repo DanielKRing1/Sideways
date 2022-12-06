@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useMemo, useCallback} from 'react';
 import {
   FlatList,
   ListRenderItem,
@@ -26,33 +26,51 @@ const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
   const dispatch: AppDispatch = useDispatch();
 
   // LOCAL STATE
-  const selectedOutputs: Set<string> = new Set(outputs);
-  const toggleSelected = (output: string) => {
-    // 1. Toggle selected outputs
-    if (!selectedOutputs.has(output)) selectedOutputs.add(output);
-    else selectedOutputs.delete(output);
-
-    // 2. Set Redux outputs
-    dispatch(setOutputs(Array.from(selectedOutputs)));
-  };
-
-  // RENDER ITEM
-  const renderItem: ListRenderItem<string> = itemInfo => (
-    <OutputOption
-      itemInfo={itemInfo}
-      selectedOutputs={selectedOutputs}
-      toggleSelected={toggleSelected}
-    />
+  const selectedOutputs: Set<string> = useMemo(
+    () => new Set(outputs),
+    [outputs],
   );
+  const toggleSelected = useCallback(
+    (output: string) => {
+      // 1. Toggle selected outputs
+      if (!selectedOutputs.has(output)) selectedOutputs.add(output);
+      else selectedOutputs.delete(output);
+
+      // 2. Set Redux outputs
+      dispatch(setOutputs(Array.from(selectedOutputs)));
+    },
+    [selectedOutputs],
+  );
+
+  const renderItem = useMemo(
+    () => renderItemWrapper(selectedOutputs, toggleSelected),
+    [selectedOutputs, toggleSelected],
+  );
+  const keyExtractor = useCallback((item: string) => item, []);
 
   return (
     <FlatList
       data={allDbOutputs}
       renderItem={renderItem}
-      keyExtractor={item => item}
+      keyExtractor={keyExtractor}
     />
   );
 };
+
+// RENDER ITEM
+const renderItemWrapper =
+  (
+    selectedOutputs: Set<string>,
+    toggleSelected: (output: string) => void,
+  ): ListRenderItem<string> =>
+  itemInfo =>
+    (
+      <OutputOption
+        itemInfo={itemInfo}
+        selectedOutputs={selectedOutputs}
+        toggleSelected={toggleSelected}
+      />
+    );
 
 export default RatingOutputOptions;
 
@@ -86,14 +104,17 @@ const OutputOption: FC<OutputOptionProps> = props => {
     [isSelected],
   );
 
-  return (
-    <TouchableOpacity onPress={handleToggleSelected}>
-      <MyBorder style={borderStyle}>
-        <FlexRow justifyContent="space-between">
-          <MyText>{output}</MyText>
-          {isSelected && <MyText>Yes</MyText>}
-        </FlexRow>
-      </MyBorder>
-    </TouchableOpacity>
+  return useMemo(
+    () => (
+      <TouchableOpacity onPress={handleToggleSelected}>
+        <MyBorder style={borderStyle}>
+          <FlexRow justifyContent="space-between">
+            <MyText>{output}</MyText>
+            {isSelected && <MyText>Yes</MyText>}
+          </FlexRow>
+        </MyBorder>
+      </TouchableOpacity>
+    ),
+    [handleToggleSelected, borderStyle, output, isSelected],
   );
 };

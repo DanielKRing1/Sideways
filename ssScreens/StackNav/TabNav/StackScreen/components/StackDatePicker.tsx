@@ -17,9 +17,8 @@ const StackDatePicker: FC<StackDatePickerProps> = props => {
 
   const dispatch = useDispatch();
   const {stackStartDate, readStackSignature} = useSelector(
-    (state: RootState) => ({
-      ...state.readSidewaysSlice.internalReadReducer.readStackReducer,
-    }),
+    (state: RootState) =>
+      state.readSidewaysSlice.internalReadReducer.readStackReducer,
   );
 
   // PROP DRILLING STATE

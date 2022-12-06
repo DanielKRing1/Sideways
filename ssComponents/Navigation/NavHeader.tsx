@@ -23,6 +23,7 @@ import {
 import {RequireActiveSliceContext} from 'ssContexts/RequireActiveSlice/RequireActiveSlice';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigatorNavigationProp} from 'ssNavigation/StackNavigator';
+import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 
 type NavHeaderType = {
   children: React.ReactNode;
@@ -37,7 +38,15 @@ type NavHeaderType = {
 const NavHeader: FC<NavHeaderType> = props => {
   const {children, justifyContent = 'space-between'} = props;
 
-  return <FlexRow justifyContent={justifyContent}>{children}</FlexRow>;
+  const {remainingHeight} = useTabBarHeight();
+
+  return (
+    <FlexRow
+      style={{height: (remainingHeight * 10) / 100}}
+      justifyContent={justifyContent}>
+      {children}
+    </FlexRow>
+  );
 };
 
 type TabNavHeaderProps = {};

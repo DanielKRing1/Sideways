@@ -68,6 +68,8 @@ const RequireActiveSliceProvider: FC<
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
+  console.log('REQUIREACTIVESLICE RERENDERING');
+
   return (
     <RequireActiveSliceContext.Provider
       // @ts-ignore

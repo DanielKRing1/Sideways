@@ -9,7 +9,7 @@ import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankin
 type RecommendationNodesProps = {};
 const RecommendationNodes: FC<RecommendationNodesProps> = () => {
   const {recommendations, recommendationsSignature} = useSelector(
-    (state: RootState) => ({...state.analyticsSlice.recoStatsSlice}),
+    (state: RootState) => state.analyticsSlice.recoStatsSlice,
   );
 
   return (

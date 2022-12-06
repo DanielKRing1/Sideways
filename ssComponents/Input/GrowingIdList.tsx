@@ -29,7 +29,10 @@ const GrowingIdList: FC<GrowingIdListProps> = props => {
 
   // HANDLER METHODS
   const handleAddInputText = (newInputOption: string) => {
-    handleAddInput(popId(), newInputOption);
+    const newId: number = popId();
+    console.log('NEW ID-------------------------');
+    console.log(newId);
+    handleAddInput(newId, newInputOption);
   };
 
   return (

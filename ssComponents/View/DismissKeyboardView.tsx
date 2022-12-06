@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -12,6 +12,11 @@ type DismissKeyboardViewProps = {
 const DismissKeyboardView: FC<DismissKeyboardViewProps> = props => {
   const {children} = props;
 
+  const id: number = useMemo(() => Math.random(), []);
+
+  console.log('DISMISSKEYBOARD RERENDER');
+  console.log(id);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View {...props}>{children}</View>
@@ -20,3 +25,16 @@ const DismissKeyboardView: FC<DismissKeyboardViewProps> = props => {
 };
 
 export default DismissKeyboardView;
+
+type PersistKeyboardViewProps = {
+  children: React.ReactNode;
+} & ViewProps;
+export const PersistKeyboardView: FC<PersistKeyboardViewProps> = props => {
+  const {children} = props;
+
+  return (
+    <TouchableWithoutFeedback onPress={() => {}} accessible={false}>
+      <View {...props}>{children}</View>
+    </TouchableWithoutFeedback>
+  );
+};

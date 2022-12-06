@@ -64,7 +64,7 @@ export const ActiveSliceNavButton: FC<ActiveSliceNavButtonProps> = props => {
   const navigation: StackNavigatorNavigationProp = useNavigation();
 
   const {activeSliceName, readSSSignature} = useSelector(
-    (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
 
   const theme = useTheme();
@@ -86,7 +86,7 @@ export const ActiveSliceNavButton: FC<ActiveSliceNavButtonProps> = props => {
 type ActiveSliceNavInputProps = {};
 export const ActiveSliceNavInput: FC<ActiveSliceNavInputProps> = props => {
   const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
-    (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
   const dispatch = useDispatch();
 
@@ -119,7 +119,7 @@ export const AddSliceNavButton: FC<AddSliceNavButtonProps> = props => {
 type AddSliceNavInputProps = {};
 export const AddSliceNavInput: FC<AddSliceNavInputProps> = props => {
   const {newSliceName, possibleOutputs, createdSignature} = useSelector(
-    (state: RootState) => ({...state.createSidewaysSlice}),
+    (state: RootState) => state.createSidewaysSlice,
   );
   const dispatch = useDispatch();
 
@@ -139,7 +139,7 @@ export const AddSliceNavInput: FC<AddSliceNavInputProps> = props => {
 // TODO: Remove this?
 // type AddInputNavInputProps = {};
 // export const AddInputNavInput: FC<AddInputNavInputProps> = props => {
-//   const {} = useSelector((state: RootState) => ({...state.rateSidewaysSlice}));
+//   const {} = useSelector((state: RootState) => (state.rateSidewaysSlice));
 //   const dispatch = useDispatch();
 
 //   const handleChangeText = (newText: string) => {

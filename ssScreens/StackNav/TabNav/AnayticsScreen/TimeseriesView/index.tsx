@@ -30,12 +30,11 @@ const Timeseries: FC<TimeseriesProps> = () => {
   const theme = useTheme();
 
   // REDUX
-  const {selectedChart, readSSSignature, graphsSignature} = useSelector(
-    (state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.timeseriesStatsSlice,
-    }),
+  const {readSSSignature} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
+  const {selectedChart, graphsSignature} = useSelector(
+    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -65,8 +64,6 @@ const Timeseries: FC<TimeseriesProps> = () => {
 
   return (
     <View>
-      <TabNavHeader />
-
       <SelectedChart />
 
       <FloatingSelectionButton />

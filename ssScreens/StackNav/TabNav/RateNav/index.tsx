@@ -33,7 +33,7 @@ const RateSliceScreen: FC<RateSliceScreenProps> = props => {
     (state: RootState) => state.rateSidewaysSlice,
   );
   const {activeSliceName, readSSSignature} = useSelector(
-    (state: RootState) => ({...state.readSidewaysSlice.toplevelReadReducer}),
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
   const dispatch: AppDispatch = useDispatch();
 

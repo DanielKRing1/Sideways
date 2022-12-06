@@ -31,6 +31,8 @@ const DbLoaderProvider: FC<DbLoaderProviderType> = props => {
     console.log(`DbLoader.isLoaded: ${isLoaded}`);
   }, [isLoaded]);
 
+  console.log('DBLOADER RERENDERING');
+
   return (
     <DbLoaderContext.Provider
       // @ts-ignore

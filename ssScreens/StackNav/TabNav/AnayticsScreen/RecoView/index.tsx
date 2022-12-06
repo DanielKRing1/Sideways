@@ -11,6 +11,7 @@ import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
 import RecommendationNodes from './components/RecommendationNodes';
 import {TabNavHeader} from 'ssComponents/Navigation/NavHeader';
+import StickyScrollView from 'ssComponents/View/StickyScrollView';
 
 type RecommendationScreenProps = {};
 const RecommendationScreen: FC<RecommendationScreenProps> = () => {
@@ -19,19 +20,17 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
 
   // REDUX
   const dispatch: AppDispatch = useDispatch();
-  const {readSSSignature, recommendationsSignature} = useSelector(
-    (state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.recoStatsSlice,
-    }),
+  const {readSSSignature} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
+  const {recommendationsSignature} = useSelector(
+    (state: RootState) => state.analyticsSlice.recoStatsSlice,
   );
 
   return (
-    <View>
-      <TabNavHeader />
-
-      <RecommendationNodes />
-
+    <StickyScrollView
+      keyboardShouldPersistTaps="always"
+      stickyHeaderIndices={[1]}>
       <GrowingRecoInputs />
 
       <MyButton
@@ -44,7 +43,9 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
         onPress={() => dispatch(startGetRecommendations({}))}>
         <MyText>Get Recommendations!</MyText>
       </MyButton>
-    </View>
+
+      <RecommendationNodes />
+    </StickyScrollView>
   );
 };
 

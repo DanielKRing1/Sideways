@@ -10,10 +10,12 @@ type HiLoRankingByOutputProps = {
 const HiLoRankingByOutputDisplay: FC<HiLoRankingByOutputProps> = props => {
   const {hiLoRankingByOutput} = props;
 
+  console.log('HiLoRankingByOutputDisplay RERENDERED');
+
   return (
     <FlexCol>
       {Object.keys(hiLoRankingByOutput).map(output => (
-        <FlexRow>
+        <FlexRow key={output}>
           <MyText>{output}</MyText>
 
           <HiLoRankingDisplay hiLoRanking={hiLoRankingByOutput[output]} />

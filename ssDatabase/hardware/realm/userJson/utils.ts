@@ -188,6 +188,7 @@ export function cIdToCD(
 export function inToLastCId(
   inputName: string,
   userJsonMap: UserJsonMap,
+  caller: string,
 ): string {
   let cId: string = UNASSIGNED_CATEGORY_ID;
 
@@ -198,6 +199,7 @@ export function inToLastCId(
       userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
 
     console.log('inToLastCId():');
+    console.log(caller);
     console.log(inToCIdMapping);
 
     // 2. Convert SliceName - CSId and InputName - CId

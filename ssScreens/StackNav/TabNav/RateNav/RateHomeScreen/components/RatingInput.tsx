@@ -36,9 +36,9 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
   // const isPressed = useSharedValue(false);
   // const offsetX = useSharedValue(0);
 
-  const {rating, ratedSignature} = useSelector((state: RootState) => ({
-    ...state.rateSidewaysSlice,
-  }));
+  const {rating, ratedSignature} = useSelector(
+    (state: RootState) => state.rateSidewaysSlice,
+  );
   const dispatch = useDispatch();
 
   const onChangeValue = (newText: string) => {

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 
@@ -8,11 +8,8 @@ import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankin
 
 type IdentityNodesProps = {};
 const IdentityNodes: FC<IdentityNodesProps> = () => {
-  const {identityNodes, readSSSignature, identityStatsSignature} = useSelector(
-    (state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.identityStatsSlice,
-    }),
+  const {identityNodes} = useSelector(
+    (state: RootState) => state.analyticsSlice.identityStatsSlice,
   );
 
   return (
@@ -24,4 +21,4 @@ const IdentityNodes: FC<IdentityNodesProps> = () => {
   );
 };
 
-export default IdentityNodes;
+export default memo(IdentityNodes);

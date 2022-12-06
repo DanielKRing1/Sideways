@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, memo} from 'react';
 
 import StickyScrollView from '../../../../../ssComponents/View/StickyScrollView';
 import {BoxShadow} from '../../../../../ssComponents/Shadow/BoxShadow';
@@ -11,11 +11,12 @@ import HighlyRatedTandemNodes from './components/HighlyRatedNodes';
 import {AppDispatch} from 'ssRedux/index';
 import {useDispatch} from 'react-redux';
 import {startAssureFreshness as startAssureIdentityFreshness} from 'ssRedux/analyticsSlice/identityStatsSlice';
-import {View} from 'react-native';
-import {TabNavHeader} from 'ssComponents/Navigation/NavHeader';
+import MyText from 'ssComponents/ReactNative/MyText';
+import DismissKeyboardView from 'ssComponents/View/DismissKeyboardView';
 
 type StatsScreenProps = {};
 const StatsScreen: FC<StatsScreenProps> = () => {
+  // REDUX
   const dispatch: AppDispatch = useDispatch();
 
   // Assure chart freshness:
@@ -27,16 +28,18 @@ const StatsScreen: FC<StatsScreenProps> = () => {
     dispatch(startAssureIdentityFreshness());
   }, []);
 
-  return (
-    <View
-      style={
-        {
-          // height: '100%',
-        }
-      }>
-      <TabNavHeader />
+  console.log('IDENTITYVIEW RERENDERING');
 
-      <StickyScrollView stickyHeaderIndices={[1]}>
+  return (
+    <DismissKeyboardView
+      style={{
+        backgroundColor: 'yellow',
+        flex: 1,
+      }}>
+      {/* <StickyScrollView stickyHeaderIndices={[1]}> */}
+      <StickyScrollView
+        keyboardShouldPersistTaps="always"
+        stickyHeaderIndices={[1]}>
         {/* Index 0 PageRank Stats */}
         <BoxShadow>
           <IdentityNodes />
@@ -65,8 +68,8 @@ const StatsScreen: FC<StatsScreenProps> = () => {
           <HighlyRatedTandemNodes />
         </BoxShadow>
       </StickyScrollView>
-    </View>
+    </DismissKeyboardView>
   );
 };
 
-export default StatsScreen;
+export default memo(StatsScreen);

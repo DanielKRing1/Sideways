@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 
@@ -7,11 +7,11 @@ import NodeStats from './NodeStats';
 
 type InputNodeStatsProps = {};
 const InputNodeStats: FC<InputNodeStatsProps> = props => {
-  const {nodeStats, readSSSignature, inputStatsSignature} = useSelector(
-    (state: RootState) => ({
-      ...state.readSidewaysSlice.toplevelReadReducer,
-      ...state.analyticsSlice.identityStatsSlice,
-    }),
+  const {readSSSignature} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
+  const {nodeStats, inputStatsSignature} = useSelector(
+    (state: RootState) => state.analyticsSlice.identityStatsSlice,
   );
 
   return (
@@ -21,4 +21,4 @@ const InputNodeStats: FC<InputNodeStatsProps> = props => {
   );
 };
 
-export default InputNodeStats;
+export default memo(InputNodeStats);

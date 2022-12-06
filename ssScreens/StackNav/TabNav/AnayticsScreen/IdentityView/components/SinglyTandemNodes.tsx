@@ -8,15 +8,13 @@ import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankin
 
 type SinglyTandemNodesProps = {};
 const SinglyTandemNodes: FC<SinglyTandemNodesProps> = () => {
-  const {
-    nodeIdInput,
-    singlyTandemNodes,
-    readSSSignature,
-    identityStatsSignature,
-  } = useSelector((state: RootState) => ({
-    ...state.readSidewaysSlice.toplevelReadReducer,
-    ...state.analyticsSlice.identityStatsSlice,
-  }));
+  const {readSSSignature} = useSelector(
+    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  );
+
+  const {nodeIdInput, singlyTandemNodes, identityStatsSignature} = useSelector(
+    (state: RootState) => state.analyticsSlice.identityStatsSlice,
+  );
 
   return (
     <View>

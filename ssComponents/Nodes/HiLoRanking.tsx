@@ -12,20 +12,22 @@ type HiLoRankingDisplayProps = {
 const HiLoRankingDisplay: FC<HiLoRankingDisplayProps> = props => {
   const {hiLoRanking} = props;
 
+  console.log('HiLoRankingDisplay RERENDERED');
+
   return (
     <FlexCol>
       <MyText>
         (These items score highly and you do them often for its given output)
       </MyText>
       {hiLoRanking.highestRanked.map((node: RankedNode) => (
-        <NodeStats nodeStats={node} />
+        <NodeStats key={node.id} nodeStats={node} />
       ))}
 
       <MyText>
         (These items score low and you do them often for its given output)
       </MyText>
       {hiLoRanking.lowestRanked.map((node: RankedNode) => (
-        <NodeStats nodeStats={node} />
+        <NodeStats key={node.id} nodeStats={node} />
       ))}
     </FlexCol>
   );

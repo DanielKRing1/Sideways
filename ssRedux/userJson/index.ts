@@ -92,6 +92,7 @@ export const startRefreshAllUserJson = createAsyncThunk<
   const {activeSliceName} =
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
   // 2. Get current fullUserJsonMap
+  console.log('abt to get all user json');
   const fullUserJsonMap: UserJsonMap = await userJsonDriver.getAllUserJson(
     activeSliceName,
   );

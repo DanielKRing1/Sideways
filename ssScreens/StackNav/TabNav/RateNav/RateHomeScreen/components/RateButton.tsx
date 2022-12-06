@@ -7,6 +7,7 @@ import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
 import {AppDispatch} from 'ssRedux/index';
 import {startRate} from 'ssRedux/rateSidewaysSlice';
+import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 
 type RateButtonProps = {};
 const RateButton: FC<RateButtonProps> = props => {
@@ -21,6 +22,7 @@ const RateButton: FC<RateButtonProps> = props => {
   // HOOKS
   const theme: DefaultTheme = useTheme();
   const {width, height} = useWindowDimensions();
+  const {remainingHeight} = useTabBarHeight();
 
   return (
     <MyButton
@@ -29,7 +31,7 @@ const RateButton: FC<RateButtonProps> = props => {
         borderRadius: width / theme.border.radiusDivisors.sm,
         padding: width / theme.paddingDivisors.md,
         width: '100%',
-        height: (height * 10) / 100,
+        height: (remainingHeight * 10) / 100,
       }}
       onPress={handleRate}>
       <MyText>Rate .u.</MyText>
