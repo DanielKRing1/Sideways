@@ -14,7 +14,7 @@ import {
   getOutputDecorationValue,
   getOutputDecorationList,
 } from 'ssDatabase/hardware/realm/userJson/utils';
-import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
+import {ChartBar, VennByMonth} from 'ssDatabase/api/analytics/timeseries/types';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 
 type InputVennProps = {};
@@ -46,6 +46,18 @@ const InputVenn: FC<InputVennProps> = () => {
     );
   }, [vennNodeInputs, fullUserJsonMap]);
 
+  const vennWrapper: VennByMonth = useMemo(() => {
+    const rawVennWrapper: VennByMonth =
+      vennByMonth[monthIndex] !== undefined
+        ? vennByMonth[monthIndex]
+        : {timestamp: 0, venn: [[]], outputs: [[]]};
+
+    return rawVennWrapper;
+  }, [vennByMonth, monthIndex]);
+
+  console.log('INPUTVENN---------------------');
+  console.log(vennWrapper);
+
   return (
     <View>
       <MyText>Input Venn</MyText>
@@ -54,11 +66,9 @@ const InputVenn: FC<InputVennProps> = () => {
 
       <VennStackWSlider
         colorScale={colorScale}
-        data={vennByMonth[monthIndex].venn}
-        xValues={vennByMonth[monthIndex].venn[0].map(
-          (day: ChartBar) => day.x as Date,
-        )}
-        xLabels={vennByMonth[monthIndex].outputs}
+        data={vennWrapper.venn}
+        xValues={vennWrapper.venn[0].map((day: ChartBar) => day.x)}
+        xLabels={vennWrapper.outputs}
         xLabelFill={({text}) =>
           getOutputDecorationValue(text[0], fullUserJsonMap).color
         }

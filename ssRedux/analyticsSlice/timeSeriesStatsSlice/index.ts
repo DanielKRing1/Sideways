@@ -2,11 +2,10 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {GrowingIdText as VennInput} from 'ssComponents/Input/GrowingIdList';
 export type {GrowingIdText as VennInput} from 'ssComponents/Input/GrowingIdList';
-import dbDriver from 'ssDatabase/api/core/dbDriver';
 import timeseriesDriver from 'ssDatabase/api/analytics/timeseries/timeseriesStatsDriver';
 
 import {ThunkConfig} from '../../types';
-import {deserializeDate, floorDay, serializeDate} from 'ssUtils/date';
+import {deserializeDate, floorDay, serializeDateNum} from 'ssUtils/date';
 import {} from 'ssDatabase/hardware/realm/analytics/timeseries/timeseriesStatsDriver';
 import {
   LineGraph,
@@ -41,7 +40,7 @@ export interface TimeStatsState {
   // Graph Selection
   selectedChart: SelectableGraph;
   // Date Selection
-  dayInput: string; // Derive day/month-based stats date range from this day
+  dayInput: number; // Derive day/month-based stats date range from this day
   monthIndex: number;
   // Node Input
   vennNodeInputs: VennInput[];
@@ -65,7 +64,7 @@ const initialState: TimeStatsState = {
   // Graph Selection
   selectedChart: HEAT_MAP,
   // Date Selection
-  dayInput: serializeDate(floorDay(new Date())), // Set to today
+  dayInput: serializeDateNum(floorDay(new Date())), // Set to today
   monthIndex: 0,
   // Node Input
   vennNodeInputs: [],
@@ -335,8 +334,8 @@ export const timeseriesStatsSlice = createSlice({
       state.selectedChart = action.payload;
 
       // 2. Get next greater month index - 1, based on selected chart type
-      let dayInput: Date = deserializeDate(state.dayInput);
-      let monthIndex: number = state.monthIndex;
+      let {dayInput} = state;
+      let {monthIndex} = state;
 
       switch (state.selectedChart) {
         case HISTOGRAM:
@@ -367,7 +366,7 @@ export const timeseriesStatsSlice = createSlice({
     },
     setDayInput: (state: TimeStatsState, action: SetDayInputAction) => {
       // Serialize to string
-      state.dayInput = serializeDate(action.payload);
+      state.dayInput = serializeDateNum(action.payload);
     },
     setMonthIndex: (state: TimeStatsState, action: SetMonthIndex) => {
       // 1. Set month index
@@ -376,20 +375,14 @@ export const timeseriesStatsSlice = createSlice({
       // 2. Also set dayInput Date, based on selected chart type
       switch (state.selectedChart) {
         case HISTOGRAM:
-          state.dayInput = serializeDate(
-            state.histogramByMonth[state.monthIndex].timestamp,
-          );
+          state.dayInput = state.histogramByMonth[state.monthIndex].timestamp;
           break;
         case VENN_PLOT:
-          state.dayInput = serializeDate(
-            state.vennByMonth[state.monthIndex].timestamp,
-          );
+          state.dayInput = state.vennByMonth[state.monthIndex].timestamp;
           break;
         case HEAT_MAP:
         default:
-          state.dayInput = serializeDate(
-            state.heatMapByMonth[state.monthIndex].timestamp,
-          );
+          state.dayInput = state.heatMapByMonth[state.monthIndex].timestamp;
           break;
       }
     },

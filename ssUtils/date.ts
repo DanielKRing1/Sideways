@@ -14,8 +14,13 @@ export const abbrDate = (date: Date) => ({
   month: date.toLocaleString('default', {month: 'short'}),
 });
 
-export const serializeDate = (date: Date) => date.toISOString();
-export const deserializeDate = (date: string) => new Date(date);
+// SERIALIZE DATE
+// String
+export const serializeDateStr = (date: Date) => date.toISOString();
+// Number
+export const serializeDateNum = (date: Date) => date.getTime();
+// DESERIALIZE DATE
+export const deserializeDate = (dateMs: number) => new Date(dateMs);
 
 /**
  * Subtract 'days' number of days from today's date

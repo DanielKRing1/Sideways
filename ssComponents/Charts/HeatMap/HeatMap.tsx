@@ -41,7 +41,7 @@ const HeatMap: FC<HeatMapProps> = props => {
   return (
     <>
       {dataRows.map((row: CompleteHeatMapCell[], i) => (
-        <FlexRow>
+        <FlexRow key={row[0].index}>
           {row.map((cell: CompleteHeatMapCell, i) => (
             <CellComponent data={cell} gridDim={{x: cols, y: data.length}} />
           ))}

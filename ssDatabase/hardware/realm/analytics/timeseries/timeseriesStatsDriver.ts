@@ -11,7 +11,11 @@ import {
 } from 'ssDatabase/api/analytics/timeseries/types';
 import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
 import {Dict} from '../../../../../global';
-import {floorDay, splitDay} from '../../../../../ssUtils/date';
+import {
+  floorDay,
+  serializeDateNum,
+  splitDay,
+} from '../../../../../ssUtils/date';
 import {deepCopy} from '../../../../../ssUtils/object';
 import dbDriver from '../../../../api/core/dbDriver';
 
@@ -40,7 +44,7 @@ const getDailyOutputLG = async ({
 
     // 4. For each day segment, record timestamp and output
     for (let i = 0; i < dates.length; i++) {
-      const date: Date = dates[i];
+      const date: number = serializeDateNum(dates[i]);
       lineGraph.push({x: date, y: outputValueMap[daySnapshot.outputs[i]]});
     }
   }
@@ -92,7 +96,7 @@ const getMonthlyOutputHistogram = async ({
     }
     if (month !== prevMonth && year !== prevYear) {
       histogramByMonth.push({
-        timestamp: new Date(prevYear, prevMonth, 1),
+        timestamp: serializeDateNum(new Date(prevYear, prevMonth, 1)),
         histogram: Object.keys(countMap).map((outputKey: string) => ({
           x: outputKey as unknown as number,
           y: countMap[outputKey],
@@ -117,7 +121,7 @@ const getMonthlyOutputHistogram = async ({
   }
   // 7. Handle last month
   histogramByMonth.push({
-    timestamp: new Date(prevYear, prevMonth, 1),
+    timestamp: serializeDateNum(new Date(prevYear, prevMonth, 1)),
     histogram: Object.keys(countMap).map((outputKey: string) => ({
       x: outputKey as unknown as number,
       y: countMap[outputKey],
@@ -143,7 +147,10 @@ const getNodeOverlapVenn = async ({
   );
 
   // 2. Create an array for each nodeId
-  const initialNodeMap: ChartBar[][] = nodeIds.map(() => []);
+  const initialNodeMap: ChartBar[][] =
+    nodeIds.length > 0 ? nodeIds.map(() => []) : [[]];
+  console.log('INITIAL NODE MAP------------------------------------');
+  console.log(initialNodeMap);
 
   // 3. For each month's worth of snapshots...
   let prevMonth: number = -1;
@@ -165,7 +172,7 @@ const getNodeOverlapVenn = async ({
     }
     if (month !== prevMonth && year !== prevYear) {
       vennByMonth.push({
-        timestamp: new Date(prevYear, prevMonth, 1),
+        timestamp: serializeDateNum(new Date(prevYear, prevMonth, 1)),
         venn: monthNodePoints,
         outputs: monthOutputs,
       });
@@ -190,7 +197,7 @@ const getNodeOverlapVenn = async ({
       // Wanted nodeId, track timestamp + height of 1 + y0 starts at nodeIdKey
       const nodeIdKey: number = nodeIdValueMap[nodeId];
       monthNodePoints[nodeIdKey].push({
-        x: floorDay(timestamp),
+        x: serializeDateNum(floorDay(timestamp)),
         y: 1,
         y0: nodeIdKey,
       });
@@ -198,7 +205,7 @@ const getNodeOverlapVenn = async ({
   }
   // 9. Handle last month
   vennByMonth.push({
-    timestamp: new Date(prevYear, prevMonth, 1),
+    timestamp: serializeDateNum(new Date(prevYear, prevMonth, 1)),
     venn: monthNodePoints,
     outputs: monthOutputs,
   });
@@ -230,7 +237,7 @@ const getDailyOutputHM = async ({
     }
     if (month !== prevMonth && year !== prevYear) {
       heatmapByMonth.push({
-        timestamp: new Date(prevYear, prevMonth, 1),
+        timestamp: serializeDateNum(new Date(prevYear, prevMonth, 1)),
         heatMap: monthOutputs,
       });
 
@@ -247,7 +254,7 @@ const getDailyOutputHM = async ({
   }
   // 6. Handle last month
   heatmapByMonth.push({
-    timestamp: new Date(prevYear, prevMonth, 1),
+    timestamp: serializeDateNum(new Date(prevYear, prevMonth, 1)),
     heatMap: monthOutputs,
   });
 

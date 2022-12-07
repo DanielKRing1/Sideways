@@ -1,22 +1,22 @@
 // TYPES
 export type DailyOutput = {
-  x: Date;
+  x: number;
   y: number;
 };
 export type LineGraph = DailyOutput[];
 
 export type ChartBar = {
-  x: number | Date;
-  y: number | Date;
-  y0?: number | Date;
+  x: number;
+  y: number;
+  y0?: number;
 };
 export type HistogramByMonth = {
-  timestamp: Date;
+  timestamp: number;
   histogram: ChartBar[];
 };
 
 export type VennByMonth = {
-  timestamp: Date;
+  timestamp: number;
   venn: ChartBar[][];
   outputs: string[][];
 };
@@ -25,7 +25,7 @@ export type HeatMapDay = {
   outputs: string[];
 };
 export type HeatMapByMonth = {
-  timestamp: Date;
+  timestamp: number;
   heatMap: HeatMapDay[];
 };
 

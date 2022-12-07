@@ -35,11 +35,12 @@ const OutputHeatMapCell: FC<HeatMapCellProps> = props => {
   });
 
   // Animation colors
+  const GREY: string = 'grey';
   useEffect(() => {
     setColor({
-      start: color.end,
+      start: color.end !== undefined ? color.end : GREY,
       // Just use first color for now
-      end: data.value[0],
+      end: data.value[0] !== undefined ? data.value[0] : GREY,
     });
   }, [data.value]);
 
@@ -59,6 +60,9 @@ const OutputHeatMapCell: FC<HeatMapCellProps> = props => {
   console.log({x: `${width / 20}`, y: `${width / 20}`});
 
   // 3. Get color interpolation
+  console.log('OUTPUTHEATMAPCELL');
+  console.log(animVal);
+  console.log(color);
   const myColor = animVal.interpolate({
     inputRange: [0, 1],
     outputRange: [color.start, color.end],
@@ -82,7 +86,7 @@ type ColoredCellProps = {
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
 const ColoredCell = styled(AnimatedTouchableOpacity)<ColoredCellProps>`
-  border-radius: 10%;
+  border-radius: 10px;
   height: ${({dim}: ColoredCellProps) => `${dim.y}px`};
   width: ${({dim}: ColoredCellProps) => `${dim.x}px`};
   margin: ${({margin}: ColoredCellProps) => margin};
