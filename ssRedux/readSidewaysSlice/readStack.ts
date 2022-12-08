@@ -4,7 +4,7 @@ import {serializeDateNum} from 'ssUtils/date';
 // INITIAL STATE
 
 export interface ReadStackState {
-  stackStartDate: string;
+  stackStartDate: number;
 
   readStackSignature: {};
 }
@@ -17,7 +17,7 @@ const initialState: ReadStackState = {
 
 // ACTION TYPES
 
-type SetStartDateAction = PayloadAction<string>;
+type SetStartDateAction = PayloadAction<number>;
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
