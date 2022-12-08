@@ -18,15 +18,9 @@ type StackViewScreenProps = {};
 const StackViewScreen: FC<StackViewScreenProps> = props => {
   const {} = props;
 
+  // REDUX
   const {readSSSignature, activeSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
-  );
-  const {readStackSignature} = useSelector(
-    (state: RootState) =>
-      state.readSidewaysSlice.internalReadReducer.readStackReducer,
-  );
-  const {snapshotCrudSignature} = useSelector(
-    (state: RootState) => state.snapshotCrudSlice,
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -56,7 +50,10 @@ const StackViewScreen: FC<StackViewScreenProps> = props => {
   };
 
   return (
-    <View>
+    <View
+      style={{
+        height: '100%',
+      }}>
       <TabNavHeader />
 
       <StackDatePicker />

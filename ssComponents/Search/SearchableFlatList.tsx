@@ -1,4 +1,5 @@
 import React, {FC, useEffect, useRef} from 'react';
+import {FlatListProps} from 'react-native';
 import {FlatList} from 'react-native';
 
 type SearchableFlatListProps = {
@@ -6,7 +7,7 @@ type SearchableFlatListProps = {
   data: any[];
   renderItem: FC<any>;
   keyExtractor: (item: any) => string;
-};
+} & FlatListProps<any>;
 export const SearchableFlatList: FC<SearchableFlatListProps> = props => {
   const {searchIndex, data, renderItem, keyExtractor} = props;
 
@@ -49,6 +50,7 @@ export const SearchableFlatList: FC<SearchableFlatListProps> = props => {
 
   return (
     <FlatList
+      {...props}
       maxToRenderPerBatch={100}
       updateCellsBatchingPeriod={50}
       ref={flatListRef}

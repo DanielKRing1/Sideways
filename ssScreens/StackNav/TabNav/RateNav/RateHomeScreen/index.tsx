@@ -15,14 +15,12 @@ import DismissKeyboardView from 'ssComponents/View/DismissKeyboardView';
 type RateHomeScreenProps = {};
 const RateHomeScreen: FC<RateHomeScreenProps> = props => {
   // HOOKS
-  const {height: screenHeight} = useWindowDimensions();
   const {remainingHeight} = useTabBarHeight();
 
   return (
     <DismissKeyboardView
       style={{
-        height: screenHeight,
-        maxHeight: (remainingHeight * 100) / 100,
+        height: '100%',
       }}>
       <Accordion
         headerProps={[
@@ -42,8 +40,6 @@ const RateHomeScreen: FC<RateHomeScreenProps> = props => {
         {/* RATING */}
         <RatingSlider />
       </Accordion>
-
-      <RateButton />
     </DismissKeyboardView>
   );
 };

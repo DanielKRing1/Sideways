@@ -42,16 +42,11 @@ const GraphViewScreen: FC<GraphViewScreenProps> = props => {
   return (
     <View
       style={{
-        height: (remainingHeight * 100) / 100,
+        height: '100%',
       }}>
       <TabNavHeader />
 
       {renderSwitch}
-
-      <Todo name="Input selections dropdown" />
-      <Todo name="Output selections dropdown" />
-
-      <ViewSelector />
     </View>
   );
 };

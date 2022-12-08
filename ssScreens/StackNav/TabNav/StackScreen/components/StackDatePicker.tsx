@@ -33,7 +33,7 @@ const StackDatePicker: FC<StackDatePickerProps> = props => {
 
   // REDUX
   const getDisplay = useCallback(
-    () => (stackStartDate === null ? ALL_TIME_TEXT : stackStartDate),
+    () => (stackStartDate === null ? ALL_TIME_TEXT : `${stackStartDate}`),
     [stackStartDate],
   );
   const getDisplayDate = useCallback(
