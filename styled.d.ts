@@ -25,6 +25,7 @@ declare module 'styled-components' {
       accent: string;
     };
     colors: {
+      disabled: string;
       blackText: string;
       lightText: string;
 

@@ -24,6 +24,8 @@ export const theme: DefaultTheme = {
     accent: '#b19cd9',
   },
   colors: {
+    disabled: '#cccccc',
+
     blackText: 'black',
     lightText: 'darkgray',
 
