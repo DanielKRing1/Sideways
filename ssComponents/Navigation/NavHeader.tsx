@@ -38,11 +38,11 @@ type NavHeaderType = {
 const NavHeader: FC<NavHeaderType> = props => {
   const {children, justifyContent = 'space-between'} = props;
 
-  const {remainingHeight} = useTabBarHeight();
+  const {topNavHeight} = useTabBarHeight();
 
   return (
     <FlexRow
-      style={{height: (remainingHeight * 10) / 100}}
+      style={{height: topNavHeight, maxHeight: topNavHeight}}
       justifyContent={justifyContent}>
       {children}
     </FlexRow>

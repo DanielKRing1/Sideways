@@ -15,6 +15,7 @@ import StackViewScreen from '../ssScreens/StackNav/TabNav/StackScreen';
 import RateNavigator from '../ssScreens/StackNav/TabNav/RateNav';
 import GraphViewScreen from '../ssScreens/StackNav/TabNav/AnayticsScreen';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
+import {DefaultTheme, useTheme} from 'styled-components/native';
 
 export type TabNavigatorParamList = {
   [ANALYTICS_SCREEN_NAME]: undefined;
@@ -31,9 +32,10 @@ export type TabNavigatorNavigationProp<
 const Tab = createMaterialBottomTabNavigator<TabNavigatorParamList>();
 
 const TabNavigator = () => {
-  const {barHeight} = useTabBarHeight();
+  const {botNavHeight} = useTabBarHeight();
 
   const {height, width} = useWindowDimensions();
+  const theme: DefaultTheme = useTheme();
 
   return (
     <View
@@ -43,7 +45,12 @@ const TabNavigator = () => {
       }}>
       <Tab.Navigator
         initialRouteName={RATE_NAVIGATOR_NAME}
-        barStyle={{height: barHeight}}>
+        activeColor={theme.colors.blackText}
+        inactiveColor={theme.colors.grayBorder}
+        barStyle={{
+          backgroundColor: theme.backgroundColors.accent,
+          height: botNavHeight,
+        }}>
         <Tab.Screen name={ANALYTICS_SCREEN_NAME} component={GraphViewScreen} />
         <Tab.Screen name={RATE_NAVIGATOR_NAME} component={RateNavigator} />
         <Tab.Screen name={STACK_SCREEN_NAME} component={StackViewScreen} />

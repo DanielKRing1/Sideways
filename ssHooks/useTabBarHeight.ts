@@ -2,16 +2,19 @@ import {useState, useEffect} from 'react';
 import {useWindowDimensions} from 'react-native';
 
 export const useTabBarHeight = () => {
-  const [barHeight, setBarHeight] = useState(0);
+  const [botNavHeight, setBotNavHeight] = useState(0);
+  const [topNavHeight, setTopNavHeight] = useState(0);
 
   const {height: screenHeight} = useWindowDimensions();
 
   useEffect(() => {
-    setBarHeight((screenHeight * 1) / 10);
+    setTopNavHeight((screenHeight * 1) / 10);
+    setBotNavHeight((screenHeight * 1) / 14);
   }, [screenHeight]);
 
   return {
-    barHeight,
-    remainingHeight: screenHeight - barHeight,
+    topNavHeight,
+    botNavHeight,
+    remainingHeight: screenHeight - topNavHeight - botNavHeight,
   };
 };
