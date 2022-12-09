@@ -33,7 +33,6 @@ const StatsScreen: FC<StatsScreenProps> = () => {
   return (
     <DismissKeyboardView
       style={{
-        backgroundColor: 'yellow',
         flex: 1,
       }}>
       {/* <StickyScrollView stickyHeaderIndices={[1]}> */}
@@ -41,32 +40,22 @@ const StatsScreen: FC<StatsScreenProps> = () => {
         keyboardShouldPersistTaps="always"
         stickyHeaderIndices={[1]}>
         {/* Index 0 PageRank Stats */}
-        <BoxShadow>
-          <IdentityNodes />
-        </BoxShadow>
+        <IdentityNodes />
 
         {/* Index 1 Choose Input */}
         <NodeInput />
 
         {/* Index 2 Node Stats */}
-        <BoxShadow>
-          <InputNodeStats />
-        </BoxShadow>
+        <InputNodeStats />
 
         {/* Index 3 Collectively Tandem Nodes */}
-        <BoxShadow>
-          <CollectivelyTandemNodes />
-        </BoxShadow>
+        <CollectivelyTandemNodes />
 
         {/* Index 4 Singly Tandem Node */}
-        <BoxShadow>
-          <SinglyTandemNodes />
-        </BoxShadow>
+        <SinglyTandemNodes />
 
         {/* Index 5 Highly Rated Tandem Nodes */}
-        <BoxShadow>
-          <HighlyRatedTandemNodes />
-        </BoxShadow>
+        <HighlyRatedTandemNodes />
       </StickyScrollView>
     </DismissKeyboardView>
   );

@@ -1,5 +1,7 @@
 import React, {FC} from 'react';
 import {View, ViewStyle, useWindowDimensions} from 'react-native';
+import {BoxShadow} from 'ssComponents/Shadow/BoxShadow';
+import {getBoxShadowStyles} from 'ssComponents/Shadow/BoxShadowStyles';
 import {DefaultTheme, useTheme} from 'styled-components/native';
 
 import {DISPLAY_SIZE} from '../../global';
@@ -8,6 +10,7 @@ import MyPadding from './MyPadding';
 type MyBorderProps = {
   children?: React.ReactNode;
   style?: ViewStyle;
+  shadow?: boolean;
 
   marginBase?: DISPLAY_SIZE;
   marginTop?: DISPLAY_SIZE;
@@ -25,6 +28,7 @@ const MyBorder: FC<MyBorderProps> = props => {
   const {
     children,
     style = {},
+    shadow = false,
 
     marginBase,
     marginTop,
@@ -42,6 +46,8 @@ const MyBorder: FC<MyBorderProps> = props => {
   const theme: DefaultTheme = useTheme();
   const {width} = useWindowDimensions();
 
+  const shadowStyles = shadow ? getBoxShadowStyles() : {};
+
   return (
     <MyPadding
       isMargin={true}
@@ -54,18 +60,17 @@ const MyBorder: FC<MyBorderProps> = props => {
         borderWidth: width / theme.border.widthDivisors.sm,
         borderColor: theme.border.color.main,
         borderRadius: width / theme.border.radiusDivisors.sm,
+        ...shadowStyles,
         ...style,
       }}>
-      <View style={{}}>
-        <MyPadding
-          baseSize={paddingBase}
-          topSize={paddingTop}
-          bottomSize={paddingBottom}
-          leftSize={paddingLeft}
-          rightSize={paddingRight}>
-          {children}
-        </MyPadding>
-      </View>
+      <MyPadding
+        baseSize={paddingBase}
+        topSize={paddingTop}
+        bottomSize={paddingBottom}
+        leftSize={paddingLeft}
+        rightSize={paddingRight}>
+        {children}
+      </MyPadding>
     </MyPadding>
   );
 };

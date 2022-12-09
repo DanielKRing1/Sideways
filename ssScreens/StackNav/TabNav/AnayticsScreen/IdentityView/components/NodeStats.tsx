@@ -51,9 +51,10 @@ const NodeStats: FC<NodeStatsProps> = props => {
   console.log('NODESTATS RERENDERED');
 
   return (
-    <>
+    <View style={{}}>
       {nodeStats !== undefined ? (
         <MyBorder
+          shadow
           paddingTop={DISPLAY_SIZE.sm}
           paddingBottom={DISPLAY_SIZE.sm}
           marginTop={DISPLAY_SIZE.sm}
@@ -69,23 +70,30 @@ const NodeStats: FC<NodeStatsProps> = props => {
               color={theme.colors.pastelPurple}
               marginBase={getPadding(DISPLAY_SIZE.xs, width, theme)}
             />
-            <FlexCol>
-              {Object.keys(nodeStats)
-                .filter((key: string) => key !== ID_KEY)
-                .map((key: string) => (
-                  <MyText
-                    key={key}
-                    style={{backgroundColor: theme.backgroundColors.accent}}>
-                    {key}: {`${nodeStats[key]}`.slice(0, 6)}
-                  </MyText>
-                ))}
-            </FlexCol>
+            <MyBorder
+              paddingTop={DISPLAY_SIZE.xs}
+              paddingBottom={DISPLAY_SIZE.xs}
+              marginTop={DISPLAY_SIZE.xs}
+              marginBottom={DISPLAY_SIZE.xs}
+              style={{
+                backgroundColor: theme.backgroundColors.accent,
+              }}>
+              <FlexCol>
+                {Object.keys(nodeStats)
+                  .filter((key: string) => key !== ID_KEY)
+                  .map((key: string) => (
+                    <MyText key={key}>
+                      {key}: {`${nodeStats[key]}`.slice(0, 6)}
+                    </MyText>
+                  ))}
+              </FlexCol>
+            </MyBorder>
           </FlexRow>
         </MyBorder>
       ) : (
         <MyText>Choose an input...</MyText>
       )}
-    </>
+    </View>
   );
 };
 
