@@ -39,3 +39,9 @@ export const getPadding = (
   screenWidth: number,
   theme: DefaultTheme,
 ) => getDisplaySizeStyle(size, screenWidth, theme.paddingDivisors);
+
+export const getIconSize = (
+  size: DISPLAY_SIZE,
+  screenWidth: number,
+  theme: DefaultTheme,
+) => getDisplaySizeStyle(size, 1.2 * screenWidth, theme.iconSizeDivisors);

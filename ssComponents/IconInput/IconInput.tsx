@@ -25,7 +25,7 @@ const IconInput: FC<IconInputProps> = props => {
     unselectedColor = theme.colors.whiteFg,
     selectedColor = theme.colors.pastelPurple,
     iconName,
-    size,
+    displaySize,
     onPress,
     flexDirection = 'row',
     front = true,
@@ -43,7 +43,7 @@ const IconInput: FC<IconInputProps> = props => {
         flexDirection="column"
         iconName={iconName}
         onPress={onPress}
-        size={size}
+        displaySize={displaySize}
         color={isSelected ? selectedColor : unselectedColor}>
         {name !== undefined && <MyText>{name}</MyText>}
       </IconButton>

@@ -15,7 +15,11 @@ const InputNodeStats: FC<InputNodeStatsProps> = props => {
   );
 
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+      }}>
       <NodeStats nodeStats={nodeStats} />
     </View>
   );

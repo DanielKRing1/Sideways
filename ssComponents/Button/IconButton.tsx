@@ -6,13 +6,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MyButton, {MyButtonProps} from '../ReactNative/MyButton';
 import {FlexContainerProps} from '../Flex';
 import {useFlexContainer} from '../../ssHooks/useFlexContainer';
-import {RequiredExceptFor} from '../../global';
+import {DISPLAY_SIZE, RequiredExceptFor} from '../../global';
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
+import {getIconSize} from 'ssTheme/utils';
 
 export type IconButtonProps = {
   iconName: AvailableIcons | string;
 
-  size?: number;
+  displaySize?: number;
   color?: string;
 
   marginBase?: number;
@@ -32,7 +33,7 @@ const IconButton: FC<IconButtonProps> = props => {
 
   const {
     iconName,
-    size = width / theme.iconSizeDivisors.md,
+    displaySize = DISPLAY_SIZE.md,
     color = theme.colors.darkRed,
     style = {},
     marginBase = 0,
@@ -44,6 +45,8 @@ const IconButton: FC<IconButtonProps> = props => {
     front = true,
     children,
   } = props;
+
+  const size = getIconSize(displaySize, width, theme);
 
   const FlexContainer: FC<FlexContainerProps> = useFlexContainer(flexDirection);
 

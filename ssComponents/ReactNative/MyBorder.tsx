@@ -49,15 +49,14 @@ const MyBorder: FC<MyBorderProps> = props => {
       topSize={marginTop}
       bottomSize={marginBottom}
       leftSize={marginLeft}
-      rightSize={marginRight}>
-      <View
-        style={{
-          borderWidth: width / theme.border.widthDivisors.sm,
-          borderColor: theme.border.color.main,
-          borderRadius: width / theme.border.radiusDivisors.sm,
-
-          ...style,
-        }}>
+      rightSize={marginRight}
+      style={{
+        borderWidth: width / theme.border.widthDivisors.sm,
+        borderColor: theme.border.color.main,
+        borderRadius: width / theme.border.radiusDivisors.sm,
+        ...style,
+      }}>
+      <View style={{}}>
         <MyPadding
           baseSize={paddingBase}
           topSize={paddingTop}

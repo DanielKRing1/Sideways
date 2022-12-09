@@ -5,7 +5,7 @@ import {DefaultTheme, useTheme} from 'styled-components/native';
 import {ID_KEY, RankedNode} from '@asianpersonn/realm-graph';
 
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import {FlexCol} from '../../../../../../ssComponents/Flex';
+import {FlexCol, FlexRow} from '../../../../../../ssComponents/Flex';
 import {RootState} from 'ssRedux/index';
 import {cIdToCD, inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
@@ -51,33 +51,41 @@ const NodeStats: FC<NodeStatsProps> = props => {
   console.log('NODESTATS RERENDERED');
 
   return (
-    <View>
+    <>
       {nodeStats !== undefined ? (
         <MyBorder
           paddingTop={DISPLAY_SIZE.sm}
           paddingBottom={DISPLAY_SIZE.sm}
           marginTop={DISPLAY_SIZE.sm}
-          marginBottom={DISPLAY_SIZE.sm}>
-          <IconButton
-            disabled
-            iconName={iconName}
-            color={theme.colors.pastelPurple}
-            marginBase={getPadding(DISPLAY_SIZE.xs, width, theme)}>
+          marginBottom={DISPLAY_SIZE.sm}
+          style={{
+            backgroundColor: theme.backgroundColors.main,
+          }}>
+          <FlexRow justifyContent="space-around">
+            <IconButton
+              disabled
+              iconName={iconName}
+              displaySize={DISPLAY_SIZE.md}
+              color={theme.colors.pastelPurple}
+              marginBase={getPadding(DISPLAY_SIZE.xs, width, theme)}
+            />
             <FlexCol>
               {Object.keys(nodeStats)
                 .filter((key: string) => key !== ID_KEY)
                 .map((key: string) => (
-                  <MyText key={key}>
-                    {key}: {`${nodeStats[key]}`.slice(0, 60)}
+                  <MyText
+                    key={key}
+                    style={{backgroundColor: theme.backgroundColors.accent}}>
+                    {key}: {`${nodeStats[key]}`.slice(0, 6)}
                   </MyText>
                 ))}
             </FlexCol>
-          </IconButton>
+          </FlexRow>
         </MyBorder>
       ) : (
         <MyText>Choose an input...</MyText>
       )}
-    </View>
+    </>
   );
 };
 
