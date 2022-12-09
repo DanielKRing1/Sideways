@@ -15,11 +15,11 @@ const HiLoRankingByOutputDisplay: FC<HiLoRankingByOutputProps> = props => {
   return (
     <FlexCol>
       {Object.keys(hiLoRankingByOutput).map(output => (
-        <FlexRow key={output}>
+        <FlexCol key={output}>
           <MyText>{output}</MyText>
 
           <HiLoRankingDisplay hiLoRanking={hiLoRankingByOutput[output]} />
-        </FlexRow>
+        </FlexCol>
       ))}
     </FlexCol>
   );

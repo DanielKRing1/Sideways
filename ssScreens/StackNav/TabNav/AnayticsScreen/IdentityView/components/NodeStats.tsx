@@ -10,6 +10,8 @@ import {FlexCol} from '../../../../../../ssComponents/Flex';
 import {RootState} from 'ssRedux/index';
 import {cIdToCD, inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
+import MyBorder from 'ssComponents/ReactNative/MyBorder';
+import {DISPLAY_SIZE} from '../../../../../../global';
 
 type NodeStatsProps = {
   nodeStats: RankedNode | undefined;
@@ -47,21 +49,27 @@ const NodeStats: FC<NodeStatsProps> = props => {
   return (
     <View>
       {nodeStats !== undefined ? (
-        <IconInput
-          name={nodeStats.id}
-          iconName={iconName}
-          isSelected={true}
-          selectedColor={theme.colors.pastelPurple}>
-          <FlexCol>
-            {Object.keys(nodeStats)
-              .filter((key: string) => key !== ID_KEY)
-              .map((key: string) => (
-                <MyText key={key}>
-                  {key}: {nodeStats[key]}
-                </MyText>
-              ))}
-          </FlexCol>
-        </IconInput>
+        <MyBorder
+          paddingTop={DISPLAY_SIZE.sm}
+          paddingBottom={DISPLAY_SIZE.sm}
+          marginTop={DISPLAY_SIZE.sm}
+          marginBottom={DISPLAY_SIZE.sm}>
+          <IconInput
+            name={nodeStats.id}
+            iconName={iconName}
+            isSelected={true}
+            selectedColor={theme.colors.pastelPurple}>
+            <FlexCol>
+              {Object.keys(nodeStats)
+                .filter((key: string) => key !== ID_KEY)
+                .map((key: string) => (
+                  <MyText key={key}>
+                    {key}: {`${nodeStats[key]}`.slice(0, 60)}
+                  </MyText>
+                ))}
+            </FlexCol>
+          </IconInput>
+        </MyBorder>
       ) : (
         <MyText>Choose an input...</MyText>
       )}
