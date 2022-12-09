@@ -40,6 +40,8 @@ const RateHomeScreen: FC<RateHomeScreenProps> = props => {
         {/* RATING */}
         <RatingSlider />
       </Accordion>
+
+      <RateButton />
     </DismissKeyboardView>
   );
 };

@@ -25,7 +25,7 @@ const RateButton: FC<RateButtonProps> = props => {
   // HOOKS
   const theme: DefaultTheme = useTheme();
   const {width, height} = useWindowDimensions();
-  const {remainingHeight} = useTabBarHeight();
+  const {topNavHeight} = useTabBarHeight();
 
   // LOCAL STATE
   const validRating: boolean = useMemo(
@@ -41,7 +41,7 @@ const RateButton: FC<RateButtonProps> = props => {
         borderRadius: width / theme.border.radiusDivisors.sm,
         padding: width / theme.paddingDivisors.md,
         width: '100%',
-        height: (remainingHeight * 10) / 100,
+        height: topNavHeight,
       }}
       onPress={handleRate}>
       <MyText>Rate .u.</MyText>
