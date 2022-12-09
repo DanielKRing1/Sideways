@@ -1,17 +1,18 @@
 import React, {FC, memo, useMemo} from 'react';
-import {View} from 'react-native';
+import {useWindowDimensions, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {DefaultTheme, useTheme} from 'styled-components/native';
 import {ID_KEY, RankedNode} from '@asianpersonn/realm-graph';
 
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import IconInput from '../../../../../../ssComponents/IconInput/IconInput';
 import {FlexCol} from '../../../../../../ssComponents/Flex';
 import {RootState} from 'ssRedux/index';
 import {cIdToCD, inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import {DISPLAY_SIZE} from '../../../../../../global';
+import IconButton from 'ssComponents/Button/IconButton';
+import {getPadding} from 'ssTheme/utils';
 
 type NodeStatsProps = {
   nodeStats: RankedNode | undefined;
@@ -21,6 +22,9 @@ const NodeStats: FC<NodeStatsProps> = props => {
 
   // THEME
   const theme: DefaultTheme = useTheme();
+
+  // WINDOW
+  const {width} = useWindowDimensions();
 
   // REDUX
   const {activeSliceName} = useSelector(
@@ -54,11 +58,11 @@ const NodeStats: FC<NodeStatsProps> = props => {
           paddingBottom={DISPLAY_SIZE.sm}
           marginTop={DISPLAY_SIZE.sm}
           marginBottom={DISPLAY_SIZE.sm}>
-          <IconInput
-            name={nodeStats.id}
+          <IconButton
+            disabled
             iconName={iconName}
-            isSelected={true}
-            selectedColor={theme.colors.pastelPurple}>
+            color={theme.colors.pastelPurple}
+            marginBase={getPadding(DISPLAY_SIZE.xs, width, theme)}>
             <FlexCol>
               {Object.keys(nodeStats)
                 .filter((key: string) => key !== ID_KEY)
@@ -68,7 +72,7 @@ const NodeStats: FC<NodeStatsProps> = props => {
                   </MyText>
                 ))}
             </FlexCol>
-          </IconInput>
+          </IconButton>
         </MyBorder>
       ) : (
         <MyText>Choose an input...</MyText>

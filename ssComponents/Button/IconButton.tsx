@@ -15,6 +15,7 @@ export type IconButtonProps = {
   size?: number;
   color?: string;
 
+  marginBase?: number;
   marginTop?: number;
   marginRight?: number;
   marginBottom?: number;
@@ -34,10 +35,11 @@ const IconButton: FC<IconButtonProps> = props => {
     size = width / theme.iconSizeDivisors.md,
     color = theme.colors.darkRed,
     style = {},
-    marginTop = 0,
-    marginRight = 0,
-    marginBottom = 0,
-    marginLeft = 0,
+    marginBase = 0,
+    marginTop = marginBase,
+    marginRight = marginBase,
+    marginBottom = marginBase,
+    marginLeft = marginBase,
     flexDirection = 'row',
     front = true,
     children,
