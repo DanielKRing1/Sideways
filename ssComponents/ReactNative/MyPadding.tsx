@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import {useWindowDimensions, View, ViewStyle} from 'react-native';
 import {DefaultTheme, useTheme} from 'styled-components';
 
@@ -8,6 +8,7 @@ import {DISPLAY_SIZE} from '../../global';
 type MyPaddingProps = {
   children: React.ReactNode;
   style?: ViewStyle;
+  isMargin?: boolean;
   baseSize?: DISPLAY_SIZE;
   topSize?: DISPLAY_SIZE;
   rightSize?: DISPLAY_SIZE;
@@ -17,7 +18,8 @@ type MyPaddingProps = {
 const MyPadding: FC<MyPaddingProps> = props => {
   const {
     children,
-    style,
+    style = {},
+    isMargin = false,
     baseSize = DISPLAY_SIZE.md,
     topSize = baseSize,
     bottomSize = baseSize,
@@ -27,19 +29,36 @@ const MyPadding: FC<MyPaddingProps> = props => {
 
   const theme: DefaultTheme = useTheme();
   const {width} = useWindowDimensions();
-  const paddingTop: number = getPadding(topSize, width, theme);
-  const paddingBottom: number = getPadding(bottomSize, width, theme);
-  const paddingRight: number = getPadding(rightSize, width, theme);
-  const paddingLeft: number = getPadding(leftSize, width, theme);
+  const spacingStyle = useMemo(() => {
+    const paddingTop: number = getPadding(topSize, width, theme);
+    const paddingBottom: number = getPadding(bottomSize, width, theme);
+    const paddingRight: number = getPadding(rightSize, width, theme);
+    const paddingLeft: number = getPadding(leftSize, width, theme);
+
+    switch (isMargin) {
+      case false:
+        return {
+          paddingTop,
+          paddingBottom,
+          paddingLeft,
+          paddingRight,
+        };
+
+      case true:
+        return {
+          marginTop: paddingTop,
+          marginBottom: paddingBottom,
+          marginLeft: paddingLeft,
+          marginRight: paddingRight,
+        };
+    }
+  }, [topSize, bottomSize, rightSize, leftSize, width, theme]);
 
   return (
     <View
       {...props}
       style={{
-        paddingTop,
-        paddingBottom,
-        paddingLeft,
-        paddingRight,
+        ...spacingStyle,
 
         backgroundColor: 'transparent',
         justifyContent: 'center',
