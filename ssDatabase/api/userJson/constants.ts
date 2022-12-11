@@ -32,7 +32,7 @@ export enum AvailableIcons {
   'wrench' = 'wrench',
   'briefcase' = 'briefcase',
   'flask' = 'flask',
-  'lightbulb' = 'lightbulb-o',
+  'lightbulb-o' = 'lightbulb-o',
   'coffee' = 'coffee',
   'laptop' = 'laptop',
   'mobile' = 'mobile',
