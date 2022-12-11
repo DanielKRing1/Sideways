@@ -10,7 +10,7 @@ export function iterateEnum(
 }
 
 export function getEnumValues(myEnum: Dict<any>): any[] {
-  return Object.keys(myEnum).filter(
-    (key: string) => !isNaN(Number(myEnum[key])),
-  );
+  return Object.keys(myEnum).filter((key: string) => {
+    return isNaN(Number(myEnum[key]));
+  });
 }
