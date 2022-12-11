@@ -58,6 +58,7 @@ const CIdSelector: FC<CIdSelectorProps> = props => {
       return {
         cId,
         iconName: cId !== tappedCId ? cd.icon : CONFIRM_SELECTION_ICON,
+        unselectedColor: cIdToCD(activeSliceName, cId, fullUserJsonMap).color,
         name:
           cName.split('-')[0].length <= 6
             ? cName.split('-')[0]
@@ -83,6 +84,7 @@ const CIdSelector: FC<CIdSelectorProps> = props => {
 
   return (
     <ScrollView
+      keyboardShouldPersistTaps="always"
       contentContainerStyle={{
         flexGrow: 1,
         width: '100%',

@@ -8,13 +8,16 @@ import {
   AvailableIcons,
   getAvailableIcons,
 } from 'ssDatabase/api/userJson/constants';
+import {HexColor} from '../../global';
 
 type IconSelectorProps = {
+  categoryColor: HexColor;
   onCommitIcon: (iconName: AvailableIcons) => void;
 };
 const IconSelector: FC<IconSelectorProps> = props => {
   // PROPS
-  const {onCommitIcon} = props;
+  const {categoryColor, onCommitIcon} = props;
+  console.log(categoryColor);
 
   // DB: Category Set
   const availableIcons: AvailableIcons[] = getAvailableIcons();
@@ -30,6 +33,7 @@ const IconSelector: FC<IconSelectorProps> = props => {
     return availableIcons.map((icon: AvailableIcons) => ({
       iconName: icon !== tappedIcon ? icon : CONFIRM_SELECTION_ICON,
       name: icon,
+      unselectedColor: categoryColor,
       onPress: () => {
         // 1. Force tap a 2nd time
         if (icon !== tappedIcon) {
@@ -46,11 +50,14 @@ const IconSelector: FC<IconSelectorProps> = props => {
     }));
   }, [onCommitIcon]);
 
+  console.log('ICON SELECTOR------------------------');
+  console.log(AvailableIcons);
   console.log(availableIcons);
   console.log(iconProps);
 
   return (
     <ScrollView
+      keyboardShouldPersistTaps="always"
       contentContainerStyle={{
         flexGrow: 1,
         width: '100%',

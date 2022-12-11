@@ -286,7 +286,10 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
       </DecorationRowModal>
 
       <DecorationRowModal isOpen={iconPickerOpen} setIsOpen={setIconPickerOpen}>
-        <IconSelector onCommitIcon={handleEditIcon} />
+        <IconSelector
+          categoryColor={categoryDecoration.color}
+          onCommitIcon={handleEditIcon}
+        />
       </DecorationRowModal>
 
       <DecorationRowModal
