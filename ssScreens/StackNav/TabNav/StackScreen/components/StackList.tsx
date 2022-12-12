@@ -20,6 +20,8 @@ import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
 import {deserializeDate} from 'ssUtils/date';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
+import {DISPLAY_SIZE} from '../../../../../global';
+import {DefaultTheme, useTheme} from 'styled-components/native';
 
 type StackCardProps = {
   itemInfo: ListRenderItemInfo<Realm.Object & SidewaysSnapshotRow>;
@@ -38,8 +40,15 @@ const StackCard: FC<StackCardProps> = props => {
   const {itemInfo, updateSnapshot, deleteSnapshot} = props;
   const {item, index} = itemInfo;
 
+  // THEME
+  const theme: DefaultTheme = useTheme();
+
+  // LOCAL STATE
+
   const [inputsToRm, setInputsToRm] = useState<Set<string>>(new Set());
   const [outputsToRm, setOutputsToRm] = useState<Set<string>>(new Set());
+
+  // HANDLERS
 
   const toggleInputToRm = (input: string) => {
     if (inputsToRm.has(input)) inputsToRm.delete(input);
@@ -76,17 +85,26 @@ const StackCard: FC<StackCardProps> = props => {
 
   return (
     // <TouchableOpacity onPress={() => {}}>
-    <FlexCol>
-      <MyButton onPress={() => deleteSnapshot(item, index)}>
-        <MyText>Delete Stack Snapshot X</MyText>
-      </MyButton>
+    <MyBorder
+      shadow
+      paddingTop={DISPLAY_SIZE.sm}
+      paddingBottom={DISPLAY_SIZE.sm}
+      marginTop={DISPLAY_SIZE.sm}
+      marginBottom={DISPLAY_SIZE.sm}
+      style={{
+        backgroundColor: theme.backgroundColors.main,
+      }}>
+      <FlexCol>
+        <MyButton onPress={() => deleteSnapshot(item, index)}>
+          <MyText>Delete Stack Snapshot X</MyText>
+        </MyButton>
 
-      <MyText>{item.timestamp.toDateString()}</MyText>
-      <MyText>{item.rating}</MyText>
+        <MyText>{item.timestamp.toDateString()}</MyText>
+        <MyText>{item.rating}</MyText>
 
-      <MyText>Inputs:</MyText>
-      {/* TODO Remove */}
-      {/* {item.inputs.map((input: string) => (
+        <MyText>Inputs:</MyText>
+        {/* TODO Remove */}
+        {/* {item.inputs.map((input: string) => (
             <FlexRow>
               <MyText style={genStyle(input)}>
                 {input}
@@ -96,22 +114,22 @@ const StackCard: FC<StackCardProps> = props => {
               </MyButton>
             </FlexRow>
           ))} */}
-      {item.inputs.map((input: string) => (
-        <FlexRow key={input}>
-          <DbCategoryRow
-            inputName={input}
-            onCommitInputName={() => {}}
-            onDeleteCategoryRow={() => {}}
-          />
-          <MyButton onPress={() => toggleInputToRm(input)}>
-            <MyText>X</MyText>
-          </MyButton>
-        </FlexRow>
-      ))}
+        {item.inputs.map((input: string) => (
+          <FlexRow key={input}>
+            <DbCategoryRow
+              inputName={input}
+              onCommitInputName={() => {}}
+              onDeleteCategoryRow={() => {}}
+            />
+            <MyButton onPress={() => toggleInputToRm(input)}>
+              <MyText>X</MyText>
+            </MyButton>
+          </FlexRow>
+        ))}
 
-      <MyText>Outputs:</MyText>
-      {/* TODO Remove */}
-      {/* {item.outputs.map((output: string) => (
+        <MyText>Outputs:</MyText>
+        {/* TODO Remove */}
+        {/* {item.outputs.map((output: string) => (
             <FlexRow>
               <MyText
                 style={{color: !outputsToRm.has(output) ? 'green' : 'red'}}>
@@ -122,21 +140,24 @@ const StackCard: FC<StackCardProps> = props => {
               </MyButton>
             </FlexRow>
           ))} */}
-      {item.outputs.map((output: string) => (
-        <TouchableOpacity key={output} onPress={() => toggleOutputToRm(output)}>
-          <MyBorder>
-            <FlexRow justifyContent="space-between">
-              <MyText>{output}</MyText>
-              {outputsToRm.has(output) && <MyText>Yes</MyText>}
-            </FlexRow>
-          </MyBorder>
-        </TouchableOpacity>
-      ))}
+        {item.outputs.map((output: string) => (
+          <TouchableOpacity
+            key={output}
+            onPress={() => toggleOutputToRm(output)}>
+            <MyBorder>
+              <FlexRow justifyContent="space-between">
+                <MyText>{output}</MyText>
+                {outputsToRm.has(output) && <MyText>Yes</MyText>}
+              </FlexRow>
+            </MyBorder>
+          </TouchableOpacity>
+        ))}
 
-      <MyButton onPress={_updateSnapshot}>
-        <MyText>Update Stack Snapshot</MyText>
-      </MyButton>
-    </FlexCol>
+        <MyButton onPress={_updateSnapshot}>
+          <MyText>Update Stack Snapshot</MyText>
+        </MyButton>
+      </FlexCol>
+    </MyBorder>
     // {/* </TouchableOpacity> */}
   );
 };
