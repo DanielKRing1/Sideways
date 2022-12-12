@@ -12,17 +12,20 @@ import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import MyText from 'ssComponents/ReactNative/MyText';
 
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {setOutputs} from 'ssRedux/rateSidewaysSlice';
 import {useTheme} from 'styled-components';
 import {DefaultTheme} from 'styled-components/native';
 
-type RatingOutputOptionsProps = {};
+export type RatingOutputOptionsProps = {
+  outputs: string[];
+  onSetOutputs: (outputs: string[]) => void;
+};
 const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
+  const {outputs, onSetOutputs} = props;
+
   // REDUX
   const {allDbOutputs} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const {outputs} = useSelector((state: RootState) => state.rateSidewaysSlice);
   const dispatch: AppDispatch = useDispatch();
 
   // LOCAL STATE
@@ -37,7 +40,7 @@ const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
       else selectedOutputs.delete(output);
 
       // 2. Set Redux outputs
-      dispatch(setOutputs(Array.from(selectedOutputs)));
+      onSetOutputs(Array.from(selectedOutputs));
     },
     [selectedOutputs],
   );

@@ -31,15 +31,15 @@ const SLIDER_WIDTH: number = 40;
 //     );
 // }
 
-type RatingSliderProps = {};
+export type RatingSliderProps = {
+  rating: number;
+  onSetRating: (newRating: number) => void;
+};
 const RatingSlider: React.FC<RatingSliderProps> = props => {
+  const {rating, onSetRating} = props;
+
   // const isPressed = useSharedValue(false);
   // const offsetX = useSharedValue(0);
-
-  const {rating, ratedSignature} = useSelector(
-    (state: RootState) => state.rateSidewaysSlice,
-  );
-  const dispatch = useDispatch();
 
   const onChangeValue = (numStr: string) => {
     // Deleted number, so value should now be '0'
@@ -49,7 +49,7 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
     const newNum: number = parseInt(numStr);
 
     console.log(`New value: ${newNum}`);
-    dispatch(setRating(newNum));
+    onSetRating(newNum);
   };
 
   return (
