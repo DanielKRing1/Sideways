@@ -1,22 +1,15 @@
 import React, {FC} from 'react';
-import {View, useWindowDimensions} from 'react-native';
 
-import MyText from 'ssComponents/ReactNative/MyText';
 import Accordion from 'ssComponents/View/Collapsible/Accordion';
-
 import RatingInputSelection from './components/Input/RatingInputSelection';
-import RatingOutputOptions from './components/OutputOptions';
+import RatingOutputOptions from './components/Output/OutputOptions';
 import RatingSlider from '../components/RatingSlider';
-import RateButton from './components/RateButton';
-import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
+import RateButton from './components/Rating/RateButton';
 import Header from './components/Header';
 import DismissKeyboardView from 'ssComponents/View/DismissKeyboardView';
 
 type RateHomeScreenProps = {};
 const RateHomeScreen: FC<RateHomeScreenProps> = props => {
-  // HOOKS
-  const {remainingHeight} = useTabBarHeight();
-
   return (
     <DismissKeyboardView
       style={{
