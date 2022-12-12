@@ -15,8 +15,11 @@ import {AppDispatch, RootState} from 'ssRedux/index';
 import {setOutputs} from 'ssRedux/rateSidewaysSlice';
 import {useTheme} from 'styled-components';
 import {DefaultTheme} from 'styled-components/native';
+import {RATING_TYPE} from '../RatingMenu/types';
 
-type RatingOutputOptionsProps = {};
+type RatingOutputOptionsProps = {
+  ratingType: RATING_TYPE;
+};
 const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
   // REDUX
   const {allDbOutputs} = useSelector(

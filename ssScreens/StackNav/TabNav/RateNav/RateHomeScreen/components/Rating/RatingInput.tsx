@@ -12,6 +12,7 @@ import {setRating} from 'ssRedux/rateSidewaysSlice';
 // import Slider from 'ssComponents/Input/ReanimatedSlider';
 import MyText from 'ssComponents/ReactNative/MyText';
 import MyTextInput from 'ssComponents/ReactNative/MyTextInput';
+import {RATING_TYPE} from '../RatingMenu/types';
 
 const SLIDER_WIDTH: number = 40;
 
@@ -31,7 +32,9 @@ const SLIDER_WIDTH: number = 40;
 //     );
 // }
 
-type RatingSliderProps = {};
+type RatingSliderProps = {
+  ratingType: RATING_TYPE;
+};
 const RatingSlider: React.FC<RatingSliderProps> = props => {
   // const isPressed = useSharedValue(false);
   // const offsetX = useSharedValue(0);

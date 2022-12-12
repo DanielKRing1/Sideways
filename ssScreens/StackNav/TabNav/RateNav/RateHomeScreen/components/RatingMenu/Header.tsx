@@ -5,7 +5,7 @@ import MyPadding from 'ssComponents/ReactNative/MyPadding';
 import MyText from 'ssComponents/ReactNative/MyText';
 import {DefaultTheme, useTheme} from 'styled-components/native';
 
-import {DISPLAY_SIZE} from '../../../../../../global';
+import {DISPLAY_SIZE} from '../../../../../../../global';
 
 type HeaderProps = {
   title: string;

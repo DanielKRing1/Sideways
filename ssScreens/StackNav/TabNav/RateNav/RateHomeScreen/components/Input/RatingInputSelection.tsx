@@ -18,8 +18,11 @@ import {RootState, AppDispatch} from 'ssRedux/index';
 import {addInput} from 'ssRedux/rateSidewaysSlice';
 import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
+import {RATING_TYPE} from '../RatingMenu/types';
 
-type RatingInputSelectionProps = {};
+type RatingInputSelectionProps = {
+  ratingType: RATING_TYPE;
+};
 const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   // LOCAL STATE
   const [isSearching, setIsSearching] = useState(false);
