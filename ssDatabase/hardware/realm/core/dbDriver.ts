@@ -276,7 +276,7 @@ const rmSnapshotOutputs = async (
 
 const updateSnapshot = async (
   sliceName: string,
-  oldSnapshot: Realm.Object & SidewaysSnapshotRow,
+  index: number,
   newInputs: string[],
   newOutputs: string[],
   newRating: number,
@@ -285,12 +285,15 @@ const updateSnapshot = async (
 
   // 1. Get realm
   const realm: Realm = await RealmStackManager.getStack(sliceName).loadRealm();
+  const realmSnapshot = (
+    await RealmStackManager.getStack(sliceName).getAllSnapshots()
+  )[index];
 
   // 2. Update old snapshot Realm Object
   realm.write(() => {
-    oldSnapshot.inputs = newInputs;
-    oldSnapshot.outputs = newOutputs;
-    oldSnapshot.rating = newRating;
+    realmSnapshot.inputs = newInputs;
+    realmSnapshot.outputs = newOutputs;
+    realmSnapshot.rating = newRating;
   });
 };
 

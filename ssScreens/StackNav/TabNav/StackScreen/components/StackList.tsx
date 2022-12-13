@@ -16,7 +16,10 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import {ViewStyle} from 'react-native';
-import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
+import {
+  SidewaysSnapshotRow,
+  SidewaysSnapshotRowPrimitive,
+} from 'ssDatabase/api/core/types';
 import {deserializeDate} from 'ssUtils/date';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
@@ -24,15 +27,16 @@ import {DISPLAY_SIZE} from '../../../../../global';
 import {DefaultTheme, useTheme} from 'styled-components/native';
 
 type StackCardProps = {
-  itemInfo: ListRenderItemInfo<Realm.Object & SidewaysSnapshotRow>;
+  itemInfo: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>;
   updateSnapshot: (
-    oldSnapshot: Realm.Object & SidewaysSnapshotRow,
+    oldSnapshot: SidewaysSnapshotRowPrimitive,
+    index: number,
     newInputs: string[],
     newOutputs: string[],
     newRating: number,
   ) => Promise<void>;
   deleteSnapshot: (
-    snapshot: Realm.Object & SidewaysSnapshotRow,
+    snapshot: SidewaysSnapshotRowPrimitive,
     index: number,
   ) => void;
 };
@@ -72,7 +76,7 @@ const StackCard: FC<StackCardProps> = props => {
       output => !outputsToRm.has(output),
     );
 
-    await updateSnapshot(item, inputsToKeep, outputsToKeep, item.rating);
+    await updateSnapshot(item, index, inputsToKeep, outputsToKeep, item.rating);
   };
 
   // STYLES
@@ -99,7 +103,7 @@ const StackCard: FC<StackCardProps> = props => {
           <MyText>Delete Stack Snapshot X</MyText>
         </MyButton>
 
-        <MyText>{item.timestamp.toDateString()}</MyText>
+        <MyText>{deserializeDate(item.timestamp).toDateString()}</MyText>
         <MyText>{item.rating}</MyText>
 
         <MyText>Inputs:</MyText>
@@ -165,17 +169,18 @@ const StackCard: FC<StackCardProps> = props => {
 const createRenderItem =
   (
     updateSnapshot: (
-      oldSnapshot: Realm.Object & SidewaysSnapshotRow,
+      oldSnapshot: SidewaysSnapshotRowPrimitive,
+      index: number,
       newInputs: string[],
       newOutputs: string[],
       newRating: number,
     ) => Promise<void>,
     deleteSnapshot: (
-      snapshot: Realm.Object & SidewaysSnapshotRow,
+      snapshot: SidewaysSnapshotRowPrimitive,
       index: number,
     ) => void,
   ) =>
-  (itemInfo: ListRenderItemInfo<Realm.Object & SidewaysSnapshotRow>) =>
+  (itemInfo: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>) =>
     (
       <StackCard
         itemInfo={itemInfo}
@@ -186,13 +191,14 @@ const createRenderItem =
 
 type StackListProps = {
   updateSnapshot: (
-    oldSnapshot: Realm.Object & SidewaysSnapshotRow,
+    oldSnapshot: SidewaysSnapshotRowPrimitive,
+    index: number,
     newInputs: string[],
     newOutputs: string[],
     newRating: number,
   ) => Promise<void> | never;
   deleteSnapshot: (
-    snapshot: Realm.Object & SidewaysSnapshotRow,
+    snapshot: SidewaysSnapshotRowPrimitive,
     index: number,
   ) => Promise<void> | never;
 };

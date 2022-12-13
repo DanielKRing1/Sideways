@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
+import {SidewaysSnapshotRowPrimitive} from 'ssDatabase/api/core/types';
 import {TabNavHeader} from '../../../../ssComponents/Navigation/NavHeader';
 
 import {AppDispatch, RootState} from '../../../../ssRedux';
@@ -25,7 +25,8 @@ const StackViewScreen: FC<StackViewScreenProps> = props => {
   const dispatch: AppDispatch = useDispatch();
 
   const _updateSnapshot = async (
-    oldSnapshot: Realm.Object & SidewaysSnapshotRow,
+    oldSnapshot: SidewaysSnapshotRowPrimitive,
+    index: number,
     newInputs: string[],
     newOutputs: string[],
     newRating: number,
@@ -34,6 +35,7 @@ const StackViewScreen: FC<StackViewScreenProps> = props => {
       startUpdateSnapshot({
         sliceName: activeSliceName,
         oldSnapshot,
+        index,
         newInputs,
         newOutputs,
         newRating,
@@ -41,7 +43,7 @@ const StackViewScreen: FC<StackViewScreenProps> = props => {
     );
   };
   const _deleteSnapshot = async (
-    snapshot: Realm.Object & SidewaysSnapshotRow,
+    snapshot: SidewaysSnapshotRowPrimitive,
     index: number,
   ) => {
     dispatch(

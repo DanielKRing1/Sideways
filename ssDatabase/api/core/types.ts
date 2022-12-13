@@ -11,6 +11,12 @@ export type SidewaysSnapshotRow = {
 
   timestamp: Date;
 };
+export type SidewaysSnapshotRowPrimitive = Omit<
+  SidewaysSnapshotRow,
+  'timestamp'
+> & {
+  timestamp: number;
+};
 
 export type DbDriverType = {
   isLoaded: boolean;
@@ -37,7 +43,7 @@ export type DbDriverType = {
   ) => Promise<void> | never;
   updateSnapshot: (
     sliceName: string,
-    oldSnapshot: Realm.Object & SidewaysSnapshotRow,
+    index: number,
     newInputs: string[],
     newOutputs: string[],
     newRating: number,

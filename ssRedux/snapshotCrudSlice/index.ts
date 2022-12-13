@@ -1,6 +1,10 @@
+/**
+ * Called by 'undorateSidewaysSlice'
+ */
+
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
+import {SidewaysSnapshotRowPrimitive} from 'ssDatabase/api/core/types';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE
@@ -17,7 +21,7 @@ const initialState: SnapshotCrudState = {
 
 type DeleteSnapshotThunkArgs = {
   sliceName: string;
-  snapshot: Realm.Object & SidewaysSnapshotRow;
+  snapshot: SidewaysSnapshotRowPrimitive;
   index: number;
 };
 
@@ -26,7 +30,7 @@ export const startDeleteSnapshot = createAsyncThunk<
   DeleteSnapshotThunkArgs,
   ThunkConfig
 >(
-  'deleteSS/startDeleteSnapshot',
+  'snapshotCrudSlice/startDeleteSnapshot',
   async ({sliceName, snapshot, index}: DeleteSnapshotThunkArgs, thunkAPI) => {
     // 1. Delete index from RealmStack
     await dbDriver.deleteSnapshotIndexes(sliceName, [index]);
@@ -46,7 +50,8 @@ export const startDeleteSnapshot = createAsyncThunk<
 
 type UpdateSnapshotThunkArgs = {
   sliceName: string;
-  oldSnapshot: Realm.Object & SidewaysSnapshotRow;
+  oldSnapshot: SidewaysSnapshotRowPrimitive;
+  index: number;
   newInputs: string[];
   newOutputs: string[];
   newRating: number;
@@ -57,11 +62,12 @@ export const startUpdateSnapshot = createAsyncThunk<
   UpdateSnapshotThunkArgs,
   ThunkConfig
 >(
-  'deleteSS/startUpdateSnapshot',
+  'snapshotCrudSlice/startUpdateSnapshot',
   async (
     {
       sliceName,
       oldSnapshot,
+      index,
       newInputs,
       newOutputs,
       newRating,
@@ -71,7 +77,7 @@ export const startUpdateSnapshot = createAsyncThunk<
     // 1. Delete indexes from RealmStack
     await dbDriver.updateSnapshot(
       sliceName,
-      oldSnapshot,
+      index,
       newInputs,
       newOutputs,
       newRating,
