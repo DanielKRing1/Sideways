@@ -7,12 +7,15 @@ import {
   ViewStyle,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+
 import {FlexRow} from 'ssComponents/Flex';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import MyText from 'ssComponents/ReactNative/MyText';
 
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {setOutputs} from 'ssRedux/rateSidewaysSlice';
+import {setOutputs as setOutputsR} from 'ssRedux/rateSidewaysSlice';
+import {setReplacementOutputs as setOutputsUR} from 'ssRedux/undorateSidewaysSlice';
+import {select} from 'ssUtils/selector';
 import {useTheme} from 'styled-components';
 import {DefaultTheme} from 'styled-components/native';
 import {RATING_TYPE} from '../RatingMenu/types';
@@ -21,11 +24,31 @@ type RatingOutputOptionsProps = {
   ratingType: RATING_TYPE;
 };
 const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
+  // PROPS
+  const {ratingType} = props;
+
   // REDUX
   const {allDbOutputs} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const {outputs} = useSelector((state: RootState) => state.rateSidewaysSlice);
+  const {outputs: outputsR} = useSelector(
+    (state: RootState) => state.rateSidewaysSlice,
+  );
+  const {outputs: outputsUR} = useSelector(
+    (state: RootState) => state.undorateSidewaysSlice,
+  );
+  // Select reducer values
+  const [, outputs] = select(
+    ratingType,
+    [RATING_TYPE.Rate, outputsR],
+    [RATING_TYPE.UndoRate, outputsUR],
+  );
+  // Select reducer actions
+  const [, setOutputs] = select(
+    ratingType,
+    [RATING_TYPE.Rate, setOutputsR],
+    [RATING_TYPE.UndoRate, setOutputsUR],
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // LOCAL STATE

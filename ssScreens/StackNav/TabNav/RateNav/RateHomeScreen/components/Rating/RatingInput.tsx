@@ -1,18 +1,20 @@
 import * as React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import styled, {DefaultTheme} from 'styled-components/native';
 // import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 // REDUX
 import {RootState} from 'ssRedux/index';
-import {setRating} from 'ssRedux/rateSidewaysSlice';
+import {setRating as setRatingR} from 'ssRedux/rateSidewaysSlice';
+import {setReplacementRating as setRatingUR} from 'ssRedux/undorateSidewaysSlice';
 
 // COMPONENTS
 // import Slider from 'ssComponents/Input/ReanimatedSlider';
 import MyText from 'ssComponents/ReactNative/MyText';
 import MyTextInput from 'ssComponents/ReactNative/MyTextInput';
 import {RATING_TYPE} from '../RatingMenu/types';
+import {select} from 'ssUtils/selector';
 
 const SLIDER_WIDTH: number = 40;
 
@@ -36,15 +38,37 @@ type RatingSliderProps = {
   ratingType: RATING_TYPE;
 };
 const RatingSlider: React.FC<RatingSliderProps> = props => {
+  // PROPS
+  const {ratingType} = props;
+
   // const isPressed = useSharedValue(false);
   // const offsetX = useSharedValue(0);
 
-  const {rating, ratedSignature} = useSelector(
+  // REDUX
+  const {rating: ratingR} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,
+  );
+  const {rating: ratingUR} = useSelector(
+    (state: RootState) => state.undorateSidewaysSlice,
+  );
+  // Select reducer values
+  const [, rating] = select(
+    ratingType,
+    [RATING_TYPE.Rate, ratingR],
+    [RATING_TYPE.UndoRate, ratingUR],
+  );
+  // Select reducer actions
+  const [, setRating] = select(
+    ratingType,
+    [RATING_TYPE.Rate, setRatingR],
+    [RATING_TYPE.UndoRate, setRatingUR],
   );
   const dispatch = useDispatch();
 
   const onChangeValue = (newText: string) => {
+    // @ts-ignore
+    if (isNaN(newText)) return;
+
     const newNum: number = parseInt(newText);
 
     console.log(`New value: ${newNum}`);

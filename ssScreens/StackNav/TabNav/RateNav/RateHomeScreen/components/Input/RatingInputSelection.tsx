@@ -15,21 +15,43 @@ import SearchSuggestions from './Search/SearchSuggestions';
 import InputList from './List/InputList';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {RootState, AppDispatch} from 'ssRedux/index';
-import {addInput} from 'ssRedux/rateSidewaysSlice';
+import {addInput as addInputR} from 'ssRedux/rateSidewaysSlice';
+import {addReplacementInput as addInputUR} from 'ssRedux/undorateSidewaysSlice';
 import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
 import {RATING_TYPE} from '../RatingMenu/types';
+import {select} from 'ssUtils/selector';
 
 type RatingInputSelectionProps = {
   ratingType: RATING_TYPE;
 };
 const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
+  // PROPS
+  const {ratingType} = props;
+
   // LOCAL STATE
   const [isSearching, setIsSearching] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
   // REDUX
-  const {inputs} = useSelector((state: RootState) => state.rateSidewaysSlice);
+  const {inputs: ratingInputs} = useSelector(
+    (state: RootState) => state.rateSidewaysSlice,
+  );
+  const {inputs: undoratingInputs} = useSelector(
+    (state: RootState) => state.undorateSidewaysSlice,
+  );
+  // Select reducer value
+  const [, inputs] = select(
+    ratingType,
+    [RATING_TYPE.Rate, ratingInputs],
+    [RATING_TYPE.UndoRate, undoratingInputs],
+  );
+  // Select reducer action
+  const [, addInput] = select(
+    ratingType,
+    [RATING_TYPE.Rate, addInputR],
+    [RATING_TYPE.UndoRate, addInputUR],
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // IDS
@@ -93,7 +115,7 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
           onSelectSuggestion={handleSelectSuggestion}
         />
       ) : (
-        <InputList />
+        <InputList ratingType={ratingType} inputs={inputs} />
       )}
     </>
   );

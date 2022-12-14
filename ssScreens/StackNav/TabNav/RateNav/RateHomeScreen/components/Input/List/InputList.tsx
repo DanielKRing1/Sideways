@@ -1,19 +1,44 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import {FlatList, ListRenderItem, ListRenderItemInfo} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
-import {AppDispatch, RootState} from 'ssRedux/index';
-import {removeInput, setInputs} from 'ssRedux/rateSidewaysSlice';
+import {AppDispatch} from 'ssRedux/index';
+import {
+  removeInput as removeInputR,
+  setInputs as setInputsR,
+} from 'ssRedux/rateSidewaysSlice';
+import {
+  removeReplacementInput as removeInputUR,
+  setReplacementInputs as setInputsUR,
+} from 'ssRedux/undorateSidewaysSlice';
 import {GrowingIdText} from 'ssComponents/Input/GrowingIdList';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import NoInputsDisplay from './NoInputsDisplay';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
 import {DISPLAY_SIZE} from '../../../../../../../../global';
+import {RATING_TYPE} from '../../RatingMenu/types';
+import {select} from 'ssUtils/selector';
 
-type RatingInputListProps = {};
+type RatingInputListProps = {
+  ratingType: RATING_TYPE;
+  inputs: GrowingIdText[];
+};
 const RatingInputList: FC<RatingInputListProps> = props => {
+  // PROPS
+  const {ratingType, inputs} = props;
+
   // REDUX
-  const {inputs} = useSelector((state: RootState) => state.rateSidewaysSlice);
+  // Select reducer actions
+  const [, setInputs] = select(
+    ratingType,
+    [RATING_TYPE.Rate, setInputsR],
+    [RATING_TYPE.UndoRate, setInputsUR],
+  );
+  const [, removeInput] = select(
+    ratingType,
+    [RATING_TYPE.Rate, removeInputR],
+    [RATING_TYPE.UndoRate, removeInputUR],
+  );
   const dispatch: AppDispatch = useDispatch();
 
   // HANDLERS
@@ -35,12 +60,14 @@ const RatingInputList: FC<RatingInputListProps> = props => {
     dispatch(setInputs(inputsCopy));
   };
 
+  const handleRemoveInput = (index: number) => dispatch(removeInput(index));
+
   return (
     <>
       {inputs.length > 0 ? (
         <FlatList
           data={inputs}
-          renderItem={renderItem(handleCommitInputName)}
+          renderItem={renderItem(handleCommitInputName, handleRemoveInput)}
           keyExtractor={item => `${item.id}`}
         />
       ) : (
@@ -56,20 +83,25 @@ export default RatingInputList;
 const renderItem =
   (
     onCommitInputName: (index: number, newInputName: string) => void,
+    onRemoveInput: (index: number) => void,
   ): ListRenderItem<GrowingIdText> =>
   itemInfo =>
-    <RatingInput itemInfo={itemInfo} onCommitInputName={onCommitInputName} />;
+    (
+      <RatingInput
+        itemInfo={itemInfo}
+        onCommitInputName={onCommitInputName}
+        onRemoveInput={onRemoveInput}
+      />
+    );
 
 type RatingInputProps = {
   itemInfo: ListRenderItemInfo<GrowingIdText>;
   onCommitInputName: (index: number, newInputName: string) => void;
+  onRemoveInput: (index: number) => void;
 };
 const RatingInput: FC<RatingInputProps> = props => {
-  const {itemInfo, onCommitInputName} = props;
+  const {itemInfo, onCommitInputName, onRemoveInput} = props;
   const {item, index} = itemInfo;
-
-  // REDUX
-  const dispatch: AppDispatch = useDispatch();
 
   // HANDLERS
   const handleCommitInputName = (newInputName: string) => {
@@ -77,7 +109,7 @@ const RatingInput: FC<RatingInputProps> = props => {
   };
 
   const handleDeleteCategoryRow = () => {
-    dispatch(removeInput(index));
+    onRemoveInput(index);
   };
 
   return (
