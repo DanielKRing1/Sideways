@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {useWindowDimensions} from 'react-native';
+import {useWindowDimensions, View} from 'react-native';
 import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -33,7 +33,7 @@ const IconButton: FC<IconButtonProps> = props => {
 
   const {
     iconName,
-    displaySize = DISPLAY_SIZE.md,
+    displaySize = DISPLAY_SIZE.sm,
     color = theme.colors.darkRed,
     style = {},
     marginBase = 0,

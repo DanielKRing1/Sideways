@@ -21,8 +21,7 @@ import {FlexRow} from 'ssComponents/Flex';
 import MyText from 'ssComponents/ReactNative/MyText';
 import EditableText from 'ssComponents/Input/EditableText';
 import IconSelector from 'ssComponents/IconInput/IconSelector';
-import IconModalButton from 'ssComponents/Button/IconButton';
-import ColorModalButton from './components/ColorModalButton';
+import IconModalButton from './components/IconModalButton';
 
 import DecorationRowModal from './components/Modal';
 import DecorationRowColorPicker from './components/ColorPicker';
@@ -255,8 +254,9 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
           />
 
           {/* Color */}
-          <ColorModalButton
+          <IconModalButton
             color={categoryDecoration.color}
+            iconName={'square'}
             onPress={handleOpenColorModal}
           />
 
