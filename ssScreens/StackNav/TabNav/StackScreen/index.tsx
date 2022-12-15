@@ -22,34 +22,6 @@ const StackViewScreen: FC<StackViewScreenProps> = props => {
   const {readSSSignature, activeSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const dispatch: AppDispatch = useDispatch();
-
-  const _updateSnapshot = async (
-    oldSnapshot: SidewaysSnapshotRowPrimitive,
-    index: number,
-    newInputs: string[],
-    newOutputs: string[],
-    newRating: number,
-  ) => {
-    dispatch(
-      startUpdateSnapshot({
-        sliceName: activeSliceName,
-        oldSnapshot,
-        index,
-        newInputs,
-        newOutputs,
-        newRating,
-      }),
-    );
-  };
-  const _deleteSnapshot = async (
-    snapshot: SidewaysSnapshotRowPrimitive,
-    index: number,
-  ) => {
-    dispatch(
-      startDeleteSnapshot({sliceName: activeSliceName, snapshot, index}),
-    );
-  };
 
   return (
     <View
@@ -60,10 +32,7 @@ const StackViewScreen: FC<StackViewScreenProps> = props => {
 
       <StackDatePicker />
 
-      <StackList
-        updateSnapshot={_updateSnapshot}
-        deleteSnapshot={_deleteSnapshot}
-      />
+      <StackList />
     </View>
   );
 };

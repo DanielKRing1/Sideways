@@ -7,7 +7,7 @@ import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {startRate as startRateR} from 'ssRedux/rateSidewaysSlice';
-import {startUndoRate as startRateUR} from 'ssRedux/undorateSidewaysSlice';
+import {startUpdateRate as startRateUR} from 'ssRedux/undorateSidewaysSlice';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
