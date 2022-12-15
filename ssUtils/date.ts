@@ -9,9 +9,11 @@ export const isToday = (someDate: Date) => {
 
 // FORMAT
 
+export const abbrDateMs = (dateMs: number) => abbrDate(deserializeDate(dateMs));
 export const abbrDate = (date: Date) => ({
   day: date.getDate(),
   month: date.toLocaleString('default', {month: 'short'}),
+  year: date.getFullYear(),
 });
 
 // SERIALIZE DATE
