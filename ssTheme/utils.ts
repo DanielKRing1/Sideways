@@ -19,9 +19,12 @@ const getDisplaySizeStyle = (
     case DISPLAY_SIZE.md:
       fontSizeDivisor = divisorOptions.md;
       break;
-    default:
     case DISPLAY_SIZE.lg:
       fontSizeDivisor = divisorOptions.lg;
+      break;
+    default:
+    case DISPLAY_SIZE.none:
+      fontSizeDivisor = Infinity;
       break;
   }
 

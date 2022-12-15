@@ -27,7 +27,7 @@ import DecorationRowModal from './components/Modal';
 import DecorationRowColorPicker from './components/ColorPicker';
 
 import {cIdToCD} from 'ssDatabase/hardware/realm/userJson/utils';
-import {HexColor} from '../../global';
+import {DISPLAY_SIZE, HexColor} from '../../global';
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
@@ -37,6 +37,7 @@ import MyModal from 'ssComponents/View/Modal';
 import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 import {useTimeout} from 'ssHooks/useTimeout';
 import CIdSelector from './components/CIdSelector';
+import MyPadding from 'ssComponents/ReactNative/MyPadding';
 
 export type BaseCategoryRowProps = {
   editable?: boolean;
@@ -216,94 +217,103 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
   }, [iconPickerOpen]);
 
   return (
-    <FlexRow
-      alignItems="center"
-      justifyContent="space-between"
-      style={{
-        flex: 1,
-        paddingLeft: (width * 1) / 20,
-        paddingRight: (width * 1) / 20,
-        borderColor: theme.colors.blackText,
-        borderWidth: 2,
-        borderRadius: width / 35,
-        ...style,
-      }}>
-      {/* DISPLAYED IN ROW */}
-      <EditableText
-        editable={editable}
-        containerStyle={{flex: 0.6}}
-        placeholder={placeholder}
-        text={inputName}
-        onEditText={handleEditInputName}
-        onCommitText={handleCommitInputName}
-      />
-      <StopPropagationView style={{flex: 0.4}}>
-        <FlexRow justifyContent={'space-around'}>
-          {/* CId */}
-          <IconModalButton
-            color={categoryDecoration.color}
-            iconName={categoryDecoration.icon}
-            onPress={handleOpenCIdModal}
-          />
-
-          {/* Icon */}
-          <IconModalButton
-            color={categoryDecoration.color}
-            iconName={'circle'}
-            onPress={handleOpenIconModal}
-          />
-
-          {/* Color */}
-          <IconModalButton
-            color={categoryDecoration.color}
-            iconName={'square'}
-            onPress={handleOpenColorModal}
-          />
-
-          {deletable && (
-            <MyButton onPress={onDeleteCategoryRow}>
-              <MyText>X</MyText>
-            </MyButton>
-          )}
-        </FlexRow>
-      </StopPropagationView>
-      {/* MODALS */}
-      {/* Error Modal: Cannot open color picker until valid category is selected */}
-      <MyModal
-        backgroundStyle={{
-          backgroundColor: 'transparent',
-        }}
-        contentContainerStyle={{
-          backgroundColor: 'rgba(0,0,0,0.5)',
-        }}
-        isOpen={errMsg !== ''}
-        close={() => setErrMsg('')}>
-        <MyText style={{fontWeight: 'bold', color: 'white'}}>{errMsg}</MyText>
-      </MyModal>
-
-      <DecorationRowModal isOpen={cIdPickerOpen} setIsOpen={setCIdPickerOpen}>
-        <CIdSelector onCommitCId={handleEditCId} />
-      </DecorationRowModal>
-
-      <DecorationRowModal isOpen={iconPickerOpen} setIsOpen={setIconPickerOpen}>
-        <IconSelector
-          categoryColor={categoryDecoration.color}
-          onCommitIcon={handleEditIcon}
+    <MyPadding
+      isMargin
+      style={{width: '100%'}}
+      baseSize={DISPLAY_SIZE.xs}
+      leftSize={DISPLAY_SIZE.none}
+      rightSize={DISPLAY_SIZE.none}>
+      <FlexRow
+        alignItems="center"
+        justifyContent="space-between"
+        style={{
+          flex: 1,
+          paddingLeft: (width * 1) / 20,
+          paddingRight: (width * 1) / 20,
+          borderColor: theme.colors.blackText,
+          borderWidth: 2,
+          borderRadius: width / 35,
+          ...style,
+        }}>
+        {/* DISPLAYED IN ROW */}
+        <EditableText
+          editable={editable}
+          containerStyle={{flex: 0.6}}
+          placeholder={placeholder}
+          text={inputName}
+          onEditText={handleEditInputName}
+          onCommitText={handleCommitInputName}
         />
-      </DecorationRowModal>
+        <StopPropagationView style={{flex: 0.4}}>
+          <FlexRow justifyContent={'space-around'}>
+            {/* CId */}
+            <IconModalButton
+              color={categoryDecoration.color}
+              iconName={categoryDecoration.icon}
+              onPress={handleOpenCIdModal}
+            />
 
-      <DecorationRowModal
-        isOpen={colorPickerOpen}
-        setIsOpen={setColorPickerOpen}>
-        <DecorationRowColorPicker
-          color={categoryDecoration.color}
-          onColorChange={() => {}}
-          onColorSelected={(color: string) =>
-            handleEditColor(color as HexColor)
-          }
-        />
-      </DecorationRowModal>
-    </FlexRow>
+            {/* Icon */}
+            <IconModalButton
+              color={categoryDecoration.color}
+              iconName={'circle'}
+              onPress={handleOpenIconModal}
+            />
+
+            {/* Color */}
+            <IconModalButton
+              color={categoryDecoration.color}
+              iconName={'square'}
+              onPress={handleOpenColorModal}
+            />
+
+            {deletable && (
+              <MyButton onPress={onDeleteCategoryRow}>
+                <MyText>X</MyText>
+              </MyButton>
+            )}
+          </FlexRow>
+        </StopPropagationView>
+        {/* MODALS */}
+        {/* Error Modal: Cannot open color picker until valid category is selected */}
+        <MyModal
+          backgroundStyle={{
+            backgroundColor: 'transparent',
+          }}
+          contentContainerStyle={{
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}
+          isOpen={errMsg !== ''}
+          close={() => setErrMsg('')}>
+          <MyText style={{fontWeight: 'bold', color: 'white'}}>{errMsg}</MyText>
+        </MyModal>
+
+        <DecorationRowModal isOpen={cIdPickerOpen} setIsOpen={setCIdPickerOpen}>
+          <CIdSelector onCommitCId={handleEditCId} />
+        </DecorationRowModal>
+
+        <DecorationRowModal
+          isOpen={iconPickerOpen}
+          setIsOpen={setIconPickerOpen}>
+          <IconSelector
+            categoryColor={categoryDecoration.color}
+            onCommitIcon={handleEditIcon}
+          />
+        </DecorationRowModal>
+
+        <DecorationRowModal
+          isOpen={colorPickerOpen}
+          setIsOpen={setColorPickerOpen}>
+          <DecorationRowColorPicker
+            color={categoryDecoration.color}
+            onColorChange={() => {}}
+            onColorSelected={(color: string) =>
+              handleEditColor(color as HexColor)
+            }
+          />
+        </DecorationRowModal>
+      </FlexRow>
+    </MyPadding>
   );
 };
 

@@ -11,6 +11,7 @@ export type HexColor = `#${string}`;
 export type StringMap = Dict<string>;
 
 export enum DISPLAY_SIZE {
+  none,
   xs,
   sm,
   md,
