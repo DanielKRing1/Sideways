@@ -301,6 +301,7 @@ export const {
   setReplacementOutputs,
   addReplacementOutput,
   removeReplacementOutput,
+  setSnapshot,
   reset,
 } = undorateSS.actions;
 

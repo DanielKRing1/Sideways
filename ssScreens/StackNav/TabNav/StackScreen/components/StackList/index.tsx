@@ -1,13 +1,13 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
 import {ListRenderItemInfo} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 // DB DRIVER
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {DbLoaderContext} from 'ssContexts/DbLoader/DbLoader';
 
 // REDUX
-import {RootState} from 'ssRedux/index';
+import {AppDispatch, RootState} from 'ssRedux/index';
 
 // COMPONENTS
 import {SearchableFlatList} from 'ssComponents/Search/SearchableFlatList';
@@ -16,18 +16,22 @@ import {
   SidewaysSnapshotRowPrimitive,
 } from 'ssDatabase/api/core/types';
 import {deserializeDate} from 'ssUtils/date';
-import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 import StackCard from './StackCard';
 import UndoRateModal from './UndoRateModal';
 import UndoRatingMenu from 'ssScreens/StackNav/TabNav/RateNav/RateHomeScreen/components/RatingMenu/UndoRatingMenu';
+import {setSnapshot} from 'ssRedux/undorateSidewaysSlice';
 
 const createRenderItem =
-  (openUpdateRatingModal: () => void) =>
+  (
+    openUpdateRatingModal: (
+      itemInfo: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>,
+    ) => void,
+  ) =>
   (itemInfo: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>) =>
     (
       <StackCard
         itemInfo={itemInfo}
-        openUpdateRatingModal={openUpdateRatingModal}
+        openUpdateRatingModal={() => openUpdateRatingModal(itemInfo)}
       />
     );
 
@@ -35,7 +39,7 @@ type StackListProps = {};
 const StackList: FC<StackListProps> = props => {
   // LOCAL STATE
   const [searchIndex, setSearchIndex] = useState<number>(-1);
-  const [stack, setStack] = useState<Realm.List<SidewaysSnapshotRow> | []>([]);
+  const [stack, setStack] = useState<SidewaysSnapshotRow[]>([]);
 
   // REDUX
   const {activeSliceName, readSSSignature} = useSelector(
@@ -45,6 +49,7 @@ const StackList: FC<StackListProps> = props => {
     (state: RootState) =>
       state.readSidewaysSlice.internalReadReducer.readStackReducer,
   );
+  const dispatch: AppDispatch = useDispatch();
 
   // DB DRIVER
   const {isLoaded} = useContext(DbLoaderContext);
@@ -54,8 +59,9 @@ const StackList: FC<StackListProps> = props => {
     // if(!activeSliceName) return setStack([]);
 
     (async () => {
-      const freshStack: Realm.List<SidewaysSnapshotRow> | [] =
-        await dbDriver.getStack(activeSliceName);
+      const freshStack: SidewaysSnapshotRow[] = await dbDriver.getList(
+        activeSliceName,
+      );
       setStack(freshStack);
     })();
   }, [isLoaded, activeSliceName]);
@@ -77,7 +83,11 @@ const StackList: FC<StackListProps> = props => {
   console.log('searchIndex');
 
   const [updateRatingModalOpen, setUpdateRatingModalOpen] = useState(false);
-  const handleOpenUpdateRatingModal = () => {
+  const handleOpenUpdateRatingModal = ({
+    item,
+    index,
+  }: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>) => {
+    dispatch(setSnapshot({indexToUpdate: index, originalSnapshot: item}));
     setUpdateRatingModalOpen(true);
   };
 
