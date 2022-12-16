@@ -11,10 +11,8 @@ export type SidewaysSnapshotRow = {
 
   timestamp: Date;
 };
-export type SidewaysSnapshotRowPrimitive = Omit<
-  SidewaysSnapshotRow,
-  'timestamp'
-> & {
+export type SidewaysSnapshotRowWOTime = Omit<SidewaysSnapshotRow, 'timestamp'>;
+export type SidewaysSnapshotRowPrimitive = SidewaysSnapshotRowWOTime & {
   timestamp: number;
 };
 
@@ -34,7 +32,10 @@ export type DbDriverType = {
   ) => Promise<Realm.List<SidewaysSnapshotRow> | []> | never;
   getList: (stackName: string) => Promise<SidewaysSnapshotRow[]> | never;
   searchStack: (stackName: string, date: Date) => Promise<number> | never;
-  push: (stackName: string, ...snapshots: Dict<any>[]) => void | never;
+  push: (
+    stackName: string,
+    ...snapshots: SidewaysSnapshotRowWOTime[]
+  ) => void | never;
   deleteStack: (stackName: string) => Promise<void> | never;
 
   deleteSnapshotIndexes: (
