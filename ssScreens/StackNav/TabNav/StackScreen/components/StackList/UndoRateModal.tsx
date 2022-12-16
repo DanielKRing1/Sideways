@@ -18,7 +18,7 @@ const UndoRateModal: FC<UndoRateModalProps> = props => {
       isOpen={isOpen}
       close={() => setIsOpen(false)}
       contentContainerStyle={{
-        height: (height * 2) / 3,
+        height: height, //(height * 2) / 3,
         width: width,
         paddingTop: (height * 1) / 15,
         paddingBottom: (height * 1) / 15,
