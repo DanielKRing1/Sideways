@@ -23,6 +23,7 @@ import {
   ExistingSlice,
   SidewaysSnapshotRow,
   DbDriverType,
+  SidewaysSnapshotRowWOTime,
 } from 'ssDatabase/api/core/types';
 
 // VARIABLES
@@ -135,6 +136,7 @@ const createStack = async (stackName: string): Promise<void> | never => {
 
   const DEFAULT_SNAPSHOT_PROPERTIES: Dict<string> = {
     inputs: 'string[]',
+    categories: 'string[]',
     outputs: 'string[]',
     rating: 'int',
   };
@@ -190,7 +192,10 @@ const searchStack = async (
 };
 
 // UPDATE (PUSH ONTO) STACK
-const push = (stackName: string, ...snapshots: Dict<any>[]): void | never => {
+const push = (
+  stackName: string,
+  ...snapshots: SidewaysSnapshotRowWOTime[]
+): void | never => {
   throwLoadError();
 
   RealmStackManager.getStack(stackName).push({}, ...snapshots);
