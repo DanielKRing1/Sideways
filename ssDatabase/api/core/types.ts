@@ -79,10 +79,7 @@ export type DbDriverType = {
     sliceName: string,
     graphType?: GraphType,
   ) => Realm.Results<Realm.Object & CGEdge> | [] | never;
-  deleteGraph: (
-    sliceName: string,
-    graphType?: GraphType,
-  ) => Promise<void> | never;
+  deleteGraphs: (sliceName: string) => Promise<void> | never;
   rateGraph: (
     sliceName: string,
     outputProperty: string,

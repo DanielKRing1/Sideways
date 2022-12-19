@@ -3,6 +3,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
 export type {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
 import DbDriver from 'ssDatabase/api/core/dbDriver';
+import {GraphType} from 'ssDatabase/api/core/types';
 import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
 import {startCleanInputCategories} from 'ssRedux/userJson';
 import {ThunkConfig} from '../types';
@@ -65,7 +66,7 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     });
 
     // 2. Rate Graph
-    const promises: Promise<any>[] = outputs.map((output: string) =>
+    const inputGraphPromises: Promise<any>[] = outputs.map((output: string) =>
       DbDriver.rateGraph(
         activeSliceName,
         output,
@@ -74,7 +75,18 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
         new Array(inputs.length).fill(1 / inputs.length / outputs.length),
       ),
     );
-    await Promise.all(promises);
+    const categoryGraphPromises: Promise<any>[] = outputs.map(
+      (output: string) =>
+        DbDriver.rateGraph(
+          activeSliceName,
+          output,
+          inputCategories,
+          rating,
+          new Array(inputs.length).fill(1 / inputs.length / outputs.length),
+          GraphType.Category,
+        ),
+    );
+    await Promise.all([...inputGraphPromises, ...categoryGraphPromises]);
 
     // 3. Clean input to category mapping
     thunkAPI.dispatch(startCleanInputCategories());

@@ -2,7 +2,10 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export type {GrowingIdText as UndoRateInput} from 'ssComponents/Input/GrowingIdList';
 import DbDriver from 'ssDatabase/api/core/dbDriver';
-import {SidewaysSnapshotRowPrimitive} from 'ssDatabase/api/core/types';
+import {
+  GraphType,
+  SidewaysSnapshotRowPrimitive,
+} from 'ssDatabase/api/core/types';
 import {InputState} from 'ssRedux/rateSidewaysSlice';
 import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
 import {startCleanInputCategories} from 'ssRedux/userJson';
@@ -74,12 +77,13 @@ export const startUpdateRate = createAsyncThunk<
   const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
   const {
     inputs: originalInputs,
+    categories: originalCategories,
     outputs: originalOutputs,
     rating: originalRating,
   } = originalSnapshot;
 
   // 1. Undo Graph rating
-  const undoPromises: Promise<any>[] = originalOutputs.map(
+  const undoInputGraphPromises: Promise<any>[] = originalOutputs.map(
     (originalOutput: string) =>
       DbDriver.undoRateGraph(
         activeSliceName,
@@ -91,31 +95,65 @@ export const startUpdateRate = createAsyncThunk<
         ),
       ),
   );
-  await Promise.all(undoPromises);
+
+  const undoCategoryGraphPromises: Promise<any>[] = originalOutputs.map(
+    (originalOutput: string) =>
+      DbDriver.undoRateGraph(
+        activeSliceName,
+        originalOutput,
+        originalCategories,
+        originalRating,
+        new Array(originalInputs.length).fill(
+          1 / originalInputs.length / originalOutputs.length,
+        ),
+        GraphType.Category,
+      ),
+  );
+
+  await Promise.all([...undoInputGraphPromises, ...undoCategoryGraphPromises]);
 
   // 2. Apply new Graph rating
-  const updatePromises: Promise<any>[] = newOutputs.map((newOutput: string) =>
-    DbDriver.rateGraph(
-      activeSliceName,
-      newOutput,
-      newInputs,
-      newRating,
-      new Array(newInputs.length).fill(1 / newInputs.length / newOutput.length),
-    ),
+  const updateInputGraphPromises: Promise<any>[] = newOutputs.map(
+    (newOutput: string) =>
+      DbDriver.rateGraph(
+        activeSliceName,
+        newOutput,
+        newInputs,
+        newRating,
+        new Array(newInputs.length).fill(
+          1 / newInputs.length / newOutput.length,
+        ),
+      ),
+  );
+
+  const updateCategoryGraphPromises: Promise<any>[] = newOutputs.map(
+    (newOutput: string) =>
+      DbDriver.rateGraph(
+        activeSliceName,
+        newOutput,
+        newCategories,
+        newRating,
+        new Array(newInputs.length).fill(
+          1 / newInputs.length / newOutput.length,
+        ),
+        GraphType.Category,
+      ),
   );
 
   // 3. Update snapshot
-  updatePromises.push(
-    DbDriver.updateSnapshot(
-      activeSliceName,
-      indexToUpdate,
-      newInputs,
-      newOutputs,
-      newRating,
-    ),
+  const updateSnapshotPromise: Promise<any> = DbDriver.updateSnapshot(
+    activeSliceName,
+    indexToUpdate,
+    newInputs,
+    newOutputs,
+    newRating,
   );
 
-  await Promise.all(updatePromises);
+  await Promise.all([
+    ...updateInputGraphPromises,
+    ...updateCategoryGraphPromises,
+    updateSnapshotPromise,
+  ]);
 
   return true;
 });
@@ -140,27 +178,50 @@ export const startDeleteRate = createAsyncThunk<
   const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
   const {
     inputs: originalInputs,
+    categories: originalCategories,
     outputs: originalOutputs,
     rating: originalRating,
   } = originalSnapshot;
 
   // 1. Undo Graph rating
-  const promises: Promise<any>[] = originalOutputs.map((output: string) =>
-    DbDriver.undoRateGraph(
-      activeSliceName,
-      output,
-      originalInputs,
-      originalRating,
-      new Array(originalInputs.length).fill(
-        1 / originalInputs.length / originalOutputs.length,
+  const undoInputGraphPromises: Promise<any>[] = originalOutputs.map(
+    (output: string) =>
+      DbDriver.undoRateGraph(
+        activeSliceName,
+        output,
+        originalInputs,
+        originalRating,
+        new Array(originalInputs.length).fill(
+          1 / originalInputs.length / originalOutputs.length,
+        ),
       ),
-    ),
+  );
+
+  const undoCategoryGraphPromises: Promise<any>[] = originalOutputs.map(
+    (output: string) =>
+      DbDriver.undoRateGraph(
+        activeSliceName,
+        output,
+        originalCategories,
+        originalRating,
+        new Array(originalInputs.length).fill(
+          1 / originalInputs.length / originalOutputs.length,
+        ),
+        GraphType.Category,
+      ),
   );
 
   // 2. Remove from Stack
-  promises.push(DbDriver.deleteSnapshotIndexes(activeSliceName, [indexToRm]));
+  const deleteSnapshotPromise: Promise<any> = DbDriver.deleteSnapshotIndexes(
+    activeSliceName,
+    [indexToRm],
+  );
 
-  await Promise.all(promises);
+  await Promise.all([
+    ...undoInputGraphPromises,
+    ...undoCategoryGraphPromises,
+    deleteSnapshotPromise,
+  ]);
 
   // 3. Clean input to category mapping
   thunkAPI.dispatch(startCleanInputCategories());

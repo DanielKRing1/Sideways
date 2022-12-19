@@ -462,13 +462,11 @@ const undoRateGraph = async (
 };
 
 // DELETE GRAPH
-const deleteGraph = async (
-  sliceName: string,
-  graphType: GraphType = GraphType.Input,
-): Promise<void> | never => {
+const deleteGraphs = async (sliceName: string): Promise<void> | never => {
   throwLoadError();
 
-  await getGraph(sliceName, graphType).deleteGraph();
+  getGraph(sliceName, GraphType.Input).deleteGraph();
+  getGraph(sliceName, GraphType.Category).deleteGraph();
 };
 
 const Driver: DbDriverType = {
@@ -496,7 +494,7 @@ const Driver: DbDriverType = {
   getAllNodes,
   getEdge,
   getAllEdges,
-  deleteGraph,
+  deleteGraphs,
   rateGraph,
   undoRateGraph,
 };

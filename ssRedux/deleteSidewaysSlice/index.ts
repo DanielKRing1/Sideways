@@ -25,7 +25,7 @@ export const startDeleteSlice = createAsyncThunk<
   // 1. Delete from Stack
   const p1: Promise<any> = dbDriver.deleteStack(sliceName);
   // 2. Delete from Graph
-  const p2: Promise<any> = dbDriver.deleteGraph(sliceName);
+  const p2: Promise<any> = dbDriver.deleteGraphs(sliceName);
 
   await Promise.all([p1, p2]);
 
