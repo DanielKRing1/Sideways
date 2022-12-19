@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 
 import {AppDispatch} from 'ssRedux/index';
 import {
+  InputState,
   removeInput as removeInputR,
   setInputs as setInputsR,
 } from 'ssRedux/rateSidewaysSlice';
@@ -11,7 +12,6 @@ import {
   removeReplacementInput as removeInputUR,
   setReplacementInputs as setInputsUR,
 } from 'ssRedux/undorateSidewaysSlice';
-import {GrowingIdText} from 'ssComponents/Input/GrowingIdList';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import NoInputsDisplay from './NoInputsDisplay';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
@@ -21,7 +21,7 @@ import {select} from 'ssUtils/selector';
 
 type RatingInputListProps = {
   ratingType: RATING_TYPE;
-  inputs: GrowingIdText[];
+  inputs: InputState[];
 };
 const RatingInputList: FC<RatingInputListProps> = props => {
   // PROPS
@@ -50,13 +50,23 @@ const RatingInputList: FC<RatingInputListProps> = props => {
     console.log(newInputName);
     inputsCopy[index] = {
       ...inputsCopy[index],
-      text: newInputName,
+      name: newInputName,
     };
     console.log('here');
     console.log(inputsCopy[index]);
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
     console.log('AFTER');
     console.log(inputsCopy);
+    dispatch(setInputs(inputsCopy));
+  };
+
+  const handleCommitCId = (index: number, newCId: string) => {
+    const inputsCopy = [...inputs];
+    inputsCopy[index] = {
+      ...inputsCopy[index],
+      category: newCId,
+    };
+    // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
     dispatch(setInputs(inputsCopy));
   };
 
@@ -67,7 +77,11 @@ const RatingInputList: FC<RatingInputListProps> = props => {
       {inputs.length > 0 ? (
         <FlatList
           data={inputs}
-          renderItem={renderItem(handleCommitInputName, handleRemoveInput)}
+          renderItem={renderItem(
+            handleCommitInputName,
+            handleCommitCId,
+            handleRemoveInput,
+          )}
           keyExtractor={item => `${item.id}`}
         />
       ) : (
@@ -83,29 +97,36 @@ export default RatingInputList;
 const renderItem =
   (
     onCommitInputName: (index: number, newInputName: string) => void,
+    onCommitCId: (index: number, newCId: string) => void,
     onRemoveInput: (index: number) => void,
-  ): ListRenderItem<GrowingIdText> =>
+  ): ListRenderItem<InputState> =>
   itemInfo =>
     (
       <RatingInput
         itemInfo={itemInfo}
         onCommitInputName={onCommitInputName}
+        onCommitCId={onCommitCId}
         onRemoveInput={onRemoveInput}
       />
     );
 
 type RatingInputProps = {
-  itemInfo: ListRenderItemInfo<GrowingIdText>;
+  itemInfo: ListRenderItemInfo<InputState>;
   onCommitInputName: (index: number, newInputName: string) => void;
+  onCommitCId: (index: number, newCId: string) => void;
   onRemoveInput: (index: number) => void;
 };
 const RatingInput: FC<RatingInputProps> = props => {
-  const {itemInfo, onCommitInputName, onRemoveInput} = props;
+  const {itemInfo, onCommitInputName, onCommitCId, onRemoveInput} = props;
   const {item, index} = itemInfo;
 
   // HANDLERS
   const handleCommitInputName = (newInputName: string) => {
     onCommitInputName(index, newInputName);
+  };
+
+  const handleCommitCId = (newCId: string) => {
+    onCommitCId(index, newCId);
   };
 
   const handleDeleteCategoryRow = () => {
@@ -118,8 +139,10 @@ const RatingInput: FC<RatingInputProps> = props => {
       rightSize={DISPLAY_SIZE.sm}
       leftSize={DISPLAY_SIZE.sm}>
       <DbCategoryRow
-        inputName={item.text}
+        inputName={item.name}
+        categoryId={item.category}
         onCommitInputName={newInputName => handleCommitInputName(newInputName)}
+        onCommitCId={newCId => handleCommitCId(newCId)}
         onDeleteCategoryRow={handleDeleteCategoryRow}
       />
     </MyPadding>

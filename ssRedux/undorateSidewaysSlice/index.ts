@@ -1,9 +1,9 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as UndoRateInput} from 'ssComponents/Input/GrowingIdList';
 export type {GrowingIdText as UndoRateInput} from 'ssComponents/Input/GrowingIdList';
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {SidewaysSnapshotRowPrimitive} from 'ssDatabase/api/core/types';
+import {InputState} from 'ssRedux/rateSidewaysSlice';
 import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
 import {startCleanInputCategories} from 'ssRedux/userJson';
 import {ThunkConfig} from '../types';
@@ -20,7 +20,7 @@ export interface UndoRateSSState {
   typingInput: string;
 
   // Final values
-  inputs: UndoRateInput[];
+  inputs: InputState[];
   outputs: string[];
   rating: number;
 
@@ -32,6 +32,7 @@ const initialState: UndoRateSSState = {
   indexToUpdate: 0,
   originalSnapshot: {
     inputs: [],
+    categories: [],
     outputs: [],
     rating: 0,
     timestamp: 0,
@@ -66,7 +67,8 @@ export const startUpdateRate = createAsyncThunk<
     outputs: newOutputs,
     rating: newRating,
   } = thunkAPI.getState().undorateSidewaysSlice;
-  const newInputs: string[] = newInputObjs.map(({text}) => text);
+  const newInputs: string[] = newInputObjs.map(({name}) => name);
+  const newCategories: string[] = newInputObjs.map(({category}) => category);
 
   // ORIGINAL SNAPSHOT
   const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
@@ -177,8 +179,8 @@ export const startDeleteRate = createAsyncThunk<
 
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetRatingAction = PayloadAction<number>;
-type SetInputsAction = PayloadAction<UndoRateInput[]>;
-type AddInputAction = PayloadAction<UndoRateInput>;
+type SetInputsAction = PayloadAction<InputState[]>;
+type AddInputAction = PayloadAction<InputState>;
 type RmInputAction = PayloadAction<number>;
 type SetOutputAction = PayloadAction<string[]>;
 type AddOutputAction = PayloadAction<string>;
@@ -236,7 +238,8 @@ export const undorateSS = createSlice({
       // Start New Rating info as Original Rating info
       state.inputs = originalSnapshot.inputs.map((input, i) => ({
         id: i,
-        text: input,
+        name: input,
+        category: originalSnapshot.categories[i],
       }));
       state.outputs = originalSnapshot.outputs;
       state.rating = originalSnapshot.rating;
@@ -247,6 +250,7 @@ export const undorateSS = createSlice({
 
       state.originalSnapshot = {
         inputs: [],
+        categories: [],
         outputs: [],
         rating: 0,
         timestamp: 0,

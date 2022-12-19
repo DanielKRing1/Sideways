@@ -25,6 +25,7 @@ import {
   DbDriverType,
   SidewaysSnapshotRowWOTime,
 } from 'ssDatabase/api/core/types';
+import {DEFAULT_SNAPSHOT_PROPERTIES} from './schemas';
 
 // VARIABLES
 let isLoaded = false;
@@ -133,13 +134,6 @@ const getLastLoggedSlices = async (): Promise<ExistingSlice[]> | never => {
 // CREATE SINGLE STACK
 const createStack = async (stackName: string): Promise<void> | never => {
   throwLoadError();
-
-  const DEFAULT_SNAPSHOT_PROPERTIES: Dict<string> = {
-    inputs: 'string[]',
-    categories: 'string[]',
-    outputs: 'string[]',
-    rating: 'int',
-  };
 
   await RealmStackManager.createStack({
     metaRealmPath: DEFAULT_REALM_STACK_META_REALM_PATH,

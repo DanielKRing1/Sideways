@@ -9,12 +9,14 @@ import {ThunkConfig} from '../types';
 
 // INITIAL STATE
 
+export type InputState = {id: number; name: string; category: string};
+
 export interface RateSSState {
   // Current input
   typingInput: string;
 
   // Final values
-  inputs: RateInput[];
+  inputs: InputState[];
   outputs: string[];
   rating: number;
 
@@ -49,12 +51,15 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     const {activeSliceName} =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const {inputs, outputs, rating} = thunkAPI.getState().rateSidewaysSlice;
+    const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
 
-    const inputTexts: string[] = inputs.map((input: RateInput) => input.text);
+    const inputNames: string[] = inputs.map(({name}) => name);
+    const inputCategories: string[] = inputs.map(({category}) => category);
 
     // 1. Add to Stack
     DbDriver.push(activeSliceName, {
-      inputs: inputTexts,
+      inputs: inputNames,
+      categories: inputCategories,
       outputs,
       rating,
     });
@@ -64,7 +69,7 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
       DbDriver.rateGraph(
         activeSliceName,
         output,
-        inputTexts,
+        inputNames,
         rating,
         new Array(inputs.length).fill(1 / inputs.length / outputs.length),
       ),
@@ -91,8 +96,8 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
 
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetRatingAction = PayloadAction<number>;
-type SetInputsAction = PayloadAction<RateInput[]>;
-type AddInputAction = PayloadAction<RateInput>;
+type SetInputsAction = PayloadAction<InputState[]>;
+type AddInputAction = PayloadAction<InputState>;
 type RmInputAction = PayloadAction<number>;
 type SetOutputAction = PayloadAction<string[]>;
 type AddOutputAction = PayloadAction<string>;

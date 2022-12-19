@@ -6,6 +6,7 @@ export type ExistingSlice = {sliceName: string; lastLogged: Date | undefined};
 // REALM DB TYPES
 export type SidewaysSnapshotRow = {
   inputs: string[];
+  categories: string[];
   outputs: string[];
   rating: number;
 

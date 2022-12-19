@@ -21,6 +21,7 @@ import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
 import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
+import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
 
 type RatingInputSelectionProps = {
   ratingType: RATING_TYPE;
@@ -40,6 +41,9 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   const {inputs: undoratingInputs} = useSelector(
     (state: RootState) => state.undorateSidewaysSlice,
   );
+  const {fullUserJsonMap} = useSelector(
+    (state: RootState) => state.userJsonSlice,
+  );
   // Select reducer value
   const [, inputs] = select(
     ratingType,
@@ -52,6 +56,9 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
     [RATING_TYPE.Rate, addInputR],
     [RATING_TYPE.UndoRate, addInputUR],
   );
+  // Select category selector
+  const getInputCategory = (inputName: string) =>
+    inToLastCId(inputName, fullUserJsonMap, 'RatingInputSelector');
   const dispatch: AppDispatch = useDispatch();
 
   // IDS
@@ -82,7 +89,13 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
     // 1. Create new id
     const newId: number = popId();
     // 2. Add the Redux InputList
-    dispatch(addInput({id: newId, text: newInputName}));
+    dispatch(
+      addInput({
+        id: newId,
+        name: newInputName,
+        category: getInputCategory(newInputName),
+      }),
+    );
 
     // 3. Reset searchInput
     setSearchInput('');

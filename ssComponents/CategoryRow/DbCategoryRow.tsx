@@ -37,9 +37,15 @@ import {HexColor} from '../../global';
 type DbCategoryRowProps = Omit<
   BaseCategoryRowProps,
   'categoryId' | 'activeSliceName' | 'fullUserJsonMap'
->;
+> & {categoryId?: string};
 const DbCategoryRow: FC<DbCategoryRowProps> = props => {
-  const {inputName, onCommitInputName, onDeleteCategoryRow} = props;
+  const {
+    inputName,
+    categoryId: categoryIdProp,
+    onCommitInputName,
+    onCommitCId = () => {},
+    onDeleteCategoryRow,
+  } = props;
 
   // REDUX
   const {activeSliceName} = useSelector(
@@ -54,10 +60,13 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
 
   // MEMO
   // Do we want ton change the category when the user changes the input name??
-  const categoryId: string = useMemo(
-    () => inToLastCId(inputName, fullUserJsonMap, 'dbcategoryrow'),
-    [inputName, fullUserJsonMap],
-  );
+  const categoryId =
+    categoryIdProp !== undefined
+      ? categoryIdProp
+      : useMemo(
+          () => inToLastCId(inputName, fullUserJsonMap, 'dbcategoryrow'),
+          [inputName, fullUserJsonMap],
+        );
 
   // HANDLERS
   const handleUpdateInputCategory = (newInputName: string) => {
@@ -105,8 +114,11 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
     // 1. Update input name -> categoryId mapping
     CategoryDriver.editInputCategory({inputId: inputName, categoryId: newCId});
 
+    // 2. Update categoryId in parent component
+    onCommitCId(newCId);
+
     // Redux
-    // 2. Update UserJsonMap
+    // 3. Update UserJsonMap
     dispatch(startRefreshInputNameToCategoryNameMapping());
   };
   const handleCommitIcon = (newIcon: AvailableIcons) => {

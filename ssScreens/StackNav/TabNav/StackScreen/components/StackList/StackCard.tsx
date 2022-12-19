@@ -61,12 +61,13 @@ const StackCard: FC<StackCardProps> = props => {
         <MyText>{item.rating}</MyText>
 
         <MyText>Inputs:</MyText>
-        {item.inputs.map((input: string) => (
-          <FlexRow key={input}>
+        {item.inputs.map((input: string, i: number) => (
+          <FlexRow key={`${input}-${i}`}>
             <DbCategoryRow
               editable={false}
               deletable={false}
               inputName={input}
+              categoryId={item.categories[i]}
               onCommitInputName={handleCommitInputName}
               onDeleteCategoryRow={handleDeleteCategoryRow}
             />
