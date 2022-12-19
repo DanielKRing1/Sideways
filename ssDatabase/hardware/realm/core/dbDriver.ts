@@ -24,8 +24,10 @@ import {
   SidewaysSnapshotRow,
   DbDriverType,
   SidewaysSnapshotRowWOTime,
+  GraphType,
 } from 'ssDatabase/api/core/types';
 import {DEFAULT_SNAPSHOT_PROPERTIES} from './schemas';
+import {genCategoryGraphName, genInputGraphName} from './constants';
 
 // VARIABLES
 let isLoaded = false;
@@ -308,75 +310,107 @@ const deleteSnapshotIndexes = async (
 // REALM GRAPH
 
 // CREATE A SINGLE GRAPH
-const createGraph = async (
-  graphName: string,
-  propertyNames: string[],
+const createGraphs = async (
+  sliceName: string,
+  outputNames: string[],
 ): Promise<void> | never => {
   throwLoadError();
 
   await RealmGraphManager.createGraph({
     metaRealmPath: DEFAULT_REALM_GRAPH_META_REALM_PATH,
     loadableRealmPath: DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH,
-    graphName: graphName,
-    propertyNames: propertyNames,
+    graphName: genInputGraphName(sliceName),
+    propertyNames: outputNames,
+  });
+
+  await RealmGraphManager.createGraph({
+    metaRealmPath: DEFAULT_REALM_GRAPH_META_REALM_PATH,
+    loadableRealmPath: DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH,
+    graphName: genCategoryGraphName(sliceName),
+    propertyNames: outputNames,
   });
 };
 
 // READ GRAPH
+const genGraphName = (
+  sliceName: string,
+  graphType: GraphType = GraphType.Input,
+) => {
+  throwLoadError();
+
+  switch (graphType) {
+    case GraphType.Category:
+      return genCategoryGraphName(sliceName);
+    case GraphType.Input:
+    default:
+      return genInputGraphName(sliceName);
+  }
+};
+const getGraph = (sliceName: string, graphType: GraphType) => {
+  const graphName: string = genGraphName(sliceName, graphType);
+  const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+
+  return realmGraph;
+};
 const getNode = (
-  graphName: string,
+  sliceName: string,
   nodeId: string,
+  graphType: GraphType = GraphType.Input,
 ): (Realm.Object & CGNode) | undefined | never => {
   throwLoadError();
 
-  const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   return realmGraph.getNode(nodeId);
 };
 const getEdge = (
-  graphName: string,
+  sliceName: string,
   node1Id: string,
   node2Id: string,
+  graphType: GraphType = GraphType.Input,
 ): (Realm.Object & CGEdge) | undefined | never => {
   throwLoadError();
 
-  const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   const edgeId: string = genEdgeName(node1Id, node2Id);
   return realmGraph.getEdge(edgeId);
 };
 const getAllNodes = (
-  graphName: string,
+  sliceName: string,
+  graphType: GraphType = GraphType.Input,
 ): Realm.Results<Realm.Object & CGNode> | [] | never => {
   throwLoadError();
 
-  const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   return realmGraph.getAllNodes();
 };
 const getAllEdges = (
-  graphName: string,
+  sliceName: string,
+  graphType: GraphType = GraphType.Input,
 ): Realm.Results<Realm.Object & CGEdge> | [] | never => {
   throwLoadError();
 
-  const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   return realmGraph.getAllEdges();
 };
 
 // UPDATE / ADD GRAPH RATING
 const rateGraph = async (
-  graphName: string,
+  sliceName: string,
   outputProperty: string,
   inputProperties: string[],
   rating: number,
   weights: number[] = new Array(inputProperties.length).fill(
     1 / inputProperties.length,
   ),
+  graphType: GraphType = GraphType.Input,
 ): Promise<boolean> | never => {
   throwLoadError();
 
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   realmGraph.rate(
     outputProperty,
@@ -396,17 +430,18 @@ const rateGraph = async (
   return true;
 };
 const undoRateGraph = async (
-  graphName: string,
+  sliceName: string,
   outputProperty: string,
   inputProperties: string[],
   rating: number,
   weights: number[] = new Array(inputProperties.length).fill(
     1 / inputProperties.length,
   ),
+  graphType: GraphType = GraphType.Input,
 ): Promise<boolean> | never => {
   throwLoadError();
 
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   realmGraph.rate(
     outputProperty,
@@ -427,10 +462,13 @@ const undoRateGraph = async (
 };
 
 // DELETE GRAPH
-const deleteGraph = async (graphName: string): Promise<void> | never => {
+const deleteGraph = async (
+  sliceName: string,
+  graphType: GraphType = GraphType.Input,
+): Promise<void> | never => {
   throwLoadError();
 
-  await RealmGraphManager.getGraph(graphName).deleteGraph();
+  await getGraph(sliceName, graphType).deleteGraph();
 };
 
 const Driver: DbDriverType = {
@@ -453,7 +491,7 @@ const Driver: DbDriverType = {
   updateSnapshot,
   deleteSnapshotIndexes,
 
-  createGraph,
+  createGraphs,
   getNode,
   getAllNodes,
   getEdge,

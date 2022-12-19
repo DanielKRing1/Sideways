@@ -42,7 +42,7 @@ export const startCreateSlice = createAsyncThunk<
   const outputTextList: string[] = possibleOutputs.map(
     (possibleOutput: NewSliceOutput) => possibleOutput.text,
   );
-  const graphPromise: Promise<void> = DbDriver.createGraph(
+  const graphPromise: Promise<void> = DbDriver.createGraphs(
     newSliceName,
     outputTextList,
   );

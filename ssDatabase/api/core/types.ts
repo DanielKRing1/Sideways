@@ -1,6 +1,11 @@
 import {CGNode, CGEdge} from '@asianpersonn/realm-graph';
 import {Dict} from '../../../global';
 
+export enum GraphType {
+  Input,
+  Category,
+}
+
 export type ExistingSlice = {sliceName: string; lastLogged: Date | undefined};
 
 // REALM DB TYPES
@@ -51,38 +56,47 @@ export type DbDriverType = {
     newRating: number,
   ) => Promise<void> | never;
 
-  createGraph: (
-    graphName: string,
+  createGraphs: (
+    sliceName: string,
     propertyNames: string[],
   ) => Promise<void> | never;
   getNode: (
-    graphName: string,
+    sliceName: string,
     nodeId: string,
+    graphType?: GraphType,
   ) => (Realm.Object & CGNode) | undefined | never;
   getEdge: (
-    graphName: string,
+    sliceName: string,
     node1Id: string,
     node2Id: string,
+    graphType?: GraphType,
   ) => (Realm.Object & CGEdge) | undefined | never;
   getAllNodes: (
-    graphName: string,
+    sliceName: string,
+    graphType?: GraphType,
   ) => Realm.Results<Realm.Object & CGNode> | [] | never;
   getAllEdges: (
-    graphName: string,
+    sliceName: string,
+    graphType?: GraphType,
   ) => Realm.Results<Realm.Object & CGEdge> | [] | never;
-  deleteGraph: (graphName: string) => Promise<void> | never;
+  deleteGraph: (
+    sliceName: string,
+    graphType?: GraphType,
+  ) => Promise<void> | never;
   rateGraph: (
-    graphName: string,
+    sliceName: string,
     outputProperty: string,
     inputProperties: string[],
     rating: number,
     weights?: number[],
+    graphType?: GraphType,
   ) => Promise<boolean> | never;
   undoRateGraph: (
-    graphName: string,
+    sliceName: string,
     outputProperty: string,
     inputProperties: string[],
     rating: number,
     weights?: number[],
+    graphType?: GraphType,
   ) => Promise<boolean> | never;
 };
