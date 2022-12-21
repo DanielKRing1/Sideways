@@ -3,16 +3,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import styled, {DefaultTheme} from 'styled-components/native';
 
 // REDUX
-import {RootState} from '../../../../ssRedux';
+import {AppDispatch, RootState} from '../../../../ssRedux';
 import {
   setNewSliceName,
   addPossibleOutput,
   removePossibleOutput,
-  setPossibleOutputs,
+  editPossibleOutput,
 } from '../../../../ssRedux/createSidewaysSlice';
 
 // COMPONENTS
-import GrowingIdList from '../../../../ssComponents/Input/GrowingIdList';
 import {GrowingIdText as NewSliceOutput} from '../../../../ssComponents/Input/GrowingIdList';
 
 // NAV
@@ -20,6 +19,9 @@ import MyTextInput from '../../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
 import {FlexRow} from '../../../../ssComponents/Flex';
+import GrowingTextList, {
+  RenderItemProps,
+} from 'ssComponents/Input/GrowingTextList';
 
 // Possible outputs
 
@@ -70,23 +72,42 @@ const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
   const handleAddOutput = (id: number, newPossibleOutput: string) => {
     dispatch(addPossibleOutput({id, text: newPossibleOutput}));
   };
-  const handleUpdateOutput = (newText: string, index: number) => {
-    possibleOutputs[index].text = newText;
+  const handleUpdateOutput = (index: number, newText: string) => {
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-    dispatch(setPossibleOutputs(possibleOutputs));
+    dispatch(editPossibleOutput({index, newText}));
   };
 
   return (
-    <GrowingIdList
+    <GrowingTextList
       data={possibleOutputs}
-      createRenderItemComponent={createRenderItemComponent((index: number) =>
-        dispatch(removePossibleOutput(index)),
-      )}
+      handleAddOutput={handleAddOutput}
+      handleUpdateOutput={handleUpdateOutput}
+      RenderItem={RI}
       keyExtractor={keyExtractor}
-      genNextDataPlaceholder={genNextDataPlaceholder}
-      handleUpdateInput={handleUpdateOutput}
-      handleAddInput={handleAddOutput}
     />
+  );
+};
+
+const RI: FC<RenderItemProps> = ({item, index, handleChangeText}: any) => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleDeleteOutput = (index: number) =>
+    dispatch(removePossibleOutput(index));
+
+  return (
+    <FlexRow>
+      <StyledTextInput
+        placeholder={'Anotha one...'}
+        value={item.text}
+        onChangeText={(newText: string) => handleChangeText(newText, index)}
+      />
+
+      <MyText>{item.id}</MyText>
+
+      <MyButton onPress={() => handleDeleteOutput(index)}>
+        <MyText>X</MyText>
+      </MyButton>
+    </FlexRow>
   );
 };
 

@@ -70,6 +70,7 @@ type SetNewSliceNameAction = PayloadAction<string>;
 type SetCSIdAction = PayloadAction<string>;
 type SetPossibleOutputsAction = PayloadAction<NewSliceOutput[]>;
 type AddPossibleOutputAction = PayloadAction<NewSliceOutput>;
+type EditPossibleOutputAction = PayloadAction<{index: number; newText: string}>;
 type RmPossibleOutputAction = PayloadAction<number>;
 type ResetAction = PayloadAction<undefined>;
 type StartCreateSSFulfilled = PayloadAction<boolean>;
@@ -97,6 +98,14 @@ export const createSS = createSlice({
       action: AddPossibleOutputAction,
     ) => {
       state.possibleOutputs.push(action.payload);
+    },
+    editPossibleOutput: (
+      state: CreateSSState,
+      action: EditPossibleOutputAction,
+    ) => {
+      const {index, newText} = action.payload;
+
+      state.possibleOutputs[index].text = newText;
     },
     removePossibleOutput: (
       state: CreateSSState,
@@ -146,6 +155,7 @@ export const {
   setCSId,
   setPossibleOutputs,
   addPossibleOutput,
+  editPossibleOutput,
   removePossibleOutput,
   forceSignatureRerender,
 } = createSS.actions;
