@@ -72,18 +72,21 @@ export const throwLoadError = (): void | never => {
 const getSliceNames = (): string[] | never => {
   throwLoadError();
 
-  return RealmGraphManager.getAllLoadedGraphNames();
+  return RealmStackManager.getAllLoadedStackNames();
 
   // return RealmStack.getStackNames(DEFAULT_REALM_STACK_META_REALM_PATH,DEFAULT_REALM_STACK_LOADABLE_REALM_PATH);
 };
 const getSlicePropertyNames = (sliceName: string): string[] | never => {
   throwLoadError();
 
-  return RealmGraphManager.getGraph(sliceName).getPropertyNames();
+  return RealmGraphManager.getGraph(
+    genInputGraphName(sliceName),
+  ).getPropertyNames();
 
   // return RealmStack.getStackProperties(DEFAULT_REALM_STACK_META_REALM_PATH, sliceName);
 };
 
+// TODO!!!! NOTICE THAT: This returns the snapshot properties, not the output property options
 const getSliceProperties = (sliceName: string): Dict<any> | never => {
   const realmStack: RealmStack | undefined =
     RealmStackManager.getStack(sliceName);
