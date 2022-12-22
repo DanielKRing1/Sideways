@@ -64,7 +64,7 @@ const StackList: FC<StackListProps> = props => {
       );
       setStack(freshStack);
     })();
-  }, [isLoaded, activeSliceName]);
+  }, [isLoaded, activeSliceName, readStackSignature]);
 
   // 2. Get stack search index
   useEffect(() => {

@@ -6,7 +6,7 @@ import {
   GraphType,
   SidewaysSnapshotRowPrimitive,
 } from 'ssDatabase/api/core/types';
-import {InputState} from 'ssRedux/rateSidewaysSlice';
+import {InputState, startRefreshUiAfterRate} from 'ssRedux/rateSidewaysSlice';
 import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
 import {startCleanInputCategories} from 'ssRedux/userJson';
 import {ThunkConfig} from '../types';
@@ -154,6 +154,9 @@ export const startUpdateRate = createAsyncThunk<
     ...updateCategoryGraphPromises,
     updateSnapshotPromise,
   ]);
+
+  // 4. Refresh UI (Stack + Input names)
+  thunkAPI.dispatch(startRefreshUiAfterRate());
 
   return true;
 });
