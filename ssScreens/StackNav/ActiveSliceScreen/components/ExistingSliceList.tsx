@@ -77,6 +77,7 @@ type ExistingSliceListProps = {
 const ExistingSliceList: FC<ExistingSliceListProps> = props => {
   const {onSelectSlice, onDeleteSlice} = props;
 
+  // TODO: Use useAutoComplete hook instead and map key to lower case
   const {
     setValues: setTrieValues,
     search,

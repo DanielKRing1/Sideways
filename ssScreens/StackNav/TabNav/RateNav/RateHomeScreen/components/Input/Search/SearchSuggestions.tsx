@@ -28,9 +28,9 @@ const SearchSuggestions: FC<SearchSuggestionsProps> = props => {
 
   // AUTOCOMPLETE
   const {autoComplete} = useAutoComplete(
-    searchInput,
+    searchInput.toLocaleLowerCase(),
     allDbInputs,
-    (input: string) => input,
+    (input: string) => input.toLocaleLowerCase(),
   );
 
   return (
