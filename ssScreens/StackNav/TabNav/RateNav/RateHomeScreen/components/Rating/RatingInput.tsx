@@ -69,7 +69,7 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
     // @ts-ignore
     if (isNaN(newText)) return;
 
-    const newNum: number = parseInt(newText);
+    const newNum: number = newText === '' ? 0 : parseInt(newText);
 
     console.log(`New value: ${newNum}`);
     dispatch(setRating(newNum));
@@ -79,7 +79,6 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
     <View>
       <MyTextInput
         keyboardType="numeric"
-        placeholder="Temp rating input..."
         value={`${rating}`}
         onChangeText={onChangeValue}
       />
