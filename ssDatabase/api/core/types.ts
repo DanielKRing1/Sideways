@@ -1,4 +1,4 @@
-import {CGNode, CGEdge} from '@asianpersonn/realm-graph';
+import {CGNode, CGEdge, RealmGraph} from '@asianpersonn/realm-graph';
 import {Dict} from '../../../global';
 
 export enum GraphType {
@@ -60,6 +60,7 @@ export type DbDriverType = {
     sliceName: string,
     propertyNames: string[],
   ) => Promise<void> | never;
+  getGraph: (sliceName: string, graphType: GraphType) => RealmGraph | never;
   getNode: (
     sliceName: string,
     nodeId: string,

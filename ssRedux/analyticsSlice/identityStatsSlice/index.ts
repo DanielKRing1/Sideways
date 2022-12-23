@@ -14,6 +14,7 @@ import {
   GetNodeStatsArgs,
   GetNodeStatsByOutputArgs,
 } from 'ssDatabase/api/analytics/identity/types';
+import {GraphType} from 'ssDatabase/api/core/types';
 
 // INITIAL STATE
 
@@ -77,6 +78,10 @@ export const startAssureFreshness = createAsyncThunk<
   const isFresh: boolean =
     thunkAPI.getState().analyticsSlice.identityStatsSlice.isFresh;
 
+  console.log('START ASSURE FRESHNESS');
+  console.log(activeSliceName);
+  console.log(analyzedSliceName);
+
   // 1. 'activeSliceName' changed
   if (activeSliceName !== analyzedSliceName) {
     // Recompute identityNodes + reset stats bcus inputNode is now unknown
@@ -89,7 +94,10 @@ export const startAssureFreshness = createAsyncThunk<
     thunkAPI.dispatch(startGetIdentityNodes());
     const nodeIdInput: string =
       thunkAPI.getState().analyticsSlice.identityStatsSlice.nodeIdInput;
-    thunkAPI.dispatch(startSetNodeIdInput(nodeIdInput));
+    // TODO: Assure freshness only updates Input and not Category GraphType analytics for now
+    thunkAPI.dispatch(
+      startSetNodeIdInput({nodeIdInput, graphType: GraphType.Input}),
+    );
 
     thunkAPI.dispatch(forceIdentityStatsSignatureRerender());
     thunkAPI.dispatch(forceInputStatsSignatureRerender());
@@ -108,7 +116,7 @@ export const startAssureFreshness = createAsyncThunk<
 const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'identityStatsSS/startGetIdentityNodes',
   async (undef, thunkAPI) => {
-    console.log('in startGetIdentityNodes');
+    console.log('in startGetIdentityNodes-------------------');
     const {activeSliceName, allDbOutputs} =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
     const listLength: number = 5;
@@ -116,14 +124,17 @@ const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
     const iterations: number = 20;
     const dampingFactor: number = 0.85;
 
+    console.log('startGetIdentityNodes------------------- 1');
     const hiLoRankings: HiLoRankingByOutput = recommendationsDriver.pageRank({
-      graphName: activeSliceName,
+      activeSliceName,
+      graphType: GraphType.Input,
       rawOutputs: allDbOutputs,
       listLength,
       outputType,
       iterations,
       dampingFactor,
     });
+    console.log('startGetIdentityNodes------------------- 2');
 
     console.log(hiLoRankings);
 
@@ -136,14 +147,17 @@ const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
 
 // Input Stats
 
-type StartSetNodeIdInputArgs = string;
+type StartSetNodeIdInputArgs = {
+  nodeIdInput: string;
+  graphType: GraphType;
+};
 export const startSetNodeIdInput = createAsyncThunk<
   boolean,
   StartSetNodeIdInputArgs,
   ThunkConfig
 >(
   'identityStatsSS/startSetNodeStats',
-  async (nodeIdInput: StartSetNodeIdInputArgs, thunkAPI) => {
+  async ({nodeIdInput, graphType}: StartSetNodeIdInputArgs, thunkAPI) => {
     // 1. Set node id input
     thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
 
@@ -156,14 +170,16 @@ export const startSetNodeIdInput = createAsyncThunk<
     // 3. Dispatch stats thunks
     const p1: Promise<any> = thunkAPI.dispatch(
       startGetNodeStats({
-        graphName: activeSliceName,
+        activeSliceName,
+        graphType,
         nodeId: nodeIdInput,
         rawOutputs: allDbOutputs,
       }),
     );
     const p2: Promise<any> = thunkAPI.dispatch(
       startGetCollectivelyTandemNodes({
-        graphName: activeSliceName,
+        activeSliceName,
+        graphType,
         nodeId: nodeIdInput,
         rawOutputs: allDbOutputs,
         listLength,
@@ -171,7 +187,8 @@ export const startSetNodeIdInput = createAsyncThunk<
     );
     const p3: Promise<any> = thunkAPI.dispatch(
       startGetSinglyTandemNodes({
-        graphName: activeSliceName,
+        activeSliceName,
+        graphType,
         nodeId: nodeIdInput,
         rawOutputs: allDbOutputs,
         listLength,
@@ -179,7 +196,8 @@ export const startSetNodeIdInput = createAsyncThunk<
     );
     const p4: Promise<any> = thunkAPI.dispatch(
       startGetHighlyRatedTandemNodes({
-        graphName: activeSliceName,
+        activeSliceName,
+        graphType,
         nodeId: nodeIdInput,
         rawOutputs: allDbOutputs,
         listLength,
@@ -202,10 +220,14 @@ export const startGetNodeStats = createAsyncThunk<
   ThunkConfig
 >(
   'identityStatsSS/startGetNodeStats',
-  async ({graphName, nodeId, rawOutputs}: GetNodeStatsArgs, thunkAPI) => {
+  async (
+    {activeSliceName, graphType, nodeId, rawOutputs}: GetNodeStatsArgs,
+    thunkAPI,
+  ) => {
     const t0 = new Date().getTime();
     const nodeStats: RankedNode | undefined = identityDriver.getNodeStats({
-      graphName,
+      activeSliceName,
+      graphType,
       nodeId,
       rawOutputs,
     });
@@ -227,13 +249,20 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
 >(
   'identityStatsSS/startGetCollectivelyTandemNodes',
   async (
-    {graphName, nodeId, rawOutputs, listLength}: GetNodeStatsByOutputArgs,
+    {
+      activeSliceName,
+      graphType,
+      nodeId,
+      rawOutputs,
+      listLength,
+    }: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
     const t0 = new Date().getTime();
     const hiLoRankings: HiLoRanking =
       await identityDriver.getCollectivelyTandemNodes({
-        graphName,
+        activeSliceName,
+        graphType,
         nodeId,
         rawOutputs,
         listLength,
@@ -255,13 +284,20 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
 >(
   'identityStatsSS/startGetSinglyTandemNodes',
   async (
-    {graphName, nodeId, rawOutputs, listLength}: GetNodeStatsByOutputArgs,
+    {
+      activeSliceName,
+      graphType,
+      nodeId,
+      rawOutputs,
+      listLength,
+    }: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
     const t0 = new Date().getTime();
     const hiLoRankings: HiLoRankingByOutput =
       await identityDriver.getSinglyTandemNodes({
-        graphName,
+        activeSliceName,
+        graphType,
         nodeId,
         rawOutputs,
         listLength,
@@ -283,13 +319,20 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
 >(
   'identityStatsSS/startGetHighlyRatedTandemNodes',
   async (
-    {graphName, nodeId, rawOutputs, listLength}: GetNodeStatsByOutputArgs,
+    {
+      activeSliceName,
+      graphType,
+      nodeId,
+      rawOutputs,
+      listLength,
+    }: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
     const t0 = new Date().getTime();
     const hiLoRankings: HiLoRankingByOutput =
       await identityDriver.getHighlyRatedTandemNodes({
-        graphName,
+        activeSliceName,
+        graphType,
         nodeId,
         rawOutputs,
         listLength,

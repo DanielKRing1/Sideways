@@ -1,8 +1,10 @@
+import {GraphType} from 'ssDatabase/api/core/types';
 import {GraphPropType, HiLoRankingByOutput} from 'ssDatabase/api/types';
 
 // Methods
 export type PageRankArgs = {
-  graphName: string;
+  activeSliceName: string;
+  graphType: GraphType;
   rawOutputs: string[];
   listLength: number;
   outputType: GraphPropType;

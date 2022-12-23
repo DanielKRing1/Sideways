@@ -27,7 +27,11 @@ import {
   GraphType,
 } from 'ssDatabase/api/core/types';
 import {DEFAULT_SNAPSHOT_PROPERTIES} from './schemas';
-import {genCategoryGraphName, genInputGraphName} from './constants';
+import {
+  genCategoryGraphName,
+  genGraphName,
+  genInputGraphName,
+} from './constants';
 
 // VARIABLES
 let isLoaded = false;
@@ -335,20 +339,6 @@ const createGraphs = async (
 };
 
 // READ GRAPH
-const genGraphName = (
-  sliceName: string,
-  graphType: GraphType = GraphType.Input,
-) => {
-  throwLoadError();
-
-  switch (graphType) {
-    case GraphType.Category:
-      return genCategoryGraphName(sliceName);
-    case GraphType.Input:
-    default:
-      return genInputGraphName(sliceName);
-  }
-};
 const getGraph = (sliceName: string, graphType: GraphType) => {
   const graphName: string = genGraphName(sliceName, graphType);
   const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
@@ -493,6 +483,7 @@ const Driver: DbDriverType = {
   deleteSnapshotIndexes,
 
   createGraphs,
+  getGraph,
   getNode,
   getAllNodes,
   getEdge,

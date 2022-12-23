@@ -4,6 +4,7 @@ import {
   PageRankArgs,
   RecoDriverType,
 } from 'ssDatabase/api/analytics/recommendation/types';
+import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {HiLoRankingByOutput, RankedNodesMap} from '../../../../api/types';
 import {throwLoadError} from '../../core/dbDriver';
 import {sortRankedNodesMapByAllOutputs} from '../utils';
@@ -20,7 +21,8 @@ import {sortRankedNodesMapByAllOutputs} from '../utils';
  * @returns
  */
 const getRecommendations = ({
-  graphName,
+  activeSliceName,
+  graphType,
   inputNodeIds,
   rawOutputs,
   listLength,
@@ -29,7 +31,7 @@ const getRecommendations = ({
   dampingFactor = 1,
 }: GetRecommendationsArgs): HiLoRankingByOutput | never => {
   throwLoadError();
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   const rankedNodes: RankedNodesMap =
     realmGraph.rankMostInfluentialToCentralSet(
@@ -51,7 +53,8 @@ const getRecommendations = ({
  * @returns
  */
 const pageRank = ({
-  graphName,
+  activeSliceName,
+  graphType,
   rawOutputs,
   listLength,
   outputType,
@@ -59,7 +62,7 @@ const pageRank = ({
   dampingFactor,
 }: PageRankArgs): HiLoRankingByOutput | never => {
   throwLoadError();
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   const rankingsMap: RankedNodesMap = realmGraph.pageRank(
     iterations,

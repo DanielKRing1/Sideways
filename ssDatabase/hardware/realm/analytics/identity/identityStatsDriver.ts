@@ -9,24 +9,26 @@ import {
   GetNodeStatsByOutputArgs,
   IdentityDriverType,
 } from 'ssDatabase/api/analytics/identity/types';
+import {GraphType} from 'ssDatabase/api/core/types';
 import {
   HiLoRanking,
   HiLoRankingByOutput,
   GRAPH_PROP_KEYS,
   SINGLE_KEY,
 } from '../../../../api/types';
-import {throwLoadError} from '../../core/dbDriver';
+import dbDriver, {throwLoadError} from '../../core/dbDriver';
 import {filterCGEntityAttrs, getDestinationNodeId} from '../utils';
 
 // GET IDENTITY STATS
 
 const getNodeStats = ({
-  graphName,
+  activeSliceName,
+  graphType,
   nodeId,
   rawOutputs,
 }: GetNodeStatsArgs): RankedNode | undefined => {
   throwLoadError();
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   const cgnode: CGNode | undefined = realmGraph.getNode(nodeId);
   return cgnode !== undefined
@@ -35,7 +37,8 @@ const getNodeStats = ({
 };
 
 const _getTandemNodes = async (
-  graphName: string,
+  activeSliceName: string,
+  graphType: GraphType,
   nodeId: string,
   rawOutputs: string[],
   getEdges: (nodeId: string) => Promise<CGEdge[]>,
@@ -53,7 +56,8 @@ const _getTandemNodes = async (
     highestRanked: hiCGEdges
       .map((cgedge: CGEdge) =>
         getNodeStats({
-          graphName,
+          activeSliceName,
+          graphType,
           nodeId: getDestinationNodeId(cgedge, nodeId),
           rawOutputs,
         }),
@@ -64,7 +68,8 @@ const _getTandemNodes = async (
     lowestRanked: loCGEdges
       .map((cgedge: CGEdge) =>
         getNodeStats({
-          graphName,
+          activeSliceName,
+          graphType,
           nodeId: getDestinationNodeId(cgedge, nodeId),
           rawOutputs,
         }),
@@ -75,7 +80,8 @@ const _getTandemNodes = async (
   };
 };
 const _getTandemNodesByOutput = async (
-  graphName: string,
+  activeSliceName: string,
+  graphType: GraphType,
   nodeId: string,
   rawOutputs: string[],
   getEdges: (nodeId: string, output: string) => Promise<CGEdge[]>,
@@ -87,7 +93,8 @@ const _getTandemNodesByOutput = async (
   // 2. For each output
   for (const output of rawOutputs) {
     hiLoRankings[output] = await _getTandemNodes(
-      graphName,
+      activeSliceName,
+      graphType,
       nodeId,
       rawOutputs,
       (nodeId: string) => getEdges(nodeId, output),
@@ -108,16 +115,18 @@ const _getTandemNodesByOutput = async (
  * @returns
  */
 const getCollectivelyTandemNodes = async ({
-  graphName,
+  activeSliceName,
+  graphType,
   nodeId,
   rawOutputs,
   listLength,
 }: GetNodeStatsByOutputArgs): Promise<HiLoRanking> => {
   throwLoadError();
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   return _getTandemNodes(
-    graphName,
+    activeSliceName,
+    graphType,
     nodeId,
     rawOutputs,
     realmGraph.commonlyDoneWith,
@@ -135,16 +144,18 @@ const getCollectivelyTandemNodes = async ({
  * @returns
  */
 const getSinglyTandemNodes = async ({
-  graphName,
+  activeSliceName,
+  graphType,
   nodeId,
   rawOutputs,
   listLength,
 }: GetNodeStatsByOutputArgs): Promise<HiLoRankingByOutput> => {
   throwLoadError();
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   return await _getTandemNodesByOutput(
-    graphName,
+    activeSliceName,
+    graphType,
     nodeId,
     rawOutputs,
     realmGraph.commonlyDoneByOutput,
@@ -153,16 +164,18 @@ const getSinglyTandemNodes = async ({
 };
 
 const getHighlyRatedTandemNodes = async ({
-  graphName,
+  activeSliceName,
+  graphType,
   nodeId,
   rawOutputs,
   listLength,
 }: GetNodeStatsByOutputArgs): Promise<HiLoRankingByOutput> => {
   throwLoadError();
-  const realmGraph: RealmGraph = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   return await _getTandemNodesByOutput(
-    graphName,
+    activeSliceName,
+    graphType,
     nodeId,
     rawOutputs,
     realmGraph.highlyRatedByOutput,

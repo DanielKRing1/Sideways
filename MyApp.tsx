@@ -8,7 +8,7 @@
  * @format
  */
 
-import './wdyr'; // <--- first import
+// import './wdyr'; // <--- first import
 
 import React from 'react';
 import {SafeAreaView} from 'react-native';

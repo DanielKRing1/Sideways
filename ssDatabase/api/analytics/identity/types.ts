@@ -1,11 +1,13 @@
 // IDENTITY STATS DRIVER
 
 import {RankedNode} from '@asianpersonn/realm-graph';
+import {GraphType} from 'ssDatabase/api/core/types';
 import {HiLoRanking, HiLoRankingByOutput} from 'ssDatabase/api/types';
 
 // Methods
 export type GetNodeStatsArgs = {
-  graphName: string;
+  activeSliceName: string;
+  graphType: GraphType;
   nodeId: string;
   rawOutputs: string[];
 };
