@@ -48,12 +48,9 @@ const IconSelector: FC<IconSelectorProps> = props => {
       },
       isSelected: icon === tappedIcon,
     }));
-  }, [onCommitIcon]);
+  }, [tappedIcon, onCommitIcon]);
 
   console.log('ICON SELECTOR------------------------');
-  console.log(AvailableIcons);
-  console.log(availableIcons);
-  console.log(iconProps);
 
   return (
     <ScrollView

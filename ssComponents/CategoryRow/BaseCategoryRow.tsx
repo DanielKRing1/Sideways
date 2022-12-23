@@ -95,7 +95,7 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
 
   const categoryDecoration: GJ_CategoryDecoration = useMemo(() => {
     return cIdToCD(activeSliceName, categoryId, fullUserJsonMap);
-  }, [inputName, categoryId]);
+  }, [inputName, categoryId, fullUserJsonMap]);
 
   // LOCAL STATE
   const [errMsg, setErrMsg] = useState('');

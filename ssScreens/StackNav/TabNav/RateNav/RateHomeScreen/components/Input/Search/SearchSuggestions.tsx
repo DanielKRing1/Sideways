@@ -39,7 +39,12 @@ const SearchSuggestions: FC<SearchSuggestionsProps> = props => {
       data={autoComplete}
       // TODO: Prevent duplicate inputs?
       keyExtractor={input => input}
-      renderItem={renderItem(onSelectSuggestion)}
+      renderItem={itemInfo => (
+        <SuggestionItem
+          itemInfo={itemInfo}
+          onSelectSuggestion={onSelectSuggestion}
+        />
+      )}
     />
   );
 };

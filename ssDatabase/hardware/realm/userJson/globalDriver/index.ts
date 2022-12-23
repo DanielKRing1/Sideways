@@ -237,6 +237,7 @@ const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
 
     // 4. Edit CategoryDecoation
     if (cdInfo.color !== undefined) cd.color = cdInfo.color;
+    if (cdInfo.icon !== undefined) cd.icon = cdInfo.icon;
     if (cdInfo.cId !== undefined) cd.cId = cdInfo.cId;
 
     // 5. Save new id-mapped category
@@ -252,10 +253,9 @@ const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
     console.log(err);
   }
   console.log('LOOK AT THIIIIIIS');
-  console.log(JSON.stringify(cdMapping));
   console.log(csId);
-  console.log(cs);
   console.log(cdInfo);
+  console.log(cs[cdInfo.cId]);
 
   // const cd: GJ_CategoryDecoration = cs[cdInfo.categoryId];
   // console.log({
