@@ -9,6 +9,7 @@ import {
 } from 'ssRedux/analyticsSlice/identityStatsSlice';
 import MyText from 'ssComponents/ReactNative/MyText';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
+import {GraphType} from 'ssDatabase/api/core/types';
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
@@ -18,11 +19,11 @@ const NodeInput: FC<NodeInputProps> = () => {
   const dispatch: AppDispatch = useDispatch();
 
   // HANDLERS
-  const handleSetSearchedNodeId = useCallback((nodeId: string): void => {
-    dispatch(setSearchNodeIdInput(nodeId));
+  const handleSetSearchedNodeId = useCallback((nodeIdInput: string): void => {
+    dispatch(setSearchNodeIdInput(nodeIdInput));
   }, []);
-  const handleSetNodeId = useCallback((nodeId: string): void => {
-    dispatch(startSetNodeIdInput(nodeId));
+  const handleSetNodeId = useCallback((nodeIdInput: string): void => {
+    dispatch(startSetNodeIdInput({nodeIdInput, graphType: GraphType.Input}));
   }, []);
 
   console.log('NODEINPUT RERENDERED');
