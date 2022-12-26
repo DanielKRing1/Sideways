@@ -37,7 +37,7 @@ export const startGetRecommendations = createAsyncThunk<
 >(
   'recommendationStatsSS/startGetRecommendations',
   async (
-    {iterations, dampingFactor}: StartGetRecommendationsArgs,
+    {graphType, iterations, dampingFactor}: StartGetRecommendationsArgs,
     thunkAPI,
   ) => {
     const {activeSliceName, allDbOutputs} =
@@ -50,7 +50,8 @@ export const startGetRecommendations = createAsyncThunk<
 
     const recommendations: HiLoRankingByOutput =
       recommendationsDriver.getRecommendations({
-        graphName: activeSliceName,
+        activeSliceName,
+        graphType,
         inputNodeIds,
         rawOutputs: allDbOutputs,
         outputType: GRAPH_PROP_KEYS.SINGLE,
