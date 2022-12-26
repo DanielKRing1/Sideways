@@ -82,6 +82,8 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   };
 
   const handleAddInput = (newInputName: string) => {
+    newInputName = newInputName.toLocaleLowerCase();
+
     // Do not add an empty string as an input
     if (newInputName === '') return;
 
