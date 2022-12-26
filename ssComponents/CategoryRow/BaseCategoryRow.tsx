@@ -268,11 +268,13 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
             />
 
             {/* Remove */}
-            <IconModalButton
-              color={categoryDecoration.color}
-              iconName={'remove'}
-              onPress={onDeleteCategoryRow}
-            />
+            {deletable && (
+              <IconModalButton
+                color={categoryDecoration.color}
+                iconName={'remove'}
+                onPress={onDeleteCategoryRow}
+              />
+            )}
           </FlexRow>
         </StopPropagationView>
         {/* MODALS */}
