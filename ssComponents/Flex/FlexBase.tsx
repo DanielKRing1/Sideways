@@ -19,7 +19,7 @@ const FlexBase = styled.View<FlexBaseProps>`
 
   justify-content: ${({justifyContent = 'flex-start'}: FlexBaseProps) =>
     justifyContent};
-  flexdirection: ${({flexDirection}: FlexBaseProps) => flexDirection};
+  flex-direction: ${({flexDirection}: FlexBaseProps) => flexDirection};
   align-items: ${({alignItems = 'stretch'}: FlexBaseProps) => alignItems};
 `;
 
