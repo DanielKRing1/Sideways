@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {FlatList, FlatListProps, ListRenderItem} from 'react-native';
 import {useCounterId} from 'ssHooks/useCounterId';
+import {getStartingId} from 'ssUtils/id';
 
 export type GrowingListItem = {
   id: number;
@@ -23,10 +24,7 @@ const GrowingTextList: FC<GrowingTextListProps> = props => {
   const {
     data = [],
     RenderItem,
-    startingId = data.reduce(
-      (maxId: number, curVal: GrowingListItem) => Math.max(maxId, curVal.id),
-      -1,
-    ) + 1,
+    startingId = getStartingId(data, d => d.id),
     handleAddOutput,
     handleUpdateOutput,
   } = props;

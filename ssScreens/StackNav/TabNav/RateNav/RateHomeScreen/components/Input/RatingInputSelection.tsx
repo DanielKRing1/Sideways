@@ -22,6 +22,7 @@ import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
 import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
 import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
+import {getStartingId} from 'ssUtils/id';
 
 type RatingInputSelectionProps = {
   ratingType: RATING_TYPE;
@@ -62,10 +63,7 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   const dispatch: AppDispatch = useDispatch();
 
   // IDS
-  const {popId} = useCounterId(
-    // Get starting id
-    inputs.reduce((acc, cur) => Math.max(cur.id + 1, acc), 0),
-  );
+  const {popId} = useCounterId(getStartingId(inputs, d => d.id));
 
   // HANDLERS
   // SearchInput

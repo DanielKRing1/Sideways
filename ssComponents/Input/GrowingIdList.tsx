@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {GrowingList, GrowingListProps} from './GrowingInputList';
 import {useCounterId} from '../../ssHooks/useCounterId';
+import {getStartingId} from 'ssUtils/id';
 
 export type GrowingIdText = {text: string; id: number};
 type GrowingIdListProps = {
@@ -14,10 +15,7 @@ const GrowingIdList: FC<GrowingIdListProps> = props => {
     data,
     createRenderItemComponent,
     keyExtractor,
-    startingId = data.reduce(
-      (maxId: number, curVal: GrowingIdText) => Math.max(maxId, curVal.id),
-      -1,
-    ) + 1,
+    startingId = getStartingId(data, d => d.id),
     genNextDataPlaceholder,
     handleUpdateInput,
     handleAddInput,
