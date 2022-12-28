@@ -2,7 +2,6 @@ import React, {FC, useMemo} from 'react';
 import {View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
-import Todo from '../../../../ssComponents/Dev/Todo';
 import {TabNavHeader} from '../../../../ssComponents/Navigation/NavHeader';
 
 import {RootState} from '../../../../ssRedux';
@@ -45,6 +44,7 @@ const GraphViewScreen: FC<GraphViewScreenProps> = props => {
         height: '100%',
       }}>
       <TabNavHeader />
+      <ViewSelector />
 
       {renderSwitch}
     </View>
