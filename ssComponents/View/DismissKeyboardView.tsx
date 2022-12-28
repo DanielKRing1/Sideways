@@ -12,13 +12,17 @@ type DismissKeyboardViewProps = {
 const DismissKeyboardView: FC<DismissKeyboardViewProps> = props => {
   const {children} = props;
 
+  const handlePress = () => {
+    Keyboard.dismiss();
+  };
+
   const id: number = useMemo(() => Math.random(), []);
 
   console.log('DISMISSKEYBOARD RERENDER');
   console.log(id);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <TouchableWithoutFeedback onPress={handlePress} accessible={false}>
       <View {...props}>{children}</View>
     </TouchableWithoutFeedback>
   );
