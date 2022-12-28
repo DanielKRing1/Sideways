@@ -10,8 +10,8 @@ import GrowingRecoInputs from './components/GrowingRecoInputs';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
 import RecommendationNodes from './components/RecommendationNodes';
-import {TabNavHeader} from 'ssComponents/Navigation/NavHeader';
 import StickyScrollView from 'ssComponents/View/StickyScrollView';
+import {GraphType} from 'ssDatabase/api/core/types';
 
 type RecommendationScreenProps = {};
 const RecommendationScreen: FC<RecommendationScreenProps> = () => {
@@ -40,7 +40,9 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
           borderColor: theme.colors.grayBorder,
           padding: 10,
         }}
-        onPress={() => dispatch(startGetRecommendations({}))}>
+        onPress={() =>
+          dispatch(startGetRecommendations({graphType: GraphType.Input}))
+        }>
         <MyText>Get Recommendations!</MyText>
       </MyButton>
 
