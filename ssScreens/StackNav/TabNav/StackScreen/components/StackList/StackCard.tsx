@@ -9,13 +9,13 @@ import {FlexCol, FlexRow} from 'ssComponents/Flex';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
-import {SidewaysSnapshotRowPrimitive} from 'ssDatabase/api/core/types';
+import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
 import {AppDispatch} from 'ssRedux/index';
-import {abbrDateMs} from 'ssUtils/date';
+import {abbrDateMs, serializeDateNum} from 'ssUtils/date';
 import {startDeleteRate} from 'ssRedux/undorateSidewaysSlice';
 
 type StackCardProps = {
-  itemInfo: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>;
+  itemInfo: ListRenderItemInfo<SidewaysSnapshotRow>;
   openUpdateRatingModal: () => void;
 };
 
@@ -57,7 +57,9 @@ const StackCard: FC<StackCardProps> = props => {
           <MyText>Delete Stack Snapshot X</MyText>
         </MyButton>
 
-        <MyText>{JSON.stringify(abbrDateMs(item.timestamp))}</MyText>
+        <MyText>
+          {JSON.stringify(abbrDateMs(serializeDateNum(item.timestamp)))}
+        </MyText>
         <MyText>{item.rating}</MyText>
 
         <MyText>Inputs:</MyText>

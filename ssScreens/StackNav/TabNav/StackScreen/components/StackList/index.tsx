@@ -11,11 +11,8 @@ import {AppDispatch, RootState} from 'ssRedux/index';
 
 // COMPONENTS
 import {SearchableFlatList} from 'ssComponents/Search/SearchableFlatList';
-import {
-  SidewaysSnapshotRow,
-  SidewaysSnapshotRowPrimitive,
-} from 'ssDatabase/api/core/types';
-import {deserializeDate} from 'ssUtils/date';
+import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
+import {deserializeDate, serializeDateNum} from 'ssUtils/date';
 import StackCard from './StackCard';
 import UndoRateModal from './UndoRateModal';
 import UndoRatingMenu from 'ssScreens/StackNav/TabNav/RateNav/RateHomeScreen/components/RatingMenu/UndoRatingMenu';
@@ -24,10 +21,10 @@ import {setSnapshot} from 'ssRedux/undorateSidewaysSlice';
 const createRenderItem =
   (
     openUpdateRatingModal: (
-      itemInfo: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>,
+      itemInfo: ListRenderItemInfo<SidewaysSnapshotRow>,
     ) => void,
   ) =>
-  (itemInfo: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>) =>
+  (itemInfo: ListRenderItemInfo<SidewaysSnapshotRow>) =>
     (
       <StackCard
         itemInfo={itemInfo}
@@ -86,8 +83,16 @@ const StackList: FC<StackListProps> = props => {
   const handleOpenUpdateRatingModal = ({
     item,
     index,
-  }: ListRenderItemInfo<SidewaysSnapshotRowPrimitive>) => {
-    dispatch(setSnapshot({indexToUpdate: index, originalSnapshot: item}));
+  }: ListRenderItemInfo<SidewaysSnapshotRow>) => {
+    dispatch(
+      setSnapshot({
+        indexToUpdate: index,
+        originalSnapshot: {
+          ...item,
+          timestamp: serializeDateNum(item.timestamp),
+        },
+      }),
+    );
     setUpdateRatingModalOpen(true);
   };
 

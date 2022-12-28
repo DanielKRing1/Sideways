@@ -28,7 +28,12 @@ const initialState: RecommendationsState = {
 
 type StartGetRecommendationsArgs = Omit<
   GetRecommendationsArgs,
-  'listLength' | 'rawOutputs' | 'outputType' | 'graphName' | 'inputNodeIds'
+  | 'activeSliceName'
+  | 'listLength'
+  | 'rawOutputs'
+  | 'outputType'
+  | 'graphName'
+  | 'inputNodeIds'
 >;
 export const startGetRecommendations = createAsyncThunk<
   boolean,
