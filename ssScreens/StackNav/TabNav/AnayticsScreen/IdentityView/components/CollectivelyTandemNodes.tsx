@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 
 import {RootState} from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import HiLoRankingDisplay from '../../../../../../ssComponents/Nodes/HiLoRanking';
+import HiLoRankingDisplay from '../../../../../../ssComponents/Nodes/HiLoRankingRow';
 
 type CollectivelyTandemNodesProps = {};
 const CollectivelyTandemNodes: FC<CollectivelyTandemNodesProps> = () => {

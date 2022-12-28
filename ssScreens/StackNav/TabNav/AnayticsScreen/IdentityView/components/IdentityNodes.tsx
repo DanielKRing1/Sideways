@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 
 import {RootState} from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankingByOutput';
+import HiLoRankingByOutputRow from '../../../../../../ssComponents/Nodes/HiLoRankingByOutputRow';
 
 type IdentityNodesProps = {};
 const IdentityNodes: FC<IdentityNodesProps> = () => {
@@ -16,7 +16,7 @@ const IdentityNodes: FC<IdentityNodesProps> = () => {
     <View>
       <MyText>Your Identity Inputs</MyText>
 
-      <HiLoRankingByOutput hiLoRankingByOutput={identityNodes} />
+      <HiLoRankingByOutputRow hiLoRankingByOutput={identityNodes} />
     </View>
   );
 };

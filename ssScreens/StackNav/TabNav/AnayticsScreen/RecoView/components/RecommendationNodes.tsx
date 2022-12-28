@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 
 import {RootState} from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankingByOutput';
+import HiLoRankingByOutputRow from '../../../../../../ssComponents/Nodes/HiLoRankingByOutputRow';
 
 type RecommendationNodesProps = {};
 const RecommendationNodes: FC<RecommendationNodesProps> = () => {
@@ -21,7 +21,7 @@ const RecommendationNodes: FC<RecommendationNodesProps> = () => {
             achieve each outcome
           </MyText>
 
-          <HiLoRankingByOutput hiLoRankingByOutput={recommendations} />
+          <HiLoRankingByOutputRow hiLoRankingByOutput={recommendations} />
         </>
       ) : (
         <MyText>Try entering some inputs!</MyText>

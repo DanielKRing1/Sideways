@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 
 import {RootState} from '../../../../../../ssRedux';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
-import HiLoRankingByOutput from '../../../../../../ssComponents/Nodes/HiLoRankingByOutput';
+import HiLoRankingByOutputRow from '../../../../../../ssComponents/Nodes/HiLoRankingByOutputRow';
 
 type SinglyTandemNodesProps = {};
 const SinglyTandemNodes: FC<SinglyTandemNodesProps> = () => {
@@ -20,7 +20,7 @@ const SinglyTandemNodes: FC<SinglyTandemNodesProps> = () => {
     <View>
       <MyText>You often do these with {nodeIdInput} and feel...</MyText>
 
-      <HiLoRankingByOutput hiLoRankingByOutput={singlyTandemNodes} />
+      <HiLoRankingByOutputRow hiLoRankingByOutput={singlyTandemNodes} />
     </View>
   );
 };
