@@ -29,7 +29,7 @@ const RateButton: FC<RateButtonProps> = props => {
     inputs: inputsUR,
     outputs: outputsUR,
     rating: ratingUR,
-  } = useSelector((state: RootState) => state.rateSidewaysSlice);
+  } = useSelector((state: RootState) => state.undorateSidewaysSlice);
   // Select reducer values
   const [, {inputs, outputs, rating}] = select(
     ratingType,
