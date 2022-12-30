@@ -7,6 +7,15 @@ export const isToday = (someDate: Date) => {
   );
 };
 
+// GET MILLISECONDS
+
+export const getSecondsMS = (seconds: number): number => seconds * 1000;
+export const getMinutesMS = (minutes: number): number =>
+  minutes * getSecondsMS(60);
+export const getHoursMS = (hours: number): number => hours * getMinutesMS(60);
+export const getDaysMS = (days: number): number => days * getHoursMS(24);
+export const getWeeksMS = (weeks: number): number => weeks * getDaysMS(7);
+
 // FORMAT
 
 export const abbrDateMs = (dateMs: number) => abbrDate(deserializeDate(dateMs));

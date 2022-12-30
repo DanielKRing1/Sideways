@@ -7,10 +7,12 @@ import {
 } from 'victory-native';
 import {CallbackArgs, ForAxes, DomainTuple, PaddingType} from 'victory-core';
 import {Defs, LinearGradient, Stop} from 'react-native-svg';
+
 import {LineGraph} from 'ssDatabase/api/analytics/timeseries/types';
 
 type GradientColor = {offset: string; color: string};
 export type MyLineGraphProps = {
+  height: number;
   gradientColors: GradientColor[];
 
   xDomain: ForAxes<DomainTuple>;
@@ -26,6 +28,7 @@ export type MyLineGraphProps = {
 
 const MyLineGraph: FC<MyLineGraphProps> = props => {
   const {
+    height,
     gradientColors,
     xDomain,
     xValues,
@@ -37,7 +40,10 @@ const MyLineGraph: FC<MyLineGraphProps> = props => {
   } = props;
 
   return (
-    <VictoryChart domain={xDomain} domainPadding={domainPadding}>
+    <VictoryChart
+      height={height}
+      domain={xDomain}
+      domainPadding={domainPadding}>
       <Defs>
         <LinearGradient id="linearGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
           {gradientColors.map(({offset, color}) => (
@@ -63,9 +69,7 @@ const MyLineGraph: FC<MyLineGraphProps> = props => {
             pointerEvents: 'painted',
             strokeWidth: 0.5,
           },
-          tickLabels: {
-            angle: -20,
-          },
+          tickLabels: {},
         }}
         tickValues={xValues}
         tickLabelComponent={

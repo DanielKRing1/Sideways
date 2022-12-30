@@ -2,6 +2,7 @@ import React, {FC, useMemo} from 'react';
 
 import LineGraph, {MyLineGraphProps} from './LineGraph';
 import DomainScroller, {DomainScrollerProps} from '../Domain/DomainScroller';
+import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 
 type GradientColor = {offset: string; color: string};
 export type BinnedLineGraphProps = {
@@ -23,6 +24,12 @@ const BinnedLineGraph: FC<BinnedLineGraphProps> = props => {
     domainPadding,
   } = props;
 
+  // HOOKS
+
+  const {remainingHeight} = useTabBarHeight();
+
+  // GRADIENT COLORS
+
   const gradientColors: GradientColor[] = useMemo(() => {
     const colorBins: number[] = Object.keys(colorMap)
       .map((val: string) => parseInt(val))
@@ -40,6 +47,7 @@ const BinnedLineGraph: FC<BinnedLineGraphProps> = props => {
   return (
     <>
       <LineGraph
+        height={(remainingHeight / 4) * 2}
         gradientColors={gradientColors}
         xDomain={xDomain}
         xValues={xValues}
@@ -51,6 +59,7 @@ const BinnedLineGraph: FC<BinnedLineGraphProps> = props => {
       />
 
       <DomainScroller
+        height={remainingHeight / 4}
         xDomain={xDomain}
         setXDomain={setXDomain}
         brushXValues={brushXValues}

@@ -40,7 +40,10 @@ const getDailyOutputLG = async ({
     const daySnapshot: SidewaysSnapshotRow = list[i];
 
     // 3. For each output, split the day into an equal day segment
-    const dates: Date[] = splitDay(new Date(), daySnapshot.outputs.length);
+    const dates: Date[] = splitDay(
+      daySnapshot.timestamp,
+      daySnapshot.outputs.length,
+    );
 
     // 4. For each day segment, record timestamp and output
     for (let i = 0; i < dates.length; i++) {

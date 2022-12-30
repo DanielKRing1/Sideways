@@ -7,10 +7,12 @@ import {
   VictoryLine,
 } from 'victory-native';
 import {CallbackArgs} from 'victory-core';
+
 import {XDomain} from '../types';
 import {LineGraph} from 'ssDatabase/api/analytics/timeseries/types';
 
 export type DomainScrollerProps = {
+  height: number;
   xDomain: XDomain;
   setXDomain: (newXDomain: XDomain) => void;
 
@@ -23,6 +25,7 @@ export type DomainScrollerProps = {
 };
 const DomainScroller: FC<DomainScrollerProps> = props => {
   const {
+    height,
     xDomain,
     setXDomain,
     data,
@@ -43,13 +46,14 @@ const DomainScroller: FC<DomainScrollerProps> = props => {
     x: [
       data[0].x,
       // @ts-ignore
-      data[data.length - 1].x - Math.ceil(xDomain.x[1] - xDomain.x[0]) + 2,
+      data[data.length - 1].x,
+      //  - Math.ceil(xDomain.x[1] - xDomain.x[0]) + 2,
     ],
   };
 
   return (
     <VictoryChart
-      height={150}
+      height={height}
       domain={fullDomain}
       domainPadding={domainPadding}
       containerComponent={
