@@ -16,6 +16,59 @@ export const getHoursMS = (hours: number): number => hours * getMinutesMS(60);
 export const getDaysMS = (days: number): number => days * getHoursMS(24);
 export const getWeeksMS = (weeks: number): number => weeks * getDaysMS(7);
 
+// MONTH UTILS
+
+/**
+ * Defaults to today
+ *
+ * 0 - January
+ * 1 - February
+ * ...
+ *
+ * @param d
+ */
+export const getMonth = (d: Date = new Date()) => d.getMonth();
+export const getYear = (d: Date = new Date()) => d.getFullYear();
+/**
+ * Get the day of the week of a given date
+ *
+ * 0 - Sunday
+ * 1 - Monday
+ * ...
+ *
+ * @param d
+ */
+export const getDay = (d: Date = new Date()) => d.getDay();
+
+export const getFirstDayOfMonth = (ms: number) => {
+  const firstDateOfMonth: Date = floorMonth(new Date(ms));
+  return getDay(firstDateOfMonth);
+};
+
+export const getDaysInMonth = (ms: number) => {
+  const d = new Date(ms);
+  // Pass next month, which can then be floored to the end of the provided month
+  const m: number = getMonth(d) + 1;
+  const y: number = getYear(d);
+  return getDaysInMonthMY(m, y);
+};
+
+/**
+ * 0 - January
+ * 1 - February
+ * ...
+ *
+ * @param m
+ * @param y
+ * @returns
+ */
+export const getDaysInMonthMY = (m: number, y: number) =>
+  m === 2
+    ? y & 3 || (!(y % 25) && y & 15)
+      ? 28
+      : 29
+    : 30 + ((m + (m >> 3)) & 1);
+
 // FORMAT
 
 export const abbrDateMs = (dateMs: number) => abbrDate(deserializeDate(dateMs));
@@ -48,14 +101,14 @@ export const getNDaysAgo = (days: number) => {
 
 // FLOOR/CEIL
 /**
- * Round date to beginning of month
+ * Round date to beginning of month, ie date is set to 1
  * Modifies in place
  *
  * @param date
  * @returns
  */
 export const floorMonth = (date: Date) => {
-  date.setDate(0);
+  date.setDate(1);
   floorDay(date);
 
   return date;
