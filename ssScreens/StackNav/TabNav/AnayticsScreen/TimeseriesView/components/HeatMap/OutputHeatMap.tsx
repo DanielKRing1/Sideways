@@ -11,6 +11,7 @@ import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 import {HeatMapDay} from 'ssDatabase/api/analytics/timeseries/types';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
+import {getDaysInMonth, getFirstDayOfMonth} from 'ssUtils/date';
 
 type OutputHeatMapProps = {};
 const OutputHeatMap: FC<OutputHeatMapProps> = () => {
@@ -30,24 +31,68 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
   const heatMap: PartialHeatMapCell[] = useMemo(() => {
     console.log(heatMapByMonth);
     console.log(monthIndex);
-    const rawHeatMap: HeatMapDay[] = heatMapByMonth[monthIndex]
+    // 1. Get HeatMap month { day, outputs }
+    // Handle case of no heatmap at monthIndex
+    const heatMapMonth: HeatMapDay[] = heatMapByMonth[monthIndex]
       ? heatMapByMonth[monthIndex].heatMap
       : [];
 
+    // 2. Convert raw map to heat map cells
     // [ { value: [...colors], onPress: (i) => setSelectedIndex(i) }, ... ]
-    return rawHeatMap.map((day: HeatMapDay) => ({
-      value: getOutputDecorationList<string>(
-        day.outputs,
-        fullUserJsonMap,
-        (i: number, v: OutputDecoration) => v.color,
-      ),
-      onPress: (index: number) => setSelectedIndex(index),
-    }));
+    const heatMapCellsSubset: PartialHeatMapCell[] = heatMapMonth.map(
+      (day: HeatMapDay) => ({
+        value: getOutputDecorationList<string>(
+          day.outputs,
+          fullUserJsonMap,
+          (i: number, v: OutputDecoration) => v.color,
+        ),
+        onPress: (index: number) => setSelectedIndex(index),
+      }),
+    );
+
+    const heatMapCellsFullset: PartialHeatMapCell[] = [];
+
+    // 3. Fill in missing days in heat map
+    const NONEXISTANT_DAY_CELL: PartialHeatMapCell = {
+      value: 'NONEXISTANT',
+      onPress: () => {},
+    };
+    const UNRATED_DAY_CELL: PartialHeatMapCell = {
+      value: 'UNRATED',
+      onPress: () => {},
+    };
+    for (let i = 0; i < heatMapCellsSubset.length; i++) {
+      const {day} = heatMapMonth[i];
+      while (heatMapCellsFullset.length < day - 1) {
+        heatMapCellsFullset.push(UNRATED_DAY_CELL);
+      }
+    }
+
+    // 4. Pad end of heat map cells
+    const daysInMonth: number = getDaysInMonth(
+      heatMapByMonth[monthIndex].timestamp,
+    );
+    while (heatMapCellsFullset.length < daysInMonth) {
+      heatMapCellsFullset.push(UNRATED_DAY_CELL);
+    }
+
+    // 5. Shift on empty heat map cell days
+    const firstDayOfMonth: number = getFirstDayOfMonth(
+      heatMapByMonth[monthIndex].timestamp,
+    );
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      heatMapCellsFullset.unshift(NONEXISTANT_DAY_CELL);
+    }
+
+    return heatMapCellsFullset;
   }, [heatMapByMonth, monthIndex, fullUserJsonMap]);
 
   // HANDLER METHODS
   const handleSelectMonth = (newMonthIndex: number) =>
     dispatch(setMonthIndex(newMonthIndex));
+
+  console.log('HEATMAAAAAAAAAAAAAAAAAAAAAAAAAP----------------------------');
+  console.log(heatMap);
 
   return (
     <View>
