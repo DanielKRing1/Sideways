@@ -253,7 +253,7 @@ const getDailyOutputHM = async ({
     }
 
     // 5. Record daily outputs
-    monthOutputs.push({outputs: dayOutputs});
+    monthOutputs.push({day: timestamp.getDate(), outputs: dayOutputs});
   }
   // 6. Handle last month
   heatmapByMonth.push({
