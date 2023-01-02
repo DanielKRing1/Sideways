@@ -22,7 +22,7 @@ export type VennByMonth = {
 };
 
 export type HeatMapDay = {
-  day: number;
+  date: number;
   outputs: string[];
 };
 export type HeatMapByMonth = {

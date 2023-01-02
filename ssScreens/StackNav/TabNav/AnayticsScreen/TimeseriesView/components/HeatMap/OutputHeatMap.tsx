@@ -65,8 +65,8 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
       onPress: () => {},
     };
     for (let i = heatMapCellsSubset.length - 1; i >= 0; i--) {
-      const {day} = heatMapRaw[i];
-      while (heatMapCellsFullset.length < day - 1) {
+      const {date} = heatMapRaw[i];
+      while (heatMapCellsFullset.length < date - 1) {
         heatMapCellsFullset.push(UNRATED_DAY_CELL);
       }
       heatMapCellsFullset.push(heatMapCellsSubset[i]);
