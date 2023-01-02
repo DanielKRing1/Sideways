@@ -45,6 +45,9 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
   const handleSelectMonth = (newMonthIndex: number) =>
     dispatch(setMonthIndex(newMonthIndex));
 
+  console.log('HISTOGRAAAAAAAAAAAAAAAAAAAAAAAM----------------------------');
+  console.log(histogramByMonth[monthIndex].histogram);
+
   return (
     <View>
       <MyText>Output Histogram</MyText>

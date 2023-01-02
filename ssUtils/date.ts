@@ -38,11 +38,15 @@ export const getYear = (d: Date = new Date()) => d.getFullYear();
  *
  * @param d
  */
-export const getDay = (d: Date = new Date()) => d.getDay();
+export const getDay = (d: Date = new Date()) => d.getUTCDay();
 
 export const getFirstDayOfMonth = (ms: number) => {
   const firstDateOfMonth: Date = floorMonth(new Date(ms));
   return getDay(firstDateOfMonth);
+};
+export const getLastDayOfMonth = (ms: number) => {
+  const lastDateOfMonth: Date = ceilMonth(new Date(ms));
+  return getDay(lastDateOfMonth);
 };
 
 export const getDaysInMonth = (ms: number) => {
@@ -121,10 +125,10 @@ export const floorMonth = (date: Date) => {
  * @returns
  */
 export const floorDay = (date: Date) => {
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
+  date.setUTCHours(0);
+  date.setUTCMinutes(0);
+  date.setUTCSeconds(0);
+  date.setUTCMilliseconds(0);
 
   return date;
 };
@@ -153,10 +157,10 @@ export const ceilMonth = (date: Date) => {
  * @returns
  */
 export const ceilDay = (date: Date) => {
-  date.setHours(23);
-  date.setMinutes(59);
-  date.setSeconds(59);
-  date.setMilliseconds(999);
+  date.setUTCHours(23);
+  date.setUTCMinutes(59);
+  date.setUTCSeconds(59);
+  date.setUTCMilliseconds(999);
 
   return date;
 };
@@ -171,7 +175,7 @@ export const splitDay = (date: Date, segments: number): Date[] => {
   const daySegments: Date[] = [];
   for (let i = 0; i < segments; i++) {
     const daySeg: Date = new Date(date);
-    daySeg.setMinutes(i * minPerSeg);
+    daySeg.setUTCMinutes(i * minPerSeg);
     daySegments.push(daySeg);
   }
 

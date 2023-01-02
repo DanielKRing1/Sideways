@@ -57,12 +57,12 @@ const OutputHeatMapCell: FC<HeatMapCellProps> = props => {
     }).start();
   }, [color]);
 
-  console.log({x: `${width / 20}`, y: `${width / 20}`});
+  // console.log({x: `${width / 20}`, y: `${width / 20}`});
 
   // 3. Get color interpolation
-  console.log('OUTPUTHEATMAPCELL');
-  console.log(animVal);
-  console.log(color);
+  // console.log('OUTPUTHEATMAPCELL');
+  // console.log(animVal);
+  // console.log(color);
   const myColor = animVal.interpolate({
     inputRange: [0, 1],
     outputRange: [color.start, color.end],

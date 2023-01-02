@@ -11,7 +11,11 @@ import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 import {HeatMapDay} from 'ssDatabase/api/analytics/timeseries/types';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
-import {getDaysInMonth, getFirstDayOfMonth} from 'ssUtils/date';
+import {
+  getDaysInMonth,
+  getFirstDayOfMonth,
+  getLastDayOfMonth,
+} from 'ssUtils/date';
 
 type OutputHeatMapProps = {};
 const OutputHeatMap: FC<OutputHeatMapProps> = () => {
@@ -33,13 +37,12 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
     console.log(monthIndex);
     // 1. Get HeatMap month { day, outputs }
     // Handle case of no heatmap at monthIndex
-    const heatMapMonth: HeatMapDay[] = heatMapByMonth[monthIndex]
-      ? heatMapByMonth[monthIndex].heatMap
-      : [];
+    if (monthIndex >= heatMapByMonth.length) return [];
+    const heatMapRaw: HeatMapDay[] = heatMapByMonth[monthIndex].heatMap;
 
     // 2. Convert raw map to heat map cells
     // [ { value: [...colors], onPress: (i) => setSelectedIndex(i) }, ... ]
-    const heatMapCellsSubset: PartialHeatMapCell[] = heatMapMonth.map(
+    const heatMapCellsSubset: PartialHeatMapCell[] = heatMapRaw.map(
       (day: HeatMapDay) => ({
         value: getOutputDecorationList<string>(
           day.outputs,
@@ -54,18 +57,19 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
 
     // 3. Fill in missing days in heat map
     const NONEXISTANT_DAY_CELL: PartialHeatMapCell = {
-      value: 'NONEXISTANT',
+      value: ['white'],
       onPress: () => {},
     };
     const UNRATED_DAY_CELL: PartialHeatMapCell = {
-      value: 'UNRATED',
+      value: ['grey'],
       onPress: () => {},
     };
-    for (let i = 0; i < heatMapCellsSubset.length; i++) {
-      const {day} = heatMapMonth[i];
+    for (let i = heatMapCellsSubset.length - 1; i >= 0; i--) {
+      const {day} = heatMapRaw[i];
       while (heatMapCellsFullset.length < day - 1) {
         heatMapCellsFullset.push(UNRATED_DAY_CELL);
       }
+      heatMapCellsFullset.push(heatMapCellsSubset[i]);
     }
 
     // 4. Pad end of heat map cells
@@ -76,12 +80,23 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
       heatMapCellsFullset.push(UNRATED_DAY_CELL);
     }
 
-    // 5. Shift on empty heat map cell days
+    // 5. Shift empty heat map cell days onto first row
     const firstDayOfMonth: number = getFirstDayOfMonth(
       heatMapByMonth[monthIndex].timestamp,
     );
     for (let i = 0; i < firstDayOfMonth; i++) {
       heatMapCellsFullset.unshift(NONEXISTANT_DAY_CELL);
+    }
+
+    // 6. Push empty heat map cell days onto last row
+    const lastDayOfMonth: number = getLastDayOfMonth(
+      heatMapByMonth[monthIndex].timestamp,
+    );
+    console.log('LAST DAY OF MONTHHHH-------------------');
+    console.log(lastDayOfMonth);
+    console.log(new Date().getUTCDay());
+    for (let i = 0; i < 7 - lastDayOfMonth - 1; i++) {
+      heatMapCellsFullset.push(NONEXISTANT_DAY_CELL);
     }
 
     return heatMapCellsFullset;
@@ -90,9 +105,6 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
   // HANDLER METHODS
   const handleSelectMonth = (newMonthIndex: number) =>
     dispatch(setMonthIndex(newMonthIndex));
-
-  console.log('HEATMAAAAAAAAAAAAAAAAAAAAAAAAAP----------------------------');
-  console.log(heatMap);
 
   return (
     <View>
