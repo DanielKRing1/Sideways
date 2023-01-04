@@ -31,7 +31,6 @@ import {DISPLAY_SIZE, HexColor} from '../../global';
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
-import MyButton from 'ssComponents/ReactNative/MyButton';
 import StopPropagationView from 'ssComponents/View/StopPropagationView';
 import MyModal from 'ssComponents/View/Modal';
 import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';

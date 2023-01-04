@@ -28,6 +28,7 @@ import {FlexCol} from '../../../ssComponents/Flex';
 import VerticalSpace from '../../../ssComponents/Spacing/VerticalSpace';
 import GrowingPossibleOutputs from './components/GrowingPossibleOutputs';
 import CategorySetOptions from './components/CategorySetOptions';
+import AddCategorySet from './components/AddCategorySet';
 
 // Possible outputs
 
@@ -82,6 +83,7 @@ const AddSliceScreen: FC<
 
       <VerticalSpace />
 
+      <AddCategorySet />
       <CategorySetOptions />
 
       <VerticalSpace />

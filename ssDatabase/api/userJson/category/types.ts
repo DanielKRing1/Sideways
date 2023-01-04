@@ -41,7 +41,11 @@ export type GJ_CategoryNameMapping = IdMapping;
 //    }
 // }
 export type GJ_CategoryDecorationMapping = Dict<GJ_CategorySet>;
+export type GJ_UserCategorySet = Dict<GJ_UserCategoryDecoration>;
 export type GJ_CategorySet = Dict<GJ_CategoryDecoration>;
+export type GJ_UserCategoryDecoration = Omit<GJ_CategoryDecoration, 'cId'> & {
+  name: string;
+};
 export type GJ_CategoryDecoration = {
   cId: string;
   icon: AvailableIcons;

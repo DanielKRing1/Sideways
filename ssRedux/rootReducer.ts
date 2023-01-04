@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 import createSidewaysSlice from './createSidewaysSlice';
+import createCategorySetSlice from './createCategorySetSlice';
 import readSidewaysSlice from './readSidewaysSlice';
 import rateSidewaysSlice from './rateSidewaysSlice';
 import undorateSidewaysSlice from './undorateSidewaysSlice';
@@ -13,6 +14,7 @@ import userJsonSlice from './userJson';
 
 export default combineReducers({
   createSidewaysSlice,
+  createCategorySetSlice,
   readSidewaysSlice,
   rateSidewaysSlice,
   undorateSidewaysSlice,

@@ -22,6 +22,7 @@ import {
   GJ_SliceNameToCategorySetIdMapping,
   GJ_CategoryDecoration,
   GJ_CDInfo,
+  GJ_UserCategorySet,
 } from 'ssDatabase/api/userJson/category/types';
 import {getUniqueId} from 'ssUtils/id';
 
@@ -122,7 +123,7 @@ const hasCS = (csName: string): boolean => {
  */
 const addCS = (
   newCSName: string,
-  newCS: GJ_CategorySet,
+  userCS: GJ_UserCategorySet,
   newCSId?: string,
 ): void | never => {
   throwLoadError();
@@ -161,8 +162,8 @@ const addCS = (
   // 3.2. Create ids for newCS.cNames and
   //      Replace cNames with ids
   const existingCIds: Set<string> = new Set(Object.keys(cNameMapping));
-  const idMappedCS: GJ_CategorySet = {};
-  for (const cName of Object.keys(newCS)) {
+  const newCS: GJ_CategorySet = {};
+  for (const cName of Object.keys(userCS)) {
     // 3.2.1. Create new cId
     const cId: string = getUniqueId(5, existingCIds);
     existingCIds.add(cId);
@@ -171,7 +172,11 @@ const addCS = (
     cNameMapping[cId] = cName;
 
     // 3.2.3. Replace c name with id
-    idMappedCS[cId] = newCS[cName];
+    newCS[cId] = {
+      cId,
+      icon: userCS[cName].icon,
+      color: userCS[cName].color,
+    };
   }
 
   // 3.3. Save new cNameMapping
@@ -183,7 +188,7 @@ const addCS = (
   // 3.4. Save new id-mapped category
   jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
     ...cdMapping,
-    [newCSId]: idMappedCS,
+    [newCSId]: newCS,
   });
 };
 

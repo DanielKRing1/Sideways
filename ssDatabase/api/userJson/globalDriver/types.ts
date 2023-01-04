@@ -5,6 +5,7 @@ import {
   GJ_SliceNameToCategorySetIdMapping,
   GJ_CategorySet,
   GJ_CDInfo,
+  GJ_UserCategorySet,
 } from '../category/types';
 
 /**
@@ -35,7 +36,7 @@ export type GlobalJsonDriver = {
   hasCS: (csName: string) => boolean | never;
   addCS: (
     newCSName: string,
-    newCS: GJ_CategorySet,
+    userCS: GJ_UserCategorySet,
     csId?: string,
   ) => void | never;
   rmCS: (csId: string) => void | never;

@@ -1,6 +1,10 @@
 import {hashToColor} from 'ssUtils/color';
 import {AvailableIcons} from '../constants';
-import {GJ_CategoryDecoration, GJ_CategorySet} from './types';
+import {
+  GJ_CategoryDecoration,
+  GJ_CategorySet,
+  GJ_UserCategorySet,
+} from './types';
 import {Dict} from '../../../../global';
 
 export const CATEGORY_ROW_DELIM: string = '_';
@@ -35,7 +39,7 @@ export function genDefaultCategoryDecoration(
 export type DefinedCategorySet = {
   name: string;
   csId: string;
-  cs: GJ_CategorySet;
+  cs: GJ_UserCategorySet;
 };
 
 // ACTIVITY JOURNAL
@@ -97,12 +101,12 @@ export const DAILY_JOURNAL_CATEGORY_SET: DefinedCategorySet = {
   csId: 'Daily Journal',
   // Use cName, bcus no cId yet
   // cId will be generated when adding category set
-  cs: Object.keys(DAILY_JOURNAL_CATEGORIES).reduce<GJ_CategorySet>(
+  cs: Object.keys(DAILY_JOURNAL_CATEGORIES).reduce<GJ_UserCategorySet>(
     (acc, cName: string) => {
       acc[cName] = {
         // Use cName instead of cId for now, when this Category Set is added to the Global Json via the addCs method,
         // the cNames will be replaced with cIds
-        cId: cName,
+        name: cName,
         icon: DAILY_JOURNAL_CATEGORIES[cName] as AvailableIcons,
         color: hashToColor(cName),
       };
