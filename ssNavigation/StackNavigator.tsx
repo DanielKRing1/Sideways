@@ -6,6 +6,7 @@ import {
   PROFILE_SCREEN_NAME,
   ACTIVE_SLICE_SCREEN_NAME,
   ADD_SLICE_SCREEN_NAME,
+  ADD_CATEGORY_SET_SCREEN_NAME,
   SETTINGS_SCREEN_NAME,
 } from './constants';
 import TabNavigator from './TabNavigator';
@@ -13,6 +14,7 @@ import ProfileScreen from '../ssScreens/StackNav/ProfileScreen';
 import SettingsScreen from '../ssScreens/StackNav/SettingsScreen';
 import ActiveSliceScreen from '../ssScreens/StackNav/ActiveSliceScreen';
 import AddSliceScreen from '../ssScreens/StackNav/AddSliceScreen';
+import AddCategorySetScreen from 'ssScreens/StackNav/AddCategorySet';
 
 export type StackNavigatorParamList = {
   [TAB_NAV_NAME]: undefined;
@@ -22,6 +24,7 @@ export type StackNavigatorParamList = {
   [ADD_SLICE_SCREEN_NAME]: {
     inputSliceName: string;
   };
+  [ADD_CATEGORY_SET_SCREEN_NAME]: undefined;
 };
 export type StackNavigatorProps<
   ScreenName extends keyof StackNavigatorParamList,
@@ -44,6 +47,10 @@ const StackNavigator = () => (
       component={ActiveSliceScreen}
     />
     <Stack.Screen name={ADD_SLICE_SCREEN_NAME} component={AddSliceScreen} />
+    <Stack.Screen
+      name={ADD_CATEGORY_SET_SCREEN_NAME}
+      component={AddCategorySetScreen}
+    />
   </Stack.Navigator>
 );
 

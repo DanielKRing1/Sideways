@@ -12,6 +12,7 @@ import FlexRow from '../Flex/FlexRow';
 import {
   ActiveSliceNavButton,
   ActiveSliceNavInput,
+  AddCategorySetNavInput,
   AddSliceNavButton,
   AddSliceNavInput,
   EmptySpace,
@@ -93,6 +94,29 @@ export const AddSliceNavHeader: FC<AddSliceHeaderProps> = props => {
     <NavHeader justifyContent={justifyContent}>
       <GoBackNavButton />
       <AddSliceNavInput />
+      <EmptySpace />
+    </NavHeader>
+  );
+};
+
+type AddCategorySetHeaderProps = {
+  justifyContent?:
+    | 'space-around'
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-evenly';
+};
+export const AddCategorySetNavHeader: FC<AddCategorySetHeaderProps> = props => {
+  const {justifyContent = 'space-between'} = props;
+
+  const {} = useContext(RequireActiveSliceContext);
+
+  return (
+    <NavHeader justifyContent={justifyContent}>
+      <GoBackNavButton />
+      <AddCategorySetNavInput />
       <EmptySpace />
     </NavHeader>
   );

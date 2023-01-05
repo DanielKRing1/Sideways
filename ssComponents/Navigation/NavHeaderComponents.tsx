@@ -34,6 +34,7 @@ import {useWindowDimensions, ViewStyle} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useActiveSliceState} from 'ssContexts/RequireActiveSlice/hooks/useActiveSliceState';
 import {ActiveSliceState} from 'ssContexts/constants';
+import {setNewCategorySetName} from 'ssRedux/createCategorySetSlice';
 
 type ProfileNavButton = {};
 export const ProfileNavButton: FC<ProfileNavButton> = props => {
@@ -118,7 +119,7 @@ export const AddSliceNavButton: FC<AddSliceNavButtonProps> = props => {
 
 type AddSliceNavInputProps = {};
 export const AddSliceNavInput: FC<AddSliceNavInputProps> = props => {
-  const {newSliceName, possibleOutputs, createdSignature} = useSelector(
+  const {newSliceName, createdSignature} = useSelector(
     (state: RootState) => state.createSidewaysSlice,
   );
   const dispatch = useDispatch();
@@ -131,6 +132,28 @@ export const AddSliceNavInput: FC<AddSliceNavInputProps> = props => {
     <MyTextInput
       placeholder="New Slice name..."
       value={newSliceName}
+      onChangeText={handleChangeText}
+    />
+  );
+};
+
+type AddCategorySetNavInputProps = {};
+export const AddCategorySetNavInput: FC<
+  AddCategorySetNavInputProps
+> = props => {
+  const {categorySetName, createdSignature} = useSelector(
+    (state: RootState) => state.createCategorySetSlice,
+  );
+  const dispatch = useDispatch();
+
+  const handleChangeText = (newText: string) => {
+    dispatch(setNewCategorySetName(newText));
+  };
+
+  return (
+    <MyTextInput
+      placeholder="New Category Set name..."
+      value={categorySetName}
       onChangeText={handleChangeText}
     />
   );
