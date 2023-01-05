@@ -42,6 +42,7 @@ import {
 } from 'ssDatabase/api/analytics/timeseries/types';
 import {GrowingIdText as NewSliceOutput} from '../../../../ssComponents/Input/GrowingIdList';
 import {Dict} from '../../../../global';
+import {serializeDateNum} from 'ssUtils/date';
 
 // ALL AVAILABLE DATA
 const TEST_SLICE_NAME: string = 'TestSlice';
@@ -207,32 +208,38 @@ describe('TimeseriesStatsDriver', () => {
       });
 
     let modifiedActual: VennByMonth[] = vennByMonth.map<VennByMonth>(
-      (snapshot: VennByMonth) => ({...snapshot, timestamp: new Date(0)}),
+      (snapshot: VennByMonth) => ({
+        ...snapshot,
+        timestamp: serializeDateNum(new Date(0)),
+      }),
     );
     for (const monthSnapshot of modifiedActual) {
       for (let i = 0; i < monthSnapshot.venn.length; i++) {
         const nodeSnapshots: ChartBar[] = monthSnapshot.venn[i];
         monthSnapshot.venn[i] = nodeSnapshots.map<ChartBar>(
-          (daySnapshot: ChartBar) => ({...daySnapshot, x: new Date(0)}),
+          (daySnapshot: ChartBar) => ({
+            ...daySnapshot,
+            x: serializeDateNum(new Date(0)),
+          }),
         );
       }
     }
 
     expect(modifiedActual).toEqual<VennByMonth[]>([
       {
-        timestamp: new Date(0),
+        timestamp: serializeDateNum(new Date(0)),
         venn: [
           [
-            {x: new Date(0), y: 1, y0: 0},
-            {x: new Date(0), y: 1, y0: 0},
+            {x: serializeDateNum(new Date(0)), y: 1, y0: 0},
+            {x: serializeDateNum(new Date(0)), y: 1, y0: 0},
           ],
           [
-            {x: new Date(0), y: 1, y0: 1},
-            {x: new Date(0), y: 1, y0: 1},
+            {x: serializeDateNum(new Date(0)), y: 1, y0: 1},
+            {x: serializeDateNum(new Date(0)), y: 1, y0: 1},
           ],
           [
-            {x: new Date(0), y: 1, y0: 2},
-            {x: new Date(0), y: 1, y0: 2},
+            {x: serializeDateNum(new Date(0)), y: 1, y0: 2},
+            {x: serializeDateNum(new Date(0)), y: 1, y0: 2},
           ],
         ],
         outputs: [
@@ -253,16 +260,16 @@ describe('TimeseriesStatsDriver', () => {
     expect(
       heatMapByMonth.map<HeatMapByMonth>((heatMapSnapshot: HeatMapByMonth) => ({
         ...heatMapSnapshot,
-        timestamp: new Date(0),
+        timestamp: serializeDateNum(new Date(0)),
       })),
     ).toEqual<HeatMapByMonth[]>([
       {
-        timestamp: new Date(0),
+        timestamp: serializeDateNum(new Date(0)),
         heatMap: [
-          {outputs: TEST_RATE_4.outputs},
-          {outputs: TEST_RATE_3.outputs},
-          {outputs: TEST_RATE_2.outputs},
-          {outputs: TEST_RATE_1.outputs},
+          {date: 0, outputs: TEST_RATE_4.outputs},
+          {date: 0, outputs: TEST_RATE_3.outputs},
+          {date: 0, outputs: TEST_RATE_2.outputs},
+          {date: 0, outputs: TEST_RATE_1.outputs},
         ],
       },
     ]);
