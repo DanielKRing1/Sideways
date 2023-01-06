@@ -13,7 +13,7 @@ type GrowingIdListProps = {
 const GrowingIdList: FC<GrowingIdListProps> = props => {
   const {
     data,
-    createRenderItemComponent,
+    RenderItem,
     keyExtractor,
     startingId = getStartingId(data, d => d.id),
     genNextDataPlaceholder,
@@ -36,7 +36,7 @@ const GrowingIdList: FC<GrowingIdListProps> = props => {
   return (
     <GrowingList
       data={data}
-      createRenderItemComponent={createRenderItemComponent}
+      RenderItem={RenderItem}
       keyExtractor={keyExtractor}
       genNextDataPlaceholder={() => genNextDataPlaceholder(peekId())}
       handleUpdateInput={handleUpdateInput}

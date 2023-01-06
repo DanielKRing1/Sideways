@@ -1,13 +1,11 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import styled, {DefaultTheme} from 'styled-components/native';
 import {FlexRow} from '../../../../../../../ssComponents/Flex';
 
 // MY COMPONENTS
 import GrowingIdList from '../../../../../../../ssComponents/Input/GrowingIdList';
 import MyButton from '../../../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../../../ssComponents/ReactNative/MyText';
-import MyTextInput from '../../../../../../../ssComponents/ReactNative/MyTextInput';
 
 // REDUX
 import {AppDispatch, RootState} from '../../../../../../../ssRedux';
@@ -20,12 +18,11 @@ import {
 
 // DECORATIONS
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
-import {ListRenderItemInfo} from 'react-native';
+import {RenderItemProps} from 'ssComponents/Input/GrowingInputList';
 
-const createRenderItemComponent =
+const createRenderItem =
   (deleteVennInput: (index: number) => void) =>
-  (handleChangeText: (newText: string, index: number) => void) =>
-  ({item, index}: ListRenderItemInfo<VennInput>) =>
+  ({item, index, handleChangeText}: RenderItemProps) =>
     (
       <FlexRow>
         <AutoCompleteCategory
@@ -72,7 +69,7 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
   return (
     <GrowingIdList
       data={vennNodeInputs}
-      createRenderItemComponent={createRenderItemComponent((index: number) =>
+      RenderItem={createRenderItem((index: number) =>
         dispatch(startRmVennInput(index)),
       )}
       keyExtractor={keyExtractor}
@@ -84,10 +81,3 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
 };
 
 export default GrowingVennInputList;
-
-const StyledTextInput = styled(MyTextInput)`
-  border-width: 1px;
-  bordercolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.grayBorder};
-  paddingvertical: 25px;
-  paddinghorizontal: 10px;
-`;

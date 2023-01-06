@@ -1,21 +1,25 @@
-import React, {FC, useMemo} from 'react';
-import {FlatList} from 'react-native';
+import React, {FC} from 'react';
+import {FlatList, FlatListProps} from 'react-native';
+
+export type RenderItemProps = {
+  item: any & {id: any};
+  index: number;
+  handleChangeText: (newText: string, index: number) => void;
+};
 
 export type GrowingListProps = {
   data: any[];
+  RenderItem: FC<RenderItemProps>;
   keyExtractor: (dataPoint: any) => string;
-  createRenderItemComponent: (
-    handleChangeText: (newText: string, index: number) => void,
-  ) => FC<any>;
 
   genNextDataPlaceholder: () => any;
-  handleUpdateInput: (newText: string, index: number) => void;
   handleAddInput: (newText: string) => void;
-};
+  handleUpdateInput: (newText: string, index: number) => void;
+} & Omit<FlatListProps<any>, 'data' | 'renderItem'>;
 export const GrowingList: FC<GrowingListProps> = props => {
   const {
     data,
-    createRenderItemComponent,
+    RenderItem,
     keyExtractor,
     genNextDataPlaceholder,
     handleUpdateInput,
@@ -37,23 +41,20 @@ export const GrowingList: FC<GrowingListProps> = props => {
     forceUpdate({});
   };
 
-  // Memoize
-  const RenderItem = createRenderItemComponent(handleChangeText);
-
-  const renderItem = ({item, index}: any) => (
-    <RenderItem item={item} index={index} />
-  );
-  // const renderItem = createRenderItemComponent(handleChangeText);
-
   // Add placeholder
   const grownData = [...data, genNextDataPlaceholder()];
 
   return (
     <FlatList
-      keyboardShouldPersistTaps="always"
-      data={grownData}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
+      {...props}
+      data={[...data, genNextDataPlaceholder()]}
+      renderItem={({item, index}) => (
+        <RenderItem
+          item={item}
+          index={index}
+          handleChangeText={handleChangeText}
+        />
+      )}
     />
   );
 };

@@ -12,16 +12,16 @@ import {
 } from '../../../../ssRedux/createSidewaysSlice';
 
 // COMPONENTS
-import {GrowingIdText as NewSliceOutput} from '../../../../ssComponents/Input/GrowingIdList';
+import GrowingIdList, {
+  GrowingIdText as NewSliceOutput,
+} from '../../../../ssComponents/Input/GrowingIdList';
 
 // NAV
 import MyTextInput from '../../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
 import {FlexRow} from '../../../../ssComponents/Flex';
-import GrowingTextList, {
-  RenderItemProps,
-} from 'ssComponents/Input/GrowingTextList';
+import {RenderItemProps} from 'ssComponents/Input/GrowingInputList';
 
 // Possible outputs
 
@@ -31,24 +31,6 @@ const StyledTextInput = styled(MyTextInput)`
   paddingvertical: 25px;
   paddinghorizontal: 10px;
 `;
-
-const createRenderItemComponent =
-  (deletePossibleOutput: (index: number) => void) =>
-  (handleChangeText: (newText: string, index: number) => void) =>
-  ({item, index}: any) =>
-    (
-      <FlexRow>
-        <StyledTextInput
-          placeholder={'Anotha one...'}
-          value={item.title}
-          onChangeText={(newText: string) => handleChangeText(newText, index)}
-        />
-
-        <MyButton onPress={() => deletePossibleOutput(index)}>
-          <MyText>X</MyText>
-        </MyButton>
-      </FlexRow>
-    );
 
 type GrowingPossibleOutputsProps = {};
 const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
@@ -72,18 +54,19 @@ const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
   const handleAddOutput = (id: number, newPossibleOutput: string) => {
     dispatch(addPossibleOutput({id, text: newPossibleOutput}));
   };
-  const handleUpdateOutput = (index: number, newText: string) => {
+  const handleUpdateOutput = (newText: string, index: number) => {
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
     dispatch(editPossibleOutput({index, newText}));
   };
 
   return (
-    <GrowingTextList
+    <GrowingIdList
       data={possibleOutputs}
-      handleAddOutput={handleAddOutput}
-      handleUpdateOutput={handleUpdateOutput}
+      handleAddInput={handleAddOutput}
+      handleUpdateInput={handleUpdateOutput}
       RenderItem={RI}
       keyExtractor={keyExtractor}
+      genNextDataPlaceholder={genNextDataPlaceholder}
     />
   );
 };

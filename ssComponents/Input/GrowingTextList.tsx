@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {FlatList, FlatListProps, ListRenderItem} from 'react-native';
+import {FlatList, FlatListProps} from 'react-native';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {getStartingId} from 'ssUtils/id';
 
