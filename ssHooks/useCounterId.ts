@@ -1,6 +1,15 @@
 import {useEffect, useState} from 'react';
 
-export const useCounterId = (startingId: number = 0) => {
+export type IdGenerator<T> = {
+  popId: () => T;
+  peekId: () => T;
+  setId: (id: T) => void;
+  reset: () => void;
+};
+
+export const useCounterId = (
+  startingId: number = 0,
+): IdGenerator<number> & {undoPop: () => void} => {
   const [curId, setCurId] = useState<number>(startingId);
 
   const popId = () => {
