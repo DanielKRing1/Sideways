@@ -209,16 +209,67 @@ type GoBackNavButtonProps = {
 export const GoBackNavButton: FC<GoBackNavButtonProps> = props => {
   const {style} = props;
 
+  // HANDLERS
+  const handleGoBack = (navigation: StackNavigatorNavigationProp) => {
+    navigation.goBack();
+  };
+
+  return <_GoBackNavButtonBase onGoBack={handleGoBack} style={style} />;
+};
+
+type GoBackValidSliceNavButtonProps = {
+  style?: ViewStyle;
+};
+export const GoBackValidSliceNavButton: FC<
+  GoBackValidSliceNavButtonProps
+> = props => {
+  const {style} = props;
+
   // HOOKS: ACTIVE SLICE STATUS
   const {activeSliceState} = useActiveSliceState();
+
+  // HANDLERS
+  const handleGoBack = (navigation: StackNavigatorNavigationProp) => {
+    if (activeSliceState === ActiveSliceState.VALID_ACTIVE_SLICE)
+      navigation.goBack();
+  };
+
+  return <_GoBackNavButtonBase onGoBack={handleGoBack} style={style} />;
+};
+
+type GoBackAvailableSliceNavButtonProps = {
+  style?: ViewStyle;
+};
+export const GoBackAvailableSliceNavButton: FC<
+  GoBackAvailableSliceNavButtonProps
+> = props => {
+  const {style} = props;
+
+  // HOOKS: ACTIVE SLICE STATUS
+  const {activeSliceState} = useActiveSliceState();
+
+  // HANDLERS
+  const handleGoBack = (navigation: StackNavigatorNavigationProp) => {
+    if (activeSliceState !== ActiveSliceState.NO_AVAILABLE_SLICES)
+      navigation.goBack();
+  };
+
+  return <_GoBackNavButtonBase onGoBack={handleGoBack} style={style} />;
+};
+
+type _GoBackNavButtonBaseProps = {
+  style?: ViewStyle;
+  onGoBack: (navigation: StackNavigatorNavigationProp) => void;
+};
+const _GoBackNavButtonBase: FC<_GoBackNavButtonBaseProps> = props => {
+  const {style, onGoBack} = props;
 
   // NAVIGATION
   const navigation: StackNavigatorNavigationProp = useNavigation();
 
   // HANDLERS
   const handleGoBack = () => {
-    if (activeSliceState === ActiveSliceState.VALID_ACTIVE_SLICE)
-      navigation.goBack();
+    onGoBack(navigation);
   };
 
   return <BackButton onPress={handleGoBack} style={style} />;

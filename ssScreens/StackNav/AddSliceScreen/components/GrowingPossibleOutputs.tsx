@@ -22,6 +22,8 @@ import MyButton from '../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../ssComponents/ReactNative/MyText';
 import {FlexRow} from '../../../../ssComponents/Flex';
 import {RenderItemProps} from 'ssComponents/Input/GrowingInputList';
+import {useCounterId} from 'ssHooks/useCounterId';
+import {getStartingId} from 'ssUtils/id';
 
 // Possible outputs
 
@@ -62,6 +64,7 @@ const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
   return (
     <GrowingIdList
       data={possibleOutputs}
+      idGenerator={useCounterId(getStartingId(possibleOutputs, po => po.id))}
       handleAddInput={handleAddOutput}
       handleUpdateInput={handleUpdateOutput}
       RenderItem={RI}

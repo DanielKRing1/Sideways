@@ -43,6 +43,8 @@ export const GrowingList: FC<GrowingListProps> = props => {
 
   // Add placeholder
   const grownData = [...data, genNextDataPlaceholder()];
+  console.log('GROOOOOOOOOOOOOOOOWN DATA-----------------------');
+  console.log(grownData);
 
   return (
     <FlatList

@@ -4,22 +4,30 @@ import globalDriver from 'ssDatabase/api/userJson/globalDriver';
 import {ThunkConfig} from '../types';
 import {startRefreshAllUserJson} from 'ssRedux/userJson';
 import {
+  GJ_CategoryDecoration,
+  GJ_CategoryNameMapping,
+  GJ_CategorySet,
   GJ_UserCategoryDecoration,
-  GJ_UserCategorySet,
 } from 'ssDatabase/api/userJson/category/types';
 
 // INITIAL STATE
 
 export interface CreateCSState {
   categorySetName: string;
-  categories: GJ_UserCategorySet;
+  csId: string;
+
+  categories: GJ_CategorySet;
+  categoryNameMapping: GJ_CategoryNameMapping;
 
   createdSignature: {};
 }
 
 const initialState: CreateCSState = {
   categorySetName: '',
+  csId: '',
+
   categories: {},
+  categoryNameMapping: {},
 
   createdSignature: {},
 };
@@ -29,11 +37,20 @@ const initialState: CreateCSState = {
 export const startCreateCS = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'createCS/startCreateCS',
   async (undef, thunkAPI) => {
-    const {categorySetName, categories} =
+    const {categorySetName, csId, categories, categoryNameMapping} =
       thunkAPI.getState().createCategorySetSlice;
 
     // 1. Create predefined Category Sets
-    globalDriver.addCS(categorySetName, categories);
+    try {
+      globalDriver.addCS(
+        categorySetName,
+        csId,
+        categories,
+        categoryNameMapping,
+      );
+    } catch (err) {
+      console.log(err);
+    }
 
     // 2. Refresh UserJsonMap after creating default Category Sets, so
     //    Category Set name -> id is available for ui
@@ -46,14 +63,19 @@ export const startCreateCS = createAsyncThunk<boolean, undefined, ThunkConfig>(
 // ACTION TYPES
 
 type ForceSSRerenderAction = PayloadAction<undefined>;
+type InitExistingCSAction = PayloadAction<{
+  csName: string;
+  csId: string;
+  categories: GJ_CategorySet;
+  categoryNameMapping: GJ_CategoryNameMapping;
+}>;
 type SetNewCSNameAction = PayloadAction<string>;
-type SetCSAction = PayloadAction<GJ_UserCategorySet>;
 type AddCAction = PayloadAction<{
   cName: string;
-  userCD: GJ_UserCategoryDecoration;
+  cd: GJ_CategoryDecoration;
 }>;
 type EditCAction = PayloadAction<{
-  cName: string;
+  cId: string;
   partialUserCD: Partial<GJ_UserCategoryDecoration>;
 }>;
 type RmCAction = PayloadAction<string>;
@@ -66,44 +88,55 @@ export const createSS = createSlice({
   name: 'createSS',
   initialState,
   reducers: {
+    initExistingCS: (state: CreateCSState, action: InitExistingCSAction) => {
+      state.categorySetName = action.payload.csName;
+      state.csId = action.payload.csId;
+
+      state.categories = action.payload.categories;
+      state.categoryNameMapping = action.payload.categoryNameMapping;
+    },
     setNewCategorySetName: (
       state: CreateCSState,
       action: SetNewCSNameAction,
     ) => {
       state.categorySetName = action.payload;
     },
-    setCS: (state: CreateCSState, action: SetCSAction) => {
-      state.categories = action.payload;
-    },
     addC: (state: CreateCSState, action: AddCAction) => {
-      const {cName, userCD} = action.payload;
+      console.log('ADDC-----------------------------');
+      const {cName, cd} = action.payload;
 
-      state.categories[cName] = userCD;
+      state.categoryNameMapping[cd.cId] = cName;
+
+      // 2. Add CD
+      state.categories[cd.cId] = cd;
     },
     editC: (state: CreateCSState, action: EditCAction) => {
-      const {cName, partialUserCD} = action.payload;
+      const {cId, partialUserCD} = action.payload;
+      console.log('EDITC-----------------------------');
+      console.log(action.payload);
 
       if (partialUserCD.icon !== undefined)
-        state.categories[cName].icon = partialUserCD.icon;
+        state.categories[cId].icon = partialUserCD.icon;
       if (partialUserCD.color !== undefined)
-        state.categories[cName].color = partialUserCD.color;
-      if (partialUserCD.name !== undefined) {
-        state.categories[cName].name = partialUserCD.name;
-
-        // Make new name the key
-        state.categories[partialUserCD.name] = state.categories[cName];
-        delete state.categories[cName];
-      }
+        state.categories[cId].color = partialUserCD.color;
+      if (partialUserCD.name !== undefined)
+        state.categoryNameMapping[cId] = partialUserCD.name;
     },
     removeC: (state: CreateCSState, action: RmCAction) => {
       // Do not need to set state bcus Redux Toolkit uses Immer, which
       // applies mutations to the state
-      const cName: string = action.payload;
-      delete state.categories[cName];
+      const cId: string = action.payload;
+      console.log('REMOVEC--------------------------------------');
+      console.log(cId);
+      delete state.categories[cId];
+      delete state.categoryNameMapping[cId];
     },
     reset: (state: CreateCSState, action: ResetAction) => {
       state.categorySetName = '';
+      state.csId = '';
+
       state.categories = {};
+      state.categoryNameMapping = {};
     },
     forceSignatureRerender: (
       state: CreateCSState,
@@ -136,8 +169,8 @@ export const createSS = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  initExistingCS,
   setNewCategorySetName,
-  setCS,
   addC,
   editC,
   removeC,

@@ -12,6 +12,7 @@ import {
 
 // NAVIGATION
 import {
+  ADD_CATEGORY_SET_SCREEN_NAME,
   ADD_SLICE_SCREEN_NAME,
   TAB_NAV_NAME,
 } from '../../../ssNavigation/constants';
@@ -21,23 +22,12 @@ import {StackNavigatorProps} from '../../../ssNavigation/StackNavigator';
 
 // NAV
 import {AddSliceNavHeader} from '../../../ssComponents/Navigation/NavHeader';
-import MyTextInput from '../../../ssComponents/ReactNative/MyTextInput';
 import MyButton from '../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../ssComponents/ReactNative/MyText';
 import {FlexCol} from '../../../ssComponents/Flex';
 import VerticalSpace from '../../../ssComponents/Spacing/VerticalSpace';
 import GrowingPossibleOutputs from './components/GrowingPossibleOutputs';
 import CategorySetOptions from './components/CategorySetOptions';
-import AddCategorySet from './components/AddCategorySet';
-
-// Possible outputs
-
-const StyledTextInput = styled(MyTextInput)`
-  border-width: 1px;
-  bordercolor: ${({theme}: {theme: DefaultTheme}) => theme.colors.grayBorder};
-  paddingvertical: 25px;
-  paddinghorizontal: 10px;
-`;
 
 const AddSliceScreen: FC<
   StackNavigatorProps<typeof ADD_SLICE_SCREEN_NAME>
@@ -83,7 +73,13 @@ const AddSliceScreen: FC<
 
       <VerticalSpace />
 
-      <AddCategorySet />
+      <MyButton
+        onPress={() => navigation.navigate(ADD_CATEGORY_SET_SCREEN_NAME)}>
+        <MyText>Add Category Set +</MyText>
+      </MyButton>
+
+      <VerticalSpace />
+
       <CategorySetOptions />
 
       <VerticalSpace />

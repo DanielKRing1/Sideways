@@ -114,25 +114,22 @@ const hasCS = (csName: string): boolean => {
 /**
  * Add (will not overwrite) an entire CategorySet to a csId key in the AllCategorySets mapping
  *
- * Takes 'names' as input, must convert to unique 'ids'
  *
  * @param newCSName
  * @param newCS The category ids are actually just category names, so ids will be created for each of them
- * @param newCSId
  * @returns
  */
-const addCS = (
-  newCSName: string,
+const addPredefinedCS = (
+  predefinedCSName: string,
   userCS: GJ_UserCategorySet,
-  newCSId?: string,
 ): void | never => {
   throwLoadError();
 
   // 0. Do not add duplicate CategorySet
-  if (hasCS(newCSName)) return;
+  if (hasCS(predefinedCSName)) return;
 
-  console.log('HASSS???');
-  console.log(hasCS(newCSName));
+  console.log('addPredefinedCS HASSS???');
+  console.log(hasCS(predefinedCSName));
 
   // 1. Get Json Table
   const jsonCollection: RealmJson = RealmJsonManager.getCollection(
@@ -140,36 +137,22 @@ const addCS = (
   );
 
   // 2. Get Json Rows
-  const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
-  );
   const cNameMapping: GJ_CategoryNameMapping = jsonCollection.getJson(
     GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
   );
-  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-  );
-
-  // 3.1. Add CategorySet id mapping key
-  const allCSIds: Set<string> = new Set(Object.keys(csNameMapping));
-  // Create new csId only if one is not provided (pre-defined Category Sets will have their own csIds)
-  if (newCSId === undefined) newCSId = getUniqueId(5, allCSIds);
-  jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
-    ...csNameMapping,
-    [newCSId]: newCSName,
-  });
 
   // 3.2. Create ids for newCS.cNames and
   //      Replace cNames with ids
   const existingCIds: Set<string> = new Set(Object.keys(cNameMapping));
   const newCS: GJ_CategorySet = {};
+  const cscNameMapping: GJ_CategoryNameMapping = {};
   for (const cName of Object.keys(userCS)) {
     // 3.2.1. Create new cId
     const cId: string = getUniqueId(5, existingCIds);
     existingCIds.add(cId);
 
     // 3.2.2. Add to cNameMapping
-    cNameMapping[cId] = cName;
+    cscNameMapping[cId] = cName;
 
     // 3.2.3. Replace c name with id
     newCS[cId] = {
@@ -179,16 +162,100 @@ const addCS = (
     };
   }
 
-  // 3.3. Save new cNameMapping
-  jsonCollection.setJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
-    cNameMapping,
+  addCS(predefinedCSName, predefinedCSName, newCS, cscNameMapping);
+};
+
+/**
+ * Add a CategorySet to UserJson + Update CategoryNameMapping
+ *
+ * Creates a random, unique 'csId' if not provided
+ *
+ * @param csName
+ * @param csId
+ * @param cs
+ * @param cscNameMapping - This is the mapping of the category ids included in this CS to their names
+ * @returns
+ */
+const addCS = (
+  csName: string,
+  csId: string,
+  cs: GJ_CategorySet,
+  cscNameMapping: GJ_CategoryNameMapping,
+): void | never => {
+  console.log('ADDCS1-----------------------');
+  throwLoadError();
+  console.log('ADDCS2-----------------------');
+
+  // 0. Do not add duplicate CategorySet name
+  if (hasCS(csName)) return;
+
+  console.log('addCS HASSS???');
+  console.log(hasCS(csName));
+
+  // 1. Get Json Table
+  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
+    GLOBAL_COLLECTION_KEY,
   );
 
-  // 3.4. Save new id-mapped category
+  console.log(1);
+
+  // 2. Get Json Rows
+  const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
+  );
+  console.log(2);
+  const cNameMapping: GJ_CategoryNameMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
+  );
+  console.log(3);
+  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
+  );
+  console.log(4);
+
+  // 3.1. Save new csId
+  // Create new csId only if one is not provided (pre-defined Category Sets will have their own csIds)
+  if (csId === '') csId = getUniqueId(5, new Set(Object.keys(csNameMapping)));
+  if (csNameMapping[csId] === undefined)
+    jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
+      ...csNameMapping,
+      [csId]: csName,
+    });
+  console.log(5);
+
+  // 3.2. Delete cId's that have been removed (do not exist in the new CS)
+  // If the CS already exists, there will be keys, else empty list
+  const existingCIds: string[] = cdMapping[csId]
+    ? Object.keys(cdMapping[csId])
+    : [];
+  for (let cId of existingCIds) {
+    if (cs[cId] === undefined) delete cNameMapping[csId];
+  }
+  console.log(6);
+
+  // 3.3. Save new cNameMapping
+  jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING, {
+    ...cNameMapping,
+    ...cscNameMapping,
+  });
+  console.log(7);
+
+  console.log('NEW CNAMEMAPPING----------------------------');
+  console.log({
+    ...cNameMapping,
+    ...cscNameMapping,
+  });
+
+  // 3.4. Save new cs
   jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
     ...cdMapping,
-    [newCSId]: newCS,
+    [csId]: cs,
+  });
+
+  console.log('NEW CDMAPPING----------------------------');
+  console.log({
+    ...cdMapping,
+    [csId]: cs,
   });
 };
 
@@ -422,6 +489,7 @@ const Driver: GlobalJsonDriver = {
   closeAll,
 
   hasCS,
+  addPredefinedCS,
   addCS,
   rmCS,
   editCD,

@@ -27,50 +27,47 @@ import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {HexColor} from '../../global';
 import {editC, removeC} from 'ssRedux/createCategorySetSlice';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
-import {DEFAULT_CREATE_CS_ACTIVE_SLICE} from 'ssScreens/StackNav/AddSliceScreen/components/AddCategorySet';
+import {DEFAULT_CREATE_CS_ACTIVE_SLICE} from 'ssScreens/StackNav/AddCategorySet/components/GrowingCategorySet';
+import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 
 type CategorySetCategoryRowProps = Omit<
   BaseCategoryRowProps,
-  'categoryId' | 'activeSliceName' | 'fullUserJsonMap'
+  'inputName' | 'activeSliceName' | 'fullUserJsonMap'
 > & {csUserJsonMap: UserJsonMap; categoryId?: string};
 const CategorySetCategoryRow: FC<CategorySetCategoryRowProps> = props => {
-  const {inputName, csUserJsonMap} = props;
+  const {categoryId, csUserJsonMap} = props;
 
   // REDUX
   const dispatch: AppDispatch = useDispatch();
 
   // HANDLERS
-  // So this component's interaction with the db is entirely self-sufficient
-  const handleCommitCategoryName = (newCategoryName: string) => {
-    // 1. Change input key in redux
-    dispatch(editC({cName: inputName, partialUserCD: {name: newCategoryName}}));
-  };
-
   const handleDeleteCategoryRow = () => {
     // Db
     // 1. Decrement original inputName counter (and delete if counter <= 0)
-    removeC(inputName);
+    dispatch(removeC(categoryId));
   };
 
   const handleCommitCId = (newCId: string) => {};
   const handleCommitIcon = (icon: AvailableIcons) => {
     // Redux
     // 1. Update CategoryDecortion.icon
-    dispatch(editC({cName: inputName, partialUserCD: {icon}}));
+    dispatch(editC({cId: categoryId, partialUserCD: {icon}}));
   };
   const handleCommitColor = (color: HexColor) => {
     // Db
     // 1. Update CategoryDecortion.color
-    dispatch(editC({cName: inputName, partialUserCD: {color}}));
+    dispatch(editC({cId: categoryId, partialUserCD: {color}}));
   };
 
   return (
     <BaseCategoryRow
       {...props}
-      categoryId={inputName}
+      inputName={
+        csUserJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING][categoryId]
+      }
+      categoryId={categoryId}
       activeSliceName={DEFAULT_CREATE_CS_ACTIVE_SLICE}
       fullUserJsonMap={csUserJsonMap}
-      onCommitInputName={handleCommitCategoryName}
       onDeleteCategoryRow={handleDeleteCategoryRow}
       onCommitCId={handleCommitCId}
       onCommitColor={handleCommitColor}

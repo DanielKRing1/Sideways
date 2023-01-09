@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {getUniqueId} from 'ssUtils/id';
 import {IdGenerator} from './useCounterId';
 
-export const useCounterId = (
+export const useUniqueId = (
   idLen: number,
   _existingIds: string[] = [],
 ): IdGenerator<string> => {

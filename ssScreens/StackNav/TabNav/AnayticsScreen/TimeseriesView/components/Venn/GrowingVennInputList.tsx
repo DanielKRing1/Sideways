@@ -19,6 +19,8 @@ import {
 // DECORATIONS
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
 import {RenderItemProps} from 'ssComponents/Input/GrowingInputList';
+import {useCounterId} from 'ssHooks/useCounterId';
+import {getStartingId} from 'ssUtils/id';
 
 const createRenderItem =
   (deleteVennInput: (index: number) => void) =>
@@ -69,6 +71,7 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
   return (
     <GrowingIdList
       data={vennNodeInputs}
+      idGenerator={useCounterId(getStartingId(vennNodeInputs, vni => vni.id))}
       RenderItem={createRenderItem((index: number) =>
         dispatch(startRmVennInput(index)),
       )}

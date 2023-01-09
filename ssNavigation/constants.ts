@@ -2,7 +2,7 @@
 export const PROFILE_SCREEN_NAME = 'Profile';
 export const ACTIVE_SLICE_SCREEN_NAME = 'ActiveSlice';
 export const ADD_SLICE_SCREEN_NAME = 'AddSlice';
-export const ADD_CATEGORY_SET_SCREEN_NAME = 'AddCAtegorySet';
+export const ADD_CATEGORY_SET_SCREEN_NAME = 'AddCategorySet';
 export const SETTINGS_SCREEN_NAME = 'Settings';
 export const TAB_NAV_NAME = 'TabNavigator';
 

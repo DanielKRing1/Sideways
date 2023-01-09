@@ -1,21 +1,25 @@
 import React, {FC} from 'react';
 import {GrowingList, GrowingListProps} from './GrowingInputList';
-import {useCounterId} from '../../ssHooks/useCounterId';
-import {getStartingId} from 'ssUtils/id';
+import {IdGenerator} from '../../ssHooks/useCounterId';
+import {View} from 'react-native';
 
 export type GrowingIdText = {text: string; id: number};
 type GrowingIdListProps = {
-  startingId?: number;
+  idGenerator: IdGenerator<any>;
 
-  genNextDataPlaceholder: (id: number) => any;
-  handleAddInput: (id: number, newText: string) => void;
-} & Omit<GrowingListProps, 'genNextDataPlaceholder' | 'handleAddInput'>;
+  genNextDataPlaceholder: (id: any) => any;
+  handleAddInput: (id: any, newText: string) => void;
+  handleUpdateInput: (newText: string, index: number, id: any) => void;
+} & Omit<
+  GrowingListProps,
+  'genNextDataPlaceholder' | 'handleAddInput' | 'handleUpdateInput'
+>;
 const GrowingIdList: FC<GrowingIdListProps> = props => {
   const {
     data,
     RenderItem,
     keyExtractor,
-    startingId = getStartingId(data, d => d.id),
+    idGenerator,
     genNextDataPlaceholder,
     handleUpdateInput,
     handleAddInput,
@@ -23,14 +27,17 @@ const GrowingIdList: FC<GrowingIdListProps> = props => {
 
   // ID GENERATOR
   // Start id generator with current max id or 0
-  const {peekId, popId} = useCounterId(startingId);
+  const {peekId, popId} = idGenerator;
 
   // HANDLER METHODS
-  const handleAddInputText = (newInputOption: string) => {
+  const _handleAddInput = (newText: string) => {
     const newId: number = popId();
     console.log('NEW ID-------------------------');
     console.log(newId);
-    handleAddInput(newId, newInputOption);
+    handleAddInput(newId, newText);
+  };
+  const _handleUpdateInput = (newText: string, index: number) => {
+    handleUpdateInput(newText, index, keyExtractor(data[index]));
   };
 
   return (
@@ -39,8 +46,8 @@ const GrowingIdList: FC<GrowingIdListProps> = props => {
       RenderItem={RenderItem}
       keyExtractor={keyExtractor}
       genNextDataPlaceholder={() => genNextDataPlaceholder(peekId())}
-      handleUpdateInput={handleUpdateInput}
-      handleAddInput={handleAddInputText}
+      handleUpdateInput={_handleUpdateInput}
+      handleAddInput={_handleAddInput}
     />
   );
 };

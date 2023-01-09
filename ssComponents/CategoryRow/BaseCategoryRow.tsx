@@ -39,6 +39,7 @@ import CIdSelector from './components/CIdSelector';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
 
 export type BaseCategoryRowProps = {
+  disableButtons?: boolean;
   editable?: boolean;
   deletable?: boolean;
   style?: ViewStyle;
@@ -64,6 +65,7 @@ export type BaseCategoryRowProps = {
 };
 const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
   const {
+    disableButtons = false,
     editable = true,
     deletable = true,
     style = {},
@@ -93,6 +95,10 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
   const theme = useTheme();
 
   const categoryDecoration: GJ_CategoryDecoration = useMemo(() => {
+    console.log('CATEGORY DECORATION--------------------');
+    console.log(activeSliceName);
+    console.log(categoryId);
+    console.log(fullUserJsonMap);
     return cIdToCD(activeSliceName, categoryId, fullUserJsonMap);
   }, [inputName, categoryId, fullUserJsonMap]);
 
@@ -167,10 +173,14 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
     console.log('HANDLER: handleCommitInputName');
     console.log(newInputName);
     console.log(inputName);
+    console.log(onCommitInputName);
 
     // No inputName
     if (newInputName === '') onDeleteCategoryRow();
-    else onCommitInputName(newInputName);
+    else {
+      console.log('calling onCommitInputName');
+      onCommitInputName(newInputName);
+    }
   };
   const handleCommitCId = (newCId: string) => {
     // No change
@@ -247,6 +257,7 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
           <FlexRow justifyContent={'space-around'}>
             {/* CId */}
             <IconModalButton
+              disabled={disableButtons}
               color={categoryDecoration.color}
               iconName={categoryDecoration.icon}
               onPress={handleOpenCIdModal}
@@ -254,6 +265,7 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
 
             {/* Icon */}
             <IconModalButton
+              disabled={disableButtons}
               color={categoryDecoration.color}
               iconName={'circle'}
               onPress={handleOpenIconModal}
@@ -261,6 +273,7 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
 
             {/* Color */}
             <IconModalButton
+              disabled={disableButtons}
               color={categoryDecoration.color}
               iconName={'square'}
               onPress={handleOpenColorModal}

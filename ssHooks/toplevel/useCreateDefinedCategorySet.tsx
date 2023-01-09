@@ -19,10 +19,9 @@ const useCreateDefinedCategorySet = () => {
 
   useEffect(() => {
     // 1. Create predefined Category Sets
-    GlobalDriver.addCS(
+    GlobalDriver.addPredefinedCS(
       DAILY_JOURNAL_CATEGORY_SET.name,
       DAILY_JOURNAL_CATEGORY_SET.cs,
-      DAILY_JOURNAL_CATEGORY_SET.csId,
     );
 
     // 2. Refresh UserJsonMap after creating default Category Sets, so

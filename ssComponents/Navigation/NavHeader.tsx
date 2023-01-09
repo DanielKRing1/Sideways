@@ -16,7 +16,9 @@ import {
   AddSliceNavButton,
   AddSliceNavInput,
   EmptySpace,
+  GoBackAvailableSliceNavButton,
   GoBackNavButton,
+  GoBackValidSliceNavButton,
   GoNavButton,
   ProfileNavButton,
   SettingsNavButton,
@@ -69,7 +71,7 @@ export const ActiveSliceNavHeader: FC<ActiveSliceHeaderProps> = props => {
 
   return (
     <NavHeader>
-      <GoBackNavButton />
+      <GoBackValidSliceNavButton />
       <ActiveSliceNavInput />
       <AddSliceNavButton />
     </NavHeader>
@@ -92,7 +94,7 @@ export const AddSliceNavHeader: FC<AddSliceHeaderProps> = props => {
 
   return (
     <NavHeader justifyContent={justifyContent}>
-      <GoBackNavButton />
+      <GoBackAvailableSliceNavButton />
       <AddSliceNavInput />
       <EmptySpace />
     </NavHeader>

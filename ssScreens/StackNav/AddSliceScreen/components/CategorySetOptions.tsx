@@ -34,17 +34,17 @@ const CategorySetOptions: FC<CategorySetOptionsProps> = props => {
     dispatch(setCSId(newCSId));
   };
 
-  console.log(fullUserJsonMap);
+  // console.log(fullUserJsonMap);
 
   const csNameMapping: GJ_CategorySetNameMapping =
     fullUserJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING];
 
-  console.log('AYYYYYYYYYYYYYYYYYYYE');
-  console.log(fullUserJsonMap);
-  console.log(csNameMapping);
+  // console.log('AYYYYYYYYYYYYYYYYYYYE');
+  // console.log(fullUserJsonMap);
+  // console.log(csNameMapping);
   const allCSIds: string[] = Object.keys(csNameMapping);
-  console.log('ALL CS IDS');
-  console.log(allCSIds);
+  // console.log('ALL CS IDS');
+  // console.log(allCSIds);
 
   // RENDER ITEM
   const renderItem: ListRenderItem<string> = itemInfo => (

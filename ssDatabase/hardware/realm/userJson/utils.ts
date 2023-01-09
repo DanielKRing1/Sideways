@@ -176,6 +176,10 @@ export function cIdToCD(
     console.log(csId);
     console.log(categoryId);
     console.log(cd);
+    if (cd === undefined)
+      throw new Error(
+        `cIdToCD(): 'cd' === undefined; Generate a default CategoryDecoration`,
+      );
     return cd;
   } catch (err) {
     console.log('SHOULD GO HEERRREEE');
