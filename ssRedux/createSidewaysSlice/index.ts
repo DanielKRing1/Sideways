@@ -4,7 +4,7 @@ import {GrowingIdText as NewSliceOutput} from 'ssComponents/Input/GrowingIdList'
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {DAILY_JOURNAL_CATEGORY_SET} from 'ssDatabase/api/userJson/category/constants';
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
-import {setActiveSliceName} from 'ssRedux/readSidewaysSlice';
+import {startSetActiveSliceName} from 'ssRedux/readSidewaysSlice';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE
@@ -56,7 +56,7 @@ export const startCreateSlice = createAsyncThunk<
   thunkAPI.dispatch(reset());
 
   // 5. Select created alice as active slice
-  thunkAPI.dispatch(setActiveSliceName(newSliceName));
+  thunkAPI.dispatch(startSetActiveSliceName(newSliceName));
 
   thunkAPI.dispatch(forceSignatureRerender());
 

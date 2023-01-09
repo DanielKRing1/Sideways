@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 
 // REDUX
 import {AppDispatch, RootState} from '../../../ssRedux';
-import {setActiveSliceName} from '../../../ssRedux/readSidewaysSlice';
+import {startSetActiveSliceName} from '../../../ssRedux/readSidewaysSlice';
 
 // NAVIGATION
 import {StackNavigatorProps} from '../../../ssNavigation/StackNavigator';
@@ -37,7 +37,7 @@ const ActiveSliceScreen: FC<
 
   // SLICE HANDLER METHODS
   const handleSelectActiveSlice = (sliceName: string) => {
-    dispatch(setActiveSliceName(sliceName));
+    dispatch(startSetActiveSliceName(sliceName));
 
     navigation.navigate(TAB_NAV_NAME);
   };

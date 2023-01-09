@@ -36,6 +36,19 @@ const initialState: ReadSSState = {
 
 // THUNKS
 
+export const startSetActiveSliceName = createAsyncThunk<
+  boolean,
+  string,
+  ThunkConfig
+>(
+  'rateSS/startSetActiveSliceName',
+  async (selectedActiveSliceName, thunkAPI) => {
+    thunkAPI.dispatch(setActiveSliceName(selectedActiveSliceName));
+
+    return true;
+  },
+);
+
 // CALL THESE 2 THUNKS WHENEVER IN/OUTPUTS ARE ADDED/REMOVED FROM DB
 
 // CALL THIS THUNK WHENEVER ACTIVE SLICE CHANGES
@@ -143,12 +156,8 @@ export const readSS = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  forceSignatureRerender,
-  setActiveSliceName,
-  setSearchedSliceName,
-} = readSS.actions;
-const {setAllDbInputs, setAllDbOutputs} = readSS.actions;
+export const {forceSignatureRerender, setSearchedSliceName} = readSS.actions;
+const {setActiveSliceName, setAllDbInputs, setAllDbOutputs} = readSS.actions;
 
 const internalReadReducer = combineReducers({
   readGraphReducer,
