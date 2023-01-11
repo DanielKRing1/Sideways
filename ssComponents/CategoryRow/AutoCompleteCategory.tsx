@@ -53,7 +53,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
 
   const getSuggestionText = (input: string) => input;
 
-  console.log('AUTOCOMPLETECATEGORY RERENDERED');
+  // console.log('AUTOCOMPLETECATEGORY RERENDERED');
 
   return (
     <AutoCompleteDropdown

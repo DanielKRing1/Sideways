@@ -48,7 +48,7 @@ const NodeStats: FC<NodeStatsProps> = props => {
     return cd.icon;
   }, [fullUserJsonMap]);
 
-  console.log('NODESTATS RERENDERED');
+  // console.log('NODESTATS RERENDERED');
 
   return (
     <View style={{}}>

@@ -41,7 +41,7 @@ export const SearchableDropdown = forwardRef<
     Keyboard.dismiss();
   };
 
-  console.log('SEARCHABLEDROPDOWN RERENDERED');
+  // console.log('SEARCHABLEDROPDOWN RERENDERED');
 
   return (
     <StyledRow>

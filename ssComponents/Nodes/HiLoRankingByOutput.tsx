@@ -10,7 +10,7 @@ type HiLoRankingByOutputProps = {
 const HiLoRankingByOutputDisplay: FC<HiLoRankingByOutputProps> = props => {
   const {hiLoRankingByOutput} = props;
 
-  console.log('HiLoRankingByOutputDisplay RERENDERED');
+  // console.log('HiLoRankingByOutputDisplay RERENDERED');
 
   return (
     <FlexCol>

@@ -56,7 +56,7 @@ const AutoCompleteDropdown = forwardRef<
 });
 
 const Dropdown: FC<any> = ({autoComplete, DropdownRow, inputValue}) => {
-  console.log('DROPDOWN RERENDERED');
+  // console.log('DROPDOWN RERENDERED');
 
   return (
     <FlexCol>

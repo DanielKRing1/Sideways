@@ -95,10 +95,10 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
   const theme = useTheme();
 
   const categoryDecoration: GJ_CategoryDecoration = useMemo(() => {
-    console.log('CATEGORY DECORATION--------------------');
-    console.log(activeSliceName);
-    console.log(categoryId);
-    console.log(fullUserJsonMap);
+    // console.log('CATEGORY DECORATION--------------------');
+    // console.log(activeSliceName);
+    // console.log(categoryId);
+    // console.log(fullUserJsonMap);
     return cIdToCD(activeSliceName, categoryId, fullUserJsonMap);
   }, [inputName, categoryId, fullUserJsonMap]);
 

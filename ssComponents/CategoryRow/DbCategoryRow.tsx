@@ -145,7 +145,7 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
     // 2. Update UserJsonMap
     dispatch(startRefreshCategoryMapping());
 
-    console.log('DBCATEGORYROW RERENDERED');
+    // console.log('DBCATEGORYROW RERENDERED');
   };
 
   return (

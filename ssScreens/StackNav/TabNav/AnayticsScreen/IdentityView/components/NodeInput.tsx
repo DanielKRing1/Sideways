@@ -26,7 +26,7 @@ const NodeInput: FC<NodeInputProps> = () => {
     dispatch(startSetNodeIdInput({nodeIdInput, graphType: GraphType.Input}));
   }, []);
 
-  console.log('NODEINPUT RERENDERED');
+  // console.log('NODEINPUT RERENDERED');
 
   return (
     <View>

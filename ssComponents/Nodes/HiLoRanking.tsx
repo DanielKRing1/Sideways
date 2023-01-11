@@ -12,7 +12,7 @@ type HiLoRankingDisplayProps = {
 const HiLoRankingDisplay: FC<HiLoRankingDisplayProps> = props => {
   const {hiLoRanking} = props;
 
-  console.log('HiLoRankingDisplay RERENDERED');
+  // console.log('HiLoRankingDisplay RERENDERED');
 
   return (
     <FlexCol>

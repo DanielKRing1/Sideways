@@ -172,10 +172,10 @@ export function cIdToCD(
   try {
     // Get CategoryDecoration from CategorySliceId.CategoryId
     const cd: GJ_CategoryDecoration = cdMapping[csId][categoryId];
-    console.log('DID NOT THROW AN ERROR');
-    console.log(csId);
-    console.log(categoryId);
-    console.log(cd);
+    // console.log('DID NOT THROW AN ERROR');
+    // console.log(csId);
+    // console.log(categoryId);
+    // console.log(cd);
     if (cd === undefined)
       throw new Error(
         `cIdToCD(): 'cd' === undefined; Generate a default CategoryDecoration`,
@@ -202,14 +202,14 @@ export function inToLastCId(
     const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =
       userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
 
-    console.log('inToLastCId():');
-    console.log(caller);
-    console.log(inToCIdMapping);
+    // console.log('inToLastCId():');
+    // console.log(caller);
+    // console.log(inToCIdMapping);
 
     // 2. Convert SliceName - CSId and InputName - CId
     // Category Id
     cId = inToCIdMapping[inputName].categoryId;
-    console.log(cId);
+    // console.log(cId);
   } catch (err) {
     console.log('Error was caught, and this is acceptable behavior');
     console.log(err);

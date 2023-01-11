@@ -13,7 +13,7 @@ const HiLoRankingByOutputRowDisplay: FC<
 > = props => {
   const {hiLoRankingByOutput} = props;
 
-  console.log('HiLoRankingByOutputRowDisplay RERENDERED');
+  // console.log('HiLoRankingByOutputRowDisplay RERENDERED');
 
   return (
     <>
