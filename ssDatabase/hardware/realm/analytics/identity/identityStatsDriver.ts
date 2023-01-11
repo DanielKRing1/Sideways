@@ -10,6 +10,7 @@ import {
   IdentityDriverType,
 } from 'ssDatabase/api/analytics/identity/types';
 import {GraphType} from 'ssDatabase/api/core/types';
+import {TimerMan} from 'ssUtils/timer';
 import {
   HiLoRanking,
   HiLoRankingByOutput,
@@ -36,23 +37,30 @@ const getNodeStats = ({
     : undefined;
 };
 
-const _getTandemNodes = async (
+const _getTandemNodes = (
   activeSliceName: string,
   graphType: GraphType,
   nodeId: string,
   rawOutputs: string[],
-  getEdges: (nodeId: string) => Promise<CGEdge[]>,
+  getEdges: (nodeId: string) => CGEdge[],
   listLength: number,
-): Promise<HiLoRanking> => {
+): HiLoRanking => {
   // 1. Get connected edges
-  const cgedges: CGEdge[] = await getEdges(nodeId);
+  TimerMan.getTimer('_getTandemNodes cgEdges').restart();
+  const cgedges: CGEdge[] = getEdges(nodeId);
+  console.log(getEdges.name);
+  TimerMan.getTimer('_getTandemNodes cgEdges').logInterval(
+    '_getTandemNodes cgEdges end: ----------------------------------5: ',
+  );
   const hiCGEdges: CGEdge[] = cgedges.slice(-listLength).reverse();
   const loCGEdges: CGEdge[] = cgedges.slice(0, listLength);
 
   // 2. Get destination node from edge
   //      Convert CGNode to RankedNode
   //      Filter out undefined results
-  return {
+  TimerMan.getTimer('_getRandemNodes hiloranking').restart();
+
+  const hiloranking = {
     highestRanked: hiCGEdges
       .map((cgedge: CGEdge) =>
         getNodeStats({
@@ -78,26 +86,34 @@ const _getTandemNodes = async (
         (rankedNode: RankedNode | undefined) => rankedNode !== undefined,
       ) as RankedNode[],
   };
+  TimerMan.getTimer('_getRandemNodes hiloranking').logInterval(
+    '_getRandemNodes hiloranking end: ----------------------------------4: ',
+  );
+
+  return hiloranking;
 };
-const _getTandemNodesByOutput = async (
+const _getTandemNodesByOutput = (
   activeSliceName: string,
   graphType: GraphType,
   nodeId: string,
   rawOutputs: string[],
-  getEdges: (nodeId: string, output: string) => Promise<CGEdge[]>,
+  getEdges: (nodeId: string, output: string) => CGEdge[],
   listLength: number,
-): Promise<HiLoRankingByOutput> => {
+): HiLoRankingByOutput => {
   // 1. Data structure
   const hiLoRankings: HiLoRankingByOutput = {};
 
   // 2. For each output
   for (const output of rawOutputs) {
-    hiLoRankings[output] = await _getTandemNodes(
+    hiLoRankings[output] = _getTandemNodes(
       activeSliceName,
       graphType,
       nodeId,
       rawOutputs,
-      (nodeId: string) => getEdges(nodeId, output),
+      (nodeId: string) => {
+        console.log(getEdges.name);
+        return getEdges(nodeId, output);
+      },
       listLength,
     );
   }
@@ -114,15 +130,20 @@ const _getTandemNodesByOutput = async (
  * @param listLength
  * @returns
  */
-const getCollectivelyTandemNodes = async ({
+const getCollectivelyTandemNodes = ({
   activeSliceName,
   graphType,
   nodeId,
   rawOutputs,
   listLength,
-}: GetNodeStatsByOutputArgs): Promise<HiLoRanking> => {
+}: GetNodeStatsByOutputArgs): HiLoRanking => {
   throwLoadError();
+
+  TimerMan.getTimer('getCollectivelyTandemNodes GET REALM GRAPH').restart();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
+  TimerMan.getTimer('getCollectivelyTandemNodes GET REALM GRAPH').logInterval(
+    'getCollectivelyTandemNodes GET REALM GRAPH end: ----------------------------------4: ',
+  );
 
   return _getTandemNodes(
     activeSliceName,
@@ -143,17 +164,17 @@ const getCollectivelyTandemNodes = async ({
  * @param listLength
  * @returns
  */
-const getSinglyTandemNodes = async ({
+const getSinglyTandemNodes = ({
   activeSliceName,
   graphType,
   nodeId,
   rawOutputs,
   listLength,
-}: GetNodeStatsByOutputArgs): Promise<HiLoRankingByOutput> => {
+}: GetNodeStatsByOutputArgs): HiLoRankingByOutput => {
   throwLoadError();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
-  return await _getTandemNodesByOutput(
+  return _getTandemNodesByOutput(
     activeSliceName,
     graphType,
     nodeId,
@@ -163,17 +184,17 @@ const getSinglyTandemNodes = async ({
   );
 };
 
-const getHighlyRatedTandemNodes = async ({
+const getHighlyRatedTandemNodes = ({
   activeSliceName,
   graphType,
   nodeId,
   rawOutputs,
   listLength,
-}: GetNodeStatsByOutputArgs): Promise<HiLoRankingByOutput> => {
+}: GetNodeStatsByOutputArgs): HiLoRankingByOutput => {
   throwLoadError();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
-  return await _getTandemNodesByOutput(
+  return _getTandemNodesByOutput(
     activeSliceName,
     graphType,
     nodeId,

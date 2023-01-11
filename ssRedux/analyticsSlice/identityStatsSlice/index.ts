@@ -15,6 +15,7 @@ import {
   GetNodeStatsByOutputArgs,
 } from 'ssDatabase/api/analytics/identity/types';
 import {GraphType} from 'ssDatabase/api/core/types';
+import {TimerMan} from 'ssUtils/timer';
 
 // INITIAL STATE
 
@@ -82,11 +83,17 @@ export const startAssureFreshness = createAsyncThunk<
   console.log(activeSliceName);
   console.log(analyzedSliceName);
 
+  TimerMan.getTimer('startAssureFreshness').restart();
+
   // 1. 'activeSliceName' changed
   if (activeSliceName !== analyzedSliceName) {
     // Recompute identityNodes + reset stats bcus inputNode is now unknown
     thunkAPI.dispatch(resetNodesAndStats());
     thunkAPI.dispatch(startGetIdentityNodes());
+
+    TimerMan.getTimer('startAssureFreshness').logInterval(
+      'startAssureFreshness end 1-----------------: ',
+    );
   }
   // 2. Freshness changed (rate, undo rate, ...)
   else if (!isFresh) {
@@ -101,6 +108,10 @@ export const startAssureFreshness = createAsyncThunk<
 
     thunkAPI.dispatch(forceIdentityStatsSignatureRerender());
     thunkAPI.dispatch(forceInputStatsSignatureRerender());
+
+    TimerMan.getTimer('startAssureFreshness').logInterval(
+      'startAssureFreshness end2-----------------: ',
+    );
   }
 
   // 3. Is now fresh
@@ -158,58 +169,84 @@ export const startSetNodeIdInput = createAsyncThunk<
 >(
   'identityStatsSS/startSetNodeStats',
   async ({nodeIdInput, graphType}: StartSetNodeIdInputArgs, thunkAPI) => {
-    // 1. Set node id input
-    thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
+    try {
+      // 1. Set node id input
+      thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
 
-    // 2. Get state
-    const {activeSliceName, allDbOutputs} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
-    const listLength: number =
-      thunkAPI.getState().analyticsSlice.identityStatsSlice.listLength;
+      // 2. Get state
+      const {activeSliceName, allDbOutputs} =
+        thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+      const listLength: number =
+        thunkAPI.getState().analyticsSlice.identityStatsSlice.listLength;
 
-    // 3. Dispatch stats thunks
-    const p1: Promise<any> = thunkAPI.dispatch(
-      startGetNodeStats({
-        activeSliceName,
-        graphType,
-        nodeId: nodeIdInput,
-        rawOutputs: allDbOutputs,
-      }),
-    );
-    const p2: Promise<any> = thunkAPI.dispatch(
-      startGetCollectivelyTandemNodes({
-        activeSliceName,
-        graphType,
-        nodeId: nodeIdInput,
-        rawOutputs: allDbOutputs,
-        listLength,
-      }),
-    );
-    const p3: Promise<any> = thunkAPI.dispatch(
-      startGetSinglyTandemNodes({
-        activeSliceName,
-        graphType,
-        nodeId: nodeIdInput,
-        rawOutputs: allDbOutputs,
-        listLength,
-      }),
-    );
-    const p4: Promise<any> = thunkAPI.dispatch(
-      startGetHighlyRatedTandemNodes({
-        activeSliceName,
-        graphType,
-        nodeId: nodeIdInput,
-        rawOutputs: allDbOutputs,
-        listLength,
-      }),
-    );
+      // 3. Dispatch stats thunks
+      TimerMan.getTimer('startGetNodeStats').restart();
+      const p1: Promise<any> = thunkAPI.dispatch(
+        startGetNodeStats({
+          activeSliceName,
+          graphType,
+          nodeId: nodeIdInput,
+          rawOutputs: allDbOutputs,
+        }),
+      );
+      TimerMan.getTimer('startGetNodeStats').logInterval(
+        'startGetNodeStats end: ----------------------------------1: ',
+      );
 
-    // 4. Await promises
-    await Promise.all([p1, p2, p3, p4]);
+      TimerMan.getTimer('startGetCollectivelyTandemNodes').restart();
+      const p2: Promise<any> = thunkAPI.dispatch(
+        startGetCollectivelyTandemNodes({
+          activeSliceName,
+          graphType,
+          nodeId: nodeIdInput,
+          rawOutputs: allDbOutputs,
+          listLength,
+        }),
+      );
+      TimerMan.getTimer('startGetCollectivelyTandemNodes').logInterval(
+        'startGetCollectivelyTandemNodes end: ----------------------------------2: ',
+      );
 
-    // 5. Dispatch rerender
-    thunkAPI.dispatch(forceInputStatsSignatureRerender());
+      TimerMan.getTimer('startGetSinglyTandemNodes').restart();
+      const p3: Promise<any> = thunkAPI.dispatch(
+        startGetSinglyTandemNodes({
+          activeSliceName,
+          graphType,
+          nodeId: nodeIdInput,
+          rawOutputs: allDbOutputs,
+          listLength,
+        }),
+      );
+      TimerMan.getTimer('startGetSinglyTandemNodes').logInterval(
+        'startGetSinglyTandemNodes end: ----------------------------------3: ',
+      );
 
+      TimerMan.getTimer('startGetHighlyRatedTandemNodes').restart();
+      const p4: Promise<any> = thunkAPI.dispatch(
+        startGetHighlyRatedTandemNodes({
+          activeSliceName,
+          graphType,
+          nodeId: nodeIdInput,
+          rawOutputs: allDbOutputs,
+          listLength,
+        }),
+      );
+      TimerMan.getTimer('startGetHighlyRatedTandemNodes').logInterval(
+        'startGetHighlyRatedTandemNodes end: ----------------------------------4: ',
+      );
+
+      // 4. Await promises
+      TimerMan.getTimer('startSetNodeStats').restart();
+      await Promise.all([p1, p2, p3, p4]);
+      TimerMan.getTimer('startSetNodeStats').logInterval(
+        'startSetNodeStats end-------------------: ',
+      );
+
+      // 5. Dispatch rerender
+      thunkAPI.dispatch(forceInputStatsSignatureRerender());
+    } catch (err) {
+      console.log(err);
+    }
     return true;
   },
 );
@@ -224,7 +261,6 @@ export const startGetNodeStats = createAsyncThunk<
     {activeSliceName, graphType, nodeId, rawOutputs}: GetNodeStatsArgs,
     thunkAPI,
   ) => {
-    const t0 = new Date().getTime();
     const nodeStats: RankedNode | undefined = identityDriver.getNodeStats({
       activeSliceName,
       graphType,
@@ -234,10 +270,6 @@ export const startGetNodeStats = createAsyncThunk<
     if (nodeStats === undefined) return false;
 
     thunkAPI.dispatch(setNodeStats(nodeStats));
-    const t1 = new Date().getTime();
-    console.log('startGetNodeStats');
-    console.log('HEEEEERRRREEEEE-----------------------------');
-    console.log(t1 - t0);
 
     return true;
   },
@@ -258,21 +290,27 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
     }: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
-    const t0 = new Date().getTime();
-    const hiLoRankings: HiLoRanking =
-      await identityDriver.getCollectivelyTandemNodes({
-        activeSliceName,
-        graphType,
-        nodeId,
-        rawOutputs,
-        listLength,
-      });
+    console.log(
+      'GET COLLECTIVELY TANDEM NODES--------------------------------',
+    );
+    try {
+      TimerMan.getTimer('startGetCollectivelyTandemNodes action').restart();
+      const hiLoRankings: HiLoRanking =
+        identityDriver.getCollectivelyTandemNodes({
+          activeSliceName,
+          graphType,
+          nodeId,
+          rawOutputs,
+          listLength,
+        });
 
-    thunkAPI.dispatch(setCollectivelyTandemNode(hiLoRankings));
-    const t1 = new Date().getTime();
-    console.log('startGetCollectivelyTandemNodes');
-    console.log('HEEEEERRRREEEEE-----------------------------');
-    console.log(t1 - t0);
+      thunkAPI.dispatch(setCollectivelyTandemNode(hiLoRankings));
+      TimerMan.getTimer('startGetCollectivelyTandemNodes action').logInterval(
+        'startGetCollectivelyTandemNodes action end: ----------------------------------4: ',
+      );
+    } catch (err) {
+      console.log(err);
+    }
 
     return true;
   },
@@ -293,9 +331,8 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
     }: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
-    const t0 = new Date().getTime();
     const hiLoRankings: HiLoRankingByOutput =
-      await identityDriver.getSinglyTandemNodes({
+      identityDriver.getSinglyTandemNodes({
         activeSliceName,
         graphType,
         nodeId,
@@ -304,10 +341,6 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
       });
 
     thunkAPI.dispatch(setSinglyTandemNodes(hiLoRankings));
-    const t1 = new Date().getTime();
-    console.log('startGetSinglyTandemNodes');
-    console.log('HEEEEERRRREEEEE-----------------------------');
-    console.log(t1 - t0);
 
     return true;
   },
@@ -328,9 +361,8 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
     }: GetNodeStatsByOutputArgs,
     thunkAPI,
   ) => {
-    const t0 = new Date().getTime();
     const hiLoRankings: HiLoRankingByOutput =
-      await identityDriver.getHighlyRatedTandemNodes({
+      identityDriver.getHighlyRatedTandemNodes({
         activeSliceName,
         graphType,
         nodeId,
@@ -339,10 +371,6 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
       });
 
     thunkAPI.dispatch(setHighlyRatedTandemNodes(hiLoRankings));
-    const t1 = new Date().getTime();
-    console.log('startGetHighlyRatedTandemNodes');
-    console.log('HEEEEERRRREEEEE-----------------------------');
-    console.log(t1 - t0);
 
     return true;
   },
