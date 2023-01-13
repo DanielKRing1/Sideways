@@ -10,6 +10,7 @@ import {
 import MyText from 'ssComponents/ReactNative/MyText';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
 import {GraphType} from 'ssDatabase/api/core/types';
+import styled, {DefaultTheme} from 'styled-components/native';
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
@@ -29,7 +30,7 @@ const NodeInput: FC<NodeInputProps> = () => {
   // console.log('NODEINPUT RERENDERED');
 
   return (
-    <View>
+    <StyleView>
       <MyText>Choose an Input Node</MyText>
       <MyText>{nodeIdInput}</MyText>
 
@@ -40,8 +41,12 @@ const NodeInput: FC<NodeInputProps> = () => {
         setInputValue={handleSetSearchedNodeId}
         onSelectEntityId={handleSetNodeId}
       />
-    </View>
+    </StyleView>
   );
 };
 
 export default memo(NodeInput);
+
+const StyleView = styled.View`
+  background: ${({theme}) => theme.backgroundColors.main};
+`;
