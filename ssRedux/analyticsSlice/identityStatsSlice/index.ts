@@ -296,7 +296,7 @@ export const startGetCollectivelyTandemNodes = createAsyncThunk<
     try {
       TimerMan.getTimer('startGetCollectivelyTandemNodes action').restart();
       const hiLoRankings: HiLoRanking =
-        identityDriver.getCollectivelyTandemNodes({
+        await identityDriver.getCollectivelyTandemNodes({
           activeSliceName,
           graphType,
           nodeId,
@@ -332,7 +332,7 @@ export const startGetSinglyTandemNodes = createAsyncThunk<
     thunkAPI,
   ) => {
     const hiLoRankings: HiLoRankingByOutput =
-      identityDriver.getSinglyTandemNodes({
+      await identityDriver.getSinglyTandemNodes({
         activeSliceName,
         graphType,
         nodeId,
@@ -362,7 +362,7 @@ export const startGetHighlyRatedTandemNodes = createAsyncThunk<
     thunkAPI,
   ) => {
     const hiLoRankings: HiLoRankingByOutput =
-      identityDriver.getHighlyRatedTandemNodes({
+      await identityDriver.getHighlyRatedTandemNodes({
         activeSliceName,
         graphType,
         nodeId,
