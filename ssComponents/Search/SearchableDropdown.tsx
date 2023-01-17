@@ -6,7 +6,6 @@ import {FlexCol, FlexRow} from '../Flex';
 import MyTextInput from '../ReactNative/MyTextInput';
 
 export type SearchableDropdownProps = {
-  clickOutsideId: string;
   placeholder: string;
   inputValue: string;
   setInputValue: (newValue: string) => void;
@@ -19,7 +18,6 @@ export const SearchableDropdown = forwardRef<
   SearchableDropdownProps
 >((props, ref) => {
   const {
-    clickOutsideId,
     placeholder,
     inputValue,
     setInputValue,

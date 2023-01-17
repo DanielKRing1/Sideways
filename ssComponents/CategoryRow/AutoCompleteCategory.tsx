@@ -18,13 +18,7 @@ export type AutoCompleteDecorationProps = {
 >;
 const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
   // PROPS
-  const {
-    clickOutsideId,
-    placeholder,
-    inputValue,
-    setInputValue,
-    onSelectEntityId,
-  } = props;
+  const {placeholder, inputValue, setInputValue, onSelectEntityId} = props;
 
   // REDUX SELECTOR
   const {allDbInputs} = useSelector(
@@ -58,7 +52,6 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
   return (
     <AutoCompleteDropdown
       ref={textInputRef}
-      clickOutsideId={clickOutsideId}
       placeholder={placeholder}
       allSuggestions={allDbInputs}
       getSuggestionText={getSuggestionText}

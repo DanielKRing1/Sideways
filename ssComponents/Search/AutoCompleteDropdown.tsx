@@ -22,7 +22,6 @@ const AutoCompleteDropdown = forwardRef<
   AutoCompleteDropdownProps<any>
 >((props, ref) => {
   const {
-    clickOutsideId,
     placeholder,
     inputValue,
     setInputValue,
@@ -40,7 +39,6 @@ const AutoCompleteDropdown = forwardRef<
   return (
     <SearchableDropdown
       ref={ref}
-      clickOutsideId={`${clickOutsideId}/autocomplete-dropdown`}
       placeholder={placeholder}
       inputValue={inputValue}
       setInputValue={setInputValue}
