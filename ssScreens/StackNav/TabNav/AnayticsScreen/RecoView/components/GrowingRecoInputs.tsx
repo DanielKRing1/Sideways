@@ -1,4 +1,5 @@
-import React, {FC, useCallback} from 'react';
+import React, {FC} from 'react';
+import {FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
 import MyText from 'ssComponents/ReactNative/MyText';
@@ -15,38 +16,8 @@ import {
   addRecommendationInput,
   RecoInput,
   editRecommendationInputs,
+  removeRecommendationInput,
 } from '../../../../../../ssRedux/analyticsSlice/recoStatsSlice';
-
-const createRenderItemComponent =
-  (deleteInputNode: (index: number) => void) =>
-  (handleChangeText: (newText: string, index: number) => void) =>
-  ({item, index}: any) => {
-    const handleChangeTextUseCallback = useCallback(
-      (newText: string) => handleChangeText(newText, index),
-      [],
-    );
-
-    return (
-      <FlexRow>
-        <AutoCompleteCategory
-          clickOutsideId="GrowingRecoInputs"
-          placeholder="Choose a past input..."
-          inputValue={item.text}
-          setInputValue={handleChangeTextUseCallback}
-          onSelectEntityId={handleChangeTextUseCallback}
-        />
-        {/* <StyledTextInput
-          placeholder={'Anotha one...'}
-          value={item.text}
-          onChangeText={(newText: string) => handleChangeText(newText, index)}
-        /> */}
-
-        <MyButton onPress={() => deleteInputNode(index)}>
-          <MyText>X</MyText>
-        </MyButton>
-      </FlexRow>
-    );
-  };
 
 type GrowingRecoInputsProps = {};
 const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
@@ -60,13 +31,16 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
 
   // HANDLER METHODS
   const keyExtractor = (dataPoint: RecoInput) => `${dataPoint.id}`;
-  const genNextDataPlaceholder = (id: number) => ({id, text: ''});
   const handleAddInput = (id: number, newInputOption: string) => {
     dispatch(addRecommendationInput({id, text: newInputOption}));
   };
+  const handleDeleteInput = (index: number): void => {
+    dispatch(removeRecommendationInput(index));
+  };
   const handleUpdateInput = (newText: string, index: number) => {
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-    dispatch(editRecommendationInputs({index, text: newText}));
+    if (newText === '') handleDeleteInput(index);
+    else dispatch(editRecommendationInputs({index, text: newText}));
   };
 
   console.log('RECOMMENDATION INPUTS----------------------');
@@ -97,28 +71,32 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   };
 
   return (
-    <>
-      {grownRecommendationInputs.map((item, index) => (
+    <FlatList
+      keyboardShouldPersistTaps="handled"
+      data={grownRecommendationInputs}
+      renderItem={({item, index}) => (
         <RI
-          key={keyExtractor(item)}
           item={item}
           index={index}
           handleChangeText={handleChangeText}
+          handleDeleteInput={handleDeleteInput}
         />
-      ))}
-    </>
+      )}
+      keyExtractor={keyExtractor}
+    />
   );
 };
 
-const RI = ({item, index, handleChangeText}: any) => {
+const RI = ({item, index, handleChangeText, deleteInputNode}: any) => {
   return (
-    <AutoCompleteCategory
-      clickOutsideId="GrowingRecoInputs"
-      placeholder="Choose a past input..."
-      inputValue={item.text}
-      setInputValue={(newText: string) => handleChangeText(index, newText)}
-      onSelectEntityId={(newText: string) => handleChangeText(index, newText)}
-    />
+    <FlexRow>
+      <AutoCompleteCategory
+        placeholder="Choose a past input..."
+        inputValue={item.text}
+        setInputValue={(newText: string) => handleChangeText(index, newText)}
+        onSelectEntityId={(newText: string) => handleChangeText(index, newText)}
+      />
+    </FlexRow>
   );
 };
 

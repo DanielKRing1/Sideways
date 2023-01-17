@@ -32,7 +32,7 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
 
   return (
     <StickyScrollView
-      keyboardShouldPersistTaps="always"
+      keyboardShouldPersistTaps="handled"
       stickyHeaderIndices={[1]}
       contentContainerStyle={{alignItems: 'center'}}>
       <GrowingRecoInputs />
