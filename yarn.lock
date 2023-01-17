@@ -31,10 +31,10 @@
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
 
-"@asianpersonn/realm-graph@^2.0.15":
-  version "2.0.15"
-  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.15.tgz#f5aa9e620dea1d10416fe1ff1b6c495161798832"
-  integrity sha512-QpgUsgQM2VoFtsg4EuRdeBT3uuD4vGdInOOse1poXkUMF0w2NMJ/jto/5ajLGpauSKUMN6Zx8YT4EbZXDSgxhQ==
+"@asianpersonn/realm-graph@^2.0.16":
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/@asianpersonn/realm-graph/-/realm-graph-2.0.16.tgz#98869c62bf5001af7568a5ac2fff9cd386a68785"
+  integrity sha512-ryqwpEUeeqKyXoHknlgi44AxEYWEZD3RB5iCPxGGm4h6CgBxlrMMXo81hcRNAAyuVnPgP2bQKkAdJ7fwu8Ndfw==
   dependencies:
     "@asianpersonn/dict-utils" "^1.0.5"
     "@asianpersonn/metarealm" "^1.0.4"
