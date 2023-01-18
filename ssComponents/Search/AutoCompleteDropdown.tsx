@@ -3,6 +3,7 @@ import {TextInput} from 'react-native';
 
 import {FlexCol} from 'ssComponents/Flex';
 import {
+  InputProps,
   SearchableDropdown,
   SearchableDropdownProps,
 } from 'ssComponents/Search/SearchableDropdown';
@@ -15,6 +16,7 @@ export type AutoCompleteDropdownProps<T> = {
   allSuggestions: T[];
   getSuggestionText?: (suggestion: any) => string;
 
+  InputComponent?: FC<InputProps>;
   DropdownRow: FC<DropdownRowProps<T>>;
 } & Omit<SearchableDropdownProps, 'DropdownComponent'>;
 const AutoCompleteDropdown = forwardRef<
@@ -22,16 +24,14 @@ const AutoCompleteDropdown = forwardRef<
   AutoCompleteDropdownProps<any>
 >((props, ref) => {
   const {
-    placeholder,
-    inputValue,
-    setInputValue,
+    value = '',
     allSuggestions,
     getSuggestionText = (suggestion: string) => suggestion,
     DropdownRow,
   } = props;
 
   const {autoComplete} = useAutoComplete(
-    inputValue,
+    value,
     allSuggestions,
     getSuggestionText,
   );
@@ -39,14 +39,12 @@ const AutoCompleteDropdown = forwardRef<
   return (
     <SearchableDropdown
       ref={ref}
-      placeholder={placeholder}
-      inputValue={inputValue}
-      setInputValue={setInputValue}
+      {...props}
       DropdownComponent={() => (
         <Dropdown
           autoComplete={autoComplete}
           DropdownRow={DropdownRow}
-          inputValue={inputValue}
+          inputValue={value}
         />
       )}
     />

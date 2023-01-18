@@ -11,6 +11,7 @@ import {ThunkConfig} from '../../types';
 // INITIAL STATE
 
 export interface RecommendationsState {
+  searchInput: string;
   recommendationInputs: RecoInput[];
   recommendations: HiLoRankingByOutput;
 
@@ -18,6 +19,7 @@ export interface RecommendationsState {
 }
 
 const initialState: RecommendationsState = {
+  searchInput: '',
   recommendationInputs: [],
   recommendations: {},
 
@@ -75,6 +77,7 @@ export const startGetRecommendations = createAsyncThunk<
 // ACTION TYPES
 
 // Input
+type EditSearchInput = PayloadAction<string>;
 type SetRecommendationInputs = PayloadAction<RecoInput[]>;
 type EditRecommendationInputs = PayloadAction<{index: number; text: string}>;
 type AddRecommendationInput = PayloadAction<RecoInput>;
@@ -90,6 +93,9 @@ export const recommendationStatsSlice = createSlice({
   name: 'recommendationStatsSlice',
   initialState,
   reducers: {
+    editSearchInput: (state: RecommendationsState, action: EditSearchInput) => {
+      state.searchInput = action.payload;
+    },
     setRecommendationInputs: (
       state: RecommendationsState,
       action: SetRecommendationInputs,
@@ -101,6 +107,9 @@ export const recommendationStatsSlice = createSlice({
       action: AddRecommendationInput,
     ) => {
       state.recommendationInputs.push(action.payload);
+
+      // Reset
+      state.searchInput = '';
     },
     editRecommendationInputs: (
       state: RecommendationsState,
@@ -138,6 +147,7 @@ export const recommendationStatsSlice = createSlice({
 // Action creators are generated for each case reducer function
 const {setRecommendations} = recommendationStatsSlice.actions;
 export const {
+  editSearchInput,
   setRecommendationInputs,
   addRecommendationInput,
   editRecommendationInputs,

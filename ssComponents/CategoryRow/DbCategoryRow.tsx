@@ -18,13 +18,14 @@
  * 4. Upon clicking out of EditableText, commit 'localInputName' to Db
  */
 
-import React, {FC, memo, useEffect, useMemo} from 'react';
+import React, {forwardRef, memo, useMemo} from 'react';
+import {View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 
 import CategoryDriver from 'ssDatabase/api/userJson/category';
 import GlobalDriver from 'ssDatabase/api/userJson/globalDriver';
 
 import BaseCategoryRow, {BaseCategoryRowProps} from './BaseCategoryRow';
-import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {inToLastCId, snToCSId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {
@@ -34,11 +35,14 @@ import {
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {HexColor} from '../../global';
 
-type DbCategoryRowProps = Omit<
-  BaseCategoryRowProps,
-  'categoryId' | 'activeSliceName' | 'fullUserJsonMap'
-> & {categoryId?: string};
-const DbCategoryRow: FC<DbCategoryRowProps> = props => {
+interface DbCategoryRowProps
+  extends Omit<
+    BaseCategoryRowProps,
+    'categoryId' | 'activeSliceName' | 'fullUserJsonMap'
+  > {
+  categoryId?: string;
+}
+const DbCategoryRow = forwardRef<View, DbCategoryRowProps>((props, ref) => {
   const {
     inputName,
     categoryId: categoryIdProp,
@@ -59,7 +63,6 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
   // EFFECTS
 
   // MEMO
-  // Do we want ton change the category when the user changes the input name??
   const categoryId =
     categoryIdProp !== undefined
       ? categoryIdProp
@@ -161,6 +164,6 @@ const DbCategoryRow: FC<DbCategoryRowProps> = props => {
       onCommitIcon={handleCommitIcon}
     />
   );
-};
+});
 
 export default memo<DbCategoryRowProps>(DbCategoryRow);

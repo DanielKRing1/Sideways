@@ -1,10 +1,5 @@
 import React, {forwardRef} from 'react';
-import {
-  TextInput,
-  TextInputProps,
-  TextStyle,
-  useWindowDimensions,
-} from 'react-native';
+import {TextInput, TextInputProps, useWindowDimensions} from 'react-native';
 import {getFontSize} from 'ssTheme/utils';
 import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 
@@ -12,7 +7,6 @@ import {DISPLAY_SIZE} from '../../global';
 
 type MyTextInputProps = {
   size?: DISPLAY_SIZE;
-  style?: TextStyle;
 } & TextInputProps;
 const MyTextInput = forwardRef<TextInput, MyTextInputProps>((props, ref) => {
   const {

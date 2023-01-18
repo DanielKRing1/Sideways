@@ -1,10 +1,5 @@
-import React, {FC, useRef} from 'react';
-import {
-  TextInput,
-  Keyboard,
-  NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
-} from 'react-native';
+import React, {FC, forwardRef, useCallback, useMemo, useRef} from 'react';
+import {TextInput, Keyboard, View} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import AutoCompleteDropdown, {
@@ -13,23 +8,21 @@ import AutoCompleteDropdown, {
 } from 'ssComponents/Search/AutoCompleteDropdown';
 import {TouchableOpacity} from 'react-native';
 import {RootState} from 'ssRedux/index';
-import DbCategoryRow from './DbCategoryRow';
+import DbCategoryRow from '../DbCategoryRow';
 
-export type AutoCompleteDecorationProps = {
-  filterSuggestions?: (allSuggestions: string[]) => string[];
-  onSelectEntityId: (entityId: string) => void;
+export type CategoryRowSuggestionsProps = {
+  onSelectCategoryId: (categoryId: string) => void;
 } & Omit<
   AutoCompleteDropdownProps<any>,
   'allSuggestions' | 'getSuggestionText' | 'DropdownRow'
 >;
-const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
+const CategoryRowSuggestions: FC<CategoryRowSuggestionsProps> = props => {
   // PROPS
   const {
+    placeholder,
     value = '',
     onChangeText = () => {},
-    onSubmitEditing = () => {},
-    filterSuggestions = (all: string[]) => all,
-    onSelectEntityId,
+    onSelectCategoryId,
   } = props;
 
   // REDUX SELECTOR
@@ -41,7 +34,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
   const textInputRef = useRef<TextInput>(null);
 
   // HANDLERS
-  const handleSelectEntityId = (entityId: string) => {
+  const handleSelectCategoyId = (categoryId: string) => {
     console.log('BEFFFFFFFFFFFFFFFFFFFFFFFFFFFOR');
     console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAFTER');
     if (textInputRef.current) {
@@ -49,19 +42,12 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
       Keyboard.dismiss();
       textInputRef.current.blur();
     }
-    onSelectEntityId(entityId);
+    onSelectCategoryId(categoryId);
   };
 
   const handleCommitInputName = (newInputName: string) => {
     onChangeText(newInputName);
   };
-  // Easier to handle if user cannot 'submit' text
-  //    and can only 'select' text
-  // const handleSubmitEditing = (
-  //   e: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
-  // ) => {
-  //   if (value !== '' && new Set(allDbInputs).has(value)) onSubmitEditing(e);
-  // };
   const handleCommitCId = (newCId: string) => {};
   const handleDeleteCategoryRow = () => {};
 
@@ -72,12 +58,19 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
   return (
     <AutoCompleteDropdown
       {...props}
-      allSuggestions={filterSuggestions(allDbInputs)}
+      allSuggestions={allDbInputs}
       getSuggestionText={getSuggestionText}
       onChangeText={handleCommitInputName}
-      // onSubmitEditing={handleSubmitEditing}
+      InputComponent={forwardRef(() => (
+        <DbCategoryRow
+          inputName={value}
+          onCommitInputName={handleCommitInputName}
+          onCommitCId={newCId => handleCommitCId(newCId)}
+          onDeleteCategoryRow={handleDeleteCategoryRow}
+        />
+      ))}
       DropdownRow={DropdownRow(
-        handleSelectEntityId,
+        handleSelectCategoyId,
         onChangeText,
         handleDeleteCategoryRow,
       )}
@@ -107,4 +100,4 @@ const DropdownRow =
     );
   };
 
-export default AutoCompleteDecoration;
+export default CategoryRowSuggestions;

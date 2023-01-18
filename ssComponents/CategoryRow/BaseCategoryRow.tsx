@@ -13,8 +13,8 @@
  * 4. Upon clicking out of EditableText, commit 'localInputName' to Db
  */
 
-import React, {FC, useEffect, useState, memo, useMemo} from 'react';
-import {useWindowDimensions, ViewStyle} from 'react-native';
+import React, {FC, useEffect, useState, memo, useMemo, forwardRef} from 'react';
+import {useWindowDimensions, View, ViewStyle} from 'react-native';
 import {useTheme} from 'styled-components';
 
 import {FlexRow} from 'ssComponents/Flex';
@@ -63,7 +63,7 @@ export type BaseCategoryRowProps = {
   onCommitColor?: (color: HexColor) => void;
   onCommitIcon?: (icon: AvailableIcons) => void;
 };
-const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
+const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
   const {
     disableButtons = false,
     editable = true,
@@ -330,6 +330,6 @@ const BaseCategoryRow: FC<BaseCategoryRowProps> = props => {
       </FlexRow>
     </MyPadding>
   );
-};
+});
 
 export default memo<BaseCategoryRowProps>(BaseCategoryRow);

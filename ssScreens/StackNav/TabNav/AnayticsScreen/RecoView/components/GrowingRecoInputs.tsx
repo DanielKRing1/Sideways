@@ -1,22 +1,19 @@
 import React, {FC} from 'react';
-import {FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
-import MyText from 'ssComponents/ReactNative/MyText';
+import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {getStartingId} from 'ssUtils/id';
 import {FlexRow} from '../../../../../../ssComponents/Flex';
 
-// MY COMPONENTS
-import MyButton from '../../../../../../ssComponents/ReactNative/MyButton';
-
 // REDUX
-import {RootState} from '../../../../../../ssRedux';
+import {AppDispatch, RootState} from '../../../../../../ssRedux';
 import {
   addRecommendationInput,
   RecoInput,
   editRecommendationInputs,
   removeRecommendationInput,
+  editSearchInput,
 } from '../../../../../../ssRedux/analyticsSlice/recoStatsSlice';
 
 type GrowingRecoInputsProps = {};
@@ -25,13 +22,13 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   const {readSSSignature} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const {recommendationInputs, recommendationsSignature} = useSelector(
-    (state: RootState) => state.analyticsSlice.recoStatsSlice,
-  );
+  const {searchInput, recommendationInputs, recommendationsSignature} =
+    useSelector((state: RootState) => state.analyticsSlice.recoStatsSlice);
 
   // HANDLER METHODS
   const keyExtractor = (dataPoint: RecoInput) => `${dataPoint.id}`;
-  const handleAddInput = (id: number, newInputOption: string) => {
+  const handleAddInput = (newInputOption: string) => {
+    const id: number = popId();
     dispatch(addRecommendationInput({id, text: newInputOption}));
   };
   const handleDeleteInput = (index: number): void => {
@@ -52,7 +49,7 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
 
   const grownRecommendationInputs = [
     ...recommendationInputs,
-    {id: peekId(), text: ''},
+    // {id: peekId(), text: ''},
   ];
 
   const handleChangeText = (index: number, newText: string) => {
@@ -65,36 +62,55 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
     if (index < recommendationInputs.length) {
       handleUpdateInput(newText, index);
     } else {
-      const newId = popId();
-      handleAddInput(newId, newText);
+      handleAddInput(newText);
     }
   };
 
   return (
-    <FlatList
-      keyboardShouldPersistTaps="handled"
-      data={grownRecommendationInputs}
-      renderItem={({item, index}) => (
-        <RI
-          item={item}
-          index={index}
-          handleChangeText={handleChangeText}
-          handleDeleteInput={handleDeleteInput}
-        />
-      )}
-      keyExtractor={keyExtractor}
-    />
+    <>
+      <>
+        {grownRecommendationInputs.map((item, index) => (
+          <DbCategoryRow
+            key={item.id}
+            inputName={item.text}
+            onCommitInputName={(newText: string) =>
+              handleChangeText(index, newText)
+            }
+            onDeleteCategoryRow={() => handleDeleteInput(index)}
+          />
+        ))}
+      </>
+      <AutoCompleteCategory
+        placeholder="Choose a past input..."
+        value={searchInput}
+        onChangeText={(newText: string) => dispatch(editSearchInput(newText))}
+        onSubmitEditing={() => handleAddInput(searchInput)}
+        filterSuggestions={(all: string[]) => {
+          const exisiting = new Set(
+            recommendationInputs.map((ri: RecoInput) => ri.text),
+          );
+          return all.filter((suggestion: string) => !exisiting.has(suggestion));
+        }}
+        onSelectEntityId={(selectedText: string) =>
+          handleAddInput(selectedText)
+        }
+      />
+    </>
   );
 };
 
 const RI = ({item, index, handleChangeText, deleteInputNode}: any) => {
+  const dispatch: AppDispatch = useDispatch();
+
   return (
     <FlexRow>
       <AutoCompleteCategory
         placeholder="Choose a past input..."
-        inputValue={item.text}
-        setInputValue={(newText: string) => handleChangeText(index, newText)}
-        onSelectEntityId={(newText: string) => handleChangeText(index, newText)}
+        value={item.text}
+        onChangeText={(newText: string) => dispatch(editSearchInput(newText))}
+        onSelectEntityId={(newText: string) =>
+          dispatch(editSearchInput(newText))
+        }
       />
     </FlexRow>
   );

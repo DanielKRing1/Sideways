@@ -1,27 +1,26 @@
-import React, {FC, useState, forwardRef, useMemo, useCallback} from 'react';
-import {Keyboard, TextInput} from 'react-native';
+import React, {FC, useState, forwardRef} from 'react';
+import {Keyboard, TextInput, TextInputProps} from 'react-native';
 import styled from 'styled-components/native';
 
 import {FlexCol, FlexRow} from '../Flex';
 import MyTextInput from '../ReactNative/MyTextInput';
 
-export type SearchableDropdownProps = {
-  placeholder: string;
-  inputValue: string;
-  setInputValue: (newValue: string) => void;
+export interface SearchableDropdownProps extends TextInputProps {
   LeftComponent?: FC | undefined;
+  InputComponent?: FC<InputProps>;
   DropdownComponent?: FC | undefined;
   RightComponent?: FC | undefined;
-};
+}
 export const SearchableDropdown = forwardRef<
   TextInput,
   SearchableDropdownProps
 >((props, ref) => {
   const {
     placeholder,
-    inputValue,
-    setInputValue,
+    value,
+    onChangeText,
     LeftComponent,
+    InputComponent = DefaultInput,
     DropdownComponent,
     RightComponent,
   } = props;
@@ -31,6 +30,7 @@ export const SearchableDropdown = forwardRef<
   const shouldDisplayDropdown = isFocused && !!DropdownComponent;
 
   const handleFocus = () => {
+    console.log('FOCUSED!!------');
     setIsFocused(true);
   };
 
@@ -46,11 +46,9 @@ export const SearchableDropdown = forwardRef<
       {!!LeftComponent && <LeftComponent />}
 
       <FlexCol style={{width: '100%'}}>
-        <MyTextInput
+        <InputComponent
           ref={ref}
-          placeholder={placeholder}
-          value={inputValue}
-          onChangeText={setInputValue}
+          {...props}
           onFocus={handleFocus}
           onBlur={handleBlur}
         />
@@ -62,6 +60,11 @@ export const SearchableDropdown = forwardRef<
     </StyledRow>
   );
 });
+
+export type InputProps = {
+  ref: React.Ref<TextInput>;
+} & TextInputProps;
+const DefaultInput = MyTextInput;
 
 const StyledRow = styled(FlexRow)`
   bordercolor: black;
