@@ -4,10 +4,9 @@ import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory'
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {getStartingId} from 'ssUtils/id';
-import {FlexRow} from '../../../../../../ssComponents/Flex';
 
 // REDUX
-import {AppDispatch, RootState} from '../../../../../../ssRedux';
+import {RootState} from '../../../../../../ssRedux';
 import {
   addRecommendationInput,
   RecoInput,
@@ -97,23 +96,6 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
         }
       />
     </>
-  );
-};
-
-const RI = ({item, index, handleChangeText, deleteInputNode}: any) => {
-  const dispatch: AppDispatch = useDispatch();
-
-  return (
-    <FlexRow>
-      <AutoCompleteCategory
-        placeholder="Choose a past input..."
-        value={item.text}
-        onChangeText={(newText: string) => dispatch(editSearchInput(newText))}
-        onSelectEntityId={(newText: string) =>
-          dispatch(editSearchInput(newText))
-        }
-      />
-    </FlexRow>
   );
 };
 
