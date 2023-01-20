@@ -99,6 +99,7 @@ const DropdownRow =
       <TouchableOpacity onPress={() => handleSelectEntityId(entityId)}>
         <DbCategoryRow
           editable={false}
+          deletable={false}
           inputName={entityId}
           onCommitInputName={setInputValue}
           onDeleteCategoryRow={handleDeleteCategoryRow}
