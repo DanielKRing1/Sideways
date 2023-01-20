@@ -10,7 +10,6 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import CategoryDriver from 'ssDatabase/api/userJson/category';
 
-import SearchInput from './Search/SearchInput';
 import SearchSuggestions from './Search/SearchSuggestions';
 import InputList from './List/InputList';
 import {useCounterId} from 'ssHooks/useCounterId';
@@ -23,6 +22,9 @@ import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
 import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {getStartingId} from 'ssUtils/id';
+import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
+import {ScrollView} from 'react-native-gesture-handler';
+import {FlexCol} from 'ssComponents/Flex';
 
 type RatingInputSelectionProps = {
   ratingType: RATING_TYPE;
@@ -112,15 +114,18 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   };
 
   return (
-    <>
-      <SearchInput
-        ref={null}
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onSubmitSearchInput={handleSubmitSearchInput}
-      />
+    <FlexCol>
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <AutoCompleteCategory
+          placeholder="Add an input..."
+          value={searchInput}
+          onChangeText={setSearchInput}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onSubmitEditing={handleSubmitSearchInput}
+          onSelectEntityId={handleSelectSuggestion}
+        />
+      </ScrollView>
 
       {isSearching ? (
         <SearchSuggestions
@@ -130,7 +135,7 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
       ) : (
         <InputList ratingType={ratingType} inputs={inputs} />
       )}
-    </>
+    </FlexCol>
   );
 };
 
