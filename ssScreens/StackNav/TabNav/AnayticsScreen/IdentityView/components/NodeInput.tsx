@@ -35,10 +35,9 @@ const NodeInput: FC<NodeInputProps> = () => {
       <MyText>{nodeIdInput}</MyText>
 
       <AutoCompleteCategory
-        clickOutsideId="StatsNodeInput"
         placeholder="Choose a past input..."
-        inputValue={searchedNodeIdInput}
-        setInputValue={handleSetSearchedNodeId}
+        value={searchedNodeIdInput}
+        onChangeText={handleSetSearchedNodeId}
         onSelectEntityId={handleSetNodeId}
       />
     </StyleView>

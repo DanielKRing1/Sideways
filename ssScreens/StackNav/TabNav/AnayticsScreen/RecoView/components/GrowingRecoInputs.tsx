@@ -71,6 +71,7 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
       <>
         {grownRecommendationInputs.map((item, index) => (
           <DbCategoryRow
+            editable={false}
             key={item.id}
             inputName={item.text}
             onCommitInputName={(newText: string) =>
