@@ -1,5 +1,6 @@
-import React, {FC, useState, forwardRef} from 'react';
+import React, {FC, useState, forwardRef, useEffect} from 'react';
 import {Keyboard, TextInput, TextInputProps} from 'react-native';
+import {useIsKeyboardVisible} from 'ssHooks/useIsKeyboardVisible';
 import styled from 'styled-components/native';
 
 import {FlexCol, FlexRow} from '../Flex';
@@ -26,6 +27,7 @@ export const SearchableDropdown = forwardRef<
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
+  const {isKeyboardVisible} = useIsKeyboardVisible();
 
   const shouldDisplayDropdown = isFocused && !!DropdownComponent;
 
@@ -38,6 +40,11 @@ export const SearchableDropdown = forwardRef<
     setIsFocused(false);
     Keyboard.dismiss();
   };
+
+  // KEYBOARD EFFECT
+  useEffect(() => {
+    if (isFocused && !isKeyboardVisible) setIsFocused(false);
+  }, [isKeyboardVisible]);
 
   // console.log('SEARCHABLEDROPDOWN RERENDERED');
 
