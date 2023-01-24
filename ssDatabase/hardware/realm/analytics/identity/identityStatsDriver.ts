@@ -28,9 +28,12 @@ const getNodeStats = ({
   rawOutputs,
 }: GetNodeStatsArgs): RankedNode | undefined => {
   throwLoadError();
-  const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
-  const cgnode: CGNode | undefined = realmGraph.getNode(nodeId);
+  const cgnode: CGNode | undefined = dbDriver.getNode(
+    activeSliceName,
+    nodeId,
+    graphType,
+  );
   return cgnode !== undefined
     ? filterCGEntityAttrs(cgnode, rawOutputs, GRAPH_PROP_KEYS[SINGLE_KEY])
     : undefined;
