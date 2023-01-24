@@ -22,7 +22,7 @@ import {
   VENN_PLOT,
 } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
-import {TabNavHeader} from 'ssComponents/Navigation/NavHeader';
+import {abbrDateMs} from 'ssUtils/date';
 
 type TimeseriesProps = {};
 const Timeseries: FC<TimeseriesProps> = () => {
@@ -33,9 +33,10 @@ const Timeseries: FC<TimeseriesProps> = () => {
   const {readSSSignature} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
-  const {selectedChart, graphsSignature} = useSelector(
-    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
-  );
+  const {heatMapByMonth, monthIndex, selectedChart, graphsSignature} =
+    useSelector(
+      (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+    );
   const dispatch: AppDispatch = useDispatch();
 
   // Assure chart freshness:
@@ -62,8 +63,21 @@ const Timeseries: FC<TimeseriesProps> = () => {
     }
   }, [selectedChart]);
 
+  const date = new Date(2009, 10, 10); // 2009-11-10
+  const month = date.toLocaleString('default', {month: 'long'});
+  console.log(month);
+
   return (
     <View>
+      {monthIndex > -1 && !!heatMapByMonth && !!heatMapByMonth[monthIndex] && (
+        <>
+          <MyText>Month:</MyText>
+          <MyText>
+            {JSON.stringify(abbrDateMs(heatMapByMonth[monthIndex].timestamp))}
+          </MyText>
+        </>
+      )}
+
       <SelectedChart />
 
       <FloatingSelectionButton />
