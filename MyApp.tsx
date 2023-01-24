@@ -10,8 +10,14 @@
 
 // import './wdyr'; // <--- first import
 
+if (Platform.OS === 'android') {
+  // only android needs polyfill
+  require('intl'); // import intl object
+  require('intl/locale-data/jsonp/en-IN'); // load the required locale details
+}
+
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {Platform, SafeAreaView} from 'react-native';
 
 import store from './ssRedux';
 import {Provider as ReduxProvider} from 'react-redux';
