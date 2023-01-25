@@ -226,11 +226,13 @@ export const startDeleteRate = createAsyncThunk<
     deleteSnapshotPromise,
   ]);
 
-  // 3. Clean input to category mapping
-  thunkAPI.dispatch(startCleanInputCategories());
+  thunkAPI.dispatch(startRefreshUiAfterRate());
 
-  // 4. Update all in/outputs
-  thunkAPI.dispatch(startCacheAllDbInputsOutputs());
+  // // 3. Clean input to category mapping
+  // thunkAPI.dispatch(startCleanInputCategories());
+
+  // // 4. Update all in/outputs
+  // thunkAPI.dispatch(startCacheAllDbInputsOutputs());
 
   // 5. Reset rating inputs
   thunkAPI.dispatch(reset());
