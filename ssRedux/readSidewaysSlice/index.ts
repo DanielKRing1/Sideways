@@ -57,9 +57,6 @@ export const startCacheAllDbInputsOutputs = createAsyncThunk<
   undefined,
   ThunkConfig
 >('rateSS/startCacheAllDbInputsOutputs', async (undef, thunkAPI) => {
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
-
   // 1. Inputs
   thunkAPI.dispatch(startCacheAllDbInputs());
   // 2. Outputs
