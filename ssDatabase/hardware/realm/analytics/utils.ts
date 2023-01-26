@@ -19,6 +19,7 @@ import {
   COLLECTIVE_TALLY_KEY,
   SINGLE_KEY,
   SINGLE_TALLY_KEY,
+  NODE_ID,
 } from '../../../api/types';
 
 // RankedNodeMap UTILS
@@ -182,8 +183,8 @@ export const filterCGEntityAttrs = (
  */
 export const getDestinationNodeId = (
   cgedge: CGEdge,
-  originNodeId: string,
-): string =>
+  originNodeId: NODE_ID,
+): NODE_ID =>
   cgedge.nodeId1 !== originNodeId ? cgedge.nodeId1 : cgedge.nodeId2;
 
 // NAMING UTILS --------------------------------

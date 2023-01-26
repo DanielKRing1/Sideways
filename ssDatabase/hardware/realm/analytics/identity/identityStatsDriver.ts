@@ -15,6 +15,7 @@ import {
   HiLoRankingByOutput,
   GRAPH_PROP_KEYS,
   SINGLE_KEY,
+  NODE_ID,
 } from '../../../../api/types';
 import dbDriver, {throwLoadError} from '../../core/dbDriver';
 import {filterCGEntityAttrs, getDestinationNodeId} from '../utils';
@@ -42,9 +43,9 @@ const getNodeStats = ({
 const _getTandemNodes = async (
   activeSliceName: string,
   graphType: GraphType,
-  nodeId: string,
+  nodeId: NODE_ID,
   rawOutputs: string[],
-  getEdges: (nodeId: string) => Promise<CGEdge[]>,
+  getEdges: (nodeId: NODE_ID) => Promise<CGEdge[]>,
   listLength: number,
 ): Promise<HiLoRanking> => {
   // 1. Get connected edges
@@ -85,9 +86,9 @@ const _getTandemNodes = async (
 const _getTandemNodesByOutput = async (
   activeSliceName: string,
   graphType: GraphType,
-  nodeId: string,
+  nodeId: NODE_ID,
   rawOutputs: string[],
-  getEdges: (nodeId: string, output: string) => Promise<CGEdge[]>,
+  getEdges: (nodeId: NODE_ID, output: string) => Promise<CGEdge[]>,
   listLength: number,
 ): Promise<HiLoRankingByOutput> => {
   // 1. Data structure
@@ -102,7 +103,7 @@ const _getTandemNodesByOutput = async (
         graphType,
         nodeId,
         rawOutputs,
-        (nodeId: string) => getEdges(nodeId, output),
+        (nodeId: NODE_ID) => getEdges(nodeId, output),
         listLength,
       ),
     );
