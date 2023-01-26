@@ -41,6 +41,7 @@ import MyPadding from 'ssComponents/ReactNative/MyPadding';
 export type BaseCategoryRowProps = {
   disableButtons?: boolean;
   editable?: boolean;
+  goodOrBad?: boolean;
   deletable?: boolean;
   style?: ViewStyle;
 
@@ -52,6 +53,7 @@ export type BaseCategoryRowProps = {
   fullUserJsonMap: UserJsonMap;
 
   onEditInputName?: (newInputName: string) => void;
+  onToggleGoodOrBad?: () => void;
   onEditCId?: (cId: string) => void;
   onEditColor?: (color: HexColor) => void;
   onEditIcon?: (icon: AvailableIcons) => void;
@@ -67,6 +69,7 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
   const {
     disableButtons = false,
     editable = true,
+    goodOrBad = true,
     deletable = true,
     style = {},
 
@@ -78,6 +81,7 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
     fullUserJsonMap,
 
     onEditInputName = () => {},
+    onToggleGoodOrBad = () => {},
     onEditCId = () => {},
     onEditColor = () => {},
     onEditIcon = () => {},
@@ -149,6 +153,9 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
 
   // EDIT HANDLERS
   const handleEditInputName = (newText: string) => onEditInputName(newText);
+  const handleToggleGoodOrBad = () => {
+    onToggleGoodOrBad();
+  };
   const handleEditCId = (newCId: string) => {
     // Props
     onEditCId(newCId);
@@ -256,12 +263,14 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
         <StopPropagationView style={{flex: 0.5}}>
           <FlexRow justifyContent={'space-around'}>
             {/* Good/Bad */}
-            <CategoryRowIconButton
-              disabled={disableButtons}
-              color={categoryDecoration.color}
-              iconName={categoryDecoration.icon}
-              onPress={handleOpenCIdModal}
-            />
+            {goodOrBad !== undefined && (
+              <CategoryRowIconButton
+                disabled={disableButtons}
+                color={categoryDecoration.color}
+                iconName={goodOrBad ? 'thumbs-up' : 'thumbs-down'}
+                onPress={handleToggleGoodOrBad}
+              />
+            )}
 
             {/* CId */}
             <CategoryRowIconButton
