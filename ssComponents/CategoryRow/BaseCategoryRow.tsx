@@ -21,7 +21,7 @@ import {FlexRow} from 'ssComponents/Flex';
 import MyText from 'ssComponents/ReactNative/MyText';
 import EditableText from 'ssComponents/Input/EditableText';
 import IconSelector from 'ssComponents/IconInput/IconSelector';
-import IconModalButton from './components/IconModalButton';
+import CategoryRowIconButton from './components/CategoryRowIconButton';
 
 import DecorationRowModal from './components/Modal';
 import DecorationRowColorPicker from './components/ColorPicker';
@@ -247,16 +247,24 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
         {/* DISPLAYED IN ROW */}
         <EditableText
           editable={editable}
-          containerStyle={{flex: 0.6}}
+          containerStyle={{flex: 0.5}}
           placeholder={placeholder}
           text={inputName}
           onEditText={handleEditInputName}
           onCommitText={handleCommitInputName}
         />
-        <StopPropagationView style={{flex: 0.4}}>
+        <StopPropagationView style={{flex: 0.5}}>
           <FlexRow justifyContent={'space-around'}>
+            {/* Good/Bad */}
+            <CategoryRowIconButton
+              disabled={disableButtons}
+              color={categoryDecoration.color}
+              iconName={categoryDecoration.icon}
+              onPress={handleOpenCIdModal}
+            />
+
             {/* CId */}
-            <IconModalButton
+            <CategoryRowIconButton
               disabled={disableButtons}
               color={categoryDecoration.color}
               iconName={categoryDecoration.icon}
@@ -264,7 +272,7 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
             />
 
             {/* Icon */}
-            <IconModalButton
+            <CategoryRowIconButton
               disabled={disableButtons}
               color={categoryDecoration.color}
               iconName={'circle'}
@@ -272,7 +280,7 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
             />
 
             {/* Color */}
-            <IconModalButton
+            <CategoryRowIconButton
               disabled={disableButtons}
               color={categoryDecoration.color}
               iconName={'square'}
@@ -281,7 +289,7 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
 
             {/* Remove */}
             {deletable && (
-              <IconModalButton
+              <CategoryRowIconButton
                 color={categoryDecoration.color}
                 iconName={'remove'}
                 onPress={onDeleteCategoryRow}

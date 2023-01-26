@@ -2,9 +2,9 @@ import React, {FC} from 'react';
 import {View} from 'react-native';
 import IconButton, {IconButtonProps} from 'ssComponents/Button/IconButton';
 
-type IconModalButtonProps = {} & IconButtonProps;
+type CategoryRowIconButtonProps = {} & IconButtonProps;
 
-const IconModalButton: FC<IconModalButtonProps> = props => {
+const CategoryRowIconButton: FC<CategoryRowIconButtonProps> = props => {
   return (
     <View
       style={{
@@ -17,4 +17,4 @@ const IconModalButton: FC<IconModalButtonProps> = props => {
   );
 };
 
-export default IconModalButton;
+export default CategoryRowIconButton;
