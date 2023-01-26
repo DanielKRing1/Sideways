@@ -7,9 +7,12 @@ export const BAD_POSTFIX = '-';
 export type NODE_POSTFIX = typeof GOOD_POSTFIX | typeof BAD_POSTFIX;
 export type NODE_ID = `${string}${NODE_POSTFIX}`;
 export type EDGE_ID = `${NODE_ID}-${NODE_ID}`;
-export const stripNodePostfix = (
-  fullNodeId: string,
-): [string, NODE_POSTFIX] => {
+
+export type NODE_ID_COMPONENTS = {
+  id: string;
+  postfix: NODE_POSTFIX;
+};
+export const stripNodePostfix = (fullNodeId: string): NODE_ID_COMPONENTS => {
   if (
     fullNodeId[fullNodeId.length - 1] !== GOOD_POSTFIX &&
     fullNodeId[fullNodeId.length - 1] !== BAD_POSTFIX
@@ -18,10 +21,10 @@ export const stripNodePostfix = (
       `'stripNodePostfix()' received a 'fullNodeId' that does not end with a valid 'NODE_POSTFIX'`,
     );
 
-  return [
-    fullNodeId.slice(0, fullNodeId.length - 1),
-    fullNodeId.slice(fullNodeId.length - 1) as NODE_POSTFIX,
-  ];
+  return {
+    id: fullNodeId.slice(0, fullNodeId.length - 1),
+    postfix: fullNodeId.slice(fullNodeId.length - 1) as NODE_POSTFIX,
+  };
 };
 export const addNodePostfix = (
   baseNodeId: string,

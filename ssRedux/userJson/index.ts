@@ -62,7 +62,7 @@ export const startCleanInputCategories = createAsyncThunk<
   const allDbInputs: string[] = rmDuplicates(
     dbDriver
       .getAllNodes(activeSliceName)
-      .map((node: CGNode) => stripNodePostfix(node.id)[0]),
+      .map((node: CGNode) => stripNodePostfix(node.id).id),
   );
 
   // 3. Get inputCategories
