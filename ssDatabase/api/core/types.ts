@@ -1,5 +1,6 @@
 import {CGNode, CGEdge, RealmGraph} from '@asianpersonn/realm-graph';
 import {Dict} from '../../../global';
+import {NODE_ID} from '../types';
 
 export enum GraphType {
   Input,
@@ -63,13 +64,13 @@ export type DbDriverType = {
   getGraph: (sliceName: string, graphType: GraphType) => RealmGraph | never;
   getNode: (
     sliceName: string,
-    nodeId: string,
+    nodeId: NODE_ID,
     graphType?: GraphType,
   ) => (Realm.Object & CGNode) | undefined | never;
   getEdge: (
     sliceName: string,
-    node1Id: string,
-    node2Id: string,
+    node1Id: NODE_ID,
+    node2Id: NODE_ID,
     graphType?: GraphType,
   ) => (Realm.Object & CGEdge) | undefined | never;
   getAllNodes: (

@@ -17,6 +17,8 @@ import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types'
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
 import categoryDriver from 'ssDatabase/api/userJson/category';
 import {CGNode} from '@asianpersonn/realm-graph';
+import {stripNodePostfix} from 'ssDatabase/api/types';
+import {rmDuplicates} from 'ssUtils/list';
 
 // INITIAL STATE
 
@@ -57,9 +59,11 @@ export const startCleanInputCategories = createAsyncThunk<
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
 
   // 2. Get all Graph inputs
-  const allDbInputs: string[] = dbDriver
-    .getAllNodes(activeSliceName)
-    .map((node: CGNode) => node.id);
+  const allDbInputs: string[] = rmDuplicates(
+    dbDriver
+      .getAllNodes(activeSliceName)
+      .map((node: CGNode) => stripNodePostfix(node.id)[0]),
+  );
 
   // 3. Get inputCategories
   const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =

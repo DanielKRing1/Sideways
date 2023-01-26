@@ -1,6 +1,33 @@
 import {RankedNode} from '@asianpersonn/realm-graph';
 import {Dict} from '../../global';
 
+// GOOD/BAD NODE NAMING
+export const GOOD_POSTFIX = '+';
+export const BAD_POSTFIX = '-';
+export type NODE_POSTFIX = typeof GOOD_POSTFIX | typeof BAD_POSTFIX;
+export type NODE_ID = `${string}${NODE_POSTFIX}`;
+export type EDGE_ID = `${NODE_ID}-${NODE_ID}`;
+export const stripNodePostfix = (
+  fullNodeId: string,
+): [string, NODE_POSTFIX] => {
+  if (
+    fullNodeId[fullNodeId.length - 1] !== GOOD_POSTFIX &&
+    fullNodeId[fullNodeId.length - 1] !== BAD_POSTFIX
+  )
+    throw new Error(
+      `'stripNodePostfix()' received a 'fullNodeId' that does not end with a valid 'NODE_POSTFIX'`,
+    );
+
+  return [
+    fullNodeId.slice(0, fullNodeId.length - 1),
+    fullNodeId.slice(fullNodeId.length - 1) as NODE_POSTFIX,
+  ];
+};
+export const addNodePostfix = (
+  baseNodeId: string,
+  postfix: NODE_POSTFIX,
+): NODE_ID => `${baseNodeId}${postfix}`;
+
 // NON-TIMESERIES DATASTRUCTURE TYPE DEFINITIONS
 export type RankedNodesMap = Dict<Dict<number>>;
 

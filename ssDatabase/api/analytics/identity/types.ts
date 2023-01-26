@@ -2,13 +2,13 @@
 
 import {RankedNode} from '@asianpersonn/realm-graph';
 import {GraphType} from 'ssDatabase/api/core/types';
-import {HiLoRanking, HiLoRankingByOutput} from 'ssDatabase/api/types';
+import {HiLoRanking, HiLoRankingByOutput, NODE_ID} from 'ssDatabase/api/types';
 
 // Methods
 export type GetNodeStatsArgs = {
   activeSliceName: string;
   graphType: GraphType;
-  nodeId: string;
+  nodeId: NODE_ID;
   rawOutputs: string[];
 };
 export type GetNodeStatsByOutputArgs = {

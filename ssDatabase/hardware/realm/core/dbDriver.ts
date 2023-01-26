@@ -32,6 +32,7 @@ import {
   genGraphName,
   genInputGraphName,
 } from './constants';
+import {NODE_ID} from 'ssDatabase/api/types';
 
 // VARIABLES
 let isLoaded = false;
@@ -347,7 +348,7 @@ const getGraph = (sliceName: string, graphType: GraphType) => {
 };
 const getNode = (
   sliceName: string,
-  nodeId: string,
+  nodeId: NODE_ID,
   graphType: GraphType = GraphType.Input,
 ): (Realm.Object & CGNode) | undefined | never => {
   throwLoadError();
@@ -358,8 +359,8 @@ const getNode = (
 };
 const getEdge = (
   sliceName: string,
-  node1Id: string,
-  node2Id: string,
+  node1Id: NODE_ID,
+  node2Id: NODE_ID,
   graphType: GraphType = GraphType.Input,
 ): (Realm.Object & CGEdge) | undefined | never => {
   throwLoadError();

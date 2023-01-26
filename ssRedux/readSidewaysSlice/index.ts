@@ -11,6 +11,8 @@ import {ThunkConfig} from 'ssRedux/types';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {CGNode} from '@asianpersonn/realm-graph';
 import {NO_ACTIVE_SLICE_NAME} from 'ssDatabase/api/userJson/category/constants';
+import {stripNodePostfix} from 'ssDatabase/api/types';
+import {rmDuplicates} from 'ssUtils/list';
 
 // INITIAL STATE
 
@@ -76,9 +78,11 @@ export const startCacheAllDbInputs = createAsyncThunk<
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
 
   // 1. Get all inputs
-  const allDbInputs: string[] = dbDriver
-    .getAllNodes(activeSliceName)
-    .map((node: CGNode) => node.id);
+  const allDbInputs: string[] = rmDuplicates(
+    dbDriver
+      .getAllNodes(activeSliceName)
+      .map((node: CGNode) => stripNodePostfix(node.id)[0]),
+  );
 
   // 2. Set all inputs
   thunkAPI.dispatch(setAllDbInputs(allDbInputs));
