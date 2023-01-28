@@ -1,5 +1,11 @@
 import React, {FC, useState, forwardRef, useEffect} from 'react';
-import {Keyboard, TextInput, TextInputProps} from 'react-native';
+import {
+  Keyboard,
+  NativeSyntheticEvent,
+  TextInput,
+  TextInputFocusEventData,
+  TextInputProps,
+} from 'react-native';
 import {useIsKeyboardVisible} from 'ssHooks/useIsKeyboardVisible';
 import styled from 'styled-components/native';
 
@@ -17,9 +23,8 @@ export const SearchableDropdown = forwardRef<
   SearchableDropdownProps
 >((props, ref) => {
   const {
-    placeholder,
-    value,
-    onChangeText,
+    onFocus,
+    onBlur,
     LeftComponent,
     InputComponent = DefaultInput,
     DropdownComponent,
@@ -31,14 +36,18 @@ export const SearchableDropdown = forwardRef<
 
   const shouldDisplayDropdown = isFocused && !!DropdownComponent;
 
-  const handleFocus = () => {
+  const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     console.log('FOCUSED!!------');
     setIsFocused(true);
+
+    if (onFocus) onFocus(e);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocused(false);
     Keyboard.dismiss();
+
+    if (onBlur) onBlur(e);
   };
 
   // KEYBOARD EFFECT
