@@ -11,6 +11,7 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
 import {GraphType} from 'ssDatabase/api/core/types';
 import styled, {DefaultTheme} from 'styled-components/native';
+import {GOOD_POSTFIX} from 'ssDatabase/api/types';
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
@@ -24,7 +25,14 @@ const NodeInput: FC<NodeInputProps> = () => {
     dispatch(setSearchNodeIdInput(nodeIdInput));
   }, []);
   const handleSetNodeId = useCallback((nodeIdInput: string): void => {
-    dispatch(startSetNodeIdInput({nodeIdInput, graphType: GraphType.Input}));
+    // TODO Add option to selection good or bad postfix
+    dispatch(
+      startSetNodeIdInput({
+        nodeIdInput,
+        goodOrBad: GOOD_POSTFIX,
+        graphType: GraphType.Input,
+      }),
+    );
   }, []);
 
   // console.log('NODEINPUT RERENDERED');

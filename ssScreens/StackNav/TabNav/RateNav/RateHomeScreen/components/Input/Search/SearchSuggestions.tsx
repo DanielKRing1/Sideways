@@ -33,6 +33,10 @@ const SearchSuggestions: FC<SearchSuggestionsProps> = props => {
     (input: string) => input.toLocaleLowerCase(),
   );
 
+  console.log('SEARCHSUGGESTIONS-------------------------------------');
+  console.log(allDbInputs);
+  console.log(autoComplete);
+
   return (
     <FlatList
       keyboardShouldPersistTaps="always"

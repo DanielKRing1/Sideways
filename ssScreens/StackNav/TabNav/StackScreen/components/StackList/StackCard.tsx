@@ -13,6 +13,7 @@ import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
 import {AppDispatch} from 'ssRedux/index';
 import {abbrDateMs, serializeDateNum} from 'ssUtils/date';
 import {startDeleteRate} from 'ssRedux/undorateSidewaysSlice';
+import {stripNodePostfix} from 'ssDatabase/api/types';
 
 type StackCardProps = {
   itemInfo: ListRenderItemInfo<SidewaysSnapshotRow>;
@@ -63,18 +64,23 @@ const StackCard: FC<StackCardProps> = props => {
         <MyText>{item.rating}</MyText>
 
         <MyText>Inputs:</MyText>
-        {item.inputs.map((input: string, i: number) => (
-          <FlexRow key={`${input}-${i}`}>
-            <DbCategoryRow
-              editable={false}
-              deletable={false}
-              inputName={input}
-              categoryId={item.categories[i]}
-              onCommitInputName={handleCommitInputName}
-              onDeleteCategoryRow={handleDeleteCategoryRow}
-            />
-          </FlexRow>
-        ))}
+        {item.inputs.map((input: string, i: number) => {
+          const {id, postfix} = stripNodePostfix(input);
+          return (
+            <FlexRow key={`${input}-${i}`}>
+              <DbCategoryRow
+                editable={false}
+                likable={false}
+                deletable={false}
+                inputName={id}
+                goodOrBad={postfix}
+                categoryId={item.categories[i]}
+                onCommitInputName={handleCommitInputName}
+                onDeleteCategoryRow={handleDeleteCategoryRow}
+              />
+            </FlexRow>
+          );
+        })}
 
         <MyText>Outputs:</MyText>
         {item.outputs.map((output: string) => (

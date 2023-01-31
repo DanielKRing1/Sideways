@@ -8,6 +8,9 @@ import {
   HiLoRankingByOutput,
   GraphPropType,
   GRAPH_PROP_KEYS,
+  NODE_POSTFIX,
+  GOOD_POSTFIX,
+  addNodePostfix,
 } from 'ssDatabase/api/types';
 import {ThunkConfig} from '../../types';
 import {
@@ -25,6 +28,7 @@ export interface IdentityStatsState {
 
   searchedNodeIdInput: string;
   nodeIdInput: string;
+  goodOrBad: NODE_POSTFIX;
   listLength: number;
 
   // Identity Stats
@@ -47,6 +51,7 @@ const initialState: IdentityStatsState = {
   // INPUTS
   searchedNodeIdInput: '',
   nodeIdInput: '',
+  goodOrBad: GOOD_POSTFIX,
   listLength: 5,
 
   // STATS
@@ -74,10 +79,8 @@ export const startAssureFreshness = createAsyncThunk<
 >('identityStatsSS/startAssureFreshness', async (undef, thunkAPI) => {
   const activeSliceName: string =
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-  const analyzedSliceName: string =
-    thunkAPI.getState().analyticsSlice.identityStatsSlice.analyzedSliceName;
-  const isFresh: boolean =
-    thunkAPI.getState().analyticsSlice.identityStatsSlice.isFresh;
+  const {analyzedSliceName, isFresh, nodeIdInput, goodOrBad} =
+    thunkAPI.getState().analyticsSlice.identityStatsSlice;
 
   console.log('START ASSURE FRESHNESS');
   console.log(activeSliceName);
@@ -99,11 +102,9 @@ export const startAssureFreshness = createAsyncThunk<
   else if (!isFresh) {
     // Recompute identityNodes + Recompute inputNode stats + Rerender identity and input stats
     thunkAPI.dispatch(startGetIdentityNodes());
-    const nodeIdInput: string =
-      thunkAPI.getState().analyticsSlice.identityStatsSlice.nodeIdInput;
     // TODO: Assure freshness only updates Input and not Category GraphType analytics for now
     thunkAPI.dispatch(
-      startSetNodeIdInput({nodeIdInput, graphType: GraphType.Input}),
+      startSetNodeIdInput({nodeIdInput, goodOrBad, graphType: GraphType.Input}),
     );
 
     thunkAPI.dispatch(forceIdentityStatsSignatureRerender());
@@ -160,6 +161,7 @@ const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
 
 type StartSetNodeIdInputArgs = {
   nodeIdInput: string;
+  goodOrBad: NODE_POSTFIX;
   graphType: GraphType;
 };
 export const startSetNodeIdInput = createAsyncThunk<
@@ -168,7 +170,10 @@ export const startSetNodeIdInput = createAsyncThunk<
   ThunkConfig
 >(
   'identityStatsSS/startSetNodeStats',
-  async ({nodeIdInput, graphType}: StartSetNodeIdInputArgs, thunkAPI) => {
+  async (
+    {nodeIdInput, goodOrBad, graphType}: StartSetNodeIdInputArgs,
+    thunkAPI,
+  ) => {
     try {
       // 1. Set node id input
       thunkAPI.dispatch(setNodeIdInput(nodeIdInput));
@@ -185,7 +190,7 @@ export const startSetNodeIdInput = createAsyncThunk<
         startGetNodeStats({
           activeSliceName,
           graphType,
-          nodeId: nodeIdInput,
+          nodeId: addNodePostfix(nodeIdInput, goodOrBad),
           rawOutputs: allDbOutputs,
         }),
       );
@@ -198,7 +203,7 @@ export const startSetNodeIdInput = createAsyncThunk<
         startGetCollectivelyTandemNodes({
           activeSliceName,
           graphType,
-          nodeId: nodeIdInput,
+          nodeId: addNodePostfix(nodeIdInput, goodOrBad),
           rawOutputs: allDbOutputs,
           listLength,
         }),
@@ -212,7 +217,7 @@ export const startSetNodeIdInput = createAsyncThunk<
         startGetSinglyTandemNodes({
           activeSliceName,
           graphType,
-          nodeId: nodeIdInput,
+          nodeId: addNodePostfix(nodeIdInput, goodOrBad),
           rawOutputs: allDbOutputs,
           listLength,
         }),
@@ -226,7 +231,7 @@ export const startSetNodeIdInput = createAsyncThunk<
         startGetHighlyRatedTandemNodes({
           activeSliceName,
           graphType,
-          nodeId: nodeIdInput,
+          nodeId: addNodePostfix(nodeIdInput, goodOrBad),
           rawOutputs: allDbOutputs,
           listLength,
         }),

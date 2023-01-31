@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as NewSliceOutput} from 'ssComponents/Input/GrowingIdList';
+import {GrowingIdItem} from 'ssComponents/Input/GrowingIdList';
+export type CreateSliceOutput = GrowingIdItem<string>;
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {DAILY_JOURNAL_CATEGORY_SET} from 'ssDatabase/api/userJson/category/constants';
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
@@ -11,7 +12,7 @@ import {ThunkConfig} from '../types';
 
 export interface CreateSSState {
   newSliceName: string;
-  possibleOutputs: NewSliceOutput[];
+  possibleOutputs: CreateSliceOutput[];
   csId: string;
 
   createdSignature: {};
@@ -40,7 +41,7 @@ export const startCreateSlice = createAsyncThunk<
 
   // 2. Create Graph (also reloads graph LoadableRealm)
   const outputTextList: string[] = possibleOutputs.map(
-    (possibleOutput: NewSliceOutput) => possibleOutput.text,
+    (possibleOutput: CreateSliceOutput) => possibleOutput.item,
   );
   const graphPromise: Promise<void> = DbDriver.createGraphs(
     newSliceName,
@@ -68,8 +69,8 @@ export const startCreateSlice = createAsyncThunk<
 type ForceSSRerenderAction = PayloadAction<undefined>;
 type SetNewSliceNameAction = PayloadAction<string>;
 type SetCSIdAction = PayloadAction<string>;
-type SetPossibleOutputsAction = PayloadAction<NewSliceOutput[]>;
-type AddPossibleOutputAction = PayloadAction<NewSliceOutput>;
+type SetPossibleOutputsAction = PayloadAction<CreateSliceOutput[]>;
+type AddPossibleOutputAction = PayloadAction<CreateSliceOutput>;
 type EditPossibleOutputAction = PayloadAction<{index: number; newText: string}>;
 type RmPossibleOutputAction = PayloadAction<number>;
 type ResetAction = PayloadAction<undefined>;
@@ -105,7 +106,7 @@ export const createSS = createSlice({
     ) => {
       const {index, newText} = action.payload;
 
-      state.possibleOutputs[index].text = newText;
+      state.possibleOutputs[index].item = newText;
     },
     removePossibleOutput: (
       state: CreateSSState,

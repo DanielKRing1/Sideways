@@ -4,13 +4,13 @@ import {useDispatch} from 'react-redux';
 
 import {AppDispatch} from 'ssRedux/index';
 import {
-  InputState,
+  editInput as editInputR,
+  RateInput,
   removeInput as removeInputR,
-  setInputs as setInputsR,
 } from 'ssRedux/rateSidewaysSlice';
 import {
+  editReplacementInput as editInputUR,
   removeReplacementInput as removeInputUR,
-  setReplacementInputs as setInputsUR,
 } from 'ssRedux/undorateSidewaysSlice';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import NoInputsDisplay from './NoInputsDisplay';
@@ -18,10 +18,11 @@ import MyPadding from 'ssComponents/ReactNative/MyPadding';
 import {DISPLAY_SIZE} from '../../../../../../../../global';
 import {RATING_TYPE} from '../../RatingMenu/types';
 import {select} from 'ssUtils/selector';
+import {toggleNodePostfix} from 'ssDatabase/api/types';
 
 type RatingInputListProps = {
   ratingType: RATING_TYPE;
-  inputs: InputState[];
+  inputs: RateInput[];
 };
 const RatingInputList: FC<RatingInputListProps> = props => {
   // PROPS
@@ -29,10 +30,10 @@ const RatingInputList: FC<RatingInputListProps> = props => {
 
   // REDUX
   // Select reducer actions
-  const [, setInputs] = select(
+  const [, editInput] = select(
     ratingType,
-    [RATING_TYPE.Rate, setInputsR],
-    [RATING_TYPE.UndoRate, setInputsUR],
+    [RATING_TYPE.Rate, editInputR],
+    [RATING_TYPE.UndoRate, editInputUR],
   );
   const [, removeInput] = select(
     ratingType,
@@ -43,31 +44,61 @@ const RatingInputList: FC<RatingInputListProps> = props => {
 
   // HANDLERS
   const handleCommitInputName = (index: number, newInputName: string) => {
-    const inputsCopy = [...inputs];
     console.log('BEFORE');
-    console.log(inputsCopy);
+    console.log(inputs);
     console.log(index);
     console.log(newInputName);
-    inputsCopy[index] = {
-      ...inputsCopy[index],
-      name: newInputName,
-    };
     console.log('here');
-    console.log(inputsCopy[index]);
+    console.log(inputs[index]);
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-    console.log('AFTER');
-    console.log(inputsCopy);
-    dispatch(setInputs(inputsCopy));
+    dispatch(
+      editInput({
+        index,
+        input: {
+          ...inputs[index],
+          item: {
+            ...inputs[index].item,
+            id: newInputName,
+          },
+        },
+      }),
+    );
+  };
+  const handleToggleInputPostfix = (index: number) => {
+    console.log('BEFORE');
+    console.log(inputs);
+    console.log(index);
+    console.log('here');
+    console.log(inputs[index]);
+    // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
+    dispatch(
+      editInput({
+        index,
+        input: {
+          ...inputs[index],
+          item: {
+            ...inputs[index].item,
+            postfix: toggleNodePostfix(inputs[index].item.postfix),
+          },
+        },
+      }),
+    );
   };
 
   const handleCommitCId = (index: number, newCId: string) => {
-    const inputsCopy = [...inputs];
-    inputsCopy[index] = {
-      ...inputsCopy[index],
-      category: newCId,
-    };
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-    dispatch(setInputs(inputsCopy));
+    dispatch(
+      editInput({
+        index,
+        input: {
+          ...inputs[index],
+          item: {
+            ...inputs[index].item,
+            category: newCId,
+          },
+        },
+      }),
+    );
   };
 
   const handleRemoveInput = (index: number) => dispatch(removeInput(index));
@@ -79,6 +110,7 @@ const RatingInputList: FC<RatingInputListProps> = props => {
           data={inputs}
           renderItem={renderItem(
             handleCommitInputName,
+            handleToggleInputPostfix,
             handleCommitCId,
             handleRemoveInput,
           )}
@@ -97,27 +129,36 @@ export default RatingInputList;
 const renderItem =
   (
     onCommitInputName: (index: number, newInputName: string) => void,
+    onToggleGoodOrBad: (index: number) => void,
     onCommitCId: (index: number, newCId: string) => void,
     onRemoveInput: (index: number) => void,
-  ): ListRenderItem<InputState> =>
+  ): ListRenderItem<RateInput> =>
   itemInfo =>
     (
       <RatingInput
         itemInfo={itemInfo}
         onCommitInputName={onCommitInputName}
+        onToggleGoodOrBad={onToggleGoodOrBad}
         onCommitCId={onCommitCId}
         onRemoveInput={onRemoveInput}
       />
     );
 
 type RatingInputProps = {
-  itemInfo: ListRenderItemInfo<InputState>;
+  itemInfo: ListRenderItemInfo<RateInput>;
   onCommitInputName: (index: number, newInputName: string) => void;
+  onToggleGoodOrBad: (index: number) => void;
   onCommitCId: (index: number, newCId: string) => void;
   onRemoveInput: (index: number) => void;
 };
 const RatingInput: FC<RatingInputProps> = props => {
-  const {itemInfo, onCommitInputName, onCommitCId, onRemoveInput} = props;
+  const {
+    itemInfo,
+    onCommitInputName,
+    onToggleGoodOrBad,
+    onCommitCId,
+    onRemoveInput,
+  } = props;
   const {item, index} = itemInfo;
 
   // HANDLERS
@@ -139,8 +180,10 @@ const RatingInput: FC<RatingInputProps> = props => {
       rightSize={DISPLAY_SIZE.sm}
       leftSize={DISPLAY_SIZE.sm}>
       <DbCategoryRow
-        inputName={item.name}
-        categoryId={item.category}
+        inputName={item.item.id}
+        goodOrBad={item.item.postfix}
+        onToggleGoodOrBad={() => onToggleGoodOrBad(index)}
+        categoryId={item.item.category}
         onCommitInputName={newInputName => handleCommitInputName(newInputName)}
         onCommitCId={newCId => handleCommitCId(newCId)}
         onDeleteCategoryRow={handleDeleteCategoryRow}

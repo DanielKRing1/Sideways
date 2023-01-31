@@ -36,6 +36,8 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
   const {allDbInputs} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
   );
+  console.log('AUTOCOMPLETECATEGORY----------------------------');
+  console.log(allDbInputs);
 
   // TEXT INPUT REF
   const textInputRef = useRef<TextInput>(null);
@@ -52,6 +54,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
     onSelectEntityId(entityId);
   };
 
+  // Add optional prop to handle preventing commiting a non-existant input name
   const handleCommitInputName = (newInputName: string) => {
     onChangeText(newInputName);
   };

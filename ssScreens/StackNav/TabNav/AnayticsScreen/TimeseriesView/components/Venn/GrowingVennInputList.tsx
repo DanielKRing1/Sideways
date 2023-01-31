@@ -14,6 +14,7 @@ import {
   startAddVennInput,
   startRmVennInput,
   VennInput,
+  startEditVennInput,
 } from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
 
 // DECORATIONS
@@ -21,6 +22,7 @@ import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory'
 import {RenderItemProps} from 'ssComponents/Input/GrowingInputList';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {getStartingId} from 'ssUtils/id';
+import {GOOD_POSTFIX} from 'ssDatabase/api/types';
 
 const createRenderItem =
   (deleteVennInput: (index: number) => void) =>
@@ -28,10 +30,9 @@ const createRenderItem =
     (
       <FlexRow>
         <AutoCompleteCategory
-          clickOutsideId={`GrowingVennInputList-${item.id}`}
           placeholder="Search an input..."
-          inputValue={item.text}
-          setInputValue={(newText: string) => handleChangeText(newText, index)}
+          value={item.text}
+          onChangeText={(newText: string) => handleChangeText(newText, index)}
           onSelectEntityId={(newText: string) =>
             handleChangeText(newText, index)
           }
@@ -60,12 +61,27 @@ const GrowingVennInputList: FC<GrowingVennInputListProps> = () => {
   const keyExtractor = (dataPoint: VennInput) => `${dataPoint.id}`;
   const genNextDataPlaceholder = (id: number) => ({id, text: ''});
   const handleAddInputNode = (id: number, newPossibleOutput: string) => {
-    dispatch(startAddVennInput({id, text: newPossibleOutput}));
+    dispatch(
+      startAddVennInput({
+        id,
+        item: {id: newPossibleOutput, postfix: GOOD_POSTFIX},
+      }),
+    );
   };
   const handleUpdateInputNode = (newText: string, index: number) => {
-    vennNodeInputs[index].text = newText;
     // TODO: Dispatch a copy of the previous state: [ ...possibleInputs ]?
-    dispatch(startSetVennInputs(vennNodeInputs));
+    dispatch(
+      startEditVennInput({
+        index,
+        vennInput: {
+          ...vennNodeInputs[index],
+          item: {
+            ...vennNodeInputs[index].item,
+            id: newText,
+          },
+        },
+      }),
+    );
   };
 
   return (

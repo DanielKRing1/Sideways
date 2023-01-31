@@ -1,4 +1,5 @@
 import {RankedNode} from '@asianpersonn/realm-graph';
+import {NodeStatsType} from 'ssScreens/StackNav/TabNav/AnayticsScreen/IdentityView/components/NodeStats';
 import {Dict} from '../../global';
 
 // GOOD/BAD NODE NAMING
@@ -16,10 +17,14 @@ export const stripNodePostfix = (fullNodeId: string): NODE_ID_COMPONENTS => {
   if (
     fullNodeId[fullNodeId.length - 1] !== GOOD_POSTFIX &&
     fullNodeId[fullNodeId.length - 1] !== BAD_POSTFIX
-  )
+  ) {
+    console.log(
+      `'stripNodePostfix()' received a 'fullNodeId' that does not end with a valid 'NODE_POSTFIX'`,
+    );
     throw new Error(
       `'stripNodePostfix()' received a 'fullNodeId' that does not end with a valid 'NODE_POSTFIX'`,
     );
+  }
 
   return {
     id: fullNodeId.slice(0, fullNodeId.length - 1),
@@ -30,6 +35,8 @@ export const addNodePostfix = (
   baseNodeId: string,
   postfix: NODE_POSTFIX,
 ): NODE_ID => `${baseNodeId}${postfix}`;
+export const toggleNodePostfix = (postfix: NODE_POSTFIX) =>
+  postfix === GOOD_POSTFIX ? BAD_POSTFIX : GOOD_POSTFIX;
 
 // NON-TIMESERIES DATASTRUCTURE TYPE DEFINITIONS
 export type RankedNodesMap = Dict<Dict<number>>;

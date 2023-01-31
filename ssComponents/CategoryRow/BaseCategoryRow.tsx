@@ -37,15 +37,17 @@ import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants
 import {useTimeout} from 'ssHooks/useTimeout';
 import CIdSelector from './components/CIdSelector';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
+import {GOOD_POSTFIX} from 'ssDatabase/api/types';
 
 export type BaseCategoryRowProps = {
   disableButtons?: boolean;
   editable?: boolean;
-  goodOrBad?: boolean;
+  likable?: boolean;
   deletable?: boolean;
   style?: ViewStyle;
 
   inputName: string;
+  goodOrBad?: string;
   categoryId: string;
   placeholder?: string;
 
@@ -69,11 +71,12 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
   const {
     disableButtons = false,
     editable = true,
-    goodOrBad = true,
+    likable = true,
     deletable = true,
     style = {},
 
     inputName,
+    goodOrBad = undefined,
     categoryId,
     placeholder,
 
@@ -265,9 +268,11 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
             {/* Good/Bad */}
             {goodOrBad !== undefined && (
               <CategoryRowIconButton
-                disabled={disableButtons}
+                disabled={likable && disableButtons}
                 color={categoryDecoration.color}
-                iconName={goodOrBad ? 'thumbs-up' : 'thumbs-down'}
+                iconName={
+                  goodOrBad === GOOD_POSTFIX ? 'thumbs-up' : 'thumbs-down'
+                }
                 onPress={handleToggleGoodOrBad}
               />
             )}

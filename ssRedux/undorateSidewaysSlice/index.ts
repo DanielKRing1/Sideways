@@ -1,14 +1,13 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export type {GrowingIdText as UndoRateInput} from 'ssComponents/Input/GrowingIdList';
+export type {GrowingIdItem as UndoRateInput} from 'ssComponents/Input/GrowingIdList';
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {
   GraphType,
   SidewaysSnapshotRowPrimitive,
 } from 'ssDatabase/api/core/types';
-import {InputState, startRefreshUiAfterRate} from 'ssRedux/rateSidewaysSlice';
-import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
-import {startCleanInputCategories} from 'ssRedux/userJson';
+import {addNodePostfix, NODE_ID, stripNodePostfix} from 'ssDatabase/api/types';
+import {RateInput, startRefreshUiAfterRate} from 'ssRedux/rateSidewaysSlice';
 import {ThunkConfig} from '../types';
 
 // INITIAL STATE
@@ -23,7 +22,7 @@ export interface UndoRateSSState {
   typingInput: string;
 
   // Final values
-  inputs: InputState[];
+  inputs: RateInput[];
   outputs: string[];
   rating: number;
 
@@ -70,8 +69,10 @@ export const startUpdateRate = createAsyncThunk<
     outputs: newOutputs,
     rating: newRating,
   } = thunkAPI.getState().undorateSidewaysSlice;
-  const newInputs: string[] = newInputObjs.map(({name}) => name);
-  const newCategories: string[] = newInputObjs.map(({category}) => category);
+  const newInputs: string[] = newInputObjs.map(({item}) =>
+    addNodePostfix(item.id, item.postfix),
+  );
+  const newCategories: string[] = newInputObjs.map(({item}) => item.category);
 
   // ORIGINAL SNAPSHOT
   const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
@@ -245,8 +246,9 @@ export const startDeleteRate = createAsyncThunk<
 
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetRatingAction = PayloadAction<number>;
-type SetInputsAction = PayloadAction<InputState[]>;
-type AddInputAction = PayloadAction<InputState>;
+type SetInputsAction = PayloadAction<RateInput[]>;
+type AddInputAction = PayloadAction<RateInput>;
+type EditInputAction = PayloadAction<{index: number; input: RateInput}>;
 type RmInputAction = PayloadAction<number>;
 type SetOutputAction = PayloadAction<string[]>;
 type AddOutputAction = PayloadAction<string>;
@@ -272,6 +274,9 @@ export const undorateSS = createSlice({
     },
     addReplacementInput: (state: UndoRateSSState, action: AddInputAction) => {
       state.inputs.push(action.payload);
+    },
+    editReplacementInput: (state: UndoRateSSState, action: EditInputAction) => {
+      state.inputs[action.payload.index] = action.payload.input;
     },
     removeReplacementInput: (state: UndoRateSSState, action: RmInputAction) => {
       // Do not need to set state bcus Redux Toolkit uses Immer, which
@@ -302,11 +307,18 @@ export const undorateSS = createSlice({
 
       // NEW RATING
       // Start New Rating info as Original Rating info
-      state.inputs = originalSnapshot.inputs.map((input, i) => ({
-        id: i,
-        name: input,
-        category: originalSnapshot.categories[i],
-      }));
+      state.inputs = originalSnapshot.inputs.map((input: NODE_ID, i) => {
+        const {id, postfix} = stripNodePostfix(input);
+
+        return {
+          id: i,
+          item: {
+            id,
+            postfix,
+            category: originalSnapshot.categories[i],
+          },
+        };
+      });
       state.outputs = originalSnapshot.outputs;
       state.rating = originalSnapshot.rating;
     },
@@ -367,6 +379,7 @@ export const {
   setReplacementRating,
   setReplacementInputs,
   addReplacementInput,
+  editReplacementInput,
   removeReplacementInput,
   setReplacementOutputs,
   addReplacementOutput,

@@ -37,9 +37,10 @@ import {
   ChartBar,
   HeatMapByMonth,
 } from 'ssDatabase/api/analytics/timeseries/types';
-import {GrowingIdText as NewSliceOutput} from '../../../../ssComponents/Input/GrowingIdList';
+import {GrowingIdItem} from '../../../../ssComponents/Input/GrowingIdList';
 import {Dict} from '../../../../global';
 import {serializeDateNum} from 'ssUtils/date';
+import {GOOD_POSTFIX, NODE_ID_COMPONENTS} from 'ssDatabase/api/types';
 
 // ALL AVAILABLE DATA
 const TEST_SLICE_NAME: string = 'TestSlice';
@@ -48,9 +49,11 @@ const TEST_OUTPUTS_MAP: Dict<string> = {
   bad: 'bad',
 };
 const TEST_OUPUTS_ALL: string[] = Object.values(TEST_OUTPUTS_MAP).sort();
-const TEST_GROWING_ID_TEXT_ALL: NewSliceOutput[] = TEST_OUPUTS_ALL.map(
-  (output: string, i) => ({id: i, text: output}),
-);
+const TEST_GROWING_ID_TEXT_ALL: GrowingIdItem<NODE_ID_COMPONENTS>[] =
+  TEST_OUPUTS_ALL.map((output: string, i) => ({
+    id: i,
+    item: {id: output, postfix: GOOD_POSTFIX},
+  }));
 const TEST_NODES_MAP: Dict<string> = {
   basketball: 'basketball',
   eat: 'eat',

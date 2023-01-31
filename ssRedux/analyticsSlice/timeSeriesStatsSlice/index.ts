@@ -1,11 +1,11 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as VennInput} from 'ssComponents/Input/GrowingIdList';
-export type {GrowingIdText as VennInput} from 'ssComponents/Input/GrowingIdList';
+import {GrowingIdItem} from 'ssComponents/Input/GrowingIdList';
+export type VennInput = GrowingIdItem<NODE_ID_COMPONENTS>;
 import timeseriesDriver from 'ssDatabase/api/analytics/timeseries/timeseriesStatsDriver';
 
 import {ThunkConfig} from '../../types';
-import {deserializeDate, floorDay, serializeDateNum} from 'ssUtils/date';
+import {floorDay, serializeDateNum} from 'ssUtils/date';
 import {} from 'ssDatabase/hardware/realm/analytics/timeseries/timeseriesStatsDriver';
 import {
   LineGraph,
@@ -13,6 +13,7 @@ import {
   VennByMonth,
   HeatMapByMonth,
 } from 'ssDatabase/api/analytics/timeseries/types';
+import {addNodePostfix, NODE_ID_COMPONENTS} from 'ssDatabase/api/types';
 
 // INITIAL STATE
 
@@ -137,6 +138,23 @@ export const startAddVennInput = createAsyncThunk<
     return true;
   },
 );
+type StartEditVennInputsArg = {index: number; vennInput: VennInput};
+export const startEditVennInput = createAsyncThunk<
+  boolean,
+  StartEditVennInputsArg,
+  ThunkConfig
+>(
+  'timeseriesStatsSS/startAddVennInput',
+  async (args: StartEditVennInputsArg, thunkAPI) => {
+    // 1. Add venn input
+    thunkAPI.dispatch(editVennInput(args));
+
+    // 2. Recalculate venn
+    thunkAPI.dispatch(startGetVenn());
+
+    return true;
+  },
+);
 type StartRmVennInputsArg = number;
 export const startRmVennInput = createAsyncThunk<
   boolean,
@@ -245,16 +263,17 @@ const startGetVenn = createAsyncThunk<boolean, StartGetVennArgs, ThunkConfig>(
   async (undef: StartGetVennArgs, thunkAPI) => {
     const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const inputNodeIds: string[] = thunkAPI
+    const inputNodeFullIds: string[] = thunkAPI
       .getState()
       .analyticsSlice.timeseriesStatsSlice.vennNodeInputs.map(
-        (vennInput: VennInput) => vennInput.text,
+        (vennInput: VennInput) =>
+          addNodePostfix(vennInput.item.id, vennInput.item.postfix),
       );
 
     // const venn: VennByMonth[] = await timeseriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: [] }) as VennByMonth[];
     const venn: VennByMonth[] = await timeseriesDriver.getNodeOverlapVenn({
       sliceName: activeSliceName,
-      nodeIds: inputNodeIds,
+      nodeIds: inputNodeFullIds,
     });
 
     thunkAPI.dispatch(setVenn(venn));
@@ -295,6 +314,7 @@ type SetAnalyzedSliceName = PayloadAction<string>;
 type SetGraphSelectionAction = PayloadAction<SelectableGraph>;
 type SetDayInputAction = PayloadAction<Date>;
 type AddVennInput = PayloadAction<VennInput>;
+type EditVennInput = PayloadAction<StartEditVennInputsArg>;
 type RemoveVennInput = PayloadAction<number>;
 type SetVennInputs = PayloadAction<VennInput[]>;
 type SetMonthIndex = PayloadAction<number>;
@@ -391,6 +411,11 @@ export const timeseriesStatsSlice = createSlice({
       // Force rerender/recalculate Venn (and all)
       state.graphsSignature = {};
     },
+    editVennInput: (state: TimeStatsState, action: EditVennInput) => {
+      state.vennNodeInputs[action.payload.index] = action.payload.vennInput;
+      // Force rerender/recalculate Venn (and all)
+      state.graphsSignature = {};
+    },
     removeVennInput: (state: TimeStatsState, action: RemoveVennInput) => {
       // Do not need to set state bcus Redux Toolkit uses Immer, which
       // applies mutations to the state
@@ -455,6 +480,7 @@ export const timeseriesStatsSlice = createSlice({
 // Action creators are generated for each case reducer function
 const {
   addVennInput,
+  editVennInput,
   removeVennInput,
   setVennInputs,
   setLineGraph,

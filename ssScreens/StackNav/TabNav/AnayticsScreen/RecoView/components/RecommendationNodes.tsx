@@ -12,6 +12,9 @@ const RecommendationNodes: FC<RecommendationNodesProps> = () => {
     (state: RootState) => state.analyticsSlice.recoStatsSlice,
   );
 
+  console.log('RECOMMENDATIONS------------------');
+  console.log(recommendations);
+
   return (
     <View>
       {Object.keys(recommendations).length > 0 ? (

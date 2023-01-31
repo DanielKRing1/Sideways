@@ -13,12 +13,16 @@ import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import {DISPLAY_SIZE} from '../../../../../../global';
 import IconButton from 'ssComponents/Button/IconButton';
 import {getPadding} from 'ssTheme/utils';
+import {NODE_ID, stripNodePostfix} from 'ssDatabase/api/types';
 
+export type NodeStatsType = Omit<RankedNode, 'id'> & {id: NODE_ID};
 type NodeStatsProps = {
-  nodeStats: RankedNode | undefined;
+  nodeStats: NodeStatsType;
 };
 const NodeStats: FC<NodeStatsProps> = props => {
   const {nodeStats} = props;
+  console.log('nodeStats-------------------------');
+  console.log(nodeStats);
 
   // THEME
   const theme: DefaultTheme = useTheme();
@@ -36,7 +40,8 @@ const NodeStats: FC<NodeStatsProps> = props => {
 
   const iconName: string = useMemo(() => {
     // NOTE: If id becomes a uuid and is no longer the input name, then get the input name differently
-    const inputName: string = nodeStats !== undefined ? nodeStats.id : '';
+    const inputName: string =
+      nodeStats !== undefined ? stripNodePostfix(nodeStats.id).id : '';
 
     const cId: string = inToLastCId(inputName, fullUserJsonMap, 'nodestats');
     const cd: GJ_CategoryDecoration = cIdToCD(
@@ -63,13 +68,18 @@ const NodeStats: FC<NodeStatsProps> = props => {
             backgroundColor: theme.backgroundColors.main,
           }}>
           <FlexRow justifyContent="space-around">
-            <IconButton
-              disabled
-              iconName={iconName}
-              displaySize={DISPLAY_SIZE.md}
-              color={theme.colors.pastelPurple}
-              marginBase={getPadding(DISPLAY_SIZE.xs, width, theme)}
-            />
+            <FlexCol>
+              <MyText>{stripNodePostfix(nodeStats.id).id}</MyText>
+
+              <IconButton
+                disabled
+                iconName={iconName}
+                displaySize={DISPLAY_SIZE.md}
+                color={theme.colors.pastelPurple}
+                marginBase={getPadding(DISPLAY_SIZE.xs, width, theme)}
+              />
+            </FlexCol>
+
             <MyBorder
               paddingTop={DISPLAY_SIZE.xs}
               paddingBottom={DISPLAY_SIZE.xs}

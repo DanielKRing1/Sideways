@@ -25,6 +25,7 @@ import {getStartingId} from 'ssUtils/id';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FlexCol} from 'ssComponents/Flex';
+import {GOOD_POSTFIX} from 'ssDatabase/api/types';
 
 type RatingInputSelectionProps = {
   ratingType: RATING_TYPE;
@@ -94,8 +95,11 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
     dispatch(
       addInput({
         id: newId,
-        name: newInputName,
-        category: getInputCategory(newInputName),
+        item: {
+          id: newInputName,
+          postfix: GOOD_POSTFIX,
+          category: getInputCategory(newInputName),
+        },
       }),
     );
 
@@ -113,6 +117,10 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
     dispatch(startRefreshInputNameToCategoryNameMapping());
   };
 
+  console.log(
+    'IS SEARCHING-----------------------------------: ' + isSearching,
+  );
+
   return (
     <FlexCol>
       <ScrollView keyboardShouldPersistTaps="handled">
@@ -127,14 +135,16 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
         />
       </ScrollView>
 
-      {isSearching ? (
+      {!isSearching && <InputList ratingType={ratingType} inputs={inputs} />}
+
+      {/* {isSearching ? (
         <SearchSuggestions
           searchInput={searchInput}
           onSelectSuggestion={handleSelectSuggestion}
         />
       ) : (
         <InputList ratingType={ratingType} inputs={inputs} />
-      )}
+      )} */}
     </FlexCol>
   );
 };

@@ -9,12 +9,11 @@ import {
   addPossibleOutput,
   removePossibleOutput,
   editPossibleOutput,
+  CreateSliceOutput,
 } from '../../../../ssRedux/createSidewaysSlice';
 
 // COMPONENTS
-import GrowingIdList, {
-  GrowingIdText as NewSliceOutput,
-} from '../../../../ssComponents/Input/GrowingIdList';
+import GrowingIdList from '../../../../ssComponents/Input/GrowingIdList';
 
 // NAV
 import MyTextInput from '../../../../ssComponents/ReactNative/MyTextInput';
@@ -51,10 +50,15 @@ const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
   }, []);
 
   // HANDLER METHODS
-  const keyExtractor = (dataPoint: NewSliceOutput) => `${dataPoint.id}`;
+  const keyExtractor = (dataPoint: CreateSliceOutput) => `${dataPoint.id}`;
   const genNextDataPlaceholder = (id: number) => ({id, text: ''});
   const handleAddOutput = (id: number, newPossibleOutput: string) => {
-    dispatch(addPossibleOutput({id, text: newPossibleOutput}));
+    dispatch(
+      addPossibleOutput({
+        id,
+        item: newPossibleOutput,
+      }),
+    );
   };
   const handleUpdateOutput = (newText: string, index: number) => {
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?

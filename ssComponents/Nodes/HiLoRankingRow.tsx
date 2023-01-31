@@ -3,7 +3,9 @@ import React, {FC} from 'react';
 
 import MyText from '../ReactNative/MyText';
 import {FlexCol, FlexRow} from '../Flex';
-import NodeStats from 'ssScreens/StackNav/TabNav/AnayticsScreen/IdentityView/components/NodeStats';
+import NodeStats, {
+  NodeStatsType,
+} from 'ssScreens/StackNav/TabNav/AnayticsScreen/IdentityView/components/NodeStats';
 import {HiLoRanking} from 'ssDatabase/api/types';
 import {ScrollView, View} from 'react-native';
 import IgnoreTouchable from 'ssComponents/View/IgnoreTouchable';

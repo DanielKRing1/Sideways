@@ -1,11 +1,15 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as RecoInput} from 'ssComponents/Input/GrowingIdList';
-export type {GrowingIdText as RecoInput} from 'ssComponents/Input/GrowingIdList';
+import {GrowingIdItem} from 'ssComponents/Input/GrowingIdList';
+export type RecoInput = GrowingIdItem<NODE_ID_COMPONENTS>;
 import recommendationsDriver from 'ssDatabase/api/analytics/recommendation/recommendationStatsDriver';
 import {GetRecommendationsArgs} from 'ssDatabase/api/analytics/recommendation/types';
-import dbDriver from 'ssDatabase/api/core/dbDriver';
-import {HiLoRankingByOutput, GRAPH_PROP_KEYS} from 'ssDatabase/api/types';
+import {
+  HiLoRankingByOutput,
+  GRAPH_PROP_KEYS,
+  NODE_ID_COMPONENTS,
+  addNodePostfix,
+} from 'ssDatabase/api/types';
 import {ThunkConfig} from '../../types';
 
 // INITIAL STATE
@@ -49,17 +53,18 @@ export const startGetRecommendations = createAsyncThunk<
   ) => {
     const {activeSliceName, allDbOutputs} =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
-    const inputNodeIds: string[] = thunkAPI
+    const inputNodeFullIds: string[] = thunkAPI
       .getState()
       .analyticsSlice.recoStatsSlice.recommendationInputs.map(
-        (inputs: RecoInput) => inputs.text,
+        (input: GrowingIdItem<NODE_ID_COMPONENTS>) =>
+          addNodePostfix(input.item.id, input.item.postfix),
       );
 
     const recommendations: HiLoRankingByOutput =
       recommendationsDriver.getRecommendations({
         activeSliceName,
         graphType,
-        inputNodeIds,
+        inputNodeIds: inputNodeFullIds,
         rawOutputs: allDbOutputs,
         outputType: GRAPH_PROP_KEYS.SINGLE,
         listLength: 5,
@@ -79,7 +84,10 @@ export const startGetRecommendations = createAsyncThunk<
 // Input
 type EditSearchInput = PayloadAction<string>;
 type SetRecommendationInputs = PayloadAction<RecoInput[]>;
-type EditRecommendationInputs = PayloadAction<{index: number; text: string}>;
+type EditRecommendationInputs = PayloadAction<{
+  index: number;
+  input: RecoInput;
+}>;
 type AddRecommendationInput = PayloadAction<RecoInput>;
 type RemoveRecommendationInput = PayloadAction<number>;
 // Recommendations
@@ -115,8 +123,7 @@ export const recommendationStatsSlice = createSlice({
       state: RecommendationsState,
       action: EditRecommendationInputs,
     ) => {
-      const {index, text} = action.payload;
-      state.recommendationInputs[index].text = text;
+      state.recommendationInputs[action.payload.index] = action.payload.input;
     },
     removeRecommendationInput: (
       state: RecommendationsState,

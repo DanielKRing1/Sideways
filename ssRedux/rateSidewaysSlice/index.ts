@@ -1,24 +1,27 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
-export type {GrowingIdText as RateInput} from 'ssComponents/Input/GrowingIdList';
+import {GrowingIdItem} from 'ssComponents/Input/GrowingIdList';
+export type RateInput = GrowingIdItem<NODE_ID_COMPONENTS & {category: string}>;
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {GraphType} from 'ssDatabase/api/core/types';
 import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
 import {startCleanInputCategories} from 'ssRedux/userJson';
 import {forceSignatureRerender as forceStackSignatureRerender} from 'ssRedux/readSidewaysSlice/readStack';
 import {ThunkConfig} from '../types';
+import {
+  addNodePostfix,
+  NODE_ID,
+  NODE_ID_COMPONENTS,
+} from 'ssDatabase/api/types';
 
 // INITIAL STATE
-
-export type InputState = {id: number; name: string; category: string};
 
 export interface RateSSState {
   // Current input
   typingInput: string;
 
   // Final values
-  inputs: InputState[];
+  inputs: RateInput[];
   outputs: string[];
   rating: number;
 
@@ -55,8 +58,10 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     const {inputs, outputs, rating} = thunkAPI.getState().rateSidewaysSlice;
     const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
 
-    const inputNames: string[] = inputs.map(({name}) => name);
-    const inputCategories: string[] = inputs.map(({category}) => category);
+    const inputNames: NODE_ID[] = inputs.map(({item}) =>
+      addNodePostfix(item.id, item.postfix),
+    );
+    const inputCategories: string[] = inputs.map(({item}) => item.category);
 
     // 1. Add to Stack
     DbDriver.push(activeSliceName, {
@@ -123,8 +128,9 @@ export const startRefreshUiAfterRate = createAsyncThunk<
 
 type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetRatingAction = PayloadAction<number>;
-type SetInputsAction = PayloadAction<InputState[]>;
-type AddInputAction = PayloadAction<InputState>;
+type AddInputAction = PayloadAction<RateInput>;
+type EditInputAction = PayloadAction<{index: number; input: RateInput}>;
+type SetInputsAction = PayloadAction<RateInput[]>;
 type RmInputAction = PayloadAction<number>;
 type SetOutputAction = PayloadAction<string[]>;
 type AddOutputAction = PayloadAction<string>;
@@ -145,6 +151,9 @@ export const rateSS = createSlice({
     },
     addInput: (state: RateSSState, action: AddInputAction) => {
       state.inputs.push(action.payload);
+    },
+    editInput: (state: RateSSState, action: EditInputAction) => {
+      state.inputs[action.payload.index] = action.payload.input;
     },
     removeInput: (state: RateSSState, action: RmInputAction) => {
       // Do not need to set state bcus Redux Toolkit uses Immer, which
@@ -195,6 +204,7 @@ export const {
   forceSignatureRerender,
   setRating,
   setInputs,
+  editInput,
   addInput,
   removeInput,
   setOutputs,

@@ -2,6 +2,7 @@ import React, {FC, useCallback, forwardRef, memo} from 'react';
 import {TextInput} from 'react-native';
 
 import {FlexCol} from 'ssComponents/Flex';
+import MyText from 'ssComponents/ReactNative/MyText';
 import {
   InputProps,
   SearchableDropdown,
@@ -62,7 +63,8 @@ const Dropdown: FC<any> = ({autoComplete, DropdownRow, inputValue}) => {
         ))
       ) : (
         // No suggestions
-        <DropdownRow suggestion={inputValue} />
+        <MyText>No suggestions...</MyText>
+        // <DropdownRow suggestion={inputValue} />
       )}
     </FlexCol>
   );

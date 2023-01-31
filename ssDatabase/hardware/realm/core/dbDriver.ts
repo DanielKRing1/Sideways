@@ -215,7 +215,7 @@ const deleteStack = async (stackName: string): Promise<void> | never => {
 const setSnapshotInputs = async (
   stackName: string,
   index: number,
-  inputs: string[],
+  inputs: NODE_ID[],
 ): Promise<void> | never => {
   throwLoadError();
 
@@ -231,7 +231,7 @@ const setSnapshotInputs = async (
 const rmSnapshotInputs = async (
   stackName: string,
   index: number,
-  inputsToRm: Set<string>,
+  inputsToRm: Set<NODE_ID>,
 ): Promise<void> | never => {
   throwLoadError();
 
@@ -242,7 +242,7 @@ const rmSnapshotInputs = async (
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
     index
   ] as unknown as Realm.Object & SidewaysSnapshotRow;
-  const inputsToKeep: string[] = entry.inputs.filter(
+  const inputsToKeep: NODE_ID[] = entry.inputs.filter(
     input => !inputsToRm.has(input),
   );
   entry.inputs = inputsToKeep;

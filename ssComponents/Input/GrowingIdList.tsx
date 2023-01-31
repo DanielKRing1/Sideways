@@ -1,9 +1,8 @@
 import React, {FC} from 'react';
 import {GrowingList, GrowingListProps} from './GrowingInputList';
 import {IdGenerator} from '../../ssHooks/useCounterId';
-import {View} from 'react-native';
 
-export type GrowingIdText = {text: string; id: number};
+export type GrowingIdItem<T> = {item: T; id: number};
 type GrowingIdListProps = {
   idGenerator: IdGenerator<any>;
 

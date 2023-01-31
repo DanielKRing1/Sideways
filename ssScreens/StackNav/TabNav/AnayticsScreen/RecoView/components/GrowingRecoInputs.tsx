@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
+import {GOOD_POSTFIX, toggleNodePostfix} from 'ssDatabase/api/types';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {getStartingId} from 'ssUtils/id';
 
@@ -28,15 +29,20 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   const keyExtractor = (dataPoint: RecoInput) => `${dataPoint.id}`;
   const handleAddInput = (newInputOption: string) => {
     const id: number = popId();
-    dispatch(addRecommendationInput({id, text: newInputOption}));
+    dispatch(
+      addRecommendationInput({
+        id,
+        item: {id: newInputOption, postfix: GOOD_POSTFIX},
+      }),
+    );
   };
   const handleDeleteInput = (index: number): void => {
     dispatch(removeRecommendationInput(index));
   };
-  const handleUpdateInput = (newText: string, index: number) => {
+  const handleUpdateInput = (newInput: RecoInput, index: number) => {
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-    if (newText === '') handleDeleteInput(index);
-    else dispatch(editRecommendationInputs({index, text: newText}));
+    if (newInput.item.id === '') handleDeleteInput(index);
+    else dispatch(editRecommendationInputs({index, input: newInput}));
   };
 
   console.log('RECOMMENDATION INPUTS----------------------');
@@ -59,20 +65,43 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
     console.log(newText);
     console.log(recommendationInputs);
     if (index < recommendationInputs.length) {
-      handleUpdateInput(newText, index);
+      handleUpdateInput(
+        {
+          ...recommendationInputs[index],
+          item: {
+            ...recommendationInputs[index].item,
+            id: newText,
+          },
+        },
+        index,
+      );
     } else {
       handleAddInput(newText);
     }
+  };
+  const handleToggleGoodOrBad = (index: number) => {
+    handleUpdateInput(
+      {
+        ...recommendationInputs[index],
+        item: {
+          ...recommendationInputs[index].item,
+          postfix: toggleNodePostfix(recommendationInputs[index].item.postfix),
+        },
+      },
+      index,
+    );
   };
 
   return (
     <>
       <>
-        {grownRecommendationInputs.map((item, index) => (
+        {grownRecommendationInputs.map((growingRecommendationInput, index) => (
           <DbCategoryRow
             editable={false}
-            key={item.id}
-            inputName={item.text}
+            key={growingRecommendationInput.id}
+            inputName={growingRecommendationInput.item.id}
+            goodOrBad={growingRecommendationInput.item.postfix}
+            onToggleGoodOrBad={() => handleToggleGoodOrBad(index)}
             onCommitInputName={(newText: string) =>
               handleChangeText(index, newText)
             }
@@ -85,9 +114,10 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
         value={searchInput}
         onChangeText={(newText: string) => dispatch(editSearchInput(newText))}
         onSubmitEditing={() => handleAddInput(searchInput)}
+        // Do not suggest already-selected ids
         filterSuggestions={(all: string[]) => {
           const exisiting = new Set(
-            recommendationInputs.map((ri: RecoInput) => ri.text),
+            recommendationInputs.map((ri: RecoInput) => ri.item.id),
           );
           return all.filter((suggestion: string) => !exisiting.has(suggestion));
         }}
