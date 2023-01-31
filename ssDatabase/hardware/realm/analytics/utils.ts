@@ -29,7 +29,7 @@ import {
 export const rankedNodesMapToRankedNodes = (
   rankedNodesMap: RankedNodesMap,
 ): RankedNode[] =>
-  Object.keys(rankedNodesMap).map((nodeId: string) => ({
+  (Object.keys(rankedNodesMap) as NODE_ID[]).map((nodeId: NODE_ID) => ({
     ...rankedNodesMap[nodeId],
     id: nodeId,
   }));

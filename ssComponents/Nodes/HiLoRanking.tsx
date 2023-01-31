@@ -3,9 +3,7 @@ import React, {FC} from 'react';
 
 import MyText from '../ReactNative/MyText';
 import {FlexCol} from '../Flex';
-import NodeStats, {
-  NodeStatsType,
-} from 'ssScreens/StackNav/TabNav/AnayticsScreen/IdentityView/components/NodeStats';
+import NodeStats from 'ssScreens/StackNav/TabNav/AnayticsScreen/IdentityView/components/NodeStats';
 import {HiLoRanking} from 'ssDatabase/api/types';
 
 type HiLoRankingDisplayProps = {

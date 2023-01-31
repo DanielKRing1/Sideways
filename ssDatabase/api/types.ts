@@ -1,5 +1,4 @@
 import {RankedNode} from '@asianpersonn/realm-graph';
-import {NodeStatsType} from 'ssScreens/StackNav/TabNav/AnayticsScreen/IdentityView/components/NodeStats';
 import {Dict} from '../../global';
 
 // GOOD/BAD NODE NAMING

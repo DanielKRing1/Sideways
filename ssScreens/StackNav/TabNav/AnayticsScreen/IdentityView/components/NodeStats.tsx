@@ -15,9 +15,8 @@ import IconButton from 'ssComponents/Button/IconButton';
 import {getPadding} from 'ssTheme/utils';
 import {NODE_ID, stripNodePostfix} from 'ssDatabase/api/types';
 
-export type NodeStatsType = Omit<RankedNode, 'id'> & {id: NODE_ID};
 type NodeStatsProps = {
-  nodeStats: NodeStatsType;
+  nodeStats: RankedNode;
 };
 const NodeStats: FC<NodeStatsProps> = props => {
   const {nodeStats} = props;
@@ -70,6 +69,7 @@ const NodeStats: FC<NodeStatsProps> = props => {
           <FlexRow justifyContent="space-around">
             <FlexCol>
               <MyText>{stripNodePostfix(nodeStats.id).id}</MyText>
+              <MyText>{stripNodePostfix(nodeStats.id).postfix}</MyText>
 
               <IconButton
                 disabled
