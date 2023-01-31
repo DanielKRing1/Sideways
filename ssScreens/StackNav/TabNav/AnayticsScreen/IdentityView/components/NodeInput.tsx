@@ -8,7 +8,7 @@ import {
   startSetNodeIdInput,
 } from 'ssRedux/analyticsSlice/identityStatsSlice';
 import MyText from 'ssComponents/ReactNative/MyText';
-import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
+import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteCategory';
 import {GraphType} from 'ssDatabase/api/core/types';
 import styled, {DefaultTheme} from 'styled-components/native';
 import {GOOD_POSTFIX} from 'ssDatabase/api/types';

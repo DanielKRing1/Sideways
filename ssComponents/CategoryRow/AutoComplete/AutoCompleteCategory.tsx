@@ -13,7 +13,7 @@ import AutoCompleteDropdown, {
 } from 'ssComponents/Search/AutoCompleteDropdown';
 import {TouchableOpacity} from 'react-native';
 import {RootState} from 'ssRedux/index';
-import DbCategoryRow from './DbCategoryRow';
+import DbCategoryRow from '../DbCategoryRow';
 
 export type AutoCompleteDecorationProps = {
   filterSuggestions?: (allSuggestions: string[]) => string[];

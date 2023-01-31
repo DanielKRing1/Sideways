@@ -22,7 +22,7 @@ import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
 import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {getStartingId} from 'ssUtils/id';
-import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
+import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteCategory';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FlexCol} from 'ssComponents/Flex';
 import {GOOD_POSTFIX} from 'ssDatabase/api/types';

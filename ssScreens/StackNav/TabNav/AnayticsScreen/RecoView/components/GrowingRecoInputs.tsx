@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoCompleteCategory';
+import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteCategory';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import {GOOD_POSTFIX, toggleNodePostfix} from 'ssDatabase/api/types';
 import {useCounterId} from 'ssHooks/useCounterId';
