@@ -33,9 +33,10 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
   return (
     <StickyScrollView
       keyboardShouldPersistTaps="handled"
-      stickyHeaderIndices={[1]}
+      stickyHeaderIndices={[2]}
       contentContainerStyle={{alignItems: 'center'}}>
       <GrowingRecoInputs />
+      <RecommendationNodes />
 
       <View
         style={{
@@ -67,8 +68,6 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
           </View>
         </MyBorder>
       </View>
-
-      <RecommendationNodes />
     </StickyScrollView>
   );
 };

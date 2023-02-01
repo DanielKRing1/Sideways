@@ -139,12 +139,11 @@ const RatingInputDisplay: FC<RatingInputDisplayProps> = props => {
       placeholder={'Add an input'}
       value={searchInput}
       onChangeText={setSearchInput}
+      onSubmitEditing={handleSubmitSearchInput}
       onFocus={handleFocus}
       onBlur={handleBlur}
       data={inputs}
-      onSubmitEditing={handleSubmitSearchInput}
       onSelectEntityId={handleSelectSuggestion}
-      onSelectSuggestion={handleSelectSuggestion}
       ListRenderItem={({item, index}) => (
         <RatingInput item={item} index={index} ratingType={ratingType} />
       )}

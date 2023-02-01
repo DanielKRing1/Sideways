@@ -11,10 +11,9 @@ import AutoCompleteCategory, {
   AutoCompleteDecorationProps,
 } from './AutoCompleteCategory';
 
-export type AutoCompleteListProps<T> = {item: T; index: number};
+export type AutoCompleteListProps<T> = {item: T & {id: string}; index: number};
 type AutoCompleteDisplayProps = {
-  data: any[];
-  onSelectSuggestion: (selectedText: string) => void;
+  data: (any & {id: string})[];
   hideWhileSearching?: boolean;
   listFirst?: boolean;
 
@@ -30,7 +29,7 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
     hideWhileSearching = false,
     listFirst = false,
     onSubmitEditing = () => {},
-    onSelectSuggestion,
+    onSelectEntityId,
     ListRenderItem,
     NoInputsDisplay,
   } = props;
@@ -51,7 +50,7 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
 
   // SearchSuggestions
   const handleSelectSuggestion = (selectedInputName: string) => {
-    onSelectSuggestion(selectedInputName);
+    onSelectEntityId(selectedInputName);
   };
 
   const AutoCompleteList: FC = memo(() => (
@@ -83,9 +82,9 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
           placeholder="Add an input..."
           value={searchInput}
           onChangeText={setSearchInput}
+          onSubmitEditing={handleSubmitEditing}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          onSubmitEditing={handleSubmitEditing}
           onSelectEntityId={handleSelectSuggestion}
         />
       </ScrollView>
