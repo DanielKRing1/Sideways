@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import DismissKeyboardView from 'ssComponents/View/DismissKeyboardView';
 import Accordion from 'ssComponents/View/Collapsible/Accordion';
 import Header from './Header';
-import RatingInputSelection from '../Input/RatingInputSelection';
+import RatingInputDisplay from '../Input/RatingInputDisplay';
 import RatingOutputOptions from '../Output/OutputOptions';
 import RatingSlider from '../Rating/RatingInput';
 import RateButton from '../Rating/RateButton';
@@ -28,7 +28,7 @@ const BaseRatingMenu: FC<BaseRatingMenuProps> = props => {
         initiallyOpen={0}
         duration={400}>
         {/* INPUTS */}
-        <RatingInputSelection {...props} />
+        <RatingInputDisplay {...props} />
 
         {/* OUTPUTS */}
         <RatingOutputOptions {...props} />

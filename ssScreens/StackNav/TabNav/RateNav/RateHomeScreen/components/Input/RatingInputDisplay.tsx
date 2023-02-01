@@ -38,10 +38,10 @@ import {
   removeReplacementInput as removeInputUR,
 } from 'ssRedux/undorateSidewaysSlice';
 
-type RatingInputSelectionProps = {
+type RatingInputDisplayProps = {
   ratingType: RATING_TYPE;
 };
-const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
+const RatingInputDisplay: FC<RatingInputDisplayProps> = props => {
   // PROPS
   const {ratingType} = props;
 
@@ -153,7 +153,7 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   );
 };
 
-export default RatingInputSelection;
+export default RatingInputDisplay;
 
 type RatingInputProps = AutoCompleteListProps<RateInput> & {
   ratingType: RATING_TYPE;
