@@ -10,11 +10,9 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import CategoryDriver from 'ssDatabase/api/userJson/category';
 
-import SearchSuggestions from './Search/SearchSuggestions';
-import InputList from './List/InputList';
 import {useCounterId} from 'ssHooks/useCounterId';
 import {RootState, AppDispatch} from 'ssRedux/index';
-import {addInput as addInputR} from 'ssRedux/rateSidewaysSlice';
+import {addInput as addInputR, RateInput} from 'ssRedux/rateSidewaysSlice';
 import {addReplacementInput as addInputUR} from 'ssRedux/undorateSidewaysSlice';
 import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
@@ -22,10 +20,23 @@ import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
 import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
 import {getStartingId} from 'ssUtils/id';
-import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteCategory';
-import {ScrollView} from 'react-native-gesture-handler';
-import {FlexCol} from 'ssComponents/Flex';
-import {GOOD_POSTFIX} from 'ssDatabase/api/types';
+import {GOOD_POSTFIX, toggleNodePostfix} from 'ssDatabase/api/types';
+import AutoCompleteDisplay, {
+  AutoCompleteListProps,
+} from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteDisplay';
+import NoInputsDisplay from './List/NoInputsDisplay';
+import {DISPLAY_SIZE} from '../../../../../../../global';
+import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
+import MyPadding from 'ssComponents/ReactNative/MyPadding';
+
+import {
+  editInput as editInputR,
+  removeInput as removeInputR,
+} from 'ssRedux/rateSidewaysSlice';
+import {
+  editReplacementInput as editInputUR,
+  removeReplacementInput as removeInputUR,
+} from 'ssRedux/undorateSidewaysSlice';
 
 type RatingInputSelectionProps = {
   ratingType: RATING_TYPE;
@@ -74,6 +85,8 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   const handleBlur = () => setIsSearching(false);
   // SearchInput
   const handleSubmitSearchInput = () => {
+    console.log('HEEEERREEEE------------------------');
+    console.log(searchInput);
     handleAddInput(searchInput);
   };
 
@@ -122,31 +135,108 @@ const RatingInputSelection: FC<RatingInputSelectionProps> = props => {
   );
 
   return (
-    <FlexCol>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <AutoCompleteCategory
-          placeholder="Add an input..."
-          value={searchInput}
-          onChangeText={setSearchInput}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onSubmitEditing={handleSubmitSearchInput}
-          onSelectEntityId={handleSelectSuggestion}
-        />
-      </ScrollView>
-
-      {!isSearching && <InputList ratingType={ratingType} inputs={inputs} />}
-
-      {/* {isSearching ? (
-        <SearchSuggestions
-          searchInput={searchInput}
-          onSelectSuggestion={handleSelectSuggestion}
-        />
-      ) : (
-        <InputList ratingType={ratingType} inputs={inputs} />
-      )} */}
-    </FlexCol>
+    <AutoCompleteDisplay
+      placeholder={'Add an input'}
+      value={searchInput}
+      onChangeText={setSearchInput}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      data={inputs}
+      onSubmitEditing={handleSubmitSearchInput}
+      onSelectEntityId={handleSelectSuggestion}
+      onSelectSuggestion={handleSelectSuggestion}
+      ListRenderItem={({item, index}) => (
+        <RatingInput item={item} index={index} ratingType={ratingType} />
+      )}
+      NoInputsDisplay={NoInputsDisplay}
+    />
   );
 };
 
 export default RatingInputSelection;
+
+type RatingInputProps = AutoCompleteListProps<RateInput> & {
+  ratingType: RATING_TYPE;
+};
+const RatingInput: FC<RatingInputProps> = props => {
+  // PROPS
+  const {item, index, ratingType} = props;
+
+  // REDUX
+  // Select reducer actions
+  const [, editInput] = select(
+    ratingType,
+    [RATING_TYPE.Rate, editInputR],
+    [RATING_TYPE.UndoRate, editInputUR],
+  );
+  const [, removeInput] = select(
+    ratingType,
+    [RATING_TYPE.Rate, removeInputR],
+    [RATING_TYPE.UndoRate, removeInputUR],
+  );
+  const dispatch: AppDispatch = useDispatch();
+
+  // HANDLERS
+  const handleCommitInputName = (newInputName: string) => {
+    dispatch(
+      editInput({
+        index,
+        input: {
+          ...item,
+          item: {
+            ...item.item,
+            id: newInputName,
+          },
+        },
+      }),
+    );
+  };
+  const handleToggleInputPostfix = () => {
+    dispatch(
+      editInput({
+        index,
+        input: {
+          ...item,
+          item: {
+            ...item.item,
+            postfix: toggleNodePostfix(item.item.postfix),
+          },
+        },
+      }),
+    );
+  };
+
+  const handleCommitCId = (newCId: string) => {
+    dispatch(
+      editInput({
+        index,
+        input: {
+          ...item,
+          item: {
+            ...item.item,
+            category: newCId,
+          },
+        },
+      }),
+    );
+  };
+
+  const handleDeleteCategoryRow = () => dispatch(removeInput(index));
+
+  return (
+    <MyPadding
+      baseSize={DISPLAY_SIZE.xs}
+      rightSize={DISPLAY_SIZE.sm}
+      leftSize={DISPLAY_SIZE.sm}>
+      <DbCategoryRow
+        inputName={item.item.id}
+        goodOrBad={item.item.postfix}
+        onToggleGoodOrBad={handleToggleInputPostfix}
+        categoryId={item.item.category}
+        onCommitInputName={handleCommitInputName}
+        onCommitCId={handleCommitCId}
+        onDeleteCategoryRow={handleDeleteCategoryRow}
+      />
+    </MyPadding>
+  );
+};
