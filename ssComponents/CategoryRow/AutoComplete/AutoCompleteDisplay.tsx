@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, memo, useState} from 'react';
 import {
   FlatList,
   NativeSyntheticEvent,
@@ -16,6 +16,7 @@ type AutoCompleteDisplayProps = {
   data: any[];
   onSelectSuggestion: (selectedText: string) => void;
   hideWhileSearching?: boolean;
+  listFirst?: boolean;
 
   ListRenderItem: FC<AutoCompleteListProps<any>>;
   NoInputsDisplay: FC;
@@ -27,6 +28,7 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
     value: searchInput,
     onChangeText: setSearchInput,
     hideWhileSearching = false,
+    listFirst = false,
     onSubmitEditing = () => {},
     onSelectSuggestion,
     ListRenderItem,
@@ -52,20 +54,8 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
     onSelectSuggestion(selectedInputName);
   };
 
-  return (
-    <FlexCol>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <AutoCompleteCategory
-          placeholder="Add an input..."
-          value={searchInput}
-          onChangeText={setSearchInput}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onSubmitEditing={handleSubmitEditing}
-          onSelectEntityId={handleSelectSuggestion}
-        />
-      </ScrollView>
-
+  const AutoCompleteList: FC = memo(() => (
+    <>
       {(!isSearching || !hideWhileSearching) && (
         <>
           {data.length > 0 ? (
@@ -81,6 +71,26 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
           )}
         </>
       )}
+    </>
+  ));
+
+  return (
+    <FlexCol>
+      {listFirst && <AutoCompleteList />}
+
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <AutoCompleteCategory
+          placeholder="Add an input..."
+          value={searchInput}
+          onChangeText={setSearchInput}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onSubmitEditing={handleSubmitEditing}
+          onSelectEntityId={handleSelectSuggestion}
+        />
+      </ScrollView>
+
+      {!listFirst && <AutoCompleteList />}
     </FlexCol>
   );
 };
