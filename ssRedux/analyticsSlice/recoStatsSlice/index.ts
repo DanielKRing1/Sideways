@@ -119,7 +119,7 @@ export const recommendationStatsSlice = createSlice({
       // Reset
       state.searchInput = '';
     },
-    editRecommendationInputs: (
+    editRecommendationInput: (
       state: RecommendationsState,
       action: EditRecommendationInputs,
     ) => {
@@ -157,7 +157,7 @@ export const {
   editSearchInput,
   setRecommendationInputs,
   addRecommendationInput,
-  editRecommendationInputs,
+  editRecommendationInput,
   removeRecommendationInput,
   forceSignatureRerender,
 } = recommendationStatsSlice.actions;

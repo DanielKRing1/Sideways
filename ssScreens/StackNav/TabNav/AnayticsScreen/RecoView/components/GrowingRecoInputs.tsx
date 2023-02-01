@@ -11,7 +11,7 @@ import {RootState} from '../../../../../../ssRedux';
 import {
   addRecommendationInput,
   RecoInput,
-  editRecommendationInputs,
+  editRecommendationInput,
   removeRecommendationInput,
   editSearchInput,
 } from '../../../../../../ssRedux/analyticsSlice/recoStatsSlice';
@@ -42,7 +42,7 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   const handleUpdateInput = (newInput: RecoInput, index: number) => {
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
     if (newInput.item.id === '') handleDeleteInput(index);
-    else dispatch(editRecommendationInputs({index, input: newInput}));
+    else dispatch(editRecommendationInput({index, input: newInput}));
   };
 
   console.log('RECOMMENDATION INPUTS----------------------');
