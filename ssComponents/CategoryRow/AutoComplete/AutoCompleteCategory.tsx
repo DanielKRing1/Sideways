@@ -1,10 +1,5 @@
 import React, {FC, useRef} from 'react';
-import {
-  TextInput,
-  Keyboard,
-  NativeSyntheticEvent,
-  TextInputSubmitEditingEventData,
-} from 'react-native';
+import {TextInput, Keyboard} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import AutoCompleteDropdown, {
@@ -78,7 +73,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
       allSuggestions={filterSuggestions(allDbInputs)}
       getSuggestionText={getSuggestionText}
       onChangeText={handleCommitInputName}
-      // onSubmitEditing={handleSubmitEditing}
+      onSubmitEditing={onSubmitEditing}
       DropdownRow={DropdownRow(
         handleSelectEntityId,
         onChangeText,
