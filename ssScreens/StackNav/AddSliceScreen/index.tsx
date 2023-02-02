@@ -5,10 +5,7 @@ import styled, {DefaultTheme, useTheme} from 'styled-components/native';
 
 // REDUX
 import {AppDispatch, RootState} from '../../../ssRedux';
-import {
-  setNewSliceName,
-  startCreateSlice,
-} from '../../../ssRedux/createSidewaysSlice';
+import {startCreateSlice} from '../../../ssRedux/createSidewaysSlice';
 
 // NAVIGATION
 import {
@@ -39,10 +36,7 @@ const AddSliceScreen: FC<
   const theme = useTheme();
 
   // REDUX
-  const {searchedSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
-  );
-  const {createdSignature} = useSelector(
+  const {newSliceName, createdSignature} = useSelector(
     (state: RootState) => state.createSidewaysSlice,
   );
   const dispatch: AppDispatch = useDispatch();
@@ -86,6 +80,7 @@ const AddSliceScreen: FC<
 
       <FlexCol alignItems="center">
         <MyButton
+          disabled={newSliceName === ''}
           style={{
             width: '80%',
             borderWidth: 1,
