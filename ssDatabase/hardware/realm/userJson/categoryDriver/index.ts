@@ -24,10 +24,7 @@ import {
   ASJ_CategoryDriver,
   ASJ_OutputDecorationInfo,
   ASJ_OutputNameToDecorationMapping,
-  GJ_CategoryDecorationMapping,
-  GJ_SliceNameToCategorySetIdMapping,
 } from 'ssDatabase/api/userJson/category/types';
-import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import {NO_ACTIVE_SLICE_NAME} from 'ssDatabase/api/userJson/category/constants';
 
 // VARIABLES
