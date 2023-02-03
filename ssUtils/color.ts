@@ -16,9 +16,8 @@ export function genRandomColor() {
  */
 export const hashToColor = function (str: string = ''): HexColor {
   let hash = 0;
-  for (var i = 0; i < str.length; i++) {
+  for (var i = 0; i < str.length; i++)
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
   var color: HexColor = '#';
   for (var i = 0; i < 3; i++) {
     const value = (hash >> (i * 8)) & 0xff;

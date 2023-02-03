@@ -7,7 +7,7 @@ import {
   ASSIGN_CATEGORY_SCREEN_NAME,
 } from './constants';
 import RateHomeScreen from 'ssScreens/StackNav/TabNav/RateNav/RateHomeScreen';
-import RateInputScreen from 'ssScreens/StackNav/TabNav/RateNav/RateInputScreen';
+import RateInputScreen from 'ssScreens/StackNav/TabNav/RateNav/RateHomeScreen';
 import AssignCategoryScreen from 'ssScreens/StackNav/TabNav/RateNav/AssignCategoryScreen';
 
 export type RateNavigatorParamList = {

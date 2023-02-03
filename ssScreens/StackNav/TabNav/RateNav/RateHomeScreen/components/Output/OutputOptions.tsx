@@ -118,16 +118,16 @@ const OutputOption: FC<OutputOptionProps> = props => {
   const theme: DefaultTheme = useTheme();
 
   // HANDLERS
-  const handleToggleSelected = () => {
+  const handleToggleSelected = useCallback(() => {
     toggleSelected(output);
-  };
+  }, [toggleSelected]);
 
   const borderStyle: ViewStyle = useMemo(
     () =>
       isSelected
         ? {borderColor: theme.border.color.accent}
         : {borderColor: theme.border.color.main},
-    [isSelected],
+    [isSelected, theme],
   );
 
   return useMemo(

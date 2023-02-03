@@ -18,7 +18,8 @@ import {select} from 'ssUtils/selector';
 
 const SLIDER_WIDTH: number = 40;
 
-// const createSliderButton = (isPressed: Animated.SharedValue<boolean>, offsetX: Animated.SharedValue<number>): React.FC<Animated.AnimateProps<any>> => (props) => {
+// const createSliderButton = (isPressed: Animated.SharedValue<boolean>,
+// offsetX: Animated.SharedValue<number>): React.FC<Animated.AnimateProps<any>> => (props) => {
 //     const { style: animatedSliderStyles } = props;
 
 //     const animatedStyles = useAnimatedStyle(() => ({
@@ -69,7 +70,7 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
     // @ts-ignore
     if (isNaN(newText)) return;
 
-    const newNum: number = newText === '' ? 0 : parseInt(newText);
+    const newNum: number = newText === '' ? 0 : parseInt(newText, 10);
 
     console.log(`New value: ${newNum}`);
     dispatch(setRating(newNum));

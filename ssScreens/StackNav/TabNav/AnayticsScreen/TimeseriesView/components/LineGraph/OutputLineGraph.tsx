@@ -91,7 +91,7 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
         xDomain={domain}
         setXDomain={setDomain}
         // @ts-ignore
-        tickValues={Object.keys(outputColorMap).map(str => parseInt(str))}
+        tickValues={Object.keys(outputColorMap).map(str => parseInt(str, 10))}
         // xValues={lineGraph.map((day: DailyOutput) => day.x)}
         // brushXValues={lineGraph.map((day: DailyOutput) => day.x)}
         data={lineGraph}

@@ -15,7 +15,8 @@ import MyTextInput from '../../../../../ssComponents/ReactNative/MyTextInput';
 
 const SLIDER_WIDTH: number = 40;
 
-// const createSliderButton = (isPressed: Animated.SharedValue<boolean>, offsetX: Animated.SharedValue<number>): React.FC<Animated.AnimateProps<any>> => (props) => {
+// const createSliderButton = (isPressed: Animated.SharedValue<boolean>,
+// offsetX: Animated.SharedValue<number>): React.FC<Animated.AnimateProps<any>> => (props) => {
 //     const { style: animatedSliderStyles } = props;
 
 //     const animatedStyles = useAnimatedStyle(() => ({
@@ -46,7 +47,7 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
     // @ts-ignore
     if (numStr === '' || isNaN(numStr)) return dispatch(setRating(0));
 
-    const newNum: number = parseInt(numStr);
+    const newNum: number = parseInt(numStr, 10);
 
     console.log(`New value: ${newNum}`);
     dispatch(setRating(newNum));
