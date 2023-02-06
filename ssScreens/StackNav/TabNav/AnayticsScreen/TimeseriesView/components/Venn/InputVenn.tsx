@@ -9,13 +9,14 @@ import {
   setMonthIndex,
   VennInput,
 } from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
-import GrowingVennInputList from './GrowingVennInputList';
+import GrowingVennInputDisplay from './GrowingVennInputDisplay';
 import {
   getOutputDecorationValue,
   getOutputDecorationList,
 } from 'ssDatabase/hardware/realm/userJson/utils';
 import {ChartBar, VennByMonth} from 'ssDatabase/api/analytics/timeseries/types';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
+import {CallbackArgs} from 'victory-core';
 
 type InputVennProps = {};
 const InputVenn: FC<InputVennProps> = () => {
@@ -35,7 +36,7 @@ const InputVenn: FC<InputVennProps> = () => {
   const colorScale: string[] = useMemo(() => {
     // 1. Get nodeIds
     const vennNodeIds: string[] = vennNodeInputs.map(
-      (nodeInput: VennInput) => nodeInput.text,
+      (nodeInput: VennInput) => nodeInput.item.id,
     );
 
     // 2. Convert nodeIds to colors
@@ -62,7 +63,7 @@ const InputVenn: FC<InputVennProps> = () => {
     <View>
       <MyText>Input Venn</MyText>
 
-      <GrowingVennInputList />
+      <GrowingVennInputDisplay />
 
       <VennStackWSlider
         colorScale={colorScale}
@@ -72,7 +73,14 @@ const InputVenn: FC<InputVennProps> = () => {
         xLabelFill={({text}) =>
           getOutputDecorationValue(text[0], fullUserJsonMap).color
         }
-        yValues={vennNodeInputs.map((nodeInput: VennInput) => nodeInput.text)}
+        yValues={vennNodeInputs.map(
+          (nodeInput: VennInput) => nodeInput.item.id,
+        )}
+        tickFormat={(t: CallbackArgs) => {
+          console.log('CALLBACK ARGS----------------');
+          console.log(t);
+          return 'a';
+        }}
         value={monthIndex}
         setValue={handleSelectMonth}
         min={0}

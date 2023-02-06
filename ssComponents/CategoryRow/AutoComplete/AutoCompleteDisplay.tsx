@@ -23,6 +23,7 @@ type AutoCompleteDisplayProps = {
 const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
   // PROPS
   const {
+    placeholder,
     data,
     value: searchInput,
     onChangeText: setSearchInput,
@@ -79,7 +80,7 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
 
       <ScrollView keyboardShouldPersistTaps="handled">
         <AutoCompleteCategory
-          placeholder="Add an input..."
+          placeholder={placeholder}
           value={searchInput}
           onChangeText={setSearchInput}
           onSubmitEditing={handleSubmitEditing}

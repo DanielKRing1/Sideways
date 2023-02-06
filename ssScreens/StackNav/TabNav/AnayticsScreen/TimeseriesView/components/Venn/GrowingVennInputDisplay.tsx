@@ -1,78 +1,77 @@
 import React, {FC} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import AutoCompleteDisplay, {
-  AutoCompleteListProps,
-} from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteDisplay';
+// REDUX
+import {AppDispatch, RootState} from '../../../../../../../ssRedux';
+import {
+  setSearchInput,
+  startAddVennInput,
+  startRmVennInput,
+  VennInput,
+  startEditVennInput,
+} from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
+
+// DECORATIONS
+import AutoCompleteDisplay from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteDisplay';
+import {useCounterId} from 'ssHooks/useCounterId';
+import {getStartingId} from 'ssUtils/id';
+import {GOOD_POSTFIX, toggleNodePostfix} from 'ssDatabase/api/types';
+import {AutoCompleteListProps} from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteDisplay';
+import {DISPLAY_SIZE} from '../../../../../../../global';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
-import {GOOD_POSTFIX, toggleNodePostfix} from 'ssDatabase/api/types';
-import {useCounterId} from 'ssHooks/useCounterId';
 import NoInputsDisplay from 'ssScreens/StackNav/TabNav/RateNav/RateHomeScreen/components/Input/List/NoInputsDisplay';
-import {getStartingId} from 'ssUtils/id';
-import {DISPLAY_SIZE} from '../../../../../../global';
 
-// REDUX
-import {AppDispatch, RootState} from '../../../../../../ssRedux';
-import {
-  addRecommendationInput,
-  RecoInput,
-  editRecommendationInput,
-  removeRecommendationInput,
-  editSearchInput,
-} from '../../../../../../ssRedux/analyticsSlice/recoStatsSlice';
-
-type GrowingRecoInputsProps = {};
-const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
-  const dispatch = useDispatch();
-  const {readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+type GrowingVennInputDisplayProps = {};
+const GrowingVennInputDisplay: FC<GrowingVennInputDisplayProps> = () => {
+  // REDUX
+  const {searchInput, vennNodeInputs} = useSelector(
+    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
   );
-  const {searchInput, recommendationInputs, recommendationsSignature} =
-    useSelector((state: RootState) => state.analyticsSlice.recoStatsSlice);
+  const dispatch: AppDispatch = useDispatch();
 
   // ID
-  const {popId} = useCounterId(getStartingId(recommendationInputs, d => d.id));
+  const {popId} = useCounterId(getStartingId(vennNodeInputs, d => d.id));
 
-  // HANDLER METHODS
-  const handleAddInput = (newInputOption: string) => {
+  // PROP VARIABLES
+  const handleAddInput = (newPossibleOutput: string) => {
     const id: number = popId();
     dispatch(
-      addRecommendationInput({
+      startAddVennInput({
         id,
-        item: {id: newInputOption, postfix: GOOD_POSTFIX},
+        item: {id: newPossibleOutput, postfix: GOOD_POSTFIX},
       }),
     );
   };
 
   return (
     <AutoCompleteDisplay
+      listFirst={true}
       placeholder={'Choose a past input...'}
       value={searchInput}
-      onChangeText={(newText: string) => dispatch(editSearchInput(newText))}
+      onChangeText={(newText: string) => dispatch(setSearchInput(newText))}
       onSubmitEditing={() => handleAddInput(searchInput)}
       // Do not suggest already-selected ids
       filterSuggestions={(all: string[]) => {
         const exisiting = new Set(
-          recommendationInputs.map((ri: RecoInput) => ri.item.id),
+          vennNodeInputs.map((ri: VennInput) => ri.item.id),
         );
         return all.filter((suggestion: string) => !exisiting.has(suggestion));
       }}
-      data={recommendationInputs}
+      data={vennNodeInputs}
       onSelectEntityId={(selectedText: string) => handleAddInput(selectedText)}
       ListRenderItem={({item, index}) => (
-        <RecoInputRI item={item} index={index} />
+        <VennInputRI item={item} index={index} />
       )}
       NoInputsDisplay={NoInputsDisplay}
     />
   );
 };
 
-export default GrowingRecoInputs;
+export default GrowingVennInputDisplay;
 
-type RecoInputRIProps = AutoCompleteListProps<RecoInput>;
-const RecoInputRI: FC<RecoInputRIProps> = props => {
-  // PROPS
+type VennInputRIProps = AutoCompleteListProps<VennInput>;
+const VennInputRI: FC<VennInputRIProps> = props => {
   const {item, index} = props;
 
   // REDUX
@@ -81,7 +80,7 @@ const RecoInputRI: FC<RecoInputRIProps> = props => {
   const handleCommitInputName = (newText: string) => {};
   const handleToggleInputPostfix = () => {
     dispatch(
-      editRecommendationInput({
+      startEditVennInput({
         index,
         input: {
           ...item,
@@ -91,7 +90,7 @@ const RecoInputRI: FC<RecoInputRIProps> = props => {
     );
   };
   const handleDeleteInput = (): void => {
-    dispatch(removeRecommendationInput(index));
+    dispatch(startRmVennInput(index));
   };
 
   return (

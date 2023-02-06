@@ -6,7 +6,7 @@ import {useTheme} from 'styled-components/native';
 import {DISPLAY_SIZE} from '../../../../../global';
 import {AppDispatch, RootState} from '../../../../../ssRedux';
 import {startGetRecommendations} from '../../../../../ssRedux/analyticsSlice/recoStatsSlice';
-import GrowingRecoInputs from './components/GrowingRecoInputs';
+import GrowingRecoInputs from './components/RecoInputDisplay';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
 import RecommendationNodes from './components/RecommendationNodes';

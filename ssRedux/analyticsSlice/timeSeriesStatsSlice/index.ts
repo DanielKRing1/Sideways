@@ -43,7 +43,9 @@ export interface TimeStatsState {
   // Date Selection
   dayInput: number; // Derive day/month-based stats date range from this day
   monthIndex: number;
+
   // Node Input
+  searchInput: string;
   vennNodeInputs: VennInput[];
 
   // CHARTS
@@ -67,7 +69,9 @@ const initialState: TimeStatsState = {
   // Date Selection
   dayInput: serializeDateNum(floorDay(new Date())), // Set to today
   monthIndex: 0,
+
   // Node Input
+  searchInput: '',
   vennNodeInputs: [],
 
   // CHARTS
@@ -138,7 +142,7 @@ export const startAddVennInput = createAsyncThunk<
     return true;
   },
 );
-type StartEditVennInputsArg = {index: number; vennInput: VennInput};
+type StartEditVennInputsArg = {index: number; input: VennInput};
 export const startEditVennInput = createAsyncThunk<
   boolean,
   StartEditVennInputsArg,
@@ -313,6 +317,7 @@ type SetAnalyzedSliceName = PayloadAction<string>;
 // Input
 type SetGraphSelectionAction = PayloadAction<SelectableGraph>;
 type SetDayInputAction = PayloadAction<Date>;
+type SetSearchInput = PayloadAction<string>;
 type AddVennInput = PayloadAction<VennInput>;
 type EditVennInput = PayloadAction<StartEditVennInputsArg>;
 type RemoveVennInput = PayloadAction<number>;
@@ -406,13 +411,16 @@ export const timeseriesStatsSlice = createSlice({
           break;
       }
     },
+    setSearchInput: (state: TimeStatsState, action: SetSearchInput) => {
+      state.searchInput = action.payload;
+    },
     addVennInput: (state: TimeStatsState, action: AddVennInput) => {
       state.vennNodeInputs.push(action.payload);
       // Force rerender/recalculate Venn (and all)
       state.graphsSignature = {};
     },
     editVennInput: (state: TimeStatsState, action: EditVennInput) => {
-      state.vennNodeInputs[action.payload.index] = action.payload.vennInput;
+      state.vennNodeInputs[action.payload.index] = action.payload.input;
       // Force rerender/recalculate Venn (and all)
       state.graphsSignature = {};
     },
@@ -492,6 +500,7 @@ const {
   resetNodesAndStats,
 } = timeseriesStatsSlice.actions;
 export const {
+  setSearchInput,
   setChartSelection,
   setDayInput,
   setMonthIndex,
