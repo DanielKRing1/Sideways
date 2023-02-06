@@ -51,7 +51,7 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
     onSelectEntityId(selectedInputName);
   };
 
-  const AutoCompleteList = useMemo(
+  const SelectedList = useMemo(
     () => (
       <>
         {(!isSearching || !hideWhileSearching) && (
@@ -77,12 +77,12 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
         )}
       </>
     ),
-    [data, data.length],
+    [isSearching, data, data.length],
   );
 
   return (
     <>
-      {listFirst && AutoCompleteList}
+      {listFirst && SelectedList}
 
       <AutoCompleteCategory
         {...props}
@@ -92,7 +92,7 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
         onSelectEntityId={handleSelectSuggestion}
       />
 
-      {!listFirst && AutoCompleteList}
+      {!listFirst && SelectedList}
 
       {data.length === 0 && <NoInputsDisplay />}
     </>
