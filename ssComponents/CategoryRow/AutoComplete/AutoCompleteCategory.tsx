@@ -74,36 +74,39 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
       getSuggestionText={getSuggestionText}
       onChangeText={handleCommitInputName}
       onSubmitEditing={onSubmitEditing}
-      DropdownRow={DropdownRow(
-        handleSelectEntityId,
-        onChangeText,
-        handleDeleteCategoryRow,
+      DropdownRow={({suggestion}) => (
+        <DropdownRow
+          suggestion={suggestion}
+          onSelectEntityId={handleSelectEntityId}
+          onChangeText={onChangeText}
+          onDeleteCategoryRow={handleDeleteCategoryRow}
+        />
       )}
     />
   );
 };
 
 // DROPDOWN ROW
-const DropdownRow =
-  (
-    handleSelectEntityId: (entityId: string) => void,
-    setInputValue: (newText: string) => void,
-    handleDeleteCategoryRow: () => void,
-  ): FC<DropdownRowProps<any>> =>
-  props => {
-    const entityId: string = props.suggestion;
+type AutoCompleteDropdownRowProps = DropdownRowProps<any> & {
+  onSelectEntityId: (entityId: string) => void;
+  onChangeText: (newText: string) => void;
+  onDeleteCategoryRow: () => void;
+};
+const DropdownRow: FC<AutoCompleteDropdownRowProps> = props => {
+  const {onSelectEntityId, onChangeText, onDeleteCategoryRow} = props;
+  const entityId: string = props.suggestion;
 
-    return (
-      <TouchableOpacity onPress={() => handleSelectEntityId(entityId)}>
-        <DbCategoryRow
-          editable={false}
-          deletable={false}
-          inputName={entityId}
-          onCommitInputName={setInputValue}
-          onDeleteCategoryRow={handleDeleteCategoryRow}
-        />
-      </TouchableOpacity>
-    );
-  };
+  return (
+    <TouchableOpacity onPress={() => onSelectEntityId(entityId)}>
+      <DbCategoryRow
+        editable={false}
+        deletable={false}
+        inputName={entityId}
+        onCommitInputName={onChangeText}
+        onDeleteCategoryRow={onDeleteCategoryRow}
+      />
+    </TouchableOpacity>
+  );
+};
 
 export default AutoCompleteDecoration;
