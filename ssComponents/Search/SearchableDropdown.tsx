@@ -45,14 +45,14 @@ export const SearchableDropdown = forwardRef<
 
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocused(false);
-    Keyboard.dismiss();
 
     if (onBlur) onBlur(e);
   };
 
   // KEYBOARD EFFECT
   useEffect(() => {
-    if (isFocused && !isKeyboardVisible) setIsFocused(false);
+    if (ref !== null && isFocused && !isKeyboardVisible)
+      (ref as React.RefObject<TextInput>).current!.blur();
   }, [isKeyboardVisible]);
 
   // console.log('SEARCHABLEDROPDOWN RERENDERED');

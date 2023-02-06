@@ -39,13 +39,13 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
 
   // HANDLERS
   const handleSelectEntityId = (entityId: string) => {
-    console.log('BEFFFFFFFFFFFFFFFFFFFFFFFFFFFOR');
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAFTER');
-    if (textInputRef.current) {
-      console.log('in');
-      Keyboard.dismiss();
-      textInputRef.current.blur();
-    }
+    // console.log('BEFFFFFFFFFFFFFFFFFFFFFFFFFFFOR');
+    // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAFTER');
+    // if (textInputRef.current !== null) {
+    //   console.log('in');
+    //   Keyboard.dismiss();
+    //   textInputRef.current.blur();
+    // }
     onSelectEntityId(entityId);
   };
 
@@ -70,6 +70,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
   return (
     <AutoCompleteDropdown
       {...props}
+      ref={textInputRef}
       allSuggestions={filterSuggestions(allDbInputs)}
       getSuggestionText={getSuggestionText}
       onChangeText={handleCommitInputName}
