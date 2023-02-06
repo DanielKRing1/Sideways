@@ -9,16 +9,7 @@ type MyTextInputProps = {
   size?: DISPLAY_SIZE;
 } & TextInputProps;
 const MyTextInput = forwardRef<TextInput, MyTextInputProps>((props, ref) => {
-  const {
-    size = DISPLAY_SIZE.md,
-    style,
-    placeholder,
-    value,
-    onChangeText,
-    onFocus,
-    onBlur,
-    onSubmitEditing,
-  } = props;
+  const {size = DISPLAY_SIZE.md, style} = props;
 
   const theme: DefaultTheme = useTheme();
   const {width} = useWindowDimensions();
