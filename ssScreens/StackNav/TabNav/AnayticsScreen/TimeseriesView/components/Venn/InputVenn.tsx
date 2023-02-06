@@ -1,5 +1,5 @@
 import React, {FC, useMemo} from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import MyText from 'ssComponents/ReactNative/MyText';
@@ -60,7 +60,7 @@ const InputVenn: FC<InputVennProps> = () => {
   console.log(vennWrapper);
 
   return (
-    <View>
+    <ScrollView keyboardShouldPersistTaps="handled">
       <MyText>Input Venn</MyText>
 
       <GrowingVennInputDisplay />
@@ -88,7 +88,7 @@ const InputVenn: FC<InputVennProps> = () => {
         leftColor={'yellow'}
         rightColor={'red'}
       />
-    </View>
+    </ScrollView>
   );
 };
 

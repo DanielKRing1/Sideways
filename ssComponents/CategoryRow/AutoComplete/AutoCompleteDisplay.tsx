@@ -1,4 +1,4 @@
-import React, {FC, memo, useState} from 'react';
+import React, {FC, memo, useMemo, useState} from 'react';
 import {
   FlatList,
   NativeSyntheticEvent,
@@ -23,10 +23,7 @@ type AutoCompleteDisplayProps = {
 const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
   // PROPS
   const {
-    placeholder,
     data,
-    value: searchInput,
-    onChangeText: setSearchInput,
     hideWhileSearching = false,
     listFirst = false,
     onSubmitEditing = () => {},
@@ -54,44 +51,51 @@ const AutoCompleteDisplay: FC<AutoCompleteDisplayProps> = props => {
     onSelectEntityId(selectedInputName);
   };
 
-  const AutoCompleteList: FC = memo(() => (
-    <>
-      {(!isSearching || !hideWhileSearching) && (
-        <>
-          {data.length > 0 ? (
-            <FlatList
-              data={data}
-              renderItem={({item, index}) => (
-                <ListRenderItem item={item} index={index} />
-              )}
-              keyExtractor={item => `${item.id}`}
-            />
-          ) : (
-            <NoInputsDisplay />
-          )}
-        </>
-      )}
-    </>
-  ));
+  const AutoCompleteList = useMemo(
+    () => (
+      <>
+        {(!isSearching || !hideWhileSearching) && (
+          <>
+            {data.map((d, index) => (
+              <ListRenderItem key={d.id} item={d} index={index} />
+            ))}
+          </>
+
+          // <>
+          //   {data.length > 0 ? (
+          //     <FlatList
+          //       data={data}
+          //       renderItem={({item, index}) => (
+          //         <ListRenderItem item={item} index={index} />
+          //       )}
+          //       keyExtractor={item => `${item.id}`}
+          //     />
+          //   ) : (
+          //     <NoInputsDisplay />
+          //   )}
+          // </>
+        )}
+      </>
+    ),
+    [data, data.length],
+  );
 
   return (
-    <FlexCol>
-      {listFirst && <AutoCompleteList />}
+    <>
+      {listFirst && AutoCompleteList}
 
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <AutoCompleteCategory
-          placeholder={placeholder}
-          value={searchInput}
-          onChangeText={setSearchInput}
-          onSubmitEditing={handleSubmitEditing}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onSelectEntityId={handleSelectSuggestion}
-        />
-      </ScrollView>
+      <AutoCompleteCategory
+        {...props}
+        onSubmitEditing={handleSubmitEditing}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onSelectEntityId={handleSelectSuggestion}
+      />
 
-      {!listFirst && <AutoCompleteList />}
-    </FlexCol>
+      {!listFirst && AutoCompleteList}
+
+      {data.length === 0 && <NoInputsDisplay />}
+    </>
   );
 };
 

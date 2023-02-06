@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import AutoCompleteDisplay, {
@@ -6,6 +7,7 @@ import AutoCompleteDisplay, {
 } from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteDisplay';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
+import StickyScrollView from 'ssComponents/View/StickyScrollView';
 import {GOOD_POSTFIX, toggleNodePostfix} from 'ssDatabase/api/types';
 import {useCounterId} from 'ssHooks/useCounterId';
 import NoInputsDisplay from 'ssScreens/StackNav/TabNav/RateNav/RateHomeScreen/components/Input/List/NoInputsDisplay';
@@ -47,6 +49,7 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
 
   return (
     <AutoCompleteDisplay
+      listFirst={true}
       placeholder={'Choose a past input...'}
       value={searchInput}
       onChangeText={(newText: string) => dispatch(editSearchInput(newText))}

@@ -37,6 +37,9 @@ import {
   editReplacementInput as editInputUR,
   removeReplacementInput as removeInputUR,
 } from 'ssRedux/undorateSidewaysSlice';
+import StickyScrollView from 'ssComponents/View/StickyScrollView';
+import {View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type RatingInputDisplayProps = {
   ratingType: RATING_TYPE;
@@ -135,20 +138,22 @@ const RatingInputDisplay: FC<RatingInputDisplayProps> = props => {
   );
 
   return (
-    <AutoCompleteDisplay
-      placeholder={'Add an input'}
-      value={searchInput}
-      onChangeText={setSearchInput}
-      onSubmitEditing={handleSubmitSearchInput}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      data={inputs}
-      onSelectEntityId={handleSelectSuggestion}
-      ListRenderItem={({item, index}) => (
-        <RatingInput item={item} index={index} ratingType={ratingType} />
-      )}
-      NoInputsDisplay={NoInputsDisplay}
-    />
+    <ScrollView keyboardShouldPersistTaps="handled">
+      <AutoCompleteDisplay
+        placeholder={'Add an input'}
+        value={searchInput}
+        onChangeText={setSearchInput}
+        onSubmitEditing={handleSubmitSearchInput}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        data={inputs}
+        onSelectEntityId={handleSelectSuggestion}
+        ListRenderItem={({item, index}) => (
+          <RatingInput item={item} index={index} ratingType={ratingType} />
+        )}
+        NoInputsDisplay={NoInputsDisplay}
+      />
+    </ScrollView>
   );
 };
 
