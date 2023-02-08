@@ -8,13 +8,23 @@ const VennStackWSlider: FC<VennStackWSliderProps> = props => {
   const {
     colorScale,
     data,
+    domain,
+    domainPadding,
+    barWidth,
+
     x,
+    xdx,
+    xdy,
     xValues,
+    xTickFormat,
     xLabels,
     xLabelFill,
+
+    ydx,
+    ydy,
     yValues,
-    tickFormat,
-    domainPadding,
+    yTickFormat,
+
     value,
     setValue,
     min,
@@ -29,13 +39,20 @@ const VennStackWSlider: FC<VennStackWSliderProps> = props => {
       <VennStack
         colorScale={colorScale}
         data={data}
+        domain={domain}
+        domainPadding={domainPadding}
+        barWidth={barWidth}
         x={x}
+        xdx={xdx}
+        xdy={xdy}
         xValues={xValues}
+        xTickFormat={xTickFormat}
         xLabels={xLabels}
         xLabelFill={xLabelFill}
+        ydx={ydx}
+        ydy={ydy}
         yValues={yValues}
-        tickFormat={tickFormat}
-        domainPadding={domainPadding}
+        yTickFormat={yTickFormat}
       />
 
       <MySlider

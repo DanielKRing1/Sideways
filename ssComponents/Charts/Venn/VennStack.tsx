@@ -7,7 +7,7 @@ import {
   VictoryLabel,
   VictoryStack,
 } from 'victory-native';
-import {CallbackArgs} from 'victory-core';
+import {CallbackArgs, DomainPropType} from 'victory-core';
 import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
 
 export type VennStackDataPoint = {
@@ -18,74 +18,53 @@ export type VennStackProps = {
   colorScale: string[];
 
   data: ChartBar[][];
+  domain: DomainPropType;
+  domainPadding?: {x: number; y: number};
+  barWidth?: number;
+
   x?: string;
+  xdx?: (t: CallbackArgs) => any | number;
+  xdy?: (t: CallbackArgs) => any | number;
   xValues?: number[] | Date[];
   xLabels?: any[];
   xLabelFill?: (l: CallbackArgs) => string | number;
-  yValues?: any[];
-  tickFormat?: (t: CallbackArgs) => any | number;
+  xTickFormat?: (t: CallbackArgs) => any | number;
 
-  domainPadding?: {x: number; y: number};
+  ydx?: (t: CallbackArgs) => any | number;
+  ydy?: (t: CallbackArgs) => any | number;
+  yValues?: any[];
+  yTickFormat?: (t: CallbackArgs) => any | number;
 };
 
 const VennStack: FC<VennStackProps> = props => {
   const {
     colorScale,
     data,
-    x,
+    domain,
+    domainPadding,
+    barWidth = 0,
+
+    xdx = 0,
+    xdy = 0,
     xValues,
     xLabels,
     xLabelFill = (l: CallbackArgs) => '',
-    yValues,
-    tickFormat,
-    domainPadding,
+
+    ydx = 0,
+    ydy = 0,
+    yValues = [],
+    xTickFormat,
+    yTickFormat,
   } = props;
 
+  console.log('DATA------------------');
+  console.log(data);
+
   return (
-    <VictoryChart theme={VictoryTheme.material} domainPadding={domainPadding}>
-      <VictoryAxis
-        style={{
-          grid: {
-            pointerEvents: 'painted',
-            strokeWidth: 0.5,
-          },
-          tickLabels: {
-            angle: -20,
-          },
-        }}
-        tickValues={yValues}
-        tickLabelComponent={
-          <VictoryLabel
-            text={tickFormat}
-            textAnchor={'end'}
-            angle={-20}
-            dy={20}
-          />
-        }
-        dependentAxis
-      />
-
-      <VictoryAxis
-        style={{
-          grid: {
-            pointerEvents: 'painted',
-            strokeWidth: 0.5,
-          },
-          tickLabels: {
-            angle: -20,
-          },
-        }}
-        tickValues={xValues}
-        tickLabelComponent={
-          <VictoryLabel
-            text={tickFormat}
-            textAnchor={'end'}
-            angle={-20}
-            dy={20}
-          />
-        }
-      />
-
+    <VictoryChart
+      theme={VictoryTheme.material}
+      domain={domain}
+      domainPadding={domainPadding}>
       <VictoryStack
         colorScale={colorScale}
         labelComponent={<VictoryLabel angle={-20} textAnchor="start" />}
@@ -95,17 +74,76 @@ const VennStack: FC<VennStackProps> = props => {
             fill: (data: CallbackArgs) => xLabelFill(data),
           },
         }}>
-        {data.map((row: {x: number | Date; y: number | Date}[]) => (
-          <VictoryBar
-            animate={{
-              duration: 500,
-              onLoad: {duration: 1000},
-            }}
-            data={row}
-            alignment="start"
-          />
-        ))}
+        {data.map((row: {x: number | Date; y: number | Date}[], i: number) => {
+          console.log('row--------------------');
+          console.log(row);
+          return (
+            row.length > 0 && (
+              <VictoryBar
+                key={yValues[i]}
+                barWidth={barWidth}
+                animate={{
+                  duration: 500,
+                  onLoad: {duration: 1000},
+                }}
+                data={row}
+                // Replace this line with 'alignment' prop
+                // dataComponent={<Bar transform={`translate(${barWidth / 2})`} />}
+                alignment="start"
+              />
+            )
+          );
+        })}
       </VictoryStack>
+
+      <VictoryAxis
+        style={{
+          grid: {
+            pointerEvents: 'painted',
+            strokeWidth: 0.5,
+            stroke: 'grey',
+            opacity: 0.5,
+          },
+          tickLabels: {
+            angle: -20,
+          },
+        }}
+        tickValues={yValues}
+        tickLabelComponent={
+          <VictoryLabel
+            text={yTickFormat}
+            textAnchor={'end'}
+            angle={-20}
+            dx={ydx}
+            dy={ydy}
+          />
+        }
+        dependentAxis
+      />
+
+      <VictoryAxis
+        style={{
+          grid: {
+            pointerEvents: 'painted',
+            strokeWidth: 0,
+            stroke: 'grey',
+            opacity: 0.5,
+          },
+          tickLabels: {
+            angle: -20,
+          },
+        }}
+        tickValues={xValues}
+        tickLabelComponent={
+          <VictoryLabel
+            text={xTickFormat}
+            textAnchor={'end'}
+            angle={-20}
+            dx={xdx}
+            dy={xdy}
+          />
+        }
+      />
     </VictoryChart>
   );
 };

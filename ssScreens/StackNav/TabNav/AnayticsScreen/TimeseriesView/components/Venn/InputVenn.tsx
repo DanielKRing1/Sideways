@@ -1,5 +1,5 @@
 import React, {FC, useMemo} from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import MyText from 'ssComponents/ReactNative/MyText';
@@ -14,9 +14,11 @@ import {
   getOutputDecorationValue,
   getOutputDecorationList,
 } from 'ssDatabase/hardware/realm/userJson/utils';
-import {ChartBar, VennByMonth} from 'ssDatabase/api/analytics/timeseries/types';
+import {VennByMonth} from 'ssDatabase/api/analytics/timeseries/types';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 import {CallbackArgs} from 'victory-core';
+import {getDaysInMonth} from 'ssUtils/date';
+import {addNodePostfix, GOOD_POSTFIX, NODE_POSTFIX} from 'ssDatabase/api/types';
 
 type InputVennProps = {};
 const InputVenn: FC<InputVennProps> = () => {
@@ -57,7 +59,13 @@ const InputVenn: FC<InputVennProps> = () => {
   }, [vennByMonth, monthIndex]);
 
   console.log('INPUTVENN---------------------');
-  console.log(vennWrapper);
+  console.log(JSON.stringify(vennWrapper));
+
+  // VictoryNative's default VictoryBar chart width
+  const DEFAULT_WIDTH = 450;
+  // Divide total width among all bars and n-1 spaces
+  const barWidth =
+    DEFAULT_WIDTH / (2 * getDaysInMonth(vennWrapper.timestamp) - 1);
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
@@ -68,7 +76,22 @@ const InputVenn: FC<InputVennProps> = () => {
       <VennStackWSlider
         colorScale={colorScale}
         data={vennWrapper.venn}
-        xValues={vennWrapper.venn[0].map((day: ChartBar) => day.x)}
+        domain={{
+          x: [1, getDaysInMonth(vennWrapper.timestamp)],
+          y: [0, vennWrapper.venn.length],
+        }}
+        domainPadding={{x: barWidth, y: barWidth}}
+        barWidth={barWidth}
+        xdy={(t: CallbackArgs) => ((t.index as number) % 2 === 0 ? 0 : 20)}
+        xValues={new Array(getDaysInMonth(vennWrapper.timestamp))
+          .fill(undefined)
+          .map((v, i) => i + 1)}
+        // xValues={vennWrapper.venn[0].map((day: ChartBar) => day.x)}
+        xTickFormat={(t: CallbackArgs) =>
+          (t.index as number) % 2 === 1
+            ? (t.index as number) + 1
+            : (t.index as number) + 1
+        }
         xLabels={vennWrapper.outputs}
         xLabelFill={({text}) =>
           getOutputDecorationValue(text[0], fullUserJsonMap).color
@@ -76,10 +99,17 @@ const InputVenn: FC<InputVennProps> = () => {
         yValues={vennNodeInputs.map(
           (nodeInput: VennInput) => nodeInput.item.id,
         )}
-        tickFormat={(t: CallbackArgs) => {
-          console.log('CALLBACK ARGS----------------');
-          console.log(t);
-          return 'a';
+        yTickFormat={(t: CallbackArgs) => {
+          if (vennNodeInputs.length === 0) return '';
+
+          // console.log('CALLBACK ARGS----------------');
+          // console.log(t);
+          console.log(vennNodeInputs);
+          console.log(t.index);
+          const nodeId: string = vennNodeInputs[t.index as number].item.id;
+          const nodePostfix: NODE_POSTFIX =
+            vennNodeInputs[t.index as number].item.postfix;
+          return addNodePostfix(nodeId, nodePostfix);
         }}
         value={monthIndex}
         setValue={handleSelectMonth}

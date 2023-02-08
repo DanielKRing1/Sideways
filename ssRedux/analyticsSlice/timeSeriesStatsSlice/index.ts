@@ -6,14 +6,17 @@ import timeseriesDriver from 'ssDatabase/api/analytics/timeseries/timeseriesStat
 
 import {ThunkConfig} from '../../types';
 import {floorDay, serializeDateNum} from 'ssUtils/date';
-import {} from 'ssDatabase/hardware/realm/analytics/timeseries/timeseriesStatsDriver';
 import {
   LineGraph,
   HistogramByMonth,
   VennByMonth,
   HeatMapByMonth,
 } from 'ssDatabase/api/analytics/timeseries/types';
-import {addNodePostfix, NODE_ID_COMPONENTS} from 'ssDatabase/api/types';
+import {
+  addNodePostfix,
+  NODE_ID,
+  NODE_ID_COMPONENTS,
+} from 'ssDatabase/api/types';
 
 // INITIAL STATE
 
@@ -267,7 +270,7 @@ const startGetVenn = createAsyncThunk<boolean, StartGetVennArgs, ThunkConfig>(
   async (undef: StartGetVennArgs, thunkAPI) => {
     const activeSliceName: string =
       thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-    const inputNodeFullIds: string[] = thunkAPI
+    const inputNodeFullIds: NODE_ID[] = thunkAPI
       .getState()
       .analyticsSlice.timeseriesStatsSlice.vennNodeInputs.map(
         (vennInput: VennInput) =>

@@ -1,3 +1,5 @@
+import {NODE_ID} from 'ssDatabase/api/types';
+
 // TYPES
 export type DailyOutput = {
   x: number;
@@ -37,7 +39,7 @@ export type GetTimeseriesArgs = {
 };
 
 export type GetNodeOverlapArgs = {
-  nodeIds: string[];
+  nodeIds: NODE_ID[];
 } & Omit<GetTimeseriesArgs, 'outputs'>;
 
 // Driver type

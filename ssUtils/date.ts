@@ -40,6 +40,8 @@ export const getYear = (d: Date = new Date()) => d.getFullYear();
  */
 export const getDay = (d: Date = new Date()) => d.getUTCDay();
 
+export const getDate = (d: Date = new Date()) => d.getDate();
+
 export const getFirstDayOfMonth = (ms: number) => {
   const firstDateOfMonth: Date = floorMonth(new Date(ms));
   return getDay(firstDateOfMonth);
