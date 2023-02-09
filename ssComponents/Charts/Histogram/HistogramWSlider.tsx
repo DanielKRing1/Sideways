@@ -10,8 +10,13 @@ const HistogramWSlider: FC<HistogramWSliderProps> = props => {
     gradientColors,
     data,
     x,
-    tickFormat,
+    xValues,
+    xTickFormat,
+    yValues,
+    yTickFormat,
+    domain,
     domainPadding,
+
     value,
     setValue,
     min,
@@ -27,8 +32,12 @@ const HistogramWSlider: FC<HistogramWSliderProps> = props => {
         horizontal={horizontal}
         gradientColors={gradientColors}
         data={data}
+        xValues={xValues}
+        yValues={yValues}
         x={x}
-        tickFormat={tickFormat}
+        xTickFormat={xTickFormat}
+        yTickFormat={yTickFormat}
+        domain={domain}
         domainPadding={domainPadding}
       />
 

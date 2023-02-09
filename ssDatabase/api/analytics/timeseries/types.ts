@@ -8,8 +8,8 @@ export type DailyOutput = {
 export type LineGraph = DailyOutput[];
 
 export type ChartBar = {
-  x: number;
-  y: number;
+  x: number | string;
+  y: number | string;
   y0?: number;
 };
 export type HistogramByMonth = {

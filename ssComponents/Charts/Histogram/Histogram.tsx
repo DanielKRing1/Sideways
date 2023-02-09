@@ -5,7 +5,7 @@ import {
   VictoryBar,
   VictoryLabel,
 } from 'victory-native';
-import {CallbackArgs} from 'victory-core';
+import {CallbackArgs, DomainPropType} from 'victory-core';
 import {Defs, LinearGradient, Stop} from 'react-native-svg';
 import {ChartBar} from 'ssDatabase/api/analytics/timeseries/types';
 
@@ -15,19 +15,33 @@ export type MyHistogramProps = {
   gradientColors: GradientColor[];
 
   data: ChartBar[];
-  x: string;
-  tickFormat: (t: CallbackArgs) => string | number;
+  domain: DomainPropType;
+  domainPadding?: {x: number; y: number};
 
-  domainPadding: {x: number; y: number};
+  xValues?: (number | string)[];
+  xTickFormat?: (t: CallbackArgs) => string | number;
+  yValues?: (number | string)[];
+  yTickFormat?: (t: CallbackArgs) => string | number;
+  x: string;
 };
 
 const MyHistogram: FC<MyHistogramProps> = props => {
-  const {horizontal, gradientColors, data, x, tickFormat, domainPadding} =
-    props;
+  const {
+    horizontal,
+    gradientColors,
+    data,
+    domainPadding,
+    domain,
+    xValues,
+    xTickFormat,
+    yValues,
+    yTickFormat,
+    x,
+  } = props;
 
   return (
     <>
-      <VictoryChart domainPadding={domainPadding}>
+      <VictoryChart domain={domain} domainPadding={domainPadding}>
         <Defs>
           <LinearGradient
             id="linearGradient1"
@@ -36,43 +50,20 @@ const MyHistogram: FC<MyHistogramProps> = props => {
             x2={horizontal ? '100%' : '0%'}
             y2={horizontal ? '0%' : '100%'}>
             {gradientColors.map(({offset, color}) => (
-              <Stop offset={offset} stopColor={color} />
+              <Stop key={color} offset={offset} stopColor={color} />
             ))}
           </LinearGradient>
         </Defs>
 
-        <VictoryAxis
-          style={{
-            grid: {
-              pointerEvents: 'painted',
-              strokeWidth: 0.5,
-            },
-          }}
-          dependentAxis
-        />
-
-        <VictoryAxis
-          domain={[1, 10]}
-          style={{
-            grid: {
-              pointerEvents: 'painted',
-              strokeWidth: 0.5,
-            },
-            tickLabels: {
-              angle: -20,
-            },
-          }}
-          tickLabelComponent={
-            <VictoryLabel
-              text={tickFormat}
-              textAnchor={'end'}
-              angle={-20}
-              dy={20}
-            />
-          }
-        />
+        {/* <VictoryHistogram
+          horizontal={true}
+          data={data.map(({y}) => ({x: y}))}
+          binSpacing={5}
+          labels={({datum}) => `${datum.y}`}
+        /> */}
 
         <VictoryBar
+          domain={domain}
           horizontal={horizontal}
           animate={{
             duration: 500,
@@ -90,6 +81,52 @@ const MyHistogram: FC<MyHistogramProps> = props => {
               fill: 'red',
             },
           }}
+          alignment="end"
+        />
+
+        <VictoryAxis
+          domain={domain}
+          style={{
+            grid: {
+              pointerEvents: 'painted',
+              strokeWidth: 0.5,
+            },
+            tickLabels: {
+              angle: -20,
+            },
+          }}
+          tickValues={yValues}
+          tickLabelComponent={
+            <VictoryLabel
+              text={yTickFormat}
+              textAnchor={'start'}
+              angle={-20}
+              dy={10}
+            />
+          }
+          dependentAxis
+        />
+
+        <VictoryAxis
+          domain={domain}
+          style={{
+            grid: {
+              pointerEvents: 'painted',
+              strokeWidth: 0.5,
+            },
+            tickLabels: {
+              angle: -20,
+            },
+          }}
+          tickValues={xValues}
+          tickLabelComponent={
+            <VictoryLabel
+              text={xTickFormat}
+              verticalAnchor={'start'}
+              textAnchor={'end'}
+              dx={-10}
+            />
+          }
         />
       </VictoryChart>
     </>

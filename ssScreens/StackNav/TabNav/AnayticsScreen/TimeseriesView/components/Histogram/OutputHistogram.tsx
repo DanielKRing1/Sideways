@@ -48,6 +48,22 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
   console.log('HISTOGRAAAAAAAAAAAAAAAAAAAAAAAM----------------------------');
   console.log(histogramByMonth[monthIndex].histogram);
 
+  const yValues: number[] = useMemo(() => {
+    const min: number = 0;
+    const max: number = histogramByMonth[monthIndex].histogram.reduce(
+      (acc, cur) => Math.max(cur.y as number, acc),
+      1,
+    );
+
+    const INC: number = 2;
+    const vals = [];
+    for (let i = min; i < max; i += INC) {
+      if (i % INC === 0) vals.push(i);
+    }
+    vals.push(max);
+    return vals;
+  }, [histogramByMonth[monthIndex].histogram]);
+
   return (
     <View>
       <MyText>Output Histogram</MyText>
@@ -55,15 +71,36 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
       <HistogramWSlider
         horizontal
         gradientColors={outputColorMap}
+        // data={[
+        //   {x: 'g', y: 4},
+        //   {x: 'b', y: 2},
+        //   {x: 'c', y: 2},
+        //   {x: 'd', y: 20},
+        //   {x: 'e', y: 12},
+        //   {x: 'f', y: 15},
+        //   {x: 'x', y: 2},
+        //   {x: 'y', y: 20},
+        //   {x: 'z', y: 12},
+        //   {x: 'zz', y: 15},
+        // ]}
         data={histogramByMonth[monthIndex].histogram}
         x="x"
-        tickFormat={t =>
-          String.fromCharCode(
-            t.ticks[t.index || 0] + 'a'.charCodeAt(0) - 1,
-          ).repeat(4)
-        }
-        // @ts-ignore
-        domainPadding={{x: 20}}
+        // xTickFormat={t =>
+        //   (t.index as number) < allDbOutputs.length
+        //     ? `'${allDbOutputs[t.index as number]}'`
+        //     : ''
+        // }
+        // xValues={new Array(allDbOutputs.length + 1)
+        //   .fill(undefined)
+        //   .map((v, i) => i - 1)}
+        yValues={yValues}
+        yTickFormat={undefined}
+        // domainPadding={{y: 20, x: 20}}
+        domain={{
+          x: [0, allDbOutputs.length + 0.5],
+          // x: [0, allDbOutputs.length + 0.5 + 8],
+          // y: [0, yValues[yValues.length - 1] * 1.2],
+        }}
         value={monthIndex}
         setValue={handleSelectMonth}
         min={0}
