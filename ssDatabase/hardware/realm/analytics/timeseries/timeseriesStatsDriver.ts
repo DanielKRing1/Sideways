@@ -67,18 +67,11 @@ const getMonthlyOutputHistogram = async ({
   // 0. Short-circuit
   if (list.length === 0) return [];
 
-  // 1. Hash outputs to number value
-  const outputValueMap: Dict<number> = outputs.reduce<Dict<number>>(
-    (acc, cur, i) => {
-      acc[cur] = i;
-      return acc;
-    },
-    {},
-  );
-
+  // 1. Create initial count map: { output: 0, ... }
   const initialCountMap: Dict<number> = outputs.reduce<Dict<number>>(
     (acc, output) => {
-      const outputKey: number = outputValueMap[output];
+      // const outputKey: number = outputValueMap[output];
+      const outputKey: string = output;
       acc[outputKey] = 0;
 
       return acc;
@@ -118,7 +111,7 @@ const getMonthlyOutputHistogram = async ({
 
     // 6. Increment output occurence for month
     for (const output of outputs) {
-      const outputKey: number = outputValueMap[output];
+      const outputKey: string = output;
 
       if (countMap[outputKey] === undefined) countMap[outputKey] = 1;
       else countMap[outputKey]++;
