@@ -10,7 +10,7 @@ const VennStackWSlider: FC<VennStackWSliderProps> = props => {
     data,
     domain,
     domainPadding,
-    barWidth,
+    barWidth = 0,
 
     x,
     xdx,

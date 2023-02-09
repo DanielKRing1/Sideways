@@ -66,6 +66,7 @@ const VennStack: FC<VennStackProps> = props => {
       domain={domain}
       domainPadding={domainPadding}>
       <VictoryStack
+        domain={domain}
         colorScale={colorScale}
         labelComponent={<VictoryLabel angle={-20} textAnchor="start" />}
         labels={xLabels}
@@ -74,29 +75,35 @@ const VennStack: FC<VennStackProps> = props => {
             fill: (data: CallbackArgs) => xLabelFill(data),
           },
         }}>
-        {data.map((row: {x: number | Date; y: number | Date}[], i: number) => {
-          console.log('row--------------------');
-          console.log(row);
-          return (
-            row.length > 0 && (
-              <VictoryBar
-                key={yValues[i]}
-                barWidth={barWidth}
-                animate={{
-                  duration: 500,
-                  onLoad: {duration: 1000},
-                }}
-                data={row}
-                // Replace this line with 'alignment' prop
-                // dataComponent={<Bar transform={`translate(${barWidth / 2})`} />}
-                alignment="start"
-              />
-            )
-          );
-        })}
+        {data.map(
+          (
+            row: {x: number | string | Date; y: number | string | Date}[],
+            i: number,
+          ) => {
+            console.log('row--------------------');
+            console.log(row);
+            return (
+              row.length > 0 && (
+                <VictoryBar
+                  key={yValues[i]}
+                  barWidth={barWidth}
+                  animate={{
+                    duration: 500,
+                    onLoad: {duration: 1000},
+                  }}
+                  data={row}
+                  // Replace this line with 'alignment' prop
+                  // dataComponent={<Bar transform={`translate(${barWidth / 2})`} />}
+                  alignment="start"
+                />
+              )
+            );
+          },
+        )}
       </VictoryStack>
 
       <VictoryAxis
+        domain={domain}
         style={{
           grid: {
             pointerEvents: 'painted',
@@ -122,6 +129,7 @@ const VennStack: FC<VennStackProps> = props => {
       />
 
       <VictoryAxis
+        domain={domain}
         style={{
           grid: {
             pointerEvents: 'painted',
