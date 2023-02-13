@@ -1,9 +1,9 @@
 export const isToday = (someDate: Date) => {
   const today = new Date();
   return (
-    someDate.getDate() === today.getDate() &&
-    someDate.getMonth() === today.getMonth() &&
-    someDate.getFullYear() === today.getFullYear()
+    someDate.getUTCDate() === today.getUTCDate() &&
+    someDate.getUTCMonth() === today.getUTCMonth() &&
+    someDate.getUTCFullYear() === today.getUTCFullYear()
   );
 };
 
@@ -27,8 +27,8 @@ export const getWeeksMS = (weeks: number): number => weeks * getDaysMS(7);
  *
  * @param d
  */
-export const getMonth = (d: Date = new Date()) => d.getMonth();
-export const getYear = (d: Date = new Date()) => d.getFullYear();
+export const getMonth = (d: Date = new Date()) => d.getUTCMonth();
+export const getYear = (d: Date = new Date()) => d.getUTCFullYear();
 /**
  * Get the day of the week of a given date
  *
@@ -40,7 +40,7 @@ export const getYear = (d: Date = new Date()) => d.getFullYear();
  */
 export const getDay = (d: Date = new Date()) => d.getUTCDay();
 
-export const getDate = (d: Date = new Date()) => d.getDate();
+export const getDate = (d: Date = new Date()) => d.getUTCDate();
 
 export const getFirstDayOfMonth = (ms: number) => {
   const firstDateOfMonth: Date = floorMonth(new Date(ms));
@@ -57,6 +57,99 @@ export const getDaysInMonth = (ms: number) => {
   const m: number = getMonth(d) + 1;
   const y: number = getYear(d);
   return getDaysInMonthMY(m, y);
+};
+
+// INCREMENT TIME UTILS
+
+/**
+ * Adds 'n' days to a date object
+ * Updates Date object in-place
+ * Accounts for incrementing months, years, etc
+ *
+ * @param d
+ * @param days
+ * @returns
+ */
+export const addDays = (d: Date, days: number): Date => {
+  d.setUTCDate(d.getUTCDate() + days);
+
+  return d;
+};
+export const addDaysMs = (ms: number, days: number): Date => {
+  return addDays(new Date(ms), days);
+};
+
+/**
+ * Adds 'n' months to a date object
+ * Updates Date object in-place
+ * Accounts for incrementing years, etc
+ *
+ * @param d
+ * @param months
+ * @returns
+ */
+export const addMonths = (d: Date, months: number): Date => {
+  d.setUTCMonth(d.getUTCMonth() + months);
+
+  return d;
+};
+export const addMonthsMs = (ms: number, months: number): Date => {
+  return addMonths(deserializeDate(ms), months);
+};
+
+// GET RANGE UTILS
+/**
+ * Get the start of all months that fall within the [start-stop] range
+ * Returns the start of each month as ms
+ *
+ * @param startMs
+ * @param stopMs
+ * @returns
+ */
+export const getAllMonthsRangeMs = (
+  startMs: number,
+  stopMs: number,
+): number[] => {
+  const range: number[] = [];
+
+  // 0. Floor start month
+  console.log('hereerere--------------------');
+  console.log(new Date(startMs));
+  startMs = serializeDateNum(floorMonthMs(startMs));
+  console.log(deserializeDate(startMs));
+  for (
+    let curMs = startMs, i = 0;
+    curMs <= stopMs && i < 10;
+    // Add 1 month
+    curMs = serializeDateNum(floorMonth(addMonthsMs(curMs, 1))), i++
+  ) {
+    range.push(curMs);
+    console.log(i);
+    console.log(new Date(curMs));
+  }
+
+  // Add month following stopMs
+  // range.push(serializeDateNum(floorMonth(addMonths(floorMonthMs(stopMs), 1))));
+
+  return range;
+};
+
+export const getSliceRangeMs = (
+  startMs: number,
+  stopMs: number,
+  slices: number,
+): number[] => {
+  const rangeMs: number = (stopMs - startMs) / (slices - 1);
+
+  const range: number[] = [];
+  for (let curMs = startMs; curMs <= stopMs; curMs += rangeMs) {
+    range.push(curMs);
+  }
+
+  console.log('ABC------------------------');
+  console.log(range);
+
+  return range;
 };
 
 /**
@@ -79,10 +172,25 @@ export const getDaysInMonthMY = (m: number, y: number) =>
 
 export const abbrDateMs = (dateMs: number) => abbrDate(deserializeDate(dateMs));
 export const abbrDate = (date: Date) => ({
-  day: date.getDate(),
-  month: date.toLocaleString('default', {month: 'short'}),
-  year: date.getFullYear(),
+  day: date.getUTCDate(),
+  month: monthToString(date.getUTCMonth()),
+  year: date.getUTCFullYear(),
 });
+const MONTHS: string[] = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+const monthToString = (month: number): string => MONTHS[month];
 
 // SERIALIZE DATE
 // String
@@ -100,7 +208,7 @@ export const deserializeDate = (dateMs: number) => new Date(dateMs);
  */
 export const getNDaysAgo = (days: number) => {
   const date = new Date();
-  date.setDate(date.getDate() - days);
+  date.setUTCDate(date.getUTCDate() - days);
 
   return date;
 };
@@ -113,12 +221,16 @@ export const getNDaysAgo = (days: number) => {
  * @param date
  * @returns
  */
-export const floorMonth = (date: Date) => {
-  date.setDate(1);
+export const floorMonth = (date: Date): Date => {
+  date.setUTCDate(1);
   floorDay(date);
 
   return date;
 };
+export const floorMonthMs = (ms: number): Date => {
+  return floorMonth(new Date(ms));
+};
+
 /**
  * Round date to beginning of day
  * Modifies in place
@@ -144,9 +256,9 @@ export const floorDay = (date: Date) => {
  */
 export const ceilMonth = (date: Date) => {
   // 1. Set month to next month
-  date.setMonth(date.getMonth() + 1);
+  date.setUTCMonth(date.getUTCMonth() + 1);
   // 2. Set day to 1 day before first day of month
-  date.setDate(0);
+  date.setUTCDate(0);
   ceilDay(date);
 
   return date;
