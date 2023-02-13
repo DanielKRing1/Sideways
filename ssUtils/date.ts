@@ -9,12 +9,12 @@ export const isToday = (someDate: Date) => {
 
 // GET MILLISECONDS
 
-export const getSecondsMS = (seconds: number): number => seconds * 1000;
-export const getMinutesMS = (minutes: number): number =>
-  minutes * getSecondsMS(60);
-export const getHoursMS = (hours: number): number => hours * getMinutesMS(60);
-export const getDaysMS = (days: number): number => days * getHoursMS(24);
-export const getWeeksMS = (weeks: number): number => weeks * getDaysMS(7);
+export const genSecondsMS = (seconds: number): number => seconds * 1000;
+export const genMinutesMS = (minutes: number): number =>
+  minutes * genSecondsMS(60);
+export const genHoursMS = (hours: number): number => hours * genMinutesMS(60);
+export const genDaysMS = (days: number): number => days * genHoursMS(24);
+export const genWeeksMS = (weeks: number): number => weeks * genDaysMS(7);
 
 // MONTH UTILS
 
