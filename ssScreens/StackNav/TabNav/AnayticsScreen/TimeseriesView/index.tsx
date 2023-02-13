@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useMemo} from 'react';
-import {View} from 'react-native';
+import {ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTheme} from 'styled-components/native';
 
@@ -68,7 +68,7 @@ const Timeseries: FC<TimeseriesProps> = () => {
   console.log(month);
 
   return (
-    <View>
+    <ScrollView>
       {monthIndex > -1 && !!heatMapByMonth && !!heatMapByMonth[monthIndex] && (
         <>
           <MyText>Month:</MyText>
@@ -92,7 +92,7 @@ const Timeseries: FC<TimeseriesProps> = () => {
         onPress={() => {}}>
         <MyText>Get Graphs!</MyText>
       </MyButton>
-    </View>
+    </ScrollView>
   );
 };
 
