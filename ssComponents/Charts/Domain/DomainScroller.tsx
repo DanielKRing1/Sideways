@@ -15,24 +15,23 @@ export type DomainScrollerProps = {
   height: number;
   xDomain: XDomain;
   setXDomain: (newXDomain: XDomain) => void;
+  domainPadding?: {x: number; y: number};
 
   data: LineGraph;
-  brushXValues?: number[] | Date[];
+  brushXValues: number[] | Date[];
+  brushTickFormat: (t: CallbackArgs) => string | number;
   x: string;
-  tickFormat: (t: CallbackArgs) => string | number;
-
-  domainPadding: {x: number; y: number};
 };
 const DomainScroller: FC<DomainScrollerProps> = props => {
   const {
     height,
     xDomain,
     setXDomain,
+    domainPadding,
     data,
     brushXValues,
+    brushTickFormat,
     x,
-    tickFormat,
-    domainPadding,
   } = props;
 
   // Prevent updating even when domain has not changed
@@ -41,15 +40,15 @@ const DomainScroller: FC<DomainScrollerProps> = props => {
   };
 
   const fullDomain: XDomain = {
-    // TODO Fix typing?
-    // @ts-ignore
     x: [
-      data[0].x,
-      // @ts-ignore
-      data[data.length - 1].x,
-      //  - Math.ceil(xDomain.x[1] - xDomain.x[0]) + 2,
+      brushXValues[0] as number,
+      brushXValues[brushXValues.length - 1] as number,
     ],
   };
+
+  console.log('FULL DOMAIN--------------------');
+  console.log(fullDomain);
+  console.log(xDomain);
 
   return (
     <VictoryChart
@@ -64,27 +63,6 @@ const DomainScroller: FC<DomainScrollerProps> = props => {
           onBrushDomainChange={handleBrush}
         />
       }>
-      <VictoryAxis
-        style={{
-          grid: {
-            pointerEvents: 'painted',
-            strokeWidth: 0.5,
-          },
-          tickLabels: {
-            angle: -20,
-          },
-        }}
-        tickValues={brushXValues}
-        tickLabelComponent={
-          <VictoryLabel
-            text={tickFormat}
-            textAnchor={'end'}
-            angle={-20}
-            dy={20}
-          />
-        }
-      />
-
       <VictoryLine
         style={{
           data: {
@@ -93,8 +71,29 @@ const DomainScroller: FC<DomainScrollerProps> = props => {
           },
           parent: {border: '1px solid #ccc'},
         }}
-        data={[data[0], data[data.length - 1]]}
+        data={data}
         x={x}
+      />
+
+      <VictoryAxis
+        style={{
+          grid: {
+            pointerEvents: 'painted',
+            strokeWidth: 0.5,
+          },
+          tickLabels: {
+            angle: 20,
+          },
+        }}
+        tickValues={brushXValues}
+        tickLabelComponent={
+          <VictoryLabel
+            text={brushTickFormat}
+            textAnchor={'start'}
+            angle={20}
+            // dy={20}
+          />
+        }
       />
     </VictoryChart>
   );

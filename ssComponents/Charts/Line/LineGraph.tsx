@@ -16,14 +16,14 @@ export type MyLineGraphProps = {
   gradientColors: GradientColor[];
 
   xDomain: ForAxes<DomainTuple>;
-  xValues?: number[] | Date[];
+  domainPadding: ForAxes<PaddingType>;
 
   data: LineGraph;
+  xValues?: number[] | Date[];
+  xTickFormat: (t: CallbackArgs) => string | number;
   x: string;
-  tickValues: number[];
-  tickFormat: (t: CallbackArgs) => string | number;
-
-  domainPadding: ForAxes<PaddingType>;
+  yValues: number[];
+  yTickFormat: (t: CallbackArgs) => string | number;
 };
 
 const MyLineGraph: FC<MyLineGraphProps> = props => {
@@ -31,13 +31,17 @@ const MyLineGraph: FC<MyLineGraphProps> = props => {
     height,
     gradientColors,
     xDomain,
-    xValues,
     data,
+    xValues,
+    xTickFormat,
     x,
-    tickValues,
-    tickFormat,
+    yValues,
+    yTickFormat,
     domainPadding,
   } = props;
+
+  // console.log('LINEGRAPH DATA------------------------');
+  // console.log(data);
 
   return (
     <VictoryChart
@@ -46,11 +50,32 @@ const MyLineGraph: FC<MyLineGraphProps> = props => {
       domainPadding={domainPadding}>
       <Defs>
         <LinearGradient id="linearGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-          {gradientColors.map(({offset, color}) => (
-            <Stop offset={offset} stopColor={color} />
+          {gradientColors.map(({offset, color}, i) => (
+            <Stop key={`${color}-${i}`} offset={offset} stopColor={color} />
           ))}
         </LinearGradient>
       </Defs>
+
+      <VictoryLine
+        style={{
+          data: {
+            stroke: 'url(#linearGradient1)',
+            strokeWidth: 2,
+          },
+          parent: {border: '1px solid #ccc'},
+        }}
+        // data={[
+        //   {x: 1, y: 0},
+        //   {x: 2, y: 0},
+        //   {x: 3, y: 0},
+        //   {x: 4, y: 0},
+        //   {x: 5, y: 1},
+        //   {x: 6, y: 0},
+        //   {x: 7, y: 0},
+        // ]}
+        data={data}
+        x={x}
+      />
 
       <VictoryAxis
         style={{
@@ -59,7 +84,15 @@ const MyLineGraph: FC<MyLineGraphProps> = props => {
             strokeWidth: 0.5,
           },
         }}
-        tickValues={tickValues}
+        tickValues={yValues}
+        tickLabelComponent={
+          <VictoryLabel
+            text={yTickFormat}
+            textAnchor={'end'}
+            angle={-20}
+            dy={20}
+          />
+        }
         dependentAxis
       />
 
@@ -74,24 +107,12 @@ const MyLineGraph: FC<MyLineGraphProps> = props => {
         tickValues={xValues}
         tickLabelComponent={
           <VictoryLabel
-            text={tickFormat}
-            textAnchor={'end'}
-            angle={-20}
-            dy={20}
+            text={xTickFormat}
+            textAnchor={'start'}
+            angle={20}
+            // dy={20}
           />
         }
-      />
-
-      <VictoryLine
-        style={{
-          data: {
-            stroke: 'url(#linearGradient1)',
-            strokeWidth: 2,
-          },
-          parent: {border: '1px solid #ccc'},
-        }}
-        data={data}
-        x={x}
       />
     </VictoryChart>
   );

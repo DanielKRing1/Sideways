@@ -16,11 +16,13 @@ const BinnedLineGraph: FC<BinnedLineGraphProps> = props => {
     xDomain,
     setXDomain,
     xValues,
+    xTickFormat,
     brushXValues,
+    brushTickFormat,
     data,
     x,
-    tickValues,
-    tickFormat,
+    yValues,
+    yTickFormat,
     domainPadding,
   } = props;
 
@@ -50,12 +52,13 @@ const BinnedLineGraph: FC<BinnedLineGraphProps> = props => {
         height={(remainingHeight / 4) * 2}
         gradientColors={gradientColors}
         xDomain={xDomain}
-        xValues={xValues}
-        data={data}
-        x={x}
-        tickValues={tickValues}
-        tickFormat={tickFormat}
         domainPadding={domainPadding}
+        data={data}
+        xValues={xValues}
+        xTickFormat={xTickFormat}
+        x={x}
+        yValues={yValues}
+        yTickFormat={yTickFormat}
       />
 
       <DomainScroller
@@ -63,10 +66,9 @@ const BinnedLineGraph: FC<BinnedLineGraphProps> = props => {
         xDomain={xDomain}
         setXDomain={setXDomain}
         brushXValues={brushXValues}
+        brushTickFormat={brushTickFormat}
         data={data}
         x={x}
-        tickFormat={tickFormat}
-        domainPadding={domainPadding}
       />
     </>
   );
