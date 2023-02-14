@@ -38,10 +38,13 @@ const HeatMap: FC<HeatMapProps> = props => {
     [data, cols],
   );
 
+  console.log('HEATMAP----------------------');
+  console.log(dataRows);
+
   return (
     <>
       {dataRows.map((row: CompleteHeatMapCell[], i) => (
-        <FlexRow key={row[i].index}>
+        <FlexRow key={row[0].index}>
           {row.map((cell: CompleteHeatMapCell, j) => (
             <CellComponent
               key={row[j].index}
