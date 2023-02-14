@@ -68,7 +68,7 @@ const Timeseries: FC<TimeseriesProps> = () => {
   console.log(month);
 
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handled">
       {monthIndex > -1 && !!heatMapByMonth && !!heatMapByMonth[monthIndex] && (
         <>
           <MyText>Month:</MyText>
