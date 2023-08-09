@@ -36,6 +36,8 @@ let isLoaded = false;
 // LOAD STACK AND GRAPH ----
 
 const load = async (): Promise<void> => {
+  // TODO: Set isCoreLoaded instead of isLoaded
+
   if (isLoaded) return;
 
   const graphPromise: Promise<any> = RealmGraphManager.loadGraphs(
@@ -53,6 +55,8 @@ const load = async (): Promise<void> => {
 };
 
 const closeAll = async (): Promise<void> => {
+  // TODO: Set isCoreLoaded instead of isLoaded
+
   const graphPromise: Promise<any> = RealmGraphManager.closeAllGraphs();
   const stackPromise: Promise<any> = RealmStackManager.closeAllStacks();
 
@@ -61,28 +65,31 @@ const closeAll = async (): Promise<void> => {
   isLoaded = false;
 };
 
-export const throwLoadError = (): void | never => {
+const getRealmStackManager = (): typeof RealmStackManager => {
   if (!isLoaded)
-    throw new Error(
-      'Must call "load()" before RealmStack or RealmGraph can be used',
-    );
+    throw new Error('Must call "load()" before RealmStack can be used');
+
+  return RealmStackManager;
+};
+
+const getRealmGraphManager = (): typeof RealmGraphManager => {
+  if (!isLoaded)
+    throw new Error('Must call "load()" before RealmGraph can be used');
+
+  return RealmGraphManager;
 };
 
 // SLICES AND THEIR PROPERTIES ----
 
 const getSliceNames = (): string[] | never => {
-  throwLoadError();
-
-  return RealmStackManager.getAllLoadedStackNames();
+  return getRealmStackManager().getAllLoadedStackNames();
 
   // return RealmStack.getStackNames(DEFAULT_REALM_STACK_META_REALM_PATH,DEFAULT_REALM_STACK_LOADABLE_REALM_PATH);
 };
 const getSlicePropertyNames = (sliceName: string): string[] | never => {
-  throwLoadError();
-
-  return RealmGraphManager.getGraph(
-    genGraphName(sliceName, GraphType.Input),
-  ).getPropertyNames();
+  return getRealmGraphManager()
+    .getGraph(genGraphName(sliceName, GraphType.Input))
+    .getPropertyNames();
 
   // return RealmStack.getStackProperties(DEFAULT_REALM_STACK_META_REALM_PATH, sliceName);
 };
@@ -90,7 +97,7 @@ const getSlicePropertyNames = (sliceName: string): string[] | never => {
 // TODO!!!! NOTICE THAT: This returns the snapshot properties, not the output property options
 const getSliceProperties = (sliceName: string): Dict<any> | never => {
   const realmStack: RealmStack | undefined =
-    RealmStackManager.getStack(sliceName);
+    getRealmStackManager().getStack(sliceName);
 
   return realmStack !== undefined ? realmStack.getProperties() : {};
 };
@@ -139,9 +146,7 @@ const getLastLoggedSlices = async (): Promise<ExistingSlice[]> | never => {
 
 // CREATE SINGLE STACK
 const createStack = async (stackName: string): Promise<void> | never => {
-  throwLoadError();
-
-  await RealmStackManager.createStack({
+  await getRealmStackManager().createStack({
     metaRealmPath: DEFAULT_REALM_STACK_META_REALM_PATH,
     loadableRealmPath: DEFAULT_REALM_STACK_LOADABLE_REALM_PATH,
     stackName: stackName,
@@ -153,10 +158,9 @@ const createStack = async (stackName: string): Promise<void> | never => {
 const getStack = async (
   stackName: string,
 ): Promise<Realm.List<SidewaysSnapshotRow> | []> | never => {
-  throwLoadError();
-
   // 1. Get RealmStack
-  const realmStack: RealmStack | never = RealmStackManager.getStack(stackName);
+  const realmStack: RealmStack | never =
+    getRealmStackManager().getStack(stackName);
 
   // 2. Get RealmStackRow
   const stackRow: (RealmStackRow & Realm.Object) | undefined =
@@ -168,11 +172,9 @@ const getStack = async (
 const getList = async (
   stackName: string,
 ): Promise<SidewaysSnapshotRow[]> | never => {
-  throwLoadError();
-
-  const list: SidewaysSnapshotRow[] | never = (await RealmStackManager.getStack(
-    stackName,
-  ).getListJSON()) as SidewaysSnapshotRow[];
+  const list: SidewaysSnapshotRow[] | never = (await getRealmStackManager()
+    .getStack(stackName)
+    .getListJSON()) as SidewaysSnapshotRow[];
   return list;
 };
 
@@ -181,11 +183,9 @@ const searchStack = async (
   stackName: string,
   date: Date,
 ): Promise<number> | never => {
-  throwLoadError();
-
-  const closestIndexOlderOrEqual: number = await RealmStackManager.getStack(
-    stackName,
-  ).getClosestDate(date);
+  const closestIndexOlderOrEqual: number = await getRealmStackManager()
+    .getStack(stackName)
+    .getClosestDate(date);
   console.log(closestIndexOlderOrEqual);
 
   return closestIndexOlderOrEqual;
@@ -196,16 +196,14 @@ const push = (
   stackName: string,
   ...snapshots: SidewaysSnapshotRowWOTime[]
 ): void | never => {
-  throwLoadError();
-
-  RealmStackManager.getStack(stackName).push({}, ...snapshots);
+  getRealmStackManager()
+    .getStack(stackName)
+    .push({}, ...snapshots);
 };
 
 // DELETE STACK
 const deleteStack = async (stackName: string): Promise<void> | never => {
-  throwLoadError();
-
-  await RealmStackManager.getStack(stackName).deleteStack();
+  await getRealmStackManager().getStack(stackName).deleteStack();
 };
 
 const setSnapshotInputs = async (
@@ -213,10 +211,8 @@ const setSnapshotInputs = async (
   index: number,
   inputs: NODE_ID[],
 ): Promise<void> | never => {
-  throwLoadError();
-
   const stack: (RealmStackRow & Realm.Object) | undefined =
-    await RealmStackManager.getStack(stackName).getStackRow();
+    await getRealmStackManager().getStack(stackName).getStackRow();
   if (stack === undefined) return;
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
@@ -229,10 +225,8 @@ const rmSnapshotInputs = async (
   index: number,
   inputsToRm: Set<NODE_ID>,
 ): Promise<void> | never => {
-  throwLoadError();
-
   const stack: (RealmStackRow & Realm.Object) | undefined =
-    await RealmStackManager.getStack(stackName).getStackRow();
+    await getRealmStackManager().getStack(stackName).getStackRow();
   if (stack === undefined) return;
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
@@ -248,10 +242,8 @@ const setSnapshotOutputs = async (
   index: number,
   outputs: string[],
 ): Promise<void> | never => {
-  throwLoadError();
-
   const stack: (RealmStackRow & Realm.Object) | undefined =
-    await RealmStackManager.getStack(stackName).getStackRow();
+    await getRealmStackManager().getStack(stackName).getStackRow();
   if (stack === undefined) return;
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
@@ -264,10 +256,8 @@ const rmSnapshotOutputs = async (
   index: number,
   outputsToRm: Set<string>,
 ): Promise<void> | never => {
-  throwLoadError();
-
   const stack: (RealmStackRow & Realm.Object) | undefined =
-    await RealmStackManager.getStack(stackName).getStackRow();
+    await getRealmStackManager().getStack(stackName).getStackRow();
   if (stack === undefined) return;
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
@@ -286,12 +276,12 @@ const updateSnapshot = async (
   newOutputs: string[],
   newRating: number,
 ): Promise<void> | never => {
-  throwLoadError();
-
   // 1. Get realm
-  const realm: Realm = await RealmStackManager.getStack(sliceName).loadRealm();
+  const realm: Realm = await getRealmStackManager()
+    .getStack(sliceName)
+    .loadRealm();
   const realmSnapshot = (
-    await RealmStackManager.getStack(sliceName).getAllSnapshots()
+    await getRealmStackManager().getStack(sliceName).getAllSnapshots()
   )[index];
 
   // 2. Update old snapshot Realm Object
@@ -306,9 +296,7 @@ const deleteSnapshotIndexes = async (
   stackName: string,
   indexesToRm: number[],
 ): Promise<void> | never => {
-  throwLoadError();
-
-  await RealmStackManager.getStack(stackName).deleteIndexes(indexesToRm);
+  await getRealmStackManager().getStack(stackName).deleteIndexes(indexesToRm);
 };
 
 // REALM GRAPH
@@ -318,16 +306,14 @@ const createGraphs = async (
   sliceName: string,
   outputNames: string[],
 ): Promise<void> | never => {
-  throwLoadError();
-
-  await RealmGraphManager.createGraph({
+  await getRealmGraphManager().createGraph({
     metaRealmPath: DEFAULT_REALM_GRAPH_META_REALM_PATH,
     loadableRealmPath: DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH,
     graphName: genGraphName(sliceName, GraphType.Input),
     propertyNames: outputNames,
   });
 
-  await RealmGraphManager.createGraph({
+  await getRealmGraphManager().createGraph({
     metaRealmPath: DEFAULT_REALM_GRAPH_META_REALM_PATH,
     loadableRealmPath: DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH,
     graphName: genGraphName(sliceName, GraphType.Category),
@@ -338,7 +324,8 @@ const createGraphs = async (
 // READ GRAPH
 const getGraph = (sliceName: string, graphType: GraphType) => {
   const graphName: string = genGraphName(sliceName, graphType);
-  const realmGraph: RealmGraph | never = RealmGraphManager.getGraph(graphName);
+  const realmGraph: RealmGraph | never =
+    getRealmGraphManager().getGraph(graphName);
 
   return realmGraph;
 };
@@ -347,8 +334,6 @@ const getNode = (
   nodeId: NODE_ID,
   graphType: GraphType = GraphType.Input,
 ): (Realm.Object & CGNode) | undefined | never => {
-  throwLoadError();
-
   const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   return realmGraph.getNode(nodeId);
@@ -359,8 +344,6 @@ const getEdge = (
   node2Id: NODE_ID,
   graphType: GraphType = GraphType.Input,
 ): (Realm.Object & CGEdge) | undefined | never => {
-  throwLoadError();
-
   const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   const edgeId: string = genEdgeName(node1Id, node2Id);
@@ -370,8 +353,6 @@ const getAllNodes = (
   sliceName: string,
   graphType: GraphType = GraphType.Input,
 ): Realm.Results<Realm.Object & CGNode> | [] | never => {
-  throwLoadError();
-
   const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   return realmGraph.getAllNodes();
@@ -380,8 +361,6 @@ const getAllEdges = (
   sliceName: string,
   graphType: GraphType = GraphType.Input,
 ): Realm.Results<Realm.Object & CGEdge> | [] | never => {
-  throwLoadError();
-
   const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   return realmGraph.getAllEdges();
@@ -398,8 +377,6 @@ const rateGraph = async (
   ),
   graphType: GraphType = GraphType.Input,
 ): Promise<boolean> | never => {
-  throwLoadError();
-
   const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   realmGraph.rate(
@@ -429,8 +406,6 @@ const undoRateGraph = async (
   ),
   graphType: GraphType = GraphType.Input,
 ): Promise<boolean> | never => {
-  throwLoadError();
-
   const realmGraph: RealmGraph | never = getGraph(sliceName, graphType);
 
   realmGraph.rate(
@@ -453,8 +428,6 @@ const undoRateGraph = async (
 
 // DELETE GRAPH
 const deleteGraphs = async (sliceName: string): Promise<void> | never => {
-  throwLoadError();
-
   getGraph(sliceName, GraphType.Input).deleteGraph();
   getGraph(sliceName, GraphType.Category).deleteGraph();
 };
