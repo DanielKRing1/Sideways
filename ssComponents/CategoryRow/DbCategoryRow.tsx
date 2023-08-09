@@ -74,12 +74,9 @@ const DbCategoryRow = forwardRef<View, DbCategoryRowProps>((props, ref) => {
   // HANDLERS
   const handleUpdateInputCategory = (newInputName: string) => {
     // Db
-    // 1. Decrement original inputName counter (and delete if counter <= 0)
-    console.log(1);
-    CategoryDriver.rmInputCategories([inputName]);
     // 2. Add new inputName
     // **Will not add inputName if inputName === ''
-    console.log(2);
+    console.log(1);
     CategoryDriver.addInputCategory({
       inputId: newInputName,
       categoryId,
@@ -101,15 +98,8 @@ const DbCategoryRow = forwardRef<View, DbCategoryRowProps>((props, ref) => {
 
   const handleDeleteCategoryRow = () => {
     // Db
-    // 1. Decrement original inputName counter (and delete if counter <= 0)
-    CategoryDriver.rmInputCategories([inputName]);
-
-    // 3. Update inputName in parent component
+    // 1. Update inputName in parent component
     onDeleteCategoryRow();
-
-    // Redux
-    // 4. Update UserJsonMap
-    dispatch(startRefreshInputNameToCategoryNameMapping());
   };
 
   const handleCommitCId = (newCId: string) => {

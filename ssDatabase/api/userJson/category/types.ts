@@ -85,10 +85,7 @@ INPUT-TO-CATEGORY MAPPING
   }
 */
 // InputName - { CategoryId, counter }
-export type ASJ_InputValue = {
-  categoryId: string;
-  counter: number;
-};
+export type ASJ_InputValue = string;
 export type ASJ_InputNameToCategoryIdMapping = Dict<ASJ_InputValue>;
 // OutputName - Decoration
 export type ASJ_OutputNameToDecorationMapping = Dict<OutputDecoration>;

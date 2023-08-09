@@ -121,15 +121,8 @@ const addInputCategory = (inputInfo: ASJ_InputInfo): void | never => {
       ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING,
     );
 
-  // 3. Upsert
-  // 3.1. Save newInputCategory
-  if (inputToCategoryMapping[inputInfo.inputId] === undefined)
-    inputToCategoryMapping[inputInfo.inputId] = {
-      categoryId: inputInfo.categoryId,
-      counter: 1,
-    };
-  // 3.2. Increment counter
-  else inputToCategoryMapping[inputInfo.inputId].counter++;
+  // 3. Upsert, Save new input category
+  inputToCategoryMapping[inputInfo.inputId] = inputInfo.categoryId;
 
   // 4. Set Json Row
   jsonCollection.setJson(
@@ -170,13 +163,9 @@ const rmInputCategories = (inputNamesToRm: string[]): void | never => {
     console.log(inputName);
 
     console.log(inputToCategoryMapping[inputName]);
-    if (inputToCategoryMapping[inputName] !== undefined) {
-      inputToCategoryMapping[inputName].counter--;
-
-      // 3.2. Delete inputName key if counter <= 0
-      if (inputToCategoryMapping[inputName].counter <= 0)
-        delete inputToCategoryMapping[inputName];
-    }
+    // 3.2. If exists, delete inputName key
+    if (inputToCategoryMapping[inputName] !== undefined)
+      delete inputToCategoryMapping[inputName];
   }
   console.log('AFTER');
   console.log(inputToCategoryMapping);
@@ -222,16 +211,8 @@ const editInputCategory = (inputInfo: ASJ_InputInfo): void | never => {
   console.log(inputToCategoryMapping);
   console.log(inputInfo);
 
-  // 3. Upsert
-  // 3.1. Save newInputCategory
-  if (inputToCategoryMapping[inputInfo.inputId] === undefined)
-    inputToCategoryMapping[inputInfo.inputId] = {
-      categoryId: inputInfo.categoryId,
-      counter: 1,
-    };
-  // 3.2. Change categoryId
-  else
-    inputToCategoryMapping[inputInfo.inputId].categoryId = inputInfo.categoryId;
+  // 3. Change categoryId
+  inputToCategoryMapping[inputInfo.inputId] = inputInfo.categoryId;
 
   // 4. Set Json Row
   jsonCollection.setJson(
