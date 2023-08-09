@@ -27,8 +27,23 @@ export const genWeeksMS = (weeks: number): number => weeks * genDaysMS(7);
  *
  * @param d
  */
-export const getMonth = (d: Date = new Date()) => d.getUTCMonth();
 export const getYear = (d: Date = new Date()) => d.getUTCFullYear();
+export const getMonth = (d: Date = new Date()) => d.getUTCMonth();
+const MONTHS: string[] = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+const monthToString = (month: number): string => MONTHS[month];
 /**
  * Get the day of the week of a given date
  *
@@ -134,6 +149,15 @@ export const getAllMonthsRangeMs = (
   return range;
 };
 
+/**
+ * Slice a [start-stop] range into n slices
+ * Return slices as ms
+ *
+ * @param startMs
+ * @param stopMs
+ * @param slices
+ * @returns
+ */
 export const getSliceRangeMs = (
   startMs: number,
   stopMs: number,
@@ -172,25 +196,10 @@ export const getDaysInMonthMY = (m: number, y: number) =>
 
 export const abbrDateMs = (dateMs: number) => abbrDate(deserializeDate(dateMs));
 export const abbrDate = (date: Date) => ({
-  day: date.getUTCDate(),
-  month: monthToString(date.getUTCMonth()),
-  year: date.getUTCFullYear(),
+  day: getDate(date),
+  month: monthToString(getMonth(date)),
+  year: getYear(date),
 });
-const MONTHS: string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-const monthToString = (month: number): string => MONTHS[month];
 
 // SERIALIZE DATE
 // String
