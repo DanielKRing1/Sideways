@@ -27,11 +27,7 @@ import {
   GraphType,
 } from 'ssDatabase/api/core/types';
 import {DEFAULT_SNAPSHOT_PROPERTIES} from './schemas';
-import {
-  genCategoryGraphName,
-  genGraphName,
-  genInputGraphName,
-} from './constants';
+import {genGraphName} from './constants';
 import {NODE_ID} from 'ssDatabase/api/types';
 
 // VARIABLES
@@ -85,7 +81,7 @@ const getSlicePropertyNames = (sliceName: string): string[] | never => {
   throwLoadError();
 
   return RealmGraphManager.getGraph(
-    genInputGraphName(sliceName),
+    genGraphName(sliceName, GraphType.Input),
   ).getPropertyNames();
 
   // return RealmStack.getStackProperties(DEFAULT_REALM_STACK_META_REALM_PATH, sliceName);
@@ -327,14 +323,14 @@ const createGraphs = async (
   await RealmGraphManager.createGraph({
     metaRealmPath: DEFAULT_REALM_GRAPH_META_REALM_PATH,
     loadableRealmPath: DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH,
-    graphName: genInputGraphName(sliceName),
+    graphName: genGraphName(sliceName, GraphType.Input),
     propertyNames: outputNames,
   });
 
   await RealmGraphManager.createGraph({
     metaRealmPath: DEFAULT_REALM_GRAPH_META_REALM_PATH,
     loadableRealmPath: DEFAULT_REALM_GRAPH_LOADABLE_REALM_PATH,
-    graphName: genCategoryGraphName(sliceName),
+    graphName: genGraphName(sliceName, GraphType.Category),
     propertyNames: outputNames,
   });
 };

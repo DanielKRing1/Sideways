@@ -1,14 +1,9 @@
 import {GraphType} from 'ssDatabase/api/core/types';
 
 const DELIM = '_';
-export const genInputGraphName = (sliceName: string) =>
-  `${sliceName}${DELIM}INPUT`;
-export const genCategoryGraphName = (sliceName: string) =>
+const genInputGraphName = (sliceName: string) => `${sliceName}${DELIM}INPUT`;
+const genCategoryGraphName = (sliceName: string) =>
   `${sliceName}${DELIM}CATEGORY`;
-export const getSliceNameFromGraphName = (graphName: string) => {
-  const end: number = graphName.lastIndexOf(DELIM);
-  return graphName.slice(0, end);
-};
 
 export const genGraphName = (
   sliceName: string,
@@ -21,4 +16,8 @@ export const genGraphName = (
     default:
       return genInputGraphName(sliceName);
   }
+};
+export const getSliceNameFromGraphName = (graphName: string) => {
+  const end: number = graphName.lastIndexOf(DELIM);
+  return graphName.slice(0, end);
 };
