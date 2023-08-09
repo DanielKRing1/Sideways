@@ -26,7 +26,7 @@ import CategoryRowIconButton from './components/CategoryRowIconButton';
 import DecorationRowModal from './components/Modal';
 import DecorationRowColorPicker from './components/ColorPicker';
 
-import {cIdToCD} from 'ssDatabase/hardware/realm/userJson/utils';
+import {snToCD} from 'ssDatabase/hardware/realm/userJson/utils';
 import {DISPLAY_SIZE, HexColor} from '../../global';
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
@@ -106,7 +106,7 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
     // console.log(activeSliceName);
     // console.log(categoryId);
     // console.log(fullUserJsonMap);
-    return cIdToCD(activeSliceName, categoryId, fullUserJsonMap);
+    return snToCD(activeSliceName, categoryId, fullUserJsonMap);
   }, [inputName, categoryId, fullUserJsonMap]);
 
   // LOCAL STATE

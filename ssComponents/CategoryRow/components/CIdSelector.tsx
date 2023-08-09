@@ -8,9 +8,9 @@ import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {useSelector} from 'react-redux';
 import {RootState} from 'ssRedux/index';
 import {
-  cIdToCD,
   cIdToCName,
   getCSCIds,
+  csIdToCD,
   snToCSId,
 } from 'ssDatabase/hardware/realm/userJson/utils';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
@@ -49,16 +49,12 @@ const CIdSelector: FC<CIdSelectorProps> = props => {
   const iconProps = useMemo(() => {
     return cIds.map((cId: string) => {
       const cName: string = cIdToCName(cId, fullUserJsonMap);
-      const cd: GJ_CategoryDecoration = cIdToCD(
-        activeSliceName,
-        cId,
-        fullUserJsonMap,
-      );
+      const cd: GJ_CategoryDecoration = csIdToCD(csId, cId, fullUserJsonMap);
 
       return {
         cId,
-        iconName: cId !== tappedCId ? cd.icon : CONFIRM_SELECTION_ICON,
-        unselectedColor: cIdToCD(activeSliceName, cId, fullUserJsonMap).color,
+        iconName: cId === tappedCId ? CONFIRM_SELECTION_ICON : cd.icon,
+        unselectedColor: cd.color,
         name:
           cName.split('-')[0].length <= 6
             ? cName.split('-')[0]

@@ -23,14 +23,81 @@ import {UserJsonMap} from 'ssDatabase/api/userJson/types';
 import {hashToColor} from 'ssUtils/color';
 import {Dict} from '../../../../global';
 
-// CATEGORY SET UTILS
+/*
+  CATEGORY_SET_NAME_MAPPING
+  {
+    categorySetId: categorySetName,
+    ...
+  }
+
+  CATEGORY_NAME_MAPPING
+  {
+    categoryId: categoryName
+  }
+  
+  CATEGORY_DECORATION_MAPPING
+  {
+    categorySetId: {
+      categoryId: {
+        cId,
+        color,
+        icon,
+      },
+      ...
+    },
+    ...
+  }
+
+
+  SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING
+  {
+    sliceName: categorySetId,
+    ...
+  }
+
+
+*/
+
+function getCSNameMapping(userJsonMap: UserJsonMap): GJ_CategorySetNameMapping {
+  // 1. Get submaps of Json
+  // CategorySet Id - Category Name
+  return userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING];
+}
+function getCNameMapping(userJsonMap: UserJsonMap): GJ_CategoryNameMapping {
+  // 1. Get submaps of Json
+  // Category Id - Category Name
+  return userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING];
+}
+function getCDMapping(userJsonMap: UserJsonMap): GJ_CategoryDecorationMapping {
+  return userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
+}
+function getSNToCSIdMapping(
+  userJsonMap: UserJsonMap,
+): GJ_SliceNameToCategorySetIdMapping {
+  return userJsonMap[
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING
+  ];
+}
+function getINToCIdMapping(
+  userJsonMap: UserJsonMap,
+): ASJ_InputNameToCategoryIdMapping {
+  return userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
+}
+
+function getONToCDMapping(
+  userJsonMap: UserJsonMap,
+): ASJ_OutputNameToDecorationMapping {
+  return userJsonMap[ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING];
+}
+
+// CATEGORY SET UTILS----------------------------------------------------------------
 
 // CATEGORY SET IDS
 export function getCSIds(userJsonMap: UserJsonMap): string[] {
   // 1. Get submaps of Json
   // CategorySet Id - Category Name
   const csNameMapping: GJ_CategorySetNameMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING];
+    getCSNameMapping(userJsonMap);
 
   // 2. Get CategorySet ids
   const csIds: string[] = Object.keys(csNameMapping);
@@ -41,8 +108,7 @@ export function getCSIds(userJsonMap: UserJsonMap): string[] {
 export function getCSCIds(csId: string, userJsonMap: UserJsonMap) {
   // 1. Get submaps of Json
   // Category Set Id - Category Decoration
-  const cdMapping: GJ_CategoryDecorationMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
+  const cdMapping: GJ_CategoryDecorationMapping = getCDMapping(userJsonMap);
 
   // 2. Get category set
   // Get Category Set
@@ -63,7 +129,7 @@ export function csIdToCSName(csId: string, userJsonMap: UserJsonMap): string {
   // 1. Get submaps of Json
   // CategorySet Id - Category Name
   const csNameMapping: GJ_CategorySetNameMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING];
+    getCSNameMapping(userJsonMap);
 
   // 2. Get CategorySet names
   const csName: string = csNameMapping[csId];
@@ -81,7 +147,36 @@ export function csIdsToCSNames(
 
   return csNames;
 }
-// ACTIVE SLICE NAME -> CATEGORY SET NAMES
+
+// CATEGORY UTILS ----------------------------------------------------------------
+
+// CATEGORY IDS -> NAMES
+export function cIdToCName(cId: string, userJsonMap: UserJsonMap): string {
+  // 1. Get submaps of Json
+  const cNameMapping: GJ_CategoryNameMapping = getCNameMapping(userJsonMap);
+
+  // 2. Convert SliceName - CSId and InputName - CId
+  // Category Id
+  const cName: string = cNameMapping[cId];
+
+  return cName;
+}
+export function cIdsToCNames(
+  cIds: string[],
+  userJsonMap: UserJsonMap,
+): string[] | undefined {
+  // 1. Get Category Names
+  const cNames: string[] = cIds.map((cId: string) =>
+    cIdToCName(cId, userJsonMap),
+  );
+
+  return cNames;
+  // || [];
+}
+
+// SLICE NAME UTILS ----------------------------------------------------------------
+
+// ACTIVE SLICE NAME -> CATEGORY SET ID
 export function snToCSId(
   activeSliceName: string,
   userJsonMap: UserJsonMap,
@@ -89,7 +184,7 @@ export function snToCSId(
   // 1. Get submaps of Json
   // Slice Name - Category Set Id
   const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING];
+    getSNToCSIdMapping(userJsonMap);
 
   // 2. Get Category Set Id
   const csId: string | undefined = snToCSIdMapping[activeSliceName];
@@ -106,32 +201,6 @@ export function snToCSId(
   // || DEFAULT_CATEGORY_SET_ID;
 }
 
-// CATEGORY UTILS
-
-// CATEGORY IDS -> NAMES
-export function cIdToCName(cId: string, userJsonMap: UserJsonMap): string {
-  // 1. Get submaps of Json
-  const cIdToCNameMapping: GJ_CategoryNameMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING];
-
-  // 2. Convert SliceName - CSId and InputName - CId
-  // Category Id
-  const cName: string = cIdToCNameMapping[cId];
-
-  return cName;
-}
-export function cIdsToCNames(
-  cIds: string[],
-  userJsonMap: UserJsonMap,
-): string[] | undefined {
-  // 1. Get Category Names
-  const cNames: string[] = cIds.map((cId: string) =>
-    cIdToCName(cId, userJsonMap),
-  );
-
-  return cNames;
-  // || [];
-}
 // ACTIVE SLICE -> CATEGORY IDS
 /**
  * Get the Category ids of the provided activeSlice's CategorySet
@@ -151,9 +220,12 @@ export function snToCIds(
   // 2. Get Category Ids (CategorySet keys)
   return getCSCIds(csId, userJsonMap);
 }
-// CATEGORY ID -> CATEGORY DECORATION OBJ
-export function cIdToCD(
-  activeSliceName: string,
+
+// CATEGORY DECORATIONS UTILS ----------------------------------------------------------------
+
+// CATEGORY SET ID -> CATEGORY DECORATION OBJ
+export function csIdToCD(
+  csId: string,
   categoryId: string,
   userJsonMap: UserJsonMap,
 ): GJ_CategoryDecoration {
@@ -162,13 +234,10 @@ export function cIdToCD(
 
   // 1. Get submaps of Json
   const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING];
-  const cdMapping: GJ_CategoryDecorationMapping =
-    userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
+    getSNToCSIdMapping(userJsonMap);
+  const cdMapping: GJ_CategoryDecorationMapping = getCDMapping(userJsonMap);
 
-  // 2. Convert SliceName to CategorySet Id + CategoryId to CategoryDecoration
-  // CategorySet Id
-  const csId: string = snToCSIdMapping[activeSliceName];
+  // 2. Convert CategorySetId + CategoryId to CategoryDecoration
   try {
     // Get CategoryDecoration from CategorySliceId.CategoryId
     const cd: GJ_CategoryDecoration = cdMapping[csId][categoryId];
@@ -178,21 +247,40 @@ export function cIdToCD(
     // console.log(cd);
     if (cd === undefined)
       throw new Error(
-        `cIdToCD(): 'cd' === undefined; Generate a default CategoryDecoration`,
+        `csIdToCD(): 'cd' === undefined; Generate a default CategoryDecoration`,
       );
     return cd;
   } catch (err) {
-    console.log('SHOULD GO HEERRREEE');
+    console.log('csIdToCD() Error Below:');
     console.log(err);
     // CategorySetId.CategoryId does not exist
     return genDefaultCategoryDecoration(categoryId);
   }
 }
+
+// SLICE NAME -> CATEGORY DECORATION OBJ
+export function snToCD(
+  activeSliceName: string,
+  categoryId: string,
+  userJsonMap: UserJsonMap,
+): GJ_CategoryDecoration {
+  // 1. Get submaps of Json
+  const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
+    getSNToCSIdMapping(userJsonMap);
+
+  // 2. Convert SliceName to CategorySet Id
+  // CategorySet Id
+  const csId: string = snToCSIdMapping[activeSliceName];
+
+  return csIdToCD(csId, categoryId, userJsonMap);
+}
+
+// INPUT NAME UTILS ----------------------------------------------------------------
+
 // INPUT NAME -> CATEGORY ID
 export function inToLastCId(
   inputName: string,
   userJsonMap: UserJsonMap,
-  caller: string,
 ): string {
   let cId: string = UNASSIGNED_CATEGORY_ID;
 
@@ -200,15 +288,14 @@ export function inToLastCId(
     // 1. Get submaps of Json
     // Input Name - Category Id
     const inToCIdMapping: ASJ_InputNameToCategoryIdMapping =
-      userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
-
+      getINToCIdMapping(userJsonMap);
     // console.log('inToLastCId():');
     // console.log(caller);
     // console.log(inToCIdMapping);
 
     // 2. Convert SliceName - CSId and InputName - CId
     // Category Id
-    cId = inToCIdMapping[inputName].categoryId;
+    cId = inToCIdMapping[inputName];
     // console.log(cId);
   } catch (err) {
     console.log('Error was caught, and this is acceptable behavior');
@@ -271,7 +358,7 @@ export function getOutputDecorationValue(
 ): OutputDecoration {
   // 1. Get all output decorations
   const outputDecorations: ASJ_OutputNameToDecorationMapping =
-    userJsonMap[ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING];
+    getONToCDMapping(userJsonMap);
 
   // 2. Get outputDecoration
   const outputDecoration: OutputDecoration | undefined =
