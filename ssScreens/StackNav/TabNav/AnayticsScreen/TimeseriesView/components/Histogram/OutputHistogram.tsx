@@ -5,7 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HistogramWSlider from 'ssComponents/Charts/Histogram/HistogramWSlider';
 import {RootState, AppDispatch} from 'ssRedux/index';
-import {getOutputDecorationList} from 'ssDatabase/hardware/realm/userJson/utils';
+import {getOutputDecorationList} from 'ssDatabase/hardware/realm/userJson/utils/outputFormatting';
 import {GradientColor} from 'ssComponents/Charts/Histogram/Histogram';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';

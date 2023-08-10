@@ -13,7 +13,7 @@ import GrowingVennInputDisplay from './GrowingVennInputDisplay';
 import {
   getOutputDecorationValue,
   getOutputDecorationList,
-} from 'ssDatabase/hardware/realm/userJson/utils';
+} from 'ssDatabase/hardware/realm/userJson/utils/outputFormatting';
 import {VennByMonth} from 'ssDatabase/api/analytics/timeseries/types';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 import {CallbackArgs} from 'victory-core';

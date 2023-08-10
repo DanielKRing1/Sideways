@@ -7,7 +7,10 @@ import {ID_KEY, RankedNode} from '@asianpersonn/realm-graph';
 import MyText from '../../../../../../ssComponents/ReactNative/MyText';
 import {FlexCol, FlexRow} from '../../../../../../ssComponents/Flex';
 import {RootState} from 'ssRedux/index';
-import {snToCD, inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
+import {
+  snToCD,
+  inToLastCId,
+} from 'ssDatabase/hardware/realm/userJson/utils/joins';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import {DISPLAY_SIZE} from '../../../../../../global';
@@ -42,7 +45,7 @@ const NodeStats: FC<NodeStatsProps> = props => {
     const inputName: string =
       nodeStats !== undefined ? stripNodePostfix(nodeStats.id).id : '';
 
-    const cId: string = inToLastCId(inputName, fullUserJsonMap, 'nodestats');
+    const cId: string = inToLastCId(inputName, fullUserJsonMap);
     const cd: GJ_CategoryDecoration = snToCD(
       activeSliceName,
       cId,

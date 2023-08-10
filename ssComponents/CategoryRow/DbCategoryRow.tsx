@@ -27,7 +27,10 @@ import GlobalDriver from 'ssDatabase/api/userJson/globalDriver';
 
 import BaseCategoryRow, {BaseCategoryRowProps} from './BaseCategoryRow';
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {inToLastCId, snToCSId} from 'ssDatabase/hardware/realm/userJson/utils';
+import {
+  inToLastCId,
+  snToCSId,
+} from 'ssDatabase/hardware/realm/userJson/utils/joins';
 import {
   startRefreshCategoryMapping,
   startRefreshInputNameToCategoryNameMapping,
@@ -67,7 +70,7 @@ const DbCategoryRow = forwardRef<View, DbCategoryRowProps>((props, ref) => {
     categoryIdProp !== undefined
       ? categoryIdProp
       : useMemo(
-          () => inToLastCId(inputName, fullUserJsonMap, 'dbcategoryrow'),
+          () => inToLastCId(inputName, fullUserJsonMap),
           [inputName, fullUserJsonMap],
         );
 

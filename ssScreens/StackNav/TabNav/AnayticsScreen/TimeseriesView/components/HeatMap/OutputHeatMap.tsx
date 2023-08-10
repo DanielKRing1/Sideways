@@ -6,7 +6,7 @@ import {RootState, AppDispatch} from 'ssRedux/index';
 import MyText from 'ssComponents/ReactNative/MyText';
 import HeatMapWSlider from 'ssComponents/Charts/HeatMap/HeatMapWSlider';
 import {PartialHeatMapCell} from 'ssComponents/Charts/HeatMap/HeatMap';
-import {getOutputDecorationList} from 'ssDatabase/hardware/realm/userJson/utils';
+import {getOutputDecorationList} from 'ssDatabase/hardware/realm/userJson/utils/outputFormatting';
 import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
 import OutputHeatMapCell from './OutputHeatMapCell';
 import {HeatMapDay} from 'ssDatabase/api/analytics/timeseries/types';

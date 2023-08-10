@@ -6,7 +6,7 @@ import {CallbackArgs} from 'victory-core';
 import MyText from 'ssComponents/ReactNative/MyText';
 import BinnedLineGraph from 'ssComponents/Charts/Line/BinnedLineGraph';
 import {RootState} from 'ssRedux/index';
-import {getOutputDecorationSubset} from 'ssDatabase/hardware/realm/userJson/utils';
+import {getOutputDecorationSubset} from 'ssDatabase/hardware/realm/userJson/utils/outputFormatting';
 import {XDomain} from 'ssComponents/Charts/types';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 import {StringMap} from '../../../../../../../global';

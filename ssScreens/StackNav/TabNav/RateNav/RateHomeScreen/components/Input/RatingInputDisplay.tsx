@@ -18,7 +18,7 @@ import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants
 import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
 import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
-import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils';
+import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils/joins';
 import {getStartingId} from 'ssUtils/id';
 import {GOOD_POSTFIX, toggleNodePostfix} from 'ssDatabase/api/types';
 import AutoCompleteDisplay, {
@@ -76,7 +76,7 @@ const RatingInputDisplay: FC<RatingInputDisplayProps> = props => {
   );
   // Select category selector
   const getInputCategory = (inputName: string) =>
-    inToLastCId(inputName, fullUserJsonMap, 'RatingInputSelector');
+    inToLastCId(inputName, fullUserJsonMap);
   const dispatch: AppDispatch = useDispatch();
 
   // IDS

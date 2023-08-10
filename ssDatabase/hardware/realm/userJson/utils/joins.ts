@@ -1,27 +1,29 @@
+/**
+ * Utils for accessing the userJson database
+ * Essentially utility methods to join tables
+ */
+
 import {
-  DEFAULT_CATEGORY_ICON,
   UNASSIGNED_CATEGORY_ID,
-  DEFAULT_CATEGORY_NAME,
-  DEFAULT_OUTPUT_ICON,
   genDefaultCategoryDecoration,
 } from 'ssDatabase/api/userJson/category/constants';
 import {
   ASJ_InputNameToCategoryIdMapping,
-  ASJ_CATEGORY_ROW_KEY,
   GJ_SliceNameToCategorySetIdMapping,
   GJ_CategoryDecoration,
   GJ_CategorySet,
   GJ_CategoryDecorationMapping,
-  OutputDecoration,
-  ASJ_OutputNameToDecorationMapping,
-  GJ_CategoryWName,
   GJ_CategoryNameMapping,
   GJ_CategorySetNameMapping,
 } from 'ssDatabase/api/userJson/category/types';
-import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
-import {hashToColor} from 'ssUtils/color';
-import {Dict} from '../../../../global';
+import {
+  getCSNameMapping,
+  getCDMapping,
+  getCNameMapping,
+  getSNToCSIdMapping,
+  getINToCIdMapping,
+} from './getTables';
 
 /*
   CATEGORY_SET_NAME_MAPPING
@@ -57,38 +59,6 @@ import {Dict} from '../../../../global';
 
 
 */
-
-function getCSNameMapping(userJsonMap: UserJsonMap): GJ_CategorySetNameMapping {
-  // 1. Get submaps of Json
-  // CategorySet Id - Category Name
-  return userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING];
-}
-function getCNameMapping(userJsonMap: UserJsonMap): GJ_CategoryNameMapping {
-  // 1. Get submaps of Json
-  // Category Id - Category Name
-  return userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING];
-}
-function getCDMapping(userJsonMap: UserJsonMap): GJ_CategoryDecorationMapping {
-  return userJsonMap[GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING];
-}
-function getSNToCSIdMapping(
-  userJsonMap: UserJsonMap,
-): GJ_SliceNameToCategorySetIdMapping {
-  return userJsonMap[
-    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING
-  ];
-}
-function getINToCIdMapping(
-  userJsonMap: UserJsonMap,
-): ASJ_InputNameToCategoryIdMapping {
-  return userJsonMap[ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING];
-}
-
-function getONToCDMapping(
-  userJsonMap: UserJsonMap,
-): ASJ_OutputNameToDecorationMapping {
-  return userJsonMap[ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING];
-}
 
 // CATEGORY SET UTILS----------------------------------------------------------------
 
@@ -303,73 +273,4 @@ export function inToLastCId(
   }
 
   return cId;
-}
-
-// OUTPUT UTILS
-
-// colorMap={{
-//     0: 'green',
-//     1: '#FFA99F',
-//     2: 'yellow',
-//   }}
-export function getOutputDecorationSubset<T>(
-  outputNames: string[],
-  userJsonMap: UserJsonMap,
-  mutateKey: (i: number) => number | string,
-  mutateValue: (outputDecorationValue: OutputDecoration) => T,
-): Dict<T> {
-  return outputNames.reduce<Dict<T>>((acc, outputName: string, i) => {
-    acc[mutateKey(i)] = mutateValue(
-      getOutputDecorationValue(outputName, userJsonMap),
-    );
-
-    return acc;
-  }, {});
-}
-
-// gradientColors={[
-//     { offset: "0%", color:"green" },
-//     { offset: "40%", color:"#FFA99F" },
-//     { offset: "100%", color:"yellow" },
-//   ]}
-export function getOutputDecorationList<T>(
-  outputNames: string[],
-  userJsonMap: UserJsonMap,
-  mutateValue: (i: number, outputDecorationValue: OutputDecoration) => T,
-): T[] {
-  return outputNames.reduce<T[]>((acc, outputName: string, i) => {
-    acc.push(mutateValue(i, getOutputDecorationValue(outputName, userJsonMap)));
-
-    return acc;
-  }, []);
-}
-
-/**
- * Dig outputName's OutputDecoration obj out of 'userJsonMap',
- * Returning a default obj if none
- *
- * @param outputName
- * @param userJsonMap
- * @returns
- */
-export function getOutputDecorationValue(
-  outputName: string,
-  userJsonMap: UserJsonMap,
-): OutputDecoration {
-  // 1. Get all output decorations
-  const outputDecorations: ASJ_OutputNameToDecorationMapping =
-    getONToCDMapping(userJsonMap);
-
-  // 2. Get outputDecoration
-  const outputDecoration: OutputDecoration | undefined =
-    outputDecorations[outputName];
-
-  return outputDecoration || genDefaultOutputDecoration(outputName);
-}
-
-function genDefaultOutputDecoration(outputName: string) {
-  return {
-    icon: DEFAULT_OUTPUT_ICON,
-    color: hashToColor(outputName),
-  };
 }

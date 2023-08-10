@@ -12,7 +12,7 @@ import {
   getCSCIds,
   csIdToCD,
   snToCSId,
-} from 'ssDatabase/hardware/realm/userJson/utils';
+} from 'ssDatabase/hardware/realm/userJson/utils/joins';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
 

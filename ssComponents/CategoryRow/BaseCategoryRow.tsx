@@ -26,7 +26,7 @@ import CategoryRowIconButton from './components/CategoryRowIconButton';
 import DecorationRowModal from './components/Modal';
 import DecorationRowColorPicker from './components/ColorPicker';
 
-import {snToCD} from 'ssDatabase/hardware/realm/userJson/utils';
+import {snToCD} from 'ssDatabase/hardware/realm/userJson/utils/joins';
 import {DISPLAY_SIZE, HexColor} from '../../global';
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {GJ_CategoryDecoration} from 'ssDatabase/api/userJson/category/types';
