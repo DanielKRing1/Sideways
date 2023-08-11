@@ -1,3 +1,8 @@
+/**
+ * API for getting all RealmJSON data
+ * Calls GlobalDriver and CategoryDriver
+ */
+
 import RealmJsonManager from '@asianpersonn/realm-json';
 
 import {UserJsonDriver, UserJsonMap} from 'ssDatabase/api/userJson/types';
@@ -62,11 +67,22 @@ const closeAll = async (): Promise<void> => {
   Promise.all([userClosePromise, globalClosePromise, categoryClosePromise]);
 };
 
-const throwLoadError = (): void | never => {
+const getGlobalJsonDriver = () => {
   if (!isLoaded)
     throw new Error(
       'Must call "load()" before RealmJson (user json) can be used',
     );
+
+  return GlobalJsonDriver;
+};
+
+const getCategoryJsonDriver = () => {
+  if (!isLoaded)
+    throw new Error(
+      'Must call "load()" before RealmJson (user json) can be used',
+    );
+
+  return CategoryJsonDriver;
 };
 
 /**
@@ -77,23 +93,22 @@ const throwLoadError = (): void | never => {
  * @returns
  */
 const getAllUserJson = (activeSlice: string): UserJsonMap | never => {
-  throwLoadError();
-
   const cdMapping: GJ_CategoryDecorationMapping =
-    GlobalJsonDriver.getCDMapping();
+    getGlobalJsonDriver().getCDMapping();
   const categorySetNameMapping: GJ_CategorySetNameMapping =
-    GlobalJsonDriver.getCSNameMapping();
+    getGlobalJsonDriver().getCSNameMapping();
   const categoryNameMapping: GJ_CategoryNameMapping =
     GlobalJsonDriver.getCategoryNameMapping();
   const sliceToCategorySetMapping: GJ_SliceNameToCategorySetIdMapping =
-    GlobalJsonDriver.getSliceToCategoryMapping();
+    getGlobalJsonDriver().getSliceToCSIdMapping();
 
   let inputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping = {};
   let outputNameToDecorationMapping: ASJ_OutputNameToDecorationMapping = {};
   try {
-    inputNameToCategoryNameMapping = CategoryJsonDriver.getAllInputCategories();
+    inputNameToCategoryNameMapping =
+      getCategoryJsonDriver().getAllInputCategories();
     outputNameToDecorationMapping =
-      CategoryJsonDriver.getAllOutputDecorations();
+      getCategoryJsonDriver().getAllOutputDecorations();
   } catch (err) {
     console.log(err);
     console.log(

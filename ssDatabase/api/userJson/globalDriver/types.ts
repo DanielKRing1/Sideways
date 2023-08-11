@@ -52,5 +52,5 @@ export type GlobalJsonDriver = {
   getCDMapping: () => GJ_CategoryDecorationMapping | never;
   getCSNameMapping: () => GJ_CategorySetNameMapping | never;
   getCategoryNameMapping: () => GJ_CategoryNameMapping | never;
-  getSliceToCategoryMapping: () => GJ_SliceNameToCategorySetIdMapping | never;
+  getSliceToCSIdMapping: () => GJ_SliceNameToCategorySetIdMapping | never;
 };

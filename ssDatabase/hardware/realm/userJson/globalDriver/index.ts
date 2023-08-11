@@ -1,4 +1,7 @@
 /**
+ * API to add/rm/edit Categorys, CateogrySets, and CategoryDecorations
+ * (by updating json in the RealmJson [GLOBAL_COLLECTION_KEY] Table)
+ *
  * This Realm Driver reads/writes to/from a Global RealmJson collection
  * of AllCategorySet and sliceName to csName mapping
  */
@@ -9,6 +12,7 @@ import {
   DEFAULT_REALM_JSON_META_REALM_PATH,
   DEFAULT_REALM_JSON_LOADABLE_REALM_PATH,
 } from '../config';
+import {Dict} from '../../../../../global';
 import {
   GlobalJsonDriver,
   GLOBAL_COLLECTION_KEY,
@@ -75,11 +79,86 @@ const closeAll = async (): Promise<void> => {
   isLoaded = false;
 };
 
-const throwLoadError = (): void | never => {
+const getRealmJsonManager = (): typeof RealmJsonManager => {
   if (!isLoaded)
     throw new Error(
       'Must call "load()" before RealmJson (global json) can be used',
     );
+
+  return RealmJsonManager;
+};
+
+/**
+ * Get a JSON collection (which is a Table composed of a single json object/single row within the GLOBAL_COLLECTION_KEY schema)
+ * Then return a JSON subvalue within that collection
+ *
+ * @param nestedKey
+ */
+const getGlobalJson = (nestedKey: string) => {
+  return getRealmJsonManager()
+    .getCollection(GLOBAL_COLLECTION_KEY)
+    .getJson(nestedKey);
+};
+
+const setGlobalJson = (nestedKey: string, newJson: Dict<any>) => {
+  return getRealmJsonManager()
+    .getCollection(GLOBAL_COLLECTION_KEY)
+    .setJson(nestedKey, newJson);
+};
+
+/**
+ * Get the CategoryMapping indexed by CategorySetId.CategoryId
+ *
+ * @returns
+ */
+const getCDMapping = (): GJ_CategoryDecorationMapping | never => {
+  // 1. Get Json Row
+  const cdMapping: GJ_CategoryDecorationMapping = getGlobalJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
+  );
+
+  return cdMapping;
+};
+
+/**
+ * Get all CategorySet id -> name
+ *
+ * @returns
+ */
+const getCSNameMapping = (): GJ_CategorySetNameMapping | never => {
+  // 1. Get Json Row
+  const csNameMapping: GJ_CategorySetNameMapping = getGlobalJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
+  );
+
+  return csNameMapping;
+};
+
+/**
+ * Get all Category ids (not names)
+ *
+ * @returns
+ */
+const getCategoryNameMapping = (): GJ_CategoryNameMapping | never => {
+  // 1. Get Json Row
+  const cNameMapping: GJ_CategoryNameMapping = getGlobalJson(
+    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
+  );
+
+  return cNameMapping;
+};
+
+/**
+ * Get entire mapping for sliceName to csName
+ *
+ * @returns
+ */
+const getSliceToCSIdMapping = (): GJ_CategoryNameMapping | never => {
+  // 1. Get Json Row
+  const sliceToCSIdMapping: GJ_SliceNameToCategorySetIdMapping = getGlobalJson(
+    GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
+  );
+  return sliceToCSIdMapping;
 };
 
 /**
@@ -92,22 +171,15 @@ const throwLoadError = (): void | never => {
  * @param csName
  */
 const hasCS = (csName: string): boolean => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Rows
-  const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
+  // 1. Get Json Rows
+  const csNameMapping: GJ_CategorySetNameMapping = getGlobalJson(
     GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
   );
 
-  // 3. Get CategorySet id -> name mapping
+  // 2. Get CategorySet id -> name mapping
   const allCSIds: Set<string> = new Set(Object.values(csNameMapping));
 
-  // 4. Check if csName already exists
+  // 3. Check if csName already exists
   return allCSIds.has(csName);
 };
 
@@ -123,25 +195,14 @@ const addPredefinedCS = (
   predefinedCSName: string,
   userCS: GJ_UserCategorySet,
 ): void | never => {
-  throwLoadError();
-
   // 0. Do not add duplicate CategorySet
   if (hasCS(predefinedCSName)) return;
 
   console.log('addPredefinedCS HASSS???');
   console.log(hasCS(predefinedCSName));
 
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Rows
-  const cNameMapping: GJ_CategoryNameMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
-  );
-
-  // 3.2. Create ids for newCS.cNames and
+  // 1. Get Json Rows
+  const cNameMapping: GJ_CategoryNameMapping = getCategoryNameMapping();
   //      Replace cNames with ids
   const existingCIds: Set<string> = new Set(Object.keys(cNameMapping));
   const newCS: GJ_CategorySet = {};
@@ -183,7 +244,6 @@ const addCS = (
   cscNameMapping: GJ_CategoryNameMapping,
 ): void | never => {
   console.log('ADDCS1-----------------------');
-  throwLoadError();
   console.log('ADDCS2-----------------------');
 
   // 0. Do not add duplicate CategorySet name
@@ -192,38 +252,29 @@ const addCS = (
   console.log('addCS HASSS???');
   console.log(hasCS(csName));
 
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
   console.log(1);
 
-  // 2. Get Json Rows
-  const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
-  );
+  // 1. Get Json Rows
+  const csNameMapping: GJ_CategorySetNameMapping = getCSNameMapping();
   console.log(2);
-  const cNameMapping: GJ_CategoryNameMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
-  );
+  const cNameMapping: GJ_CategoryNameMapping = getCategoryNameMapping();
   console.log(3);
-  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-  );
+  const cdMapping: GJ_CategoryDecorationMapping = getCDMapping();
   console.log(4);
 
-  // 3.1. Save new csId
+  // 2.1. Save new csId
   // Create new csId only if one is not provided (pre-defined Category Sets will have their own csIds)
   if (csId === '') csId = getUniqueId(5, new Set(Object.keys(csNameMapping)));
   if (csNameMapping[csId] === undefined)
-    jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
+    setGlobalJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
       ...csNameMapping,
       [csId]: csName,
     });
   console.log(5);
 
-  // 3.2. Delete cId's that have been removed (do not exist in the new CS)
+  // TODO: 8/11/2023:
+  // WHAT IS THIS?
+  // 2.2. Delete cId's that have been removed (do not exist in the new CS)
   // If the CS already exists, there will be keys, else empty list
   const existingCIds: string[] = cdMapping[csId]
     ? Object.keys(cdMapping[csId])
@@ -233,8 +284,8 @@ const addCS = (
   }
   console.log(6);
 
-  // 3.3. Save new cNameMapping
-  jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING, {
+  // 2.3. Save new cNameMapping
+  setGlobalJson(GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING, {
     ...cNameMapping,
     ...cscNameMapping,
   });
@@ -246,8 +297,8 @@ const addCS = (
     ...cscNameMapping,
   });
 
-  // 3.4. Save new cs
-  jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
+  // 2.4. Save new cs
+  setGlobalJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
     ...cdMapping,
     [csId]: cs,
   });
@@ -265,40 +316,19 @@ const addCS = (
  * @param csId
  */
 const rmCS = (csId: string): void | never => {
-  throwLoadError();
+  // 1. Get Json Row
+  const cdMapping: GJ_CategoryDecorationMapping = getCDMapping();
 
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Row
-  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-  );
-
-  // 3. Remove CategorySet id from cdMapping
+  // 2. Remove CategorySet id from cdMapping
   delete cdMapping[csId];
 
-  // 4. Set Json Row, new cdMapping
-  jsonCollection.setJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-    cdMapping,
-  );
+  // 3. Set Json Row, new cdMapping
+  setGlobalJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, cdMapping);
 };
 
 const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Rows
-  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-  );
+  // 1. Get Json Rows
+  const cdMapping: GJ_CategoryDecorationMapping = getCDMapping();
 
   // 2. Get CategorySet
   const cs: GJ_CategorySet = cdMapping[csId];
@@ -313,7 +343,7 @@ const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
     if (cdInfo.cId !== undefined) cd.cId = cdInfo.cId;
 
     // 5. Save new id-mapped category
-    jsonCollection.setJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
+    setGlobalJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {
       ...cdMapping,
       [csId]: {
         ...cdMapping[csId],
@@ -339,92 +369,20 @@ const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
 };
 
 /**
- * Get the CategoryMapping indexed by CategorySetId.CategoryId
- *
- * @returns
- */
-const getCDMapping = (): GJ_CategoryDecorationMapping | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Row
-  const cdMapping: GJ_CategoryDecorationMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING,
-  );
-
-  return cdMapping;
-};
-
-/**
- * Get all CategorySet id -> name
- *
- * @returns
- */
-const getCSNameMapping = (): GJ_CategorySetNameMapping | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Row
-  const csNameMapping: GJ_CategorySetNameMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING,
-  );
-
-  return csNameMapping;
-};
-
-/**
- * Get all Category ids (not names)
- *
- * @returns
- */
-const getCategoryNameMapping = (): GJ_CategoryNameMapping | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Row
-  const cNameMapping: GJ_CategoryNameMapping = jsonCollection.getJson(
-    GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING,
-  );
-
-  return cNameMapping;
-};
-
-/**
  * Add/Overwrite a sliceName key from the GJ_SliceNameToCategorySetIdMapping mapping
  *
  * @param sliceName
  */
 const addSliceToCSMapping = (sliceName: string, csId: string): void | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Json Row
+  // 1. Json Row
   const sliceToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    jsonCollection.getJson(
-      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
-    );
+    getSliceToCSIdMapping();
 
-  // 3. Add/Overwrite Json key, sliceName to csName
+  // 2. Add/Overwrite Json key, sliceName to csName
   sliceToCSIdMapping[sliceName] = csId;
 
-  // 4. Set Json Row
-  jsonCollection.setJson(
+  // 3. Set Json Row
+  setGlobalJson(
     GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     sliceToCSIdMapping,
   );
@@ -436,51 +394,18 @@ const addSliceToCSMapping = (sliceName: string, csId: string): void | never => {
  * @param sliceName
  */
 const rmSliceToCSMapping = (sliceName: string): void | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2.Json Row
+  // 1. Json Row
   const sliceToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    jsonCollection.getJson(
-      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
-    );
+    getSliceToCSIdMapping();
 
-  // 3. Delete Json key
+  // 2. Delete Json key
   delete sliceToCSIdMapping[sliceName];
 
-  // 4. Set Json Row
-  jsonCollection.setJson(
+  // 3. Set Json Row
+  setGlobalJson(
     GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
     sliceToCSIdMapping,
   );
-};
-
-/**
- * Get entire mapping for sliceName to csName
- *
- * @returns
- */
-const getSliceToCategoryMapping = ():
-  | GJ_SliceNameToCategorySetIdMapping
-  | never => {
-  throwLoadError();
-
-  // 1. Get Json Table
-  const jsonCollection: RealmJson = RealmJsonManager.getCollection(
-    GLOBAL_COLLECTION_KEY,
-  );
-
-  // 2. Get Json Row
-  const sliceToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
-    jsonCollection.getJson(
-      GJ_COLLECTION_ROW_KEY.SLICE_NAME_TO_CATEGORY_SET_ID_MAPPING,
-    );
-
-  return sliceToCSIdMapping;
 };
 
 const Driver: GlobalJsonDriver = {
@@ -499,7 +424,7 @@ const Driver: GlobalJsonDriver = {
   getCDMapping,
   getCSNameMapping,
   getCategoryNameMapping,
-  getSliceToCategoryMapping,
+  getSliceToCSIdMapping,
 };
 
 export default Driver;

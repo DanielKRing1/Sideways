@@ -202,7 +202,7 @@ export const startRefreshSliceToCategoryMapping = createAsyncThunk<
 
     // 2. Get fresh sliceToCategoryMapping
     const freshSliceToCategoryMapping: GJ_SliceNameToCategorySetIdMapping =
-      await globalDriver.getSliceToCategoryMapping();
+      await globalDriver.getSliceToCSIdMapping();
 
     // TODO: Since ReduxToolkit uses Immer, do i need to mutate the object here or
     // can i just destructure the top level in the reducer?

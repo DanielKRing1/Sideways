@@ -1,3 +1,7 @@
+/**
+ * API for interacting with RealmStack/Graph
+ */
+
 import RealmGraphManager, {
   RealmGraph,
   RatingMode,
