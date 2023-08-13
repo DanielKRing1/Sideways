@@ -6,7 +6,6 @@ import {
 } from 'ssDatabase/api/analytics/recommendation/types';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {HiLoRankingByOutput, RankedNodesMap} from '../../../../api/types';
-import {throwLoadError} from '../../core/dbDriver';
 import {sortRankedNodesMapByAllOutputs} from '../utils';
 
 // GET GRAPH RECOMMENDATIONS
@@ -30,7 +29,6 @@ const getRecommendations = ({
   iterations = 20,
   dampingFactor = 1,
 }: GetRecommendationsArgs): HiLoRankingByOutput | never => {
-  throwLoadError();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   const rankedNodes: RankedNodesMap =
@@ -61,7 +59,6 @@ const pageRank = ({
   iterations,
   dampingFactor,
 }: PageRankArgs): HiLoRankingByOutput | never => {
-  throwLoadError();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   const rankingsMap: RankedNodesMap = realmGraph.pageRank(

@@ -17,7 +17,7 @@ import {
   SINGLE_KEY,
   NODE_ID,
 } from '../../../../api/types';
-import dbDriver, {throwLoadError} from '../../core/dbDriver';
+import dbDriver from '../../core/dbDriver';
 import {filterCGEntityAttrs, getDestinationNodeId} from '../utils';
 
 // GET IDENTITY STATS
@@ -28,8 +28,6 @@ const getNodeStats = ({
   nodeId,
   rawOutputs,
 }: GetNodeStatsArgs): RankedNode | undefined => {
-  throwLoadError();
-
   const cgnode: CGNode | undefined = dbDriver.getNode(
     activeSliceName,
     nodeId,
@@ -138,7 +136,6 @@ const getCollectivelyTandemNodes = async ({
   rawOutputs,
   listLength,
 }: GetNodeStatsByOutputArgs): Promise<HiLoRanking> => {
-  throwLoadError();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   return _getTandemNodes(
@@ -167,7 +164,6 @@ const getSinglyTandemNodes = async ({
   rawOutputs,
   listLength,
 }: GetNodeStatsByOutputArgs): Promise<HiLoRankingByOutput> => {
-  throwLoadError();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   return await _getTandemNodesByOutput(
@@ -187,7 +183,6 @@ const getHighlyRatedTandemNodes = async ({
   rawOutputs,
   listLength,
 }: GetNodeStatsByOutputArgs): Promise<HiLoRankingByOutput> => {
-  throwLoadError();
   const realmGraph: RealmGraph = dbDriver.getGraph(activeSliceName, graphType);
 
   return await _getTandemNodesByOutput(
