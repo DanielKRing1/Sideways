@@ -10,7 +10,7 @@ import GlobalDriver from 'ssDatabase/api/userJson/globalDriver';
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {startRefreshAllUserJson} from 'ssRedux/userJson';
 
-const useCreateDefinedCategorySet = () => {
+export const useCreateDefinedCategorySet = () => {
   // REDUX
   const {activeSliceName} = useSelector(
     (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
@@ -30,10 +30,4 @@ const useCreateDefinedCategorySet = () => {
 
     console.log('went through');
   }, []);
-};
-
-export const UseCreateDefinedCategorySet: FC<{}> = () => {
-  useCreateDefinedCategorySet();
-
-  return <></>;
 };

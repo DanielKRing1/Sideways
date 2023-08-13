@@ -36,8 +36,7 @@ import {
 } from './ssContexts/RequireActiveSlice/RequireActiveSlice';
 import MyThemeProvider from './ssTheme/ThemeProvider';
 import {resetRealm} from './ssRealm/reset';
-import {UseStartCacheAllDbInputsOutputs} from 'ssHooks/toplevel/useStartCacheAllDbInputsOutputs';
-import {UseCreateDefinedCategorySet} from 'ssHooks/toplevel/useCreateDefinedCategorySet';
+import AppStateManager from 'ssHooks/toplevel/AppStateManager';
 
 const NewApp = () => {
   // resetRealm();
@@ -62,10 +61,9 @@ export default NewApp;
 const AppContent = () => {
   return (
     <DbLoaderProvider>
-      <RequireActiveSliceProvider>
-        <UseStartCacheAllDbInputsOutputs />
-        <UseCreateDefinedCategorySet />
+      <AppStateManager />
 
+      <RequireActiveSliceProvider>
         <StackNavigator />
       </RequireActiveSliceProvider>
     </DbLoaderProvider>
