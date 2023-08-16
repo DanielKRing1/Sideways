@@ -6,9 +6,11 @@ import {
   GraphType,
   SidewaysSnapshotRowPrimitive,
 } from 'ssDatabase/api/core/types';
+import {ThunkConfig} from '../../ssRedux/types';
+
 import {addNodePostfix, NODE_ID, stripNodePostfix} from 'ssDatabase/api/types';
-import {RateInput, startRefreshUiAfterRate} from 'ssRedux/rateSidewaysSlice';
-import {ThunkConfig} from '../types';
+import {RateInput} from 'ssRedux/rateSidewaysSlice';
+import {startRefreshUiAfterRate} from 'ssRedux/userJson';
 
 // INITIAL STATE
 
@@ -25,8 +27,6 @@ export interface UndoRateSSState {
   inputs: RateInput[];
   outputs: string[];
   rating: number;
-
-  undoratedSignature: {};
 }
 
 const initialState: UndoRateSSState = {
@@ -48,8 +48,6 @@ const initialState: UndoRateSSState = {
   inputs: [],
   outputs: [],
   rating: 0,
-
-  undoratedSignature: {},
 };
 
 // ASYNC THUNKS
@@ -58,7 +56,7 @@ export const startUpdateRate = createAsyncThunk<
   boolean,
   undefined,
   ThunkConfig
->('undorateSS/startUpdateRate', async (undef, thunkAPI) => {
+>('undorrateSS/startUpdateRate', async (undef, thunkAPI) => {
   // REDUX STATE
   const {activeSliceName} =
     thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
@@ -76,6 +74,87 @@ export const startUpdateRate = createAsyncThunk<
 
   // ORIGINAL SNAPSHOT
   const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
+
+  // 1. Delete original Graph rating
+  const deleteGraphPromises: Promise<any>[] = deleteGraphRatingHelper(
+    activeSliceName,
+    originalSnapshot,
+  );
+
+  await Promise.all(deleteGraphPromises);
+
+  // 2. Apply new Graph rating
+  const updatePromises: Promise<any>[] = updateRatingHelper(
+    activeSliceName,
+    newOutputs,
+    newInputs,
+    newCategories,
+    newRating,
+    indexToUpdate,
+  );
+
+  await Promise.all(updatePromises);
+
+  // 3. Refresh UI (Stack + Input names)
+  thunkAPI.dispatch(startRefreshUiAfterRate());
+
+  // 4. Reset rating inputs
+  thunkAPI.dispatch(reset());
+
+  return true;
+});
+
+type DeleteRateSSThunkArgs = {
+  indexToRm: number;
+};
+
+export const startDeleteRate = createAsyncThunk<
+  boolean,
+  DeleteRateSSThunkArgs,
+  ThunkConfig
+>('undorrateSS/startDeleteRate', async (args, thunkAPI) => {
+  // ARGS
+  const {indexToRm} = args;
+
+  const {activeSliceName} =
+    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
+
+  // 1. Delete original Graph rating
+  const deleteGraphPromises: Promise<any>[] = deleteGraphRatingHelper(
+    activeSliceName,
+    originalSnapshot,
+  );
+
+  // 2. Remove from Stack
+  const deleteSnapshotPromise: Promise<any> = DbDriver.deleteSnapshotIndexes(
+    activeSliceName,
+    [indexToRm],
+  );
+
+  await Promise.all([...deleteGraphPromises, deleteSnapshotPromise]);
+
+  // 3. Refresh UI to reflect new Stack and cleaned cached Db Inputs/Outputs
+  thunkAPI.dispatch(startRefreshUiAfterRate());
+
+  // 4. Reset rating inputs
+  thunkAPI.dispatch(reset());
+
+  return true;
+});
+
+/**
+ * Deletes Input and Category Graph ratings
+ *
+ * @param activeSliceName
+ * @param originalSnapshot
+ * @returns
+ */
+const deleteGraphRatingHelper = (
+  activeSliceName: string,
+  originalSnapshot: SidewaysSnapshotRowPrimitive,
+) => {
+  // ORIGINAL SNAPSHOT
   const {
     inputs: originalInputs,
     categories: originalCategories,
@@ -83,12 +162,12 @@ export const startUpdateRate = createAsyncThunk<
     rating: originalRating,
   } = originalSnapshot;
 
-  // 1. Undo Graph rating
+  // 1. Undo Input Graph rating
   const undoInputGraphPromises: Promise<any>[] = originalOutputs.map(
-    (originalOutput: string) =>
+    (output: string) =>
       DbDriver.undoRateGraph(
         activeSliceName,
-        originalOutput,
+        output,
         originalInputs,
         originalRating,
         new Array(originalInputs.length).fill(
@@ -97,11 +176,12 @@ export const startUpdateRate = createAsyncThunk<
       ),
   );
 
+  // 2. Undo Category Graph rating
   const undoCategoryGraphPromises: Promise<any>[] = originalOutputs.map(
-    (originalOutput: string) =>
+    (output: string) =>
       DbDriver.undoRateGraph(
         activeSliceName,
-        originalOutput,
+        output,
         originalCategories,
         originalRating,
         new Array(originalInputs.length).fill(
@@ -111,9 +191,30 @@ export const startUpdateRate = createAsyncThunk<
       ),
   );
 
-  await Promise.all([...undoInputGraphPromises, ...undoCategoryGraphPromises]);
+  return [...undoInputGraphPromises, ...undoCategoryGraphPromises];
+};
 
-  // 2. Apply new Graph rating
+/**
+ * Updates Input and Category Graph ratings
+ * and
+ * Update Stack snapshot
+ *
+ * @param activeSliceName
+ * @param newOutputs
+ * @param newInputs
+ * @param newCategories
+ * @param newRating
+ * @param indexToUpdate
+ * @returns
+ */
+const updateRatingHelper = (
+  activeSliceName: string,
+  newOutputs: string[],
+  newInputs: string[],
+  newCategories: string[],
+  newRating: number,
+  indexToUpdate: number,
+) => {
   const updateInputGraphPromises: Promise<any>[] = newOutputs.map(
     (newOutput: string) =>
       DbDriver.rateGraph(
@@ -150,101 +251,15 @@ export const startUpdateRate = createAsyncThunk<
     newRating,
   );
 
-  await Promise.all([
+  return [
     ...updateInputGraphPromises,
     ...updateCategoryGraphPromises,
     updateSnapshotPromise,
-  ]);
-
-  // 4. Refresh UI (Stack + Input names)
-  thunkAPI.dispatch(startRefreshUiAfterRate());
-
-  return true;
-});
-
-type DeleteRateSSThunkArgs = {
-  indexToRm: number;
+  ];
 };
-
-export const startDeleteRate = createAsyncThunk<
-  boolean,
-  DeleteRateSSThunkArgs,
-  ThunkConfig
->('undorateSS/startDeleteRate', async (args, thunkAPI) => {
-  // ARGS
-  const {indexToRm} = args;
-
-  // REDUX  STATE
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
-
-  // ORIGINAL SNAPSHOT
-  const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
-  const {
-    inputs: originalInputs,
-    categories: originalCategories,
-    outputs: originalOutputs,
-    rating: originalRating,
-  } = originalSnapshot;
-
-  // 1. Undo Graph rating
-  const undoInputGraphPromises: Promise<any>[] = originalOutputs.map(
-    (output: string) =>
-      DbDriver.undoRateGraph(
-        activeSliceName,
-        output,
-        originalInputs,
-        originalRating,
-        new Array(originalInputs.length).fill(
-          1 / originalInputs.length / originalOutputs.length,
-        ),
-      ),
-  );
-
-  const undoCategoryGraphPromises: Promise<any>[] = originalOutputs.map(
-    (output: string) =>
-      DbDriver.undoRateGraph(
-        activeSliceName,
-        output,
-        originalCategories,
-        originalRating,
-        new Array(originalInputs.length).fill(
-          1 / originalInputs.length / originalOutputs.length,
-        ),
-        GraphType.Category,
-      ),
-  );
-
-  // 2. Remove from Stack
-  const deleteSnapshotPromise: Promise<any> = DbDriver.deleteSnapshotIndexes(
-    activeSliceName,
-    [indexToRm],
-  );
-
-  await Promise.all([
-    ...undoInputGraphPromises,
-    ...undoCategoryGraphPromises,
-    deleteSnapshotPromise,
-  ]);
-
-  thunkAPI.dispatch(startRefreshUiAfterRate());
-
-  // // 3. Clean input to category mapping
-  // thunkAPI.dispatch(startCleanInputCategories());
-
-  // // 4. Update all in/outputs
-  // thunkAPI.dispatch(startCacheAllDbInputsOutputs());
-
-  // 5. Reset rating inputs
-  thunkAPI.dispatch(reset());
-  thunkAPI.dispatch(forceSignatureRerender());
-
-  return true;
-});
 
 // ACTION TYPES
 
-type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetRatingAction = PayloadAction<number>;
 type SetInputsAction = PayloadAction<RateInput[]>;
 type AddInputAction = PayloadAction<RateInput>;
@@ -262,8 +277,8 @@ type StartUndoRateSSFulfilled = PayloadAction<boolean>;
 
 // SLICE
 
-export const undorateSS = createSlice({
-  name: 'undorateSS',
+export const undorrateSS = createSlice({
+  name: 'undorrateSS',
   initialState,
   reducers: {
     setReplacementRating: (state: UndoRateSSState, action: SetRatingAction) => {
@@ -306,7 +321,7 @@ export const undorateSS = createSlice({
       state.originalSnapshot = originalSnapshot;
 
       // NEW RATING
-      // Start New Rating info as Original Rating info
+      // Init New Snapshot to Original Snapshot
       state.inputs = originalSnapshot.inputs.map((input: NODE_ID, i) => {
         const {id, postfix} = stripNodePostfix(input);
 
@@ -343,29 +358,12 @@ export const undorateSS = createSlice({
       state.outputs = [];
       state.rating = 0;
     },
-    forceSignatureRerender: (
-      state: UndoRateSSState,
-      action: ForceRatingsRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      // 1. Update the ratings
-      state.undoratedSignature = {};
-    },
   },
   extraReducers: builder => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(
       startDeleteRate.fulfilled,
-      (state, action: StartUndoRateSSFulfilled) => {
-        // Add user to the state array
-
-        // 1. Update the ratings
-        state.undoratedSignature = {};
-      },
+      (state, action: StartUndoRateSSFulfilled) => {},
     );
     builder.addCase(startDeleteRate.rejected, (state, action) => {
       console.log(action.error.message);
@@ -375,7 +373,6 @@ export const undorateSS = createSlice({
 
 // Action creators are geneundorated for each case reducer function
 export const {
-  forceSignatureRerender,
   setReplacementRating,
   setReplacementInputs,
   addReplacementInput,
@@ -386,6 +383,6 @@ export const {
   removeReplacementOutput,
   setSnapshot,
   reset,
-} = undorateSS.actions;
+} = undorrateSS.actions;
 
-export default undorateSS.reducer;
+export default undorrateSS.reducer;

@@ -19,6 +19,8 @@ import categoryDriver from 'ssDatabase/api/userJson/category';
 import {CGNode} from '@asianpersonn/realm-graph';
 import {stripNodePostfix} from 'ssDatabase/api/types';
 import {rmDuplicates} from 'ssUtils/list';
+import {startCacheAllDbInputsOutputs} from 'newRedux/fetched/cachedInputsOutputs';
+import {forceSignatureRerender as forceStackSignatureRerender} from 'ssRedux/readSidewaysSlice/readStack';
 
 // INITIAL STATE
 
@@ -46,6 +48,23 @@ const initialState: UserJsonState = {
 };
 
 // THUNKS
+
+export const startRefreshUiAfterRate = createAsyncThunk<
+  boolean,
+  undefined,
+  ThunkConfig
+>('rateSS/startRefreshUiAfterRate', async (undef, thunkAPI) => {
+  // 1. Clean input to category mapping
+  thunkAPI.dispatch(startCleanInputCategories());
+
+  // 2. Update all in/outputs
+  thunkAPI.dispatch(startCacheAllDbInputsOutputs());
+
+  // 3. Refresh stack
+  thunkAPI.dispatch(forceStackSignatureRerender());
+
+  return true;
+});
 
 // REMOVE INPUTS THAT DO NOT EXIST IN GRAPH
 type StartCleanInputCategories = undefined;

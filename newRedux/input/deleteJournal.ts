@@ -1,17 +1,13 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import dbDriver from 'ssDatabase/api/core/dbDriver';
-import {ThunkConfig} from '../types';
+import {ThunkConfig} from '../../ssRedux/types';
 
 // INITIAL STATE
 
-export interface DeleteSSState {
-  deleteSSSignature: {};
-}
+export interface DeleteSSState {}
 
-const initialState: DeleteSSState = {
-  deleteSSSignature: {},
-};
+const initialState: DeleteSSState = {};
 
 // ASYNC THUNKS
 
@@ -29,45 +25,24 @@ export const startDeleteSlice = createAsyncThunk<
 
   await Promise.all([p1, p2]);
 
-  thunkAPI.dispatch(forceSignatureRerender());
-
   return true;
 });
 
 // ACTION TYPES
 
-type ForceRatingsRerenderAction = PayloadAction<undefined>;
-type StartRateSSFulfilled = PayloadAction<boolean>;
+type StartDeleteSSFulfilled = PayloadAction<boolean>;
 
 // SLICE
 
 export const deleteSS = createSlice({
   name: 'deleteSS',
   initialState,
-  reducers: {
-    forceSignatureRerender: (
-      state: DeleteSSState,
-      action: ForceRatingsRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      // 1. Update the ratings
-      state.deleteSSSignature = {};
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(
       startDeleteSlice.fulfilled,
-      (state, action: StartRateSSFulfilled) => {
-        // Add user to the state array
-
-        // 1. Update the ratings
-        state.deleteSSSignature = {};
-      },
+      (state, action: StartDeleteSSFulfilled) => {},
     );
     builder.addCase(startDeleteSlice.rejected, (state, action) => {
       console.log(action.error.message);
@@ -76,6 +51,6 @@ export const deleteSS = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {forceSignatureRerender} = deleteSS.actions;
+export const {} = deleteSS.actions;
 
 export default deleteSS.reducer;

@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
-import {ThunkConfig} from '../../ssRedux/types';
 import {startRefreshAllUserJson} from 'ssRedux/userJson';
+import {ThunkConfig} from '../../ssRedux/types';
 import {
   GJ_CategoryDecoration,
   GJ_CategoryNameMapping,
@@ -13,22 +13,19 @@ import {
 // INITIAL STATE
 
 export interface CreateCSState {
-  categorySetName: string;
+  typingCSName: string;
   csId: string;
 
-  categories: GJ_CategorySet;
-  categoryNameMapping: GJ_CategoryNameMapping;
-  createdSignature: {};
+  cs: GJ_CategorySet;
+  cscNameMapping: GJ_CategoryNameMapping;
 }
 
 const initialState: CreateCSState = {
-  categorySetName: '',
+  typingCSName: '',
   csId: '',
 
-  categories: {},
-  categoryNameMapping: {},
-
-  createdSignature: {},
+  cs: {},
+  cscNameMapping: {},
 };
 
 // ASYNC THUNKS
@@ -36,23 +33,21 @@ const initialState: CreateCSState = {
 export const startCreateCS = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'createCS/startCreateCS',
   async (undef, thunkAPI) => {
-    const {categorySetName, csId, categories, categoryNameMapping} =
+    const {typingCSName, csId, cs, cscNameMapping} =
       thunkAPI.getState().createCategorySetSlice;
 
-    // 1. Create predefined Category Sets
+    // 1. Create user-defined Category Sets
     try {
-      globalDriver.addCS(
-        categorySetName,
-        csId,
-        categories,
-        categoryNameMapping,
-      );
+      globalDriver.addCS(typingCSName, csId, cs, cscNameMapping);
     } catch (err) {
       console.log(err);
     }
 
-    // 2. Refresh UserJsonMap after creating default Category Sets, so
-    //    Category Set name -> id is available for ui
+    // 2. Reset local inputs
+    thunkAPI.dispatch(reset());
+
+    // 3.. Refresh UserJsonMap after creating each new user Category Set, so
+    //    Category Set Name Mapping, Category Name Mapping, and Category Decorations are available for ui
     thunkAPI.dispatch(startRefreshAllUserJson());
 
     return true;
@@ -61,12 +56,11 @@ export const startCreateCS = createAsyncThunk<boolean, undefined, ThunkConfig>(
 
 // ACTION TYPES
 
-type ForceSSRerenderAction = PayloadAction<undefined>;
-type InitExistingCSAction = PayloadAction<{
+type LoadExistingCSAsTemplate = PayloadAction<{
   csName: string;
   csId: string;
-  categories: GJ_CategorySet;
-  categoryNameMapping: GJ_CategoryNameMapping;
+  cs: GJ_CategorySet;
+  cscNameMapping: GJ_CategoryNameMapping;
 }>;
 type SetNewCSNameAction = PayloadAction<string>;
 type AddCAction = PayloadAction<{
@@ -84,81 +78,64 @@ type StartCreateCSFulfilled = PayloadAction<boolean>;
 // SLICE
 
 export const createSS = createSlice({
-  name: 'createSS',
+  name: 'createCategorySet',
   initialState,
   reducers: {
-    initExistingCS: (state: CreateCSState, action: InitExistingCSAction) => {
-      state.categorySetName = action.payload.csName;
+    loadExistingCSAsTemplate: (
+      state: CreateCSState,
+      action: LoadExistingCSAsTemplate,
+    ) => {
+      state.typingCSName = action.payload.csName;
       state.csId = action.payload.csId;
 
-      state.categories = action.payload.categories;
-      state.categoryNameMapping = action.payload.categoryNameMapping;
+      state.cs = action.payload.cs;
+      state.cscNameMapping = action.payload.cscNameMapping;
     },
+
     setNewCategorySetName: (
       state: CreateCSState,
       action: SetNewCSNameAction,
     ) => {
-      state.categorySetName = action.payload;
+      state.typingCSName = action.payload;
     },
     addC: (state: CreateCSState, action: AddCAction) => {
-      console.log('ADDC-----------------------------');
       const {cName, cd} = action.payload;
 
-      state.categoryNameMapping[cd.cId] = cName;
+      // 1. Add cName to CategoryNameMapping
+      state.cscNameMapping[cd.cId] = cName;
 
-      // 2. Add CD
-      state.categories[cd.cId] = cd;
+      // 2. Add CD to CategorySet
+      state.cs[cd.cId] = cd;
     },
     editC: (state: CreateCSState, action: EditCAction) => {
       const {cId, partialUserCD} = action.payload;
-      console.log('EDITC-----------------------------');
-      console.log(action.payload);
 
       if (partialUserCD.icon !== undefined)
-        state.categories[cId].icon = partialUserCD.icon;
+        state.cs[cId].icon = partialUserCD.icon;
       if (partialUserCD.color !== undefined)
-        state.categories[cId].color = partialUserCD.color;
+        state.cs[cId].color = partialUserCD.color;
       if (partialUserCD.name !== undefined)
-        state.categoryNameMapping[cId] = partialUserCD.name;
+        state.cscNameMapping[cId] = partialUserCD.name;
     },
     removeC: (state: CreateCSState, action: RmCAction) => {
-      // Do not need to set state bcus Redux Toolkit uses Immer, which
-      // applies mutations to the state
       const cId: string = action.payload;
-      console.log('REMOVEC--------------------------------------');
-      console.log(cId);
-      delete state.categories[cId];
-      delete state.categoryNameMapping[cId];
+
+      delete state.cs[cId];
+      delete state.cscNameMapping[cId];
     },
     reset: (state: CreateCSState, action: ResetAction) => {
-      state.categorySetName = '';
+      state.typingCSName = '';
       state.csId = '';
 
-      state.categories = {};
-      state.categoryNameMapping = {};
-    },
-    forceSignatureRerender: (
-      state: CreateCSState,
-      action: ForceSSRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      // 1. Create the set of sideways slices
-      state.createdSignature = {};
+      state.cs = {};
+      state.cscNameMapping = {};
     },
   },
   extraReducers: builder => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(
       startCreateCS.fulfilled,
-      (state, action: StartCreateCSFulfilled) => {
-        // Add user to the state array
-
-        state.createdSignature = {};
-      },
+      (state, action: StartCreateCSFulfilled) => {},
     );
     builder.addCase(startCreateCS.rejected, (state, action) => {
       console.log(action.error.message);
@@ -167,15 +144,8 @@ export const createSS = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  initExistingCS,
-  setNewCategorySetName,
-  addC,
-  editC,
-  removeC,
-  forceSignatureRerender,
-} = createSS.actions;
-
+export const {setNewCategorySetName, addC, editC, removeC} = createSS.actions;
+// Local (maybe use after creating new Category Set)
 const {reset} = createSS.actions;
 
 export default createSS.reducer;

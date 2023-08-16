@@ -4,8 +4,6 @@ import {GrowingIdItem} from 'ssComponents/Input/GrowingIdList';
 export type RateInput = GrowingIdItem<NODE_ID_COMPONENTS & {category: string}>;
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {GraphType} from 'ssDatabase/api/core/types';
-import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
-import {startCleanInputCategories} from 'ssRedux/userJson';
 import {forceSignatureRerender as forceStackSignatureRerender} from 'ssRedux/readSidewaysSlice/readStack';
 import {ThunkConfig} from '../types';
 import {
@@ -106,23 +104,6 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     return true;
   },
 );
-
-export const startRefreshUiAfterRate = createAsyncThunk<
-  boolean,
-  undefined,
-  ThunkConfig
->('rateSS/startRefreshUiAfterRate', async (undef, thunkAPI) => {
-  // 1. Clean input to category mapping
-  thunkAPI.dispatch(startCleanInputCategories());
-
-  // 2. Update all in/outputs
-  thunkAPI.dispatch(startCacheAllDbInputsOutputs());
-
-  // 3. Refresh stack
-  thunkAPI.dispatch(forceStackSignatureRerender());
-
-  return true;
-});
 
 // ACTION TYPES
 

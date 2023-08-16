@@ -4,10 +4,13 @@ import {GrowingIdItem} from 'ssComponents/Input/GrowingIdList';
 export type RateInput = GrowingIdItem<NODE_ID_COMPONENTS & {category: string}>;
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {GraphType} from 'ssDatabase/api/core/types';
+import {ThunkConfig} from '../../ssRedux/types';
 import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
-import {startCleanInputCategories} from 'ssRedux/userJson';
+import {
+  startCleanInputCategories,
+  startRefreshUiAfterRate,
+} from 'ssRedux/userJson';
 import {forceSignatureRerender as forceStackSignatureRerender} from 'ssRedux/readSidewaysSlice/readStack';
-import {ThunkConfig} from '../types';
 import {
   addNodePostfix,
   NODE_ID,
@@ -24,8 +27,6 @@ export interface RateSSState {
   inputs: RateInput[];
   outputs: string[];
   rating: number;
-
-  ratedSignature: {};
 }
 
 const initialState: RateSSState = {
@@ -36,19 +37,9 @@ const initialState: RateSSState = {
   inputs: [],
   outputs: [],
   rating: 0,
-
-  ratedSignature: {},
 };
 
 // ASYNC THUNKS
-
-type RateSSThunkArgs = {
-  sliceName: string;
-
-  inputs: RateInput[];
-  outputs: RateInput[];
-  rating: number;
-};
 
 export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'rateSS/startRate',
@@ -71,16 +62,19 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
       rating,
     });
 
-    // 2. Rate Graph
+    // 2. Rate Graphs
+    // Input Graph
     const inputGraphPromises: Promise<any>[] = outputs.map((output: string) =>
       DbDriver.rateGraph(
         activeSliceName,
         output,
         inputNames,
         rating,
+        // TODO AUG 15, 2023: Make util method for getting rating weight
         new Array(inputs.length).fill(1 / inputs.length / outputs.length),
       ),
     );
+    // Category Graph
     const categoryGraphPromises: Promise<any>[] = outputs.map(
       (output: string) =>
         DbDriver.rateGraph(
@@ -95,10 +89,7 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     await Promise.all([...inputGraphPromises, ...categoryGraphPromises]);
 
     // 3. Reset rating inputs
-    thunkAPI.dispatch(setInputs([]));
-    thunkAPI.dispatch(setOutputs([]));
-    thunkAPI.dispatch(setRating(0));
-    thunkAPI.dispatch(forceSignatureRerender());
+    thunkAPI.dispatch(reset());
 
     // 4. Refresh UI (Stack + Input names)
     thunkAPI.dispatch(startRefreshUiAfterRate());
@@ -107,26 +98,8 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
   },
 );
 
-export const startRefreshUiAfterRate = createAsyncThunk<
-  boolean,
-  undefined,
-  ThunkConfig
->('rateSS/startRefreshUiAfterRate', async (undef, thunkAPI) => {
-  // 1. Clean input to category mapping
-  thunkAPI.dispatch(startCleanInputCategories());
-
-  // 2. Update all in/outputs
-  thunkAPI.dispatch(startCacheAllDbInputsOutputs());
-
-  // 3. Refresh stack
-  thunkAPI.dispatch(forceStackSignatureRerender());
-
-  return true;
-});
-
 // ACTION TYPES
 
-type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetRatingAction = PayloadAction<number>;
 type AddInputAction = PayloadAction<RateInput>;
 type EditInputAction = PayloadAction<{index: number; input: RateInput}>;
@@ -135,6 +108,8 @@ type RmInputAction = PayloadAction<number>;
 type SetOutputAction = PayloadAction<string[]>;
 type AddOutputAction = PayloadAction<string>;
 type RmOutputAction = PayloadAction<number>;
+type ResetAction = PayloadAction<void>;
+
 type StartRateSSFulfilled = PayloadAction<boolean>;
 
 // SLICE
@@ -169,39 +144,24 @@ export const rateSS = createSlice({
     removeOutput: (state: RateSSState, action: RmOutputAction) => {
       state.outputs.splice(action.payload, 1);
     },
-    forceSignatureRerender: (
-      state: RateSSState,
-      action: ForceRatingsRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      // 1. Update the ratings
-      state.ratedSignature = {};
+    reset: (state: RateSSState, action: ResetAction) => {
+      state.inputs = [];
+      state.outputs = [];
+      state.rating = 0;
     },
   },
   extraReducers: builder => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(
       startRate.fulfilled,
-      (state, action: StartRateSSFulfilled) => {
-        // Add user to the state array
-
-        // 1. Update the ratings
-        state.ratedSignature = {};
-      },
+      (state, action: StartRateSSFulfilled) => {},
     );
-    builder.addCase(startRate.rejected, (state, action) => {
-      console.log(action.error.message);
-    });
+    builder.addCase(startRate.rejected, (state, action) => {});
   },
 });
 
 // Action creators are generated for each case reducer function
 export const {
-  forceSignatureRerender,
   setRating,
   setInputs,
   editInput,
@@ -211,5 +171,6 @@ export const {
   addOutput,
   removeOutput,
 } = rateSS.actions;
+const {reset} = rateSS.actions;
 
 export default rateSS.reducer;
