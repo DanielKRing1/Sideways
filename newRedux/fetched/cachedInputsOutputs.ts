@@ -1,16 +1,8 @@
-import {combineReducers} from 'redux';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import readGraphReducer, {
-  forceSignatureRerender as _forceGraphRerender,
-} from './readGraph';
-import readStackReducer, {
-  forceSignatureRerender as _forceStackRerender,
-} from './readStack';
 import {ThunkConfig} from 'ssRedux/types';
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import {CGNode} from '@asianpersonn/realm-graph';
-import {NO_ACTIVE_SLICE_NAME} from 'ssDatabase/api/userJson/category/constants';
 import {stripNodePostfix} from 'ssDatabase/api/types';
 import {rmDuplicates} from 'ssUtils/list';
 
@@ -19,15 +11,11 @@ import {rmDuplicates} from 'ssUtils/list';
 export interface ReadSSState {
   allDbInputs: string[];
   allDbOutputs: string[];
-
-  readSSSignature: {};
 }
 
 const initialState: ReadSSState = {
   allDbInputs: [],
   allDbOutputs: [],
-
-  readSSSignature: {},
 };
 
 // THUNKS
@@ -90,7 +78,6 @@ export const startCacheAllDbOutputs = createAsyncThunk<
 
 // ACTION TYPES
 
-type ForceRatingsRerenderAction = PayloadAction<undefined>;
 type SetAllOutputsAction = PayloadAction<string[]>;
 type SetAllInputsAction = PayloadAction<string[]>;
 
@@ -107,29 +94,11 @@ export const readSS = createSlice({
     setAllDbOutputs: (state: ReadSSState, action: SetAllOutputsAction) => {
       state.allDbOutputs = action.payload;
     },
-
-    forceSignatureRerender: (
-      state: ReadSSState,
-      action: ForceRatingsRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      // 1. Update the ratings
-      state.readSSSignature = {};
-    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {forceSignatureRerender} = readSS.actions;
+export const {} = readSS.actions;
 const {setAllDbInputs, setAllDbOutputs} = readSS.actions;
-
-const internalReadReducer = combineReducers({
-  readGraphReducer,
-  readStackReducer,
-});
 
 export default readSS.reducer;

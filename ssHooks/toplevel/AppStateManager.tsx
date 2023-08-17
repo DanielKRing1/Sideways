@@ -1,14 +1,25 @@
-import {useCreateDefinedCategorySet} from './useCreateDefinedCategorySet';
+import MyText from 'ssComponents/ReactNative/MyText';
+
 import {useHydrateApp} from './useHydrateApp';
 import {useHydrateJournal} from './useHydrateJournal';
-import {useStartCacheAllDbInputsOutputs} from './useStartCacheAllDbInputsOutputs';
 
-export default () => {
-  useCreateDefinedCategorySet();
-  useStartCacheAllDbInputsOutputs();
+type AppStateManagerProps = {
+  children: React.ReactNode;
+};
+export default (props: AppStateManagerProps) => {
+  // Props
+  const {children} = props;
 
+  // Hooks
   useHydrateApp();
-  useHydrateJournal();
+  const {isLoaded, load, closeAll} = useHydrateJournal();
 
-  return <></>;
+  return <>{isLoaded ? {children} : <LoadingComponent />}</>;
+};
+
+type LoadingComponentProps = {};
+export const LoadingComponent = (props: LoadingComponentProps) => {
+  const {} = props;
+
+  return <MyText>Loading...</MyText>;
 };

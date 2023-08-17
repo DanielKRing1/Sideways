@@ -1,9 +1,9 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {CGNode} from '@asianpersonn/realm-graph';
 
 import dbDriver from 'ssDatabase/api/core/dbDriver';
 import userJsonDriver from 'ssDatabase/api/userJson/';
 
-import {ThunkConfig} from '../types';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
 import {
   GJ_CategoryDecorationMapping,
@@ -14,9 +14,10 @@ import {
   ASJ_InputNameToCategoryIdMapping,
 } from 'ssDatabase/api/userJson/category/types';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
+import {ThunkConfig} from '../../ssRedux/types';
+
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
 import categoryDriver from 'ssDatabase/api/userJson/category';
-import {CGNode} from '@asianpersonn/realm-graph';
 import {stripNodePostfix} from 'ssDatabase/api/types';
 import {rmDuplicates} from 'ssUtils/list';
 
@@ -25,9 +26,6 @@ import {rmDuplicates} from 'ssUtils/list';
 export interface UserJsonState {
   // All User Json
   fullUserJsonMap: UserJsonMap;
-
-  // RERENDER
-  userJsonSignature: {};
 }
 
 const initialState: UserJsonState = {
@@ -40,9 +38,6 @@ const initialState: UserJsonState = {
     [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]: {},
     [ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING]: {},
   },
-
-  // RERENDER
-  userJsonSignature: {},
 };
 
 // THUNKS
@@ -105,7 +100,6 @@ export const startRefreshAllUserJson = createAsyncThunk<
   console.log(fullUserJsonMap);
 
   thunkAPI.dispatch(setFullUserJsonMap(fullUserJsonMap));
-  thunkAPI.dispatch(forceSignatureRerender());
 
   return true;
 });
@@ -130,7 +124,6 @@ export const startRefreshCategoryMapping = createAsyncThunk<
       [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: freshCategoryMapping,
     }),
   );
-  thunkAPI.dispatch(forceSignatureRerender());
 
   return true;
 });
@@ -158,7 +151,6 @@ export const startRefreshCategorySetNameMapping = createAsyncThunk<
           freshCategorySetNameMapping,
       }),
     );
-    thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
   },
@@ -184,7 +176,6 @@ export const startRefreshCategoryNameMapping = createAsyncThunk<
       [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: freshCategoryNameMapping,
     }),
   );
-  thunkAPI.dispatch(forceSignatureRerender());
 
   return true;
 });
@@ -214,7 +205,6 @@ export const startRefreshSliceToCategoryMapping = createAsyncThunk<
           freshSliceToCategoryMapping,
       }),
     );
-    thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
   },
@@ -245,7 +235,6 @@ export const startRefreshInputNameToCategoryNameMapping = createAsyncThunk<
           freshInputNameToCategoryNameMapping,
       }),
     );
-    thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
   },
@@ -268,24 +257,11 @@ export const userJsonSlice = createSlice({
     setFullUserJsonMap: (state: UserJsonState, action: SetUserJsonAction) => {
       state.fullUserJsonMap = action.payload;
     },
-
-    // RERENDER
-    forceSignatureRerender: (
-      state: UserJsonState,
-      action: ForceUserJsonRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      state.userJsonSignature = {};
-    },
   },
 });
 
 // Action creators are generated for each case reducer function
 const {setFullUserJsonMap} = userJsonSlice.actions;
-export const {forceSignatureRerender} = userJsonSlice.actions;
+export const {} = userJsonSlice.actions;
 
 export default userJsonSlice.reducer;

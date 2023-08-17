@@ -4,6 +4,7 @@ import dbDriver from 'ssDatabase/api/core/dbDriver';
 import userJsonDriver from 'ssDatabase/api/userJson';
 import {NO_ACTIVE_SLICE_NAME} from 'ssDatabase/api/userJson/category/constants';
 import {AppDispatch, RootState} from 'ssRedux/index';
+import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
 import {startRefreshAllUserJson} from 'ssRedux/userJson';
 
 export const useDbDriverLoader = () => {
@@ -63,8 +64,10 @@ export const useDbDriverLoader = () => {
       await load();
 
       // 1. Refresh UserJsonMap after switching active slices
-      if (activeSliceName !== NO_ACTIVE_SLICE_NAME)
-        dispatch(startRefreshAllUserJson());
+      if (activeSliceName === NO_ACTIVE_SLICE_NAME) return;
+
+      dispatch(startRefreshAllUserJson());
+      dispatch(startCacheAllDbInputsOutputs());
     })();
   }, [activeSliceName]);
 
