@@ -1,26 +1,13 @@
 import {combineReducers} from 'redux';
-import createSidewaysSlice from './createSidewaysSlice';
-import createCategorySetSlice from './createCategorySetSlice';
-import readSidewaysSlice from './readSidewaysSlice';
-import rateSidewaysSlice from './rateSidewaysSlice';
-import undorateSidewaysSlice from './undorateSidewaysSlice';
-import deleteSidewaysSlice from './deleteSidewaysSlice';
 
-import analyticsSlice from './analyticsSlice';
-
-import userJsonSlice from './userJson';
+import analyticsReducers from 'newRedux/analytics';
+import appStateReducers from 'newRedux/appState';
+import fetchedReducers from 'newRedux/fetched';
+import inputReducers from 'newRedux/input';
 
 export default combineReducers({
-  createSidewaysSlice,
-  createCategorySetSlice,
-  readSidewaysSlice,
-  rateSidewaysSlice,
-  undorateSidewaysSlice,
-  deleteSidewaysSlice,
-
-  snapshotCrudSlice,
-
-  analyticsSlice,
-
-  userJsonSlice,
+  analyticsReducers,
+  appStateReducers,
+  fetchedReducers,
+  inputReducers,
 });

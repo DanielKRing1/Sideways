@@ -16,6 +16,7 @@ module.exports = {
           ssNavigation: './ssNavigation',
           ssRealm: './ssRealm',
           ssRedux: './ssRedux',
+          newRedux: './newRedux',
           ssScreens: './ssScreens',
           ssTheme: './ssTheme',
           ssUtils: './ssUtils',
