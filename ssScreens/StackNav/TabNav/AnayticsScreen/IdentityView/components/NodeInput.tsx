@@ -15,7 +15,7 @@ import {GOOD_POSTFIX} from 'ssDatabase/api/types';
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
-  const {searchedNodeIdInput, nodeIdInput, inputStatsSignature} = useSelector(
+  const {typingNodeIdInput, nodeIdInput, inputStatsSignature} = useSelector(
     (state: RootState) => state.analyticsSlice.identityStatsSlice,
   );
   const dispatch: AppDispatch = useDispatch();
@@ -44,7 +44,7 @@ const NodeInput: FC<NodeInputProps> = () => {
 
       <AutoCompleteCategory
         placeholder="Choose a past input..."
-        value={searchedNodeIdInput}
+        value={typingNodeIdInput}
         onChangeText={handleSetSearchedNodeId}
         onSelectEntityId={handleSetNodeId}
       />

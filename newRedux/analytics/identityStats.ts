@@ -12,7 +12,7 @@ import {
   GOOD_POSTFIX,
   addNodePostfix,
 } from 'ssDatabase/api/types';
-import {ThunkConfig} from '../../types';
+import {ThunkConfig} from '../../ssRedux/types';
 import {
   GetNodeStatsArgs,
   GetNodeStatsByOutputArgs,
@@ -26,7 +26,7 @@ export interface IdentityStatsState {
   analyzedSliceName: string;
   isFresh: boolean;
 
-  searchedNodeIdInput: string;
+  typingNodeIdInput: string;
   nodeIdInput: string;
   goodOrBad: NODE_POSTFIX;
   listLength: number;
@@ -49,7 +49,7 @@ const initialState: IdentityStatsState = {
   isFresh: false,
 
   // INPUTS
-  searchedNodeIdInput: '',
+  typingNodeIdInput: '',
   nodeIdInput: '',
   goodOrBad: GOOD_POSTFIX,
   listLength: 5,
@@ -424,7 +424,7 @@ export const identityStatsSlice = createSlice({
       state: IdentityStatsState,
       action: SetSearchedNodeIdInputAction,
     ) => {
-      state.searchedNodeIdInput = action.payload;
+      state.typingNodeIdInput = action.payload;
     },
     setNodeIdInput: (
       state: IdentityStatsState,
@@ -478,7 +478,7 @@ export const identityStatsSlice = createSlice({
     ) => {
       console.log('RESET');
       // Input
-      state.searchedNodeIdInput = '';
+      state.typingNodeIdInput = '';
       state.nodeIdInput = '';
 
       // Stats
