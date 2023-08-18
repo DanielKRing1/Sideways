@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
 
-import analytics from 'newRedux/analytics';
-import appState from 'newRedux/appState';
-import fetched from 'newRedux/fetched';
-import input from 'newRedux/input';
+import analytics from './analytics';
+import appState from './appState';
+import fetched from './fetched';
+import input from './input';
 
 export default combineReducers({
   analytics,
