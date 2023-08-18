@@ -20,7 +20,7 @@ const StackViewScreen: FC<StackViewScreenProps> = props => {
 
   // REDUX
   const {readSSSignature, activeSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
 
   return (

@@ -78,9 +78,9 @@ export const startAssureFreshness = createAsyncThunk<
   ThunkConfig
 >('identityStatsSS/startAssureFreshness', async (undef, thunkAPI) => {
   const activeSliceName: string =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+    thunkAPI.getState().appState.activeJournal.activeSliceName;
   const {analyzedSliceName, isFresh, nodeIdInput, goodOrBad} =
-    thunkAPI.getState().analyticsSlice.identityStatsSlice;
+    thunkAPI.getState().analytics.identityStatsSlice;
 
   console.log('START ASSURE FRESHNESS');
   console.log(activeSliceName);
@@ -130,7 +130,7 @@ const startGetIdentityNodes = createAsyncThunk<boolean, undefined, ThunkConfig>(
   async (undef, thunkAPI) => {
     console.log('in startGetIdentityNodes-------------------');
     const {activeSliceName, allDbOutputs} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+      thunkAPI.getState().appState.activeJournal;
     const listLength: number = 5;
     const outputType: GraphPropType = GRAPH_PROP_KEYS.SINGLE;
     const iterations: number = 20;
@@ -180,9 +180,9 @@ export const startSetNodeIdInput = createAsyncThunk<
 
       // 2. Get state
       const {activeSliceName, allDbOutputs} =
-        thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+        thunkAPI.getState().appState.activeJournal;
       const listLength: number =
-        thunkAPI.getState().analyticsSlice.identityStatsSlice.listLength;
+        thunkAPI.getState().analytics.identityStatsSlice.listLength;
 
       // 3. Dispatch stats thunks
       TimerMan.getTimer('startGetNodeStats').restart();

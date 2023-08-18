@@ -12,6 +12,8 @@ import {addNodePostfix, NODE_ID, stripNodePostfix} from 'ssDatabase/api/types';
 import {RateInput} from 'ssRedux/rateSidewaysSlice';
 import {startRefreshUiAfterRate} from 'ssRedux/userJson';
 
+// LEFT OFF 8/17/2023: Mark NodeStats as Unfresh after Rate, UndoRate, and DeleteRate -> Create MarkUnfresh method in Rate reducer
+
 // INITIAL STATE
 
 export interface UndoRateSSState {
@@ -58,22 +60,21 @@ export const startUpdateRate = createAsyncThunk<
   ThunkConfig
 >('undorrateSS/startUpdateRate', async (undef, thunkAPI) => {
   // REDUX STATE
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
   // NEW SNAPSHOT
   const {
     indexToUpdate,
     inputs: newInputObjs,
     outputs: newOutputs,
     rating: newRating,
-  } = thunkAPI.getState().undorateSidewaysSlice;
+  } = thunkAPI.getState().input.undoRateJournal;
   const newInputs: string[] = newInputObjs.map(({item}) =>
     addNodePostfix(item.id, item.postfix),
   );
   const newCategories: string[] = newInputObjs.map(({item}) => item.category);
 
   // ORIGINAL SNAPSHOT
-  const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
+  const {originalSnapshot} = thunkAPI.getState().input.undoRateJournal;
 
   // 1. Delete original Graph rating
   const deleteGraphPromises: Promise<any>[] = deleteGraphRatingHelper(
@@ -96,6 +97,7 @@ export const startUpdateRate = createAsyncThunk<
   await Promise.all(updatePromises);
 
   // 3. Refresh UI (Stack + Input names)
+  //    and Mark unfresh NodeStats as Unfresh
   thunkAPI.dispatch(startRefreshUiAfterRate());
 
   // 4. Reset rating inputs
@@ -116,9 +118,8 @@ export const startDeleteRate = createAsyncThunk<
   // ARGS
   const {indexToRm} = args;
 
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
-  const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
+  const {originalSnapshot} = thunkAPI.getState().input.undoRateJournal;
 
   // 1. Delete original Graph rating
   const deleteGraphPromises: Promise<any>[] = deleteGraphRatingHelper(
@@ -135,6 +136,7 @@ export const startDeleteRate = createAsyncThunk<
   await Promise.all([...deleteGraphPromises, deleteSnapshotPromise]);
 
   // 3. Refresh UI to reflect new Stack and cleaned cached Db Inputs/Outputs
+  //    and Mark unfresh NodeStats as Unfresh
   thunkAPI.dispatch(startRefreshUiAfterRate());
 
   // 4. Reset rating inputs

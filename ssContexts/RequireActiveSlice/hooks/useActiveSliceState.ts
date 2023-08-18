@@ -17,7 +17,7 @@ export function useActiveSliceState() {
 
   // REDUX
   const {activeSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
 
   // CONTROL NAV ON 'activeSliceName' CHANGE

@@ -37,7 +37,7 @@ type GrowingPossibleOutputsProps = {};
 const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
   // REDUX
   const {searchedSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {possibleOutputs, createdSignature} = useSelector(
     (state: RootState) => state.createSidewaysSlice,

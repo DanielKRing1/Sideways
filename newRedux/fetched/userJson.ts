@@ -50,8 +50,7 @@ export const startCleanInputCategories = createAsyncThunk<
   ThunkConfig
 >('userJsonSlice/startCleanInputCategories', async (undef, thunkAPI) => {
   // 1. Get activeSliceName
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
 
   // 2. Get all Graph inputs
   const allDbInputs: string[] = rmDuplicates(
@@ -88,8 +87,7 @@ export const startRefreshAllUserJson = createAsyncThunk<
   console.log('REFRESHING ALL USERJSON');
 
   // 1. Get activeSliceName
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
   // 2. Get current fullUserJsonMap
   console.log('abt to get all user json');
   const fullUserJsonMap: UserJsonMap = await userJsonDriver.getAllUserJson(
@@ -111,7 +109,7 @@ export const startRefreshCategoryMapping = createAsyncThunk<
   ThunkConfig
 >('userJsonSlice/startRefreshCategoryMapping', async (undef, thunkAPI) => {
   // 1. Get fullUserJsonMap
-  const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
+  const {fullUserJsonMap} = thunkAPI.getState().fetched.userJson;
 
   // 2. Get fresh fullUserJsonMap
   const freshCategoryMapping: GJ_CategoryDecorationMapping =
@@ -137,7 +135,7 @@ export const startRefreshCategorySetNameMapping = createAsyncThunk<
   'userJsonSlice/startRefreshCategorySetNameMapping',
   async (undef, thunkAPI) => {
     // 1. Get fullUserJsonMap
-    const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
+    const {fullUserJsonMap} = thunkAPI.getState().fetched.userJson;
 
     // 2. Get fresh categorySetNameMapping
     const freshCategorySetNameMapping: GJ_CategorySetNameMapping =
@@ -163,7 +161,7 @@ export const startRefreshCategoryNameMapping = createAsyncThunk<
   ThunkConfig
 >('userJsonSlice/startRefreshCategoryNameMapping', async (undef, thunkAPI) => {
   // 1. Get fullUserJsonMap
-  const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
+  const {fullUserJsonMap} = thunkAPI.getState().fetched.userJson;
 
   // 2. Get fresh categoryNameMapping
   const freshCategoryNameMapping: GJ_CategoryNameMapping =
@@ -189,7 +187,7 @@ export const startRefreshSliceToCategoryMapping = createAsyncThunk<
   'userJsonSlice/startRefreshSliceToCategoryMapping',
   async (undef, thunkAPI) => {
     // 1. Get fullUserJsonMap
-    const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
+    const {fullUserJsonMap} = thunkAPI.getState().fetched.userJson;
 
     // 2. Get fresh sliceToCategoryMapping
     const freshSliceToCategoryMapping: GJ_SliceNameToCategorySetIdMapping =
@@ -219,9 +217,8 @@ export const startRefreshInputNameToCategoryNameMapping = createAsyncThunk<
   'userJsonSlice/startRefreshInputNameToCategoryNameMapping',
   async (undef, thunkAPI) => {
     // 1. Get activeSliceName + fullUserJsonMap
-    const {activeSliceName} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
-    const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
+    const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
+    const {fullUserJsonMap} = thunkAPI.getState().fetched.userJson;
 
     // 2. Get fresh inputNameToCategoryNameMapping
     const freshInputNameToCategoryNameMapping: ASJ_InputNameToCategoryIdMapping =

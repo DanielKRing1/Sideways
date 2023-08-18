@@ -13,13 +13,13 @@ import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = () => {
   const {activeSliceName, allDbOutputs} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {histogramByMonth, monthIndex} = useSelector(
-    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+    (state: RootState) => state.analytics.timeseriesStats,
   );
   const {fullUserJsonMap} = useSelector(
-    (state: RootState) => state.userJsonSlice,
+    (state: RootState) => state.fetched.userJson,
   );
   const dispatch: AppDispatch = useDispatch();
 

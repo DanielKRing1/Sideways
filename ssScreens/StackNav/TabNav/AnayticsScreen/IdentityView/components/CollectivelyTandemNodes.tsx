@@ -9,7 +9,7 @@ import HiLoRankingDisplay from '../../../../../../ssComponents/Nodes/HiLoRanking
 type CollectivelyTandemNodesProps = {};
 const CollectivelyTandemNodes: FC<CollectivelyTandemNodesProps> = () => {
   const {readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {nodeIdInput, collectivelyTandemNodes, identityStatsSignature} =
     useSelector((state: RootState) => state.analyticsSlice.identityStatsSlice);

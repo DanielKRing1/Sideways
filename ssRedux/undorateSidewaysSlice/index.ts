@@ -60,8 +60,7 @@ export const startUpdateRate = createAsyncThunk<
   ThunkConfig
 >('undorateSS/startUpdateRate', async (undef, thunkAPI) => {
   // REDUX STATE
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
   // NEW SNAPSHOT
   const {
     indexToUpdate,
@@ -175,8 +174,7 @@ export const startDeleteRate = createAsyncThunk<
   const {indexToRm} = args;
 
   // REDUX  STATE
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
 
   // ORIGINAL SNAPSHOT
   const {originalSnapshot} = thunkAPI.getState().undorateSidewaysSlice;

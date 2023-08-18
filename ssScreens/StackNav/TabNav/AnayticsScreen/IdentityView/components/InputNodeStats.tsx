@@ -8,7 +8,7 @@ import NodeStats from './NodeStats';
 type InputNodeStatsProps = {};
 const InputNodeStats: FC<InputNodeStatsProps> = props => {
   const {readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {nodeStats, inputStatsSignature} = useSelector(
     (state: RootState) => state.analyticsSlice.identityStatsSlice,

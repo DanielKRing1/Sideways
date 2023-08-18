@@ -65,7 +65,7 @@ export const ActiveSliceNavButton: FC<ActiveSliceNavButtonProps> = props => {
   const navigation: StackNavigatorNavigationProp = useNavigation();
 
   const {activeSliceName, readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
 
   const theme = useTheme();
@@ -87,7 +87,7 @@ export const ActiveSliceNavButton: FC<ActiveSliceNavButtonProps> = props => {
 type ActiveSliceNavInputProps = {};
 export const ActiveSliceNavInput: FC<ActiveSliceNavInputProps> = props => {
   const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const dispatch = useDispatch();
 

@@ -25,7 +25,7 @@ const CategorySetOptions: FC<CategorySetOptionsProps> = props => {
     (state: RootState) => state.createSidewaysSlice,
   );
   const {fullUserJsonMap} = useSelector(
-    (state: RootState) => state.userJsonSlice,
+    (state: RootState) => state.fetched.userJson,
   );
   const dispatch: AppDispatch = useDispatch();
 

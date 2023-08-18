@@ -56,10 +56,10 @@ const DbCategoryRow = forwardRef<View, DbCategoryRowProps>((props, ref) => {
 
   // REDUX
   const {activeSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {fullUserJsonMap, userJsonSignature} = useSelector(
-    (state: RootState) => state.userJsonSlice,
+    (state: RootState) => state.fetched.userJson,
   );
   const dispatch: AppDispatch = useDispatch();
 

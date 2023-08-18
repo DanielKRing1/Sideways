@@ -25,10 +25,10 @@ const CIdSelector: FC<CIdSelectorProps> = props => {
 
   // REDUX
   const {activeSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {fullUserJsonMap} = useSelector(
-    (state: RootState) => state.userJsonSlice,
+    (state: RootState) => state.fetched.userJson,
   );
 
   // REDUX USERJSONMAP

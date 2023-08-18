@@ -5,7 +5,7 @@ import {useTheme} from 'styled-components/native';
 // REDUX
 import {DISPLAY_SIZE} from '../../../../../global';
 import {AppDispatch, RootState} from '../../../../../ssRedux';
-import {startGetRecommendations} from '../../../../../ssRedux/analyticsSlice/recoStatsSlice';
+import {startComputeRecommendations} from '../../../../../ssRedux/analyticsSlice/recoStatsSlice';
 import RecoInputDisplay from './components/RecoInputDisplay';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
@@ -24,7 +24,7 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
   // REDUX
   const dispatch: AppDispatch = useDispatch();
   const {readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {recommendationsSignature} = useSelector(
     (state: RootState) => state.analyticsSlice.recoStatsSlice,
@@ -61,7 +61,9 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
                 backgroundColor: theme.backgroundColors.main,
               }}
               onPress={() =>
-                dispatch(startGetRecommendations({graphType: GraphType.Input}))
+                dispatch(
+                  startComputeRecommendations({graphType: GraphType.Input}),
+                )
               }>
               <MyText>Get Recommendations!</MyText>
             </MyButton>

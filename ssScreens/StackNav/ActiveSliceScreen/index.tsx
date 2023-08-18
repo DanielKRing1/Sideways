@@ -27,7 +27,7 @@ const ActiveSliceScreen: FC<
 
   // REDUX HOOKS
   const {readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   // TODO: Anything need to be done to rerender when signature changes?
   const {deleteSSSignature} = useSelector(

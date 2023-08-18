@@ -20,7 +20,7 @@ type GrowingRecoInputsProps = {};
 const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   const dispatch = useDispatch();
   const {readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {searchInput, recommendationInputs, recommendationsSignature} =
     useSelector((state: RootState) => state.analyticsSlice.recoStatsSlice);

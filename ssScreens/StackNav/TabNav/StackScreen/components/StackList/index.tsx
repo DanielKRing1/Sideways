@@ -40,7 +40,7 @@ const StackList: FC<StackListProps> = props => {
 
   // REDUX
   const {activeSliceName, readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {stackStartDate, readStackSignature} = useSelector(
     (state: RootState) =>

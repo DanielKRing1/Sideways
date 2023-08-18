@@ -26,7 +26,7 @@ type GrowingVennInputDisplayProps = {};
 const GrowingVennInputDisplay: FC<GrowingVennInputDisplayProps> = () => {
   // REDUX
   const {searchInput, vennNodeInputs} = useSelector(
-    (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+    (state: RootState) => state.analytics.timeseriesStats,
   );
   const dispatch: AppDispatch = useDispatch();
 

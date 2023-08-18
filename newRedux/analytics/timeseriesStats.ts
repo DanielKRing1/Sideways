@@ -4,7 +4,6 @@ import {GrowingIdItem} from 'ssComponents/Input/GrowingIdList';
 export type VennInput = GrowingIdItem<NODE_ID_COMPONENTS>;
 import timeseriesDriver from 'ssDatabase/api/analytics/timeseries/timeseriesStatsDriver';
 
-import {ThunkConfig} from '../../types';
 import {floorDay, serializeDateNum} from 'ssUtils/date';
 import {
   LineGraph,
@@ -17,6 +16,7 @@ import {
   NODE_ID,
   NODE_ID_COMPONENTS,
 } from 'ssDatabase/api/types';
+import {ThunkConfig} from '../../ssRedux/types';
 
 // INITIAL STATE
 
@@ -56,9 +56,6 @@ export interface TimeStatsState {
   histogramByMonth: HistogramByMonth[];
   vennByMonth: VennByMonth[];
   heatMapByMonth: HeatMapByMonth[];
-
-  // RERENDER
-  graphsSignature: {};
 }
 
 const initialState: TimeStatsState = {
@@ -82,9 +79,6 @@ const initialState: TimeStatsState = {
   histogramByMonth: [],
   vennByMonth: [],
   heatMapByMonth: [],
-
-  // RERENDER
-  graphsSignature: {},
 };
 
 // const histogramByMonth: HistogramByMonth[] = await TimeseriesStatsDriver.getMonthlyOutputHistogram({ sliceName: TEST_SLICE_NAME, outputs: TEST_OUPUTS_ALL });
@@ -100,29 +94,26 @@ export const startAssureFreshness = createAsyncThunk<
   ThunkConfig
 >('timeseriesStatsSS/startAssureFreshness', async (undef, thunkAPI) => {
   const activeSliceName: string =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
-  const analyzedSliceName: string =
-    thunkAPI.getState().analyticsSlice.timeseriesStatsSlice.analyzedSliceName;
-  const isFresh: boolean =
-    thunkAPI.getState().analyticsSlice.timeseriesStatsSlice.isFresh;
+    thunkAPI.getState().appState.activeJournal.activeSliceName;
+  const {analyzedSliceName, isFresh} =
+    thunkAPI.getState().analytics.timeseriesStats;
 
   // 1. 'activeSliceName' changed
   if (activeSliceName !== analyzedSliceName) {
     // Recompute charts + reset stats bcus vennNodes are now unknown
-    thunkAPI.dispatch(startGetAllTimeseriesStats());
     thunkAPI.dispatch(resetNodesAndStats());
+    thunkAPI.dispatch(startComputeAllTimeseriesStats());
   }
   // 2. Freshness changed (rate, undo rate, ...)
   else if (!isFresh) {
     // Recompute charts + Rerender
-    thunkAPI.dispatch(startGetAllTimeseriesStats());
-    thunkAPI.dispatch(forceSignatureRerender());
+    thunkAPI.dispatch(startComputeAllTimeseriesStats());
   }
 
   // 3. Is now fresh
-  if (!isFresh) thunkAPI.dispatch(setFreshness(true));
   if (activeSliceName !== analyzedSliceName)
     thunkAPI.dispatch(setAnalyzedSliceName(activeSliceName));
+  if (!isFresh) thunkAPI.dispatch(markTimeseriesStatsFresh());
 
   return true;
 });
@@ -140,7 +131,7 @@ export const startAddVennInput = createAsyncThunk<
     thunkAPI.dispatch(addVennInput(vennInput));
 
     // 2. Recalculate venn
-    thunkAPI.dispatch(startGetVenn());
+    thunkAPI.dispatch(startComputeVenn());
 
     return true;
   },
@@ -151,13 +142,13 @@ export const startEditVennInput = createAsyncThunk<
   StartEditVennInputsArg,
   ThunkConfig
 >(
-  'timeseriesStatsSS/startAddVennInput',
+  'timeseriesStatsSS/startEditVennInput',
   async (args: StartEditVennInputsArg, thunkAPI) => {
     // 1. Add venn input
     thunkAPI.dispatch(editVennInput(args));
 
     // 2. Recalculate venn
-    thunkAPI.dispatch(startGetVenn());
+    thunkAPI.dispatch(startComputeVenn());
 
     return true;
   },
@@ -174,7 +165,7 @@ export const startRmVennInput = createAsyncThunk<
     thunkAPI.dispatch(removeVennInput(indexToRm));
 
     // 2. Recalculate venn
-    thunkAPI.dispatch(startGetVenn());
+    thunkAPI.dispatch(startComputeVenn());
 
     return true;
   },
@@ -191,7 +182,7 @@ export const startSetVennInputs = createAsyncThunk<
     thunkAPI.dispatch(setVennInputs(vennInputs));
 
     // 2. Recalculate venn
-    thunkAPI.dispatch(startGetVenn());
+    thunkAPI.dispatch(startComputeVenn());
 
     return true;
   },
@@ -199,36 +190,34 @@ export const startSetVennInputs = createAsyncThunk<
 
 // Charts
 type StartSetAllTimeStatsArgs = undefined;
-const startGetAllTimeseriesStats = createAsyncThunk<
+const startComputeAllTimeseriesStats = createAsyncThunk<
   boolean,
   StartSetAllTimeStatsArgs,
   ThunkConfig
 >(
   'timeseriesStatsSS/startGetTimeStats',
   async (undef: StartSetAllTimeStatsArgs, thunkAPI) => {
-    const p1: Promise<any> = thunkAPI.dispatch(startGetLineGraph());
-    const p2: Promise<any> = thunkAPI.dispatch(startGetHistogram());
-    const p3: Promise<any> = thunkAPI.dispatch(startGetVenn());
-    const p4: Promise<any> = thunkAPI.dispatch(startGetHeatMap());
+    const p1: Promise<any> = thunkAPI.dispatch(startComputeLineGraph());
+    const p2: Promise<any> = thunkAPI.dispatch(startComputeHistogram());
+    const p3: Promise<any> = thunkAPI.dispatch(startComputeVenn());
+    const p4: Promise<any> = thunkAPI.dispatch(startComputeHeatMap());
 
     await Promise.all([p1, p2, p3, p4]);
-
-    thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
   },
 );
 
-type StartGetLineGraphArgs = undefined;
-const startGetLineGraph = createAsyncThunk<
+type StartComputeLineGraphArgs = undefined;
+const startComputeLineGraph = createAsyncThunk<
   boolean,
-  StartGetLineGraphArgs,
+  StartComputeLineGraphArgs,
   ThunkConfig
 >(
-  'timeseriesStatsSS/startGetLineGraph',
-  async (undef: StartGetLineGraphArgs, thunkAPI) => {
-    const {activeSliceName, allDbOutputs} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  'timeseriesStatsSS/startComputeLineGraph',
+  async (undef: StartComputeLineGraphArgs, thunkAPI) => {
+    const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
+    const {allDbOutputs} = thunkAPI.getState().fetched.cachedInputsOutputs;
 
     const lineGraph: LineGraph = await timeseriesDriver.getDailyOutputLG({
       sliceName: activeSliceName,
@@ -241,16 +230,16 @@ const startGetLineGraph = createAsyncThunk<
   },
 );
 
-type StartGetHistogramArgs = undefined;
-const startGetHistogram = createAsyncThunk<
+type StartComputeHistogramArgs = undefined;
+const startComputeHistogram = createAsyncThunk<
   boolean,
-  StartGetHistogramArgs,
+  StartComputeHistogramArgs,
   ThunkConfig
 >(
-  'timeseriesStatsSS/startGetHistogram',
-  async (undef: StartGetHistogramArgs, thunkAPI) => {
-    const {activeSliceName, allDbOutputs} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  'timeseriesStatsSS/startComputeHistogram',
+  async (undef: StartComputeHistogramArgs, thunkAPI) => {
+    const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
+    const {allDbOutputs} = thunkAPI.getState().fetched.cachedInputsOutputs;
 
     const histogram: HistogramByMonth[] =
       await timeseriesDriver.getMonthlyOutputHistogram({
@@ -264,17 +253,20 @@ const startGetHistogram = createAsyncThunk<
   },
 );
 
-type StartGetVennArgs = undefined;
-const startGetVenn = createAsyncThunk<boolean, StartGetVennArgs, ThunkConfig>(
-  'timeseriesStatsSS/startGetVenn',
-  async (undef: StartGetVennArgs, thunkAPI) => {
+type StartComputeVennArgs = undefined;
+const startComputeVenn = createAsyncThunk<
+  boolean,
+  StartComputeVennArgs,
+  ThunkConfig
+>(
+  'timeseriesStatsSS/startComputeVenn',
+  async (undef: StartComputeVennArgs, thunkAPI) => {
     const activeSliceName: string =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer.activeSliceName;
+      thunkAPI.getState().appState.activeJournal.activeSliceName;
     const inputNodeFullIds: NODE_ID[] = thunkAPI
       .getState()
-      .analyticsSlice.timeseriesStatsSlice.vennNodeInputs.map(
-        (vennInput: VennInput) =>
-          addNodePostfix(vennInput.item.id, vennInput.item.postfix),
+      .analytics.timeseriesStats.vennNodeInputs.map((vennInput: VennInput) =>
+        addNodePostfix(vennInput.item.id, vennInput.item.postfix),
       );
 
     // const venn: VennByMonth[] = await timeseriesDriver.getMonthlyOutputHistogram({ sliceName: activeSliceName, outputs: [] }) as VennByMonth[];
@@ -289,16 +281,16 @@ const startGetVenn = createAsyncThunk<boolean, StartGetVennArgs, ThunkConfig>(
   },
 );
 
-type StartGetHeatMapArgs = undefined;
-const startGetHeatMap = createAsyncThunk<
+type StartComputeHeatMapArgs = undefined;
+const startComputeHeatMap = createAsyncThunk<
   boolean,
-  StartGetHeatMapArgs,
+  StartComputeHeatMapArgs,
   ThunkConfig
 >(
-  'timeseriesStatsSS/startGetHeatMap',
-  async (undef: StartGetHeatMapArgs, thunkAPI) => {
-    const {activeSliceName, allDbOutputs} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  'timeseriesStatsSS/startComputeHeatMap',
+  async (undef: StartComputeHeatMapArgs, thunkAPI) => {
+    const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
+    const {allDbOutputs} = thunkAPI.getState().fetched.cachedInputsOutputs;
 
     const heatmap: HeatMapByMonth[] = await timeseriesDriver.getDailyOutputHM({
       sliceName: activeSliceName,
@@ -333,8 +325,6 @@ type SetVennAction = PayloadAction<VennByMonth[]>;
 type SetHeatMapAction = PayloadAction<HeatMapByMonth[]>;
 // Reset
 type ResetNodesAndStatsAction = PayloadAction<undefined>;
-// Rerender
-type ForceTimeStatsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
 
@@ -345,6 +335,12 @@ export const timeseriesStatsSlice = createSlice({
     // FRESHNESS
     setFreshness: (state: TimeStatsState, action: SetFreshnessAction) => {
       state.isFresh = action.payload;
+    },
+    markTimeseriesStatsFresh: (state: TimeStatsState) => {
+      if (state.isFresh !== true) state.isFresh = true;
+    },
+    markTimeseriesStatsUnfresh: (state: TimeStatsState) => {
+      if (state.isFresh !== false) state.isFresh = false;
     },
     setAnalyzedSliceName: (
       state: TimeStatsState,
@@ -420,24 +416,20 @@ export const timeseriesStatsSlice = createSlice({
     addVennInput: (state: TimeStatsState, action: AddVennInput) => {
       state.vennNodeInputs.push(action.payload);
       // Force rerender/recalculate Venn (and all)
-      state.graphsSignature = {};
     },
     editVennInput: (state: TimeStatsState, action: EditVennInput) => {
       state.vennNodeInputs[action.payload.index] = action.payload.input;
       // Force rerender/recalculate Venn (and all)
-      state.graphsSignature = {};
     },
     removeVennInput: (state: TimeStatsState, action: RemoveVennInput) => {
       // Do not need to set state bcus Redux Toolkit uses Immer, which
       // applies mutations to the state
       state.vennNodeInputs.splice(action.payload, 1);
       // Force rerender/recalculate Venn (and all)
-      state.graphsSignature = {};
     },
     setVennInputs: (state: TimeStatsState, action: SetVennInputs) => {
       state.vennNodeInputs = action.payload;
       // Force rerender/recalculate Venn (and all)
-      state.graphsSignature = {};
     },
 
     // CHARTS
@@ -468,22 +460,6 @@ export const timeseriesStatsSlice = createSlice({
       state.histogramByMonth = [];
       state.vennByMonth = [];
       state.heatMapByMonth = [];
-
-      // RERENDER
-      state.graphsSignature = {};
-    },
-
-    // RERENDER
-    forceSignatureRerender: (
-      state: TimeStatsState,
-      action: ForceTimeStatsRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      state.graphsSignature = {};
     },
   },
 });
@@ -498,7 +474,7 @@ const {
   setHistogram,
   setVenn,
   setHeatMap,
-  setFreshness,
+  markTimeseriesStatsFresh,
   setAnalyzedSliceName,
   resetNodesAndStats,
 } = timeseriesStatsSlice.actions;
@@ -507,7 +483,7 @@ export const {
   setChartSelection,
   setDayInput,
   setMonthIndex,
-  forceSignatureRerender,
+  markTimeseriesStatsUnfresh,
 } = timeseriesStatsSlice.actions;
 
 export default timeseriesStatsSlice.reducer;

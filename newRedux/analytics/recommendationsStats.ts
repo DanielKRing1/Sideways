@@ -10,7 +10,7 @@ import {
   NODE_ID_COMPONENTS,
   addNodePostfix,
 } from 'ssDatabase/api/types';
-import {ThunkConfig} from '../../types';
+import {ThunkConfig} from '../../ssRedux/types';
 
 // INITIAL STATE
 
@@ -18,16 +18,12 @@ export interface RecommendationsState {
   searchInput: string;
   recommendationInputs: RecoInput[];
   recommendations: HiLoRankingByOutput;
-
-  recommendationsSignature: {};
 }
 
 const initialState: RecommendationsState = {
   searchInput: '',
   recommendationInputs: [],
   recommendations: {},
-
-  recommendationsSignature: {},
 };
 
 // THUNKS
@@ -41,21 +37,22 @@ type StartGetRecommendationsArgs = Omit<
   | 'graphName'
   | 'inputNodeIds'
 >;
-export const startGetRecommendations = createAsyncThunk<
+export const startComputeRecommendations = createAsyncThunk<
   boolean,
   StartGetRecommendationsArgs,
   ThunkConfig
 >(
-  'recommendationStatsSS/startGetRecommendations',
+  'recommendationStatsSS/startComputeRecommendations',
   async (
     {graphType, iterations, dampingFactor}: StartGetRecommendationsArgs,
     thunkAPI,
   ) => {
-    const {activeSliceName, allDbOutputs} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+    const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
+    const {allDbOutputs} = thunkAPI.getState().fetched.cachedInputsOutputs;
+
     const inputNodeFullIds: string[] = thunkAPI
       .getState()
-      .analyticsSlice.recoStatsSlice.recommendationInputs.map(
+      .analytics.recommendationsStats.recommendationInputs.map(
         (input: GrowingIdItem<NODE_ID_COMPONENTS>) =>
           addNodePostfix(input.item.id, input.item.postfix),
       );
@@ -73,7 +70,6 @@ export const startGetRecommendations = createAsyncThunk<
       });
 
     thunkAPI.dispatch(setRecommendations(recommendations));
-    thunkAPI.dispatch(forceSignatureRerender());
 
     return true;
   },
@@ -137,17 +133,6 @@ export const recommendationStatsSlice = createSlice({
     ) => {
       state.recommendations = action.payload;
     },
-    forceSignatureRerender: (
-      state: RecommendationsState,
-      action: ForceRecommendationsRerenderAction,
-    ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-
-      state.recommendationsSignature = {};
-    },
   },
 });
 
@@ -159,7 +144,6 @@ export const {
   addRecommendationInput,
   editRecommendationInput,
   removeRecommendationInput,
-  forceSignatureRerender,
 } = recommendationStatsSlice.actions;
 
 export default recommendationStatsSlice.reducer;

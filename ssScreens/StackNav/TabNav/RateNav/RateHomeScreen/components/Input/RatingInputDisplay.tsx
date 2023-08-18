@@ -60,7 +60,7 @@ const RatingInputDisplay: FC<RatingInputDisplayProps> = props => {
     (state: RootState) => state.undorateSidewaysSlice,
   );
   const {fullUserJsonMap} = useSelector(
-    (state: RootState) => state.userJsonSlice,
+    (state: RootState) => state.fetched.userJson,
   );
   // Select reducer value
   const [, inputs] = select(

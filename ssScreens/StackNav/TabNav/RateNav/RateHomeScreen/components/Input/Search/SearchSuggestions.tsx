@@ -23,7 +23,7 @@ const SearchSuggestions: FC<SearchSuggestionsProps> = props => {
 
   // REDUX
   const {allDbInputs} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
 
   // AUTOCOMPLETE

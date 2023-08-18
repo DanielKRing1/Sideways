@@ -74,8 +74,7 @@ export const startCacheAllDbInputs = createAsyncThunk<
   undefined,
   ThunkConfig
 >('rateSS/startCacheAllDbInputs', async (undef, thunkAPI) => {
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
 
   // 1. Get all inputs
   const allDbInputs: string[] = rmDuplicates(
@@ -94,8 +93,7 @@ export const startCacheAllDbOutputs = createAsyncThunk<
   undefined,
   ThunkConfig
 >('rateSS/startCacheAllDbOutputs', async (undef, thunkAPI) => {
-  const {activeSliceName} =
-    thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+  const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
 
   // 1. Get all outputs
   const allDbOutputs: string[] =

@@ -34,10 +34,10 @@ const NodeStats: FC<NodeStatsProps> = props => {
 
   // REDUX
   const {activeSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {fullUserJsonMap} = useSelector(
-    (state: RootState) => state.userJsonSlice,
+    (state: RootState) => state.fetched.userJson,
   );
 
   const iconName: string = useMemo(() => {

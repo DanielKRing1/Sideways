@@ -29,7 +29,7 @@ const AutoCompleteDecoration: FC<AutoCompleteDecorationProps> = props => {
 
   // REDUX SELECTOR
   const {allDbInputs} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   console.log('AUTOCOMPLETECATEGORY----------------------------');
   console.log(allDbInputs);

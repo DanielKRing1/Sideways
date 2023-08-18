@@ -51,10 +51,9 @@ type RateSSThunkArgs = {
 export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'rateSS/startRate',
   async (undef, thunkAPI) => {
-    const {activeSliceName} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+    const {activeSliceName} = thunkAPI.getState().appState.activeJournal;
     const {inputs, outputs, rating} = thunkAPI.getState().rateSidewaysSlice;
-    const {fullUserJsonMap} = thunkAPI.getState().userJsonSlice;
+    const {fullUserJsonMap} = thunkAPI.getState().fetched.userJson;
 
     const inputNames: NODE_ID[] = inputs.map(({item}) =>
       addNodePostfix(item.id, item.postfix),

@@ -41,18 +41,18 @@ type StartGetRecommendationsArgs = Omit<
   | 'graphName'
   | 'inputNodeIds'
 >;
-export const startGetRecommendations = createAsyncThunk<
+export const startComputeRecommendations = createAsyncThunk<
   boolean,
   StartGetRecommendationsArgs,
   ThunkConfig
 >(
-  'recommendationStatsSS/startGetRecommendations',
+  'recommendationStatsSS/startComputeRecommendations',
   async (
     {graphType, iterations, dampingFactor}: StartGetRecommendationsArgs,
     thunkAPI,
   ) => {
     const {activeSliceName, allDbOutputs} =
-      thunkAPI.getState().readSidewaysSlice.toplevelReadReducer;
+      thunkAPI.getState().appState.activeJournal;
     const inputNodeFullIds: string[] = thunkAPI
       .getState()
       .analyticsSlice.recoStatsSlice.recommendationInputs.map(

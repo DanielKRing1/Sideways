@@ -30,13 +30,9 @@ const Timeseries: FC<TimeseriesProps> = () => {
   const theme = useTheme();
 
   // REDUX
-  const {readSSSignature} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+  const {heatMapByMonth, monthIndex, selectedChart} = useSelector(
+    (state: RootState) => state.analytics.timeseriesStats,
   );
-  const {heatMapByMonth, monthIndex, selectedChart, graphsSignature} =
-    useSelector(
-      (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
-    );
   const dispatch: AppDispatch = useDispatch();
 
   // Assure chart freshness:

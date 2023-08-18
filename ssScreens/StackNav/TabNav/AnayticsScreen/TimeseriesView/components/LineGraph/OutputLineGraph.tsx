@@ -25,10 +25,10 @@ type OutputLineGraphProps = {};
 const OutputLineGraph: FC<OutputLineGraphProps> = () => {
   // REDUX
   const {activeSliceName, allDbOutputs} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   // const {lineGraph} = useSelector(
-  //   (state: RootState) => state.analyticsSlice.timeseriesStatsSlice,
+  //   (state: RootState) => state.analytics.timeseriesStats,
   // );
   // DUMMY LINEGRAPH
   const lineGraph = useMemo(() => {
@@ -44,7 +44,7 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
       .reverse();
   }, []);
   const {fullUserJsonMap} = useSelector(
-    (state: RootState) => state.userJsonSlice,
+    (state: RootState) => state.fetched.userJson,
   );
 
   // LOCAL STATE

@@ -14,7 +14,7 @@ export const useHydrateJournal = () => {
 
   // REDUX
   const {activeSliceName} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const dispatch: AppDispatch = useDispatch();
 

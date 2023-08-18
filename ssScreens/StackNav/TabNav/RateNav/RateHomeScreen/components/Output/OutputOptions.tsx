@@ -29,7 +29,7 @@ const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
 
   // REDUX
   const {allDbOutputs} = useSelector(
-    (state: RootState) => state.readSidewaysSlice.toplevelReadReducer,
+    (state: RootState) => state.appState.activeJournal,
   );
   const {outputs: outputsR} = useSelector(
     (state: RootState) => state.rateSidewaysSlice,
