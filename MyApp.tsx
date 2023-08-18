@@ -61,11 +61,11 @@ export default NewApp;
 const AppContent = () => {
   return (
     <DbLoaderProvider>
-      <AppStateManager />
-
-      <RequireActiveSliceProvider>
-        <StackNavigator />
-      </RequireActiveSliceProvider>
+      <AppStateManager>
+        <RequireActiveSliceProvider>
+          <StackNavigator />
+        </RequireActiveSliceProvider>
+      </AppStateManager>
     </DbLoaderProvider>
   );
 };
