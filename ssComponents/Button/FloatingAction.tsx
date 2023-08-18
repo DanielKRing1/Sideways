@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import {Animated, Text, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 
-import {BoxShadowStyles} from '../Shadow/BoxShadowStyles';
+import {BoxShadowStylesStr} from '../Shadow/BoxShadowStyles';
 
 type Coordinate = {
   x: number;
@@ -142,7 +142,7 @@ const StyledAnimation = styled(Animated.View)<StyledAnimationProps>`
   width: ${({radius}: StyledAnimationProps) => radius * 2}px;
   border-radius: ${({radius}: StyledAnimationProps) => radius}px;
 
-  ${BoxShadowStyles}
+  ${BoxShadowStylesStr}
 
   backgroundColor: white;
 `;
