@@ -11,7 +11,7 @@ module.exports = {
         'no-undef': 'off',
         '@typescript-eslint/no-shadow': ['error'],
         '@typescript-eslint/no-unused-vars': 'off',
-        curly: ['error', 'multi'],
+        curly: ['error', 'all'],
         'max-len': [
           'warn',
           {
