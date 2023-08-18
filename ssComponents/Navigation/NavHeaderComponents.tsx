@@ -15,8 +15,9 @@ import {
   StackNavigatorNavigationProp,
   StackNavigatorParamList,
 } from '../../ssNavigation/StackNavigator';
-import {setNewSliceName} from '../../ssRedux/createSidewaysSlice';
-import {setSearchedSliceName} from '../../ssRedux/readSidewaysSlice';
+import {setTypingSliceName as setTypingActiveSliceName} from '../../ssRedux/appState/activeJournal';
+import {setNewSliceName} from '../../ssRedux/input/createJournal';
+import {setNewCategorySetName} from 'ssRedux/input/createCategorySet';
 import MyTextInput from '../ReactNative/MyTextInput';
 import MyText from '../ReactNative/MyText';
 import MyButton from '../ReactNative/MyButton';
@@ -34,7 +35,6 @@ import {useWindowDimensions, ViewStyle} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useActiveSliceState} from 'ssContexts/RequireActiveSlice/hooks/useActiveSliceState';
 import {ActiveSliceState} from 'ssContexts/constants';
-import {setNewCategorySetName} from 'ssRedux/createCategorySetSlice';
 
 type ProfileNavButton = {};
 export const ProfileNavButton: FC<ProfileNavButton> = props => {
@@ -64,7 +64,7 @@ type ActiveSliceNavButtonProps = {};
 export const ActiveSliceNavButton: FC<ActiveSliceNavButtonProps> = props => {
   const navigation: StackNavigatorNavigationProp = useNavigation();
 
-  const {activeSliceName, readSSSignature} = useSelector(
+  const {activeSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
   );
 
@@ -86,19 +86,19 @@ export const ActiveSliceNavButton: FC<ActiveSliceNavButtonProps> = props => {
 
 type ActiveSliceNavInputProps = {};
 export const ActiveSliceNavInput: FC<ActiveSliceNavInputProps> = props => {
-  const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
+  const {activeSliceName, typingSliceName: typingActiveSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
   );
   const dispatch = useDispatch();
 
   const handleChangeText = (newText: string) => {
-    dispatch(setSearchedSliceName(newText));
+    dispatch(setTypingActiveSliceName(newText));
   };
 
   return (
     <MyTextInput
       placeholder="Find Slice..."
-      value={searchedSliceName}
+      value={typingActiveSliceName}
       onChangeText={handleChangeText}
     />
   );
@@ -119,8 +119,8 @@ export const AddSliceNavButton: FC<AddSliceNavButtonProps> = props => {
 
 type AddSliceNavInputProps = {};
 export const AddSliceNavInput: FC<AddSliceNavInputProps> = props => {
-  const {newSliceName, createdSignature} = useSelector(
-    (state: RootState) => state.createSidewaysSlice,
+  const {typingSliceName: typingAddSliceName} = useSelector(
+    (state: RootState) => state.input.createJournal,
   );
   const dispatch = useDispatch();
 
@@ -131,7 +131,7 @@ export const AddSliceNavInput: FC<AddSliceNavInputProps> = props => {
   return (
     <MyTextInput
       placeholder="New Slice name..."
-      value={newSliceName}
+      value={typingAddSliceName}
       onChangeText={handleChangeText}
     />
   );
@@ -141,8 +141,8 @@ type AddCategorySetNavInputProps = {};
 export const AddCategorySetNavInput: FC<
   AddCategorySetNavInputProps
 > = props => {
-  const {categorySetName, createdSignature} = useSelector(
-    (state: RootState) => state.createCategorySetSlice,
+  const {typingCSName} = useSelector(
+    (state: RootState) => state.input.createCategorySet,
   );
   const dispatch = useDispatch();
 
@@ -153,7 +153,7 @@ export const AddCategorySetNavInput: FC<
   return (
     <MyTextInput
       placeholder="New Category Set name..."
-      value={categorySetName}
+      value={typingCSName}
       onChangeText={handleChangeText}
     />
   );
@@ -162,7 +162,7 @@ export const AddCategorySetNavInput: FC<
 // TODO: Remove this?
 // type AddInputNavInputProps = {};
 // export const AddInputNavInput: FC<AddInputNavInputProps> = props => {
-//   const {} = useSelector((state: RootState) => (state.rateSidewaysSlice));
+//   const {} = useSelector((state: RootState) => (state.input.rateJournal));
 //   const dispatch = useDispatch();
 
 //   const handleChangeText = (newText: string) => {

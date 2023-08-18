@@ -12,7 +12,7 @@ import MyText from 'ssComponents/ReactNative/MyText';
 import {SidewaysSnapshotRow} from 'ssDatabase/api/core/types';
 import {AppDispatch} from 'ssRedux/index';
 import {abbrDateMs, serializeDateNum} from 'ssUtils/date';
-import {startDeleteRate} from 'ssRedux/undorateSidewaysSlice';
+import {startDeleteRate} from 'ssRedux/input/undoRateJournal';
 import {stripNodePostfix} from 'ssDatabase/api/types';
 
 type StackCardProps = {

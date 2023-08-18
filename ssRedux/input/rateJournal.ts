@@ -5,17 +5,15 @@ export type RateInput = GrowingIdItem<NODE_ID_COMPONENTS & {category: string}>;
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {GraphType} from 'ssDatabase/api/core/types';
 import {ThunkConfig} from '../../ssRedux/types';
-import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
-import {
-  startCleanInputCategories,
-  startRefreshUiAfterRate,
-} from 'ssRedux/userJson';
-import {forceSignatureRerender as forceStackSignatureRerender} from 'ssRedux/readSidewaysSlice/readStack';
+import {startCleanInputCategories} from 'ssRedux/fetched/userJson';
 import {
   addNodePostfix,
   NODE_ID,
   NODE_ID_COMPONENTS,
 } from 'ssDatabase/api/types';
+import {startCacheAllDbInputsOutputs} from 'ssRedux/fetched/cachedInputsOutputs';
+import {markNodeStatsUnfresh} from 'ssRedux/analytics/identityStats';
+import {markTimeseriesStatsUnfresh} from 'ssRedux/analytics/timeseriesStats';
 
 // INITIAL STATE
 
@@ -96,6 +94,27 @@ export const startRate = createAsyncThunk<boolean, undefined, ThunkConfig>(
     return true;
   },
 );
+
+export const startRefreshUiAfterRate = createAsyncThunk<
+  boolean,
+  undefined,
+  ThunkConfig
+>('rateSS/startRefreshUiAfterRate', async (undef, thunkAPI) => {
+  // 1. Clean input to category mapping
+  thunkAPI.dispatch(startCleanInputCategories());
+
+  // 2. Update all in/outputs
+  thunkAPI.dispatch(startCacheAllDbInputsOutputs());
+
+  // 3. Refresh Node + Identity Stats
+  thunkAPI.dispatch(markNodeStatsUnfresh());
+  thunkAPI.dispatch(markTimeseriesStatsUnfresh());
+
+  // 4. TODO Aug 18, 2023: Potentially need to manually Refresh stack if stack list is not updated by un/rating
+  // thunkAPI.dispatch(forceStackSignatureRerender());
+
+  return true;
+});
 
 // ACTION TYPES
 

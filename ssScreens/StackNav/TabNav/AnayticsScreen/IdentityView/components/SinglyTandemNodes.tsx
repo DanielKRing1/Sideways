@@ -8,12 +8,8 @@ import HiLoRankingByOutputRow from '../../../../../../ssComponents/Nodes/HiLoRan
 
 type SinglyTandemNodesProps = {};
 const SinglyTandemNodes: FC<SinglyTandemNodesProps> = () => {
-  const {readSSSignature} = useSelector(
-    (state: RootState) => state.appState.activeJournal,
-  );
-
-  const {nodeIdInput, singlyTandemNodes, identityStatsSignature} = useSelector(
-    (state: RootState) => state.analyticsSlice.identityStatsSlice,
+  const {nodeIdInput, singlyTandemNodes} = useSelector(
+    (state: RootState) => state.analytics.identityStats,
   );
 
   return (

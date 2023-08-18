@@ -22,7 +22,7 @@ const GraphViewScreen: FC<GraphViewScreenProps> = props => {
 
   // REDUX
   const {selectedView} = useSelector(
-    (state: RootState) => state.analyticsSlice.selectedViewSlice,
+    (state: RootState) => state.appState.selectedAnalytics,
   );
 
   const renderSwitch = useMemo(() => {

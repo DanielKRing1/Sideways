@@ -15,7 +15,7 @@ import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
 import {useUniqueId} from 'ssHooks/useUniqueId';
-import {addC, editC} from 'ssRedux/createCategorySetSlice';
+import {addC, editC} from 'ssRedux/input/createCategorySet';
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {hashToColor} from 'ssUtils/color';
 
@@ -26,8 +26,8 @@ export const DEFAULT_CREATE_CS_ID: string = 'DEFAULT_CREATE_CS_ID';
 type GrowingCategorySetProps = {};
 const GrowingCategorySet: FC<GrowingCategorySetProps> = props => {
   // REDUX
-  const {categories, categoryNameMapping} = useSelector(
-    (state: RootState) => state.createCategorySetSlice,
+  const {cs, cscNameMapping} = useSelector(
+    (state: RootState) => state.input.createCategorySet,
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -37,9 +37,7 @@ const GrowingCategorySet: FC<GrowingCategorySetProps> = props => {
         [DEFAULT_CREATE_CS_ACTIVE_SLICE]: DEFAULT_CREATE_CS_ID,
       },
       [GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING]: {
-        [DEFAULT_CREATE_CS_ID]: Object.values(
-          categories,
-        ).reduce<GJ_CategorySet>(
+        [DEFAULT_CREATE_CS_ID]: Object.values(cs).reduce<GJ_CategorySet>(
           (acc: GJ_CategorySet, c: GJ_CategoryDecoration) => {
             acc[c.cId] = {
               cId: c.cId,
@@ -52,19 +50,19 @@ const GrowingCategorySet: FC<GrowingCategorySetProps> = props => {
         ),
       },
       [GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING]: {},
-      [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: categoryNameMapping,
+      [GJ_COLLECTION_ROW_KEY.CATEGORY_NAME_MAPPING]: cscNameMapping,
       [ASJ_CATEGORY_ROW_KEY.INPUT_NAME_TO_CATEGORY_ID_MAPPING]: {},
       [ASJ_CATEGORY_ROW_KEY.OUTPUT_NAME_TO_DECORATION_MAPPING]: {},
     };
-  }, [categories, categoryNameMapping]);
+  }, [cs, cscNameMapping]);
 
   console.log('TTTTTTTTTTTTTTT-------------------------');
-  console.log(Object.values(categories));
+  console.log(Object.values(cs));
 
   return (
     <GrowingIdList
-      data={Object.values(categories)}
-      idGenerator={useUniqueId(5, Object.keys(categories))}
+      data={Object.values(cs)}
+      idGenerator={useUniqueId(5, Object.keys(cs))}
       handleAddInput={(id: string, newText: string) => {
         console.log('HANDLEADDINPUT-------------------------');
         console.log(newText);

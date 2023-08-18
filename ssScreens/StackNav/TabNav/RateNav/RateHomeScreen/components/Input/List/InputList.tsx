@@ -7,11 +7,11 @@ import {
   editInput as editInputR,
   RateInput,
   removeInput as removeInputR,
-} from 'ssRedux/rateSidewaysSlice';
+} from 'ssRedux/input/rateJournal';
 import {
   editReplacementInput as editInputUR,
   removeReplacementInput as removeInputUR,
-} from 'ssRedux/undorateSidewaysSlice';
+} from 'ssRedux/input/undoRateJournal';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import NoInputsDisplay from './NoInputsDisplay';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';

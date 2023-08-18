@@ -14,16 +14,14 @@ import {
   editRecommendationInput,
   removeRecommendationInput,
   editSearchInput,
-} from '../../../../../../ssRedux/analyticsSlice/recoStatsSlice';
+} from '../../../../../../ssRedux/analytics/recommendationsStats';
 
 type GrowingRecoInputsProps = {};
 const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   const dispatch = useDispatch();
-  const {readSSSignature} = useSelector(
-    (state: RootState) => state.appState.activeJournal,
+  const {searchInput, recommendationInputs} = useSelector(
+    (state: RootState) => state.analytics.recommendationsStats,
   );
-  const {searchInput, recommendationInputs, recommendationsSignature} =
-    useSelector((state: RootState) => state.analyticsSlice.recoStatsSlice);
 
   // HANDLER METHODS
   const keyExtractor = (dataPoint: RecoInput) => `${dataPoint.id}`;

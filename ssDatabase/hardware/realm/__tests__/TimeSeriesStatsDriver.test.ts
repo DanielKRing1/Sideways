@@ -26,8 +26,8 @@ jest.mock(`ssDatabase/realm/core/config`, () => {
 
 // TO TEST
 import dbDriver from '../../../api/core/dbDriver';
-import {startCreateSlice} from '../../../../ssRedux/createSidewaysSlice';
-import {startRate} from '../../../../ssRedux/rateSidewaysSlice';
+import {startCreateSlice} from '../../../../ssRedux/input/createJournal';
+import {startRate} from '../../../../ssRedux/input/rateJournal';
 
 import TimeseriesStatsDriver from '../analytics/timeseries/timeseriesStatsDriver';
 import {
@@ -205,6 +205,7 @@ describe('TimeseriesStatsDriver', () => {
     const vennByMonth: VennByMonth[] =
       await TimeseriesStatsDriver.getNodeOverlapVenn({
         sliceName: TEST_SLICE_NAME,
+        // @ts-ignore
         nodeIds: TEST_NODES_VENN,
       });
 

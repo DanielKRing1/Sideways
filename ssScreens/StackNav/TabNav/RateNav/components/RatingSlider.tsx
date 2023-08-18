@@ -6,7 +6,7 @@ import styled, {DefaultTheme} from 'styled-components/native';
 
 // REDUX
 import {RootState} from '../../../../../ssRedux';
-import {setRating} from '../../../../../ssRedux/rateSidewaysSlice';
+import {setRating} from '../../../../../ssRedux/input/rateJournal';
 
 // COMPONENTS
 // import Slider from '../../../../../ssComponents/Input/ReanimatedSlider';
@@ -37,9 +37,7 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
   // const isPressed = useSharedValue(false);
   // const offsetX = useSharedValue(0);
 
-  const {rating, ratedSignature} = useSelector(
-    (state: RootState) => state.rateSidewaysSlice,
-  );
+  const {rating} = useSelector((state: RootState) => state.input.rateJournal);
   const dispatch = useDispatch();
 
   const onChangeValue = (numStr: string) => {

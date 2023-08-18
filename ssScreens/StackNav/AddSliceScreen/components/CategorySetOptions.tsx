@@ -15,14 +15,14 @@ import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import MyText from 'ssComponents/ReactNative/MyText';
 import {GJ_CategorySetNameMapping} from 'ssDatabase/api/userJson/category/types';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';
-import {setCSId} from 'ssRedux/createSidewaysSlice';
+import {setCSId} from 'ssRedux/input/createJournal';
 import {AppDispatch, RootState} from 'ssRedux/index';
 
 type CategorySetOptionsProps = {};
 const CategorySetOptions: FC<CategorySetOptionsProps> = props => {
   // REDUX
   const {csId: selectedCSId} = useSelector(
-    (state: RootState) => state.createSidewaysSlice,
+    (state: RootState) => state.input.createJournal,
   );
   const {fullUserJsonMap} = useSelector(
     (state: RootState) => state.fetched.userJson,

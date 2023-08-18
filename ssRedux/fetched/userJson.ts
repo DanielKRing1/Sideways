@@ -241,8 +241,6 @@ export const startRefreshInputNameToCategoryNameMapping = createAsyncThunk<
 
 // UserJson
 type SetUserJsonAction = PayloadAction<UserJsonMap>;
-// Rerender
-type ForceUserJsonRerenderAction = PayloadAction<undefined>;
 
 // SLICE
 

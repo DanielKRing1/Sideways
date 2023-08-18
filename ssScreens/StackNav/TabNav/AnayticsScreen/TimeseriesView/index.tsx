@@ -20,7 +20,7 @@ import {
   LINE_GRAPH,
   startAssureFreshness as startAssureTimeseriesFreshness,
   VENN_PLOT,
-} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
+} from 'ssRedux/analytics/timeseriesStats';
 import FloatingSelectionButton from './components/Selection/FloatingSelectionButton';
 import {abbrDateMs} from 'ssUtils/date';
 

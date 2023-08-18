@@ -5,7 +5,7 @@ import {AddCategorySetNavHeader} from 'ssComponents/Navigation/NavHeader';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
 import VerticalSpace from 'ssComponents/Spacing/VerticalSpace';
-import {startCreateCS} from 'ssRedux/createCategorySetSlice';
+import {startCreateCS} from 'ssRedux/input/createCategorySet';
 import {AppDispatch} from 'ssRedux/index';
 
 // NAVIGATION

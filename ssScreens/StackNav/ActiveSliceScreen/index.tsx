@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 // REDUX
-import {AppDispatch, RootState} from '../../../ssRedux';
-import {startSetActiveSliceName} from '../../../ssRedux/readSidewaysSlice';
+import {AppDispatch} from '../../../ssRedux';
+import {startSetActiveSliceName} from '../../../ssRedux/appState/activeJournal';
 
 // NAVIGATION
 import {StackNavigatorProps} from '../../../ssNavigation/StackNavigator';
@@ -18,7 +18,7 @@ import ExistingSliceList from './components/ExistingSliceList';
 
 // NAV
 import {ActiveSliceNavHeader} from '../../../ssComponents/Navigation/NavHeader';
-import {startDeleteSlice} from '../../../ssRedux/deleteSidewaysSlice';
+import {startDeleteSlice} from '../../../ssRedux/input/deleteJournal';
 
 const ActiveSliceScreen: FC<
   StackNavigatorProps<typeof ACTIVE_SLICE_SCREEN_NAME>
@@ -26,13 +26,6 @@ const ActiveSliceScreen: FC<
   const {navigation} = props;
 
   // REDUX HOOKS
-  const {readSSSignature} = useSelector(
-    (state: RootState) => state.appState.activeJournal,
-  );
-  // TODO: Anything need to be done to rerender when signature changes?
-  const {deleteSSSignature} = useSelector(
-    (state: RootState) => state.deleteSidewaysSlice,
-  );
   const dispatch: AppDispatch = useDispatch();
 
   // SLICE HANDLER METHODS

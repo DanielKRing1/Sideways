@@ -1,11 +1,11 @@
 import React, {FC} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useTheme} from 'styled-components/native';
 
 // REDUX
 import {DISPLAY_SIZE} from '../../../../../global';
-import {AppDispatch, RootState} from '../../../../../ssRedux';
-import {startComputeRecommendations} from '../../../../../ssRedux/analyticsSlice/recoStatsSlice';
+import {AppDispatch} from '../../../../../ssRedux';
+import {startComputeRecommendations} from '../../../../../ssRedux/analytics/recommendationsStats';
 import RecoInputDisplay from './components/RecoInputDisplay';
 import MyButton from '../../../../../ssComponents/ReactNative/MyButton';
 import MyText from '../../../../../ssComponents/ReactNative/MyText';
@@ -13,7 +13,6 @@ import RecommendationNodes from './components/RecommendationNodes';
 import StickyScrollView from 'ssComponents/View/StickyScrollView';
 import {GraphType} from 'ssDatabase/api/core/types';
 import MyBorder from 'ssComponents/ReactNative/MyBorder';
-import {FlexCol, FlexRow} from 'ssComponents/Flex';
 import {View} from 'react-native';
 
 type RecommendationScreenProps = {};
@@ -23,12 +22,6 @@ const RecommendationScreen: FC<RecommendationScreenProps> = () => {
 
   // REDUX
   const dispatch: AppDispatch = useDispatch();
-  const {readSSSignature} = useSelector(
-    (state: RootState) => state.appState.activeJournal,
-  );
-  const {recommendationsSignature} = useSelector(
-    (state: RootState) => state.analyticsSlice.recoStatsSlice,
-  );
 
   return (
     <StickyScrollView

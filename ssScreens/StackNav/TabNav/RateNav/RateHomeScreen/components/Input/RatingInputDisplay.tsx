@@ -12,10 +12,19 @@ import CategoryDriver from 'ssDatabase/api/userJson/category';
 
 import {useCounterId} from 'ssHooks/useCounterId';
 import {RootState, AppDispatch} from 'ssRedux/index';
-import {addInput as addInputR, RateInput} from 'ssRedux/rateSidewaysSlice';
-import {addReplacementInput as addInputUR} from 'ssRedux/undorateSidewaysSlice';
+import {
+  addInput as addInputR,
+  editInput as editInputR,
+  removeInput as removeInputR,
+  RateInput,
+} from 'ssRedux/input/rateJournal';
+import {
+  addReplacementInput as addInputUR,
+  editReplacementInput as editInputUR,
+  removeReplacementInput as removeInputUR,
+} from 'ssRedux/input/undoRateJournal';
 import {UNASSIGNED_CATEGORY_ID} from 'ssDatabase/api/userJson/category/constants';
-import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/userJson';
+import {startRefreshInputNameToCategoryNameMapping} from 'ssRedux/fetched/userJson';
 import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
 import {inToLastCId} from 'ssDatabase/hardware/realm/userJson/utils/joins';
@@ -29,14 +38,6 @@ import {DISPLAY_SIZE} from '../../../../../../../global';
 import DbCategoryRow from 'ssComponents/CategoryRow/DbCategoryRow';
 import MyPadding from 'ssComponents/ReactNative/MyPadding';
 
-import {
-  editInput as editInputR,
-  removeInput as removeInputR,
-} from 'ssRedux/rateSidewaysSlice';
-import {
-  editReplacementInput as editInputUR,
-  removeReplacementInput as removeInputUR,
-} from 'ssRedux/undorateSidewaysSlice';
 import StickyScrollView from 'ssComponents/View/StickyScrollView';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -54,10 +55,10 @@ const RatingInputDisplay: FC<RatingInputDisplayProps> = props => {
 
   // REDUX
   const {inputs: ratingInputs} = useSelector(
-    (state: RootState) => state.rateSidewaysSlice,
+    (state: RootState) => state.input.rateJournal,
   );
   const {inputs: undoratingInputs} = useSelector(
-    (state: RootState) => state.undorateSidewaysSlice,
+    (state: RootState) => state.input.undoRateJournal,
   );
   const {fullUserJsonMap} = useSelector(
     (state: RootState) => state.fetched.userJson,

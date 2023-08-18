@@ -6,8 +6,8 @@ import {DefaultTheme, useTheme} from 'styled-components/native';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {startRate as startRateR} from 'ssRedux/rateSidewaysSlice';
-import {startUpdateRate as startRateUR} from 'ssRedux/undorateSidewaysSlice';
+import {startRate as startRateR} from 'ssRedux/input/rateJournal';
+import {startUpdateRate as startRateUR} from 'ssRedux/input/undoRateJournal';
 import {useTabBarHeight} from 'ssHooks/useTabBarHeight';
 import {RATING_TYPE} from '../RatingMenu/types';
 import {select} from 'ssUtils/selector';
@@ -24,12 +24,12 @@ const RateButton: FC<RateButtonProps> = props => {
     inputs: inputsR,
     outputs: outputsR,
     rating: ratingR,
-  } = useSelector((state: RootState) => state.rateSidewaysSlice);
+  } = useSelector((state: RootState) => state.input.rateJournal);
   const {
     inputs: inputsUR,
     outputs: outputsUR,
     rating: ratingUR,
-  } = useSelector((state: RootState) => state.undorateSidewaysSlice);
+  } = useSelector((state: RootState) => state.input.undoRateJournal);
   // Select reducer values
   const [, {inputs, outputs, rating}] = select(
     ratingType,

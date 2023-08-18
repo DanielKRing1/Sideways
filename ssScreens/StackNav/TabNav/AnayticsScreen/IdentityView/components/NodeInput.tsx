@@ -6,7 +6,7 @@ import {AppDispatch, RootState} from 'ssRedux/index';
 import {
   setSearchNodeIdInput,
   startSetNodeIdInput,
-} from 'ssRedux/analyticsSlice/identityStatsSlice';
+} from 'ssRedux/analytics/identityStats';
 import MyText from 'ssComponents/ReactNative/MyText';
 import AutoCompleteCategory from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteCategory';
 import {GraphType} from 'ssDatabase/api/core/types';
@@ -15,8 +15,8 @@ import {GOOD_POSTFIX} from 'ssDatabase/api/types';
 
 type NodeInputProps = {};
 const NodeInput: FC<NodeInputProps> = () => {
-  const {typingNodeIdInput, nodeIdInput, inputStatsSignature} = useSelector(
-    (state: RootState) => state.analyticsSlice.identityStatsSlice,
+  const {typingNodeIdInput, nodeIdInput} = useSelector(
+    (state: RootState) => state.analytics.identityStats,
   );
   const dispatch: AppDispatch = useDispatch();
 

@@ -10,7 +10,7 @@ import {
   removePossibleOutput,
   editPossibleOutput,
   CreateSliceOutput,
-} from '../../../../ssRedux/createSidewaysSlice';
+} from '../../../../ssRedux/input/createJournal';
 
 // COMPONENTS
 import GrowingIdList from '../../../../ssComponents/Input/GrowingIdList';
@@ -36,17 +36,17 @@ const StyledTextInput = styled(MyTextInput)`
 type GrowingPossibleOutputsProps = {};
 const GrowingPossibleOutputs: FC<GrowingPossibleOutputsProps> = () => {
   // REDUX
-  const {searchedSliceName} = useSelector(
+  const {typingSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
   );
-  const {possibleOutputs, createdSignature} = useSelector(
-    (state: RootState) => state.createSidewaysSlice,
+  const {possibleOutputs} = useSelector(
+    (state: RootState) => state.input.createJournal,
   );
   const dispatch = useDispatch();
 
   // UPDATE REDUX STATE
   useEffect(() => {
-    dispatch(setNewSliceName(searchedSliceName));
+    dispatch(setNewSliceName(typingSliceName));
   }, []);
 
   // HANDLER METHODS

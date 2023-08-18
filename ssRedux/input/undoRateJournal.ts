@@ -6,11 +6,11 @@ import {
   GraphType,
   SidewaysSnapshotRowPrimitive,
 } from 'ssDatabase/api/core/types';
-import {ThunkConfig} from '../../ssRedux/types';
+
+import {RateInput, startRefreshUiAfterRate} from 'ssRedux/input/rateJournal';
 
 import {addNodePostfix, NODE_ID, stripNodePostfix} from 'ssDatabase/api/types';
-import {RateInput} from 'ssRedux/rateSidewaysSlice';
-import {startRefreshUiAfterRate} from 'ssRedux/userJson';
+import {ThunkConfig} from '../../ssRedux/types';
 
 // LEFT OFF 8/17/2023: Mark NodeStats as Unfresh after Rate, UndoRate, and DeleteRate -> Create MarkUnfresh method in Rate reducer
 

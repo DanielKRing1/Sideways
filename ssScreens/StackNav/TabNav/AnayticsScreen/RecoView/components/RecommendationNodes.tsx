@@ -8,8 +8,8 @@ import HiLoRankingByOutputRow from '../../../../../../ssComponents/Nodes/HiLoRan
 
 type RecommendationNodesProps = {};
 const RecommendationNodes: FC<RecommendationNodesProps> = () => {
-  const {recommendations, recommendationsSignature} = useSelector(
-    (state: RootState) => state.analyticsSlice.recoStatsSlice,
+  const {recommendations} = useSelector(
+    (state: RootState) => state.analytics.recommendationsStats,
   );
 
   console.log('RECOMMENDATIONS------------------');

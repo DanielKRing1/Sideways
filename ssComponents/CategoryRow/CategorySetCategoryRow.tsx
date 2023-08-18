@@ -25,7 +25,7 @@ import {useDispatch} from 'react-redux';
 import {AppDispatch} from 'ssRedux/index';
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {HexColor} from '../../global';
-import {editC, removeC} from 'ssRedux/createCategorySetSlice';
+import {editC, removeC} from 'ssRedux/input/createCategorySet';
 import {UserJsonMap} from 'ssDatabase/api/userJson/types';
 import {DEFAULT_CREATE_CS_ACTIVE_SLICE} from 'ssScreens/StackNav/AddCategorySet/components/GrowingCategorySet';
 import {GJ_COLLECTION_ROW_KEY} from 'ssDatabase/api/userJson/globalDriver/types';

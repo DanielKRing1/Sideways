@@ -8,7 +8,7 @@ import {
 
 import GlobalDriver from 'ssDatabase/api/userJson/globalDriver';
 import {RootState, AppDispatch} from 'ssRedux/index';
-import {startRefreshAllUserJson} from 'ssRedux/userJson';
+import {startRefreshAllUserJson} from 'ssRedux/fetched/userJson';
 
 export const useHydrateApp = () => {
   // REDUX

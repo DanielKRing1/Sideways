@@ -24,8 +24,11 @@ import {
 type OutputLineGraphProps = {};
 const OutputLineGraph: FC<OutputLineGraphProps> = () => {
   // REDUX
-  const {activeSliceName, allDbOutputs} = useSelector(
+  const {activeSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
+  );
+  const {allDbOutputs} = useSelector(
+    (state: RootState) => state.fetched.cachedInputsOutputs,
   );
   // const {lineGraph} = useSelector(
   //   (state: RootState) => state.analytics.timeseriesStats,

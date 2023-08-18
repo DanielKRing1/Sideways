@@ -1,11 +1,11 @@
 import React, {FC, useEffect} from 'react';
 import {View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import styled, {DefaultTheme, useTheme} from 'styled-components/native';
+import {useTheme} from 'styled-components/native';
 
 // REDUX
 import {AppDispatch, RootState} from '../../../ssRedux';
-import {startCreateSlice} from '../../../ssRedux/createSidewaysSlice';
+import {startCreateSlice} from '../../../ssRedux/input/createJournal';
 
 // NAVIGATION
 import {
@@ -36,8 +36,8 @@ const AddSliceScreen: FC<
   const theme = useTheme();
 
   // REDUX
-  const {newSliceName, createdSignature} = useSelector(
-    (state: RootState) => state.createSidewaysSlice,
+  const {typingSliceName} = useSelector(
+    (state: RootState) => state.input.createJournal,
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -80,7 +80,7 @@ const AddSliceScreen: FC<
 
       <FlexCol alignItems="center">
         <MyButton
-          disabled={newSliceName === ''}
+          disabled={typingSliceName === ''}
           style={{
             width: '80%',
             borderWidth: 1,

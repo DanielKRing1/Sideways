@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
-import {startRefreshAllUserJson} from 'ssRedux/userJson';
+import {startRefreshAllUserJson} from 'ssRedux/fetched/userJson';
 import {ThunkConfig} from '../../ssRedux/types';
 import {
   GJ_CategoryDecoration,
@@ -34,7 +34,7 @@ export const startCreateCS = createAsyncThunk<boolean, undefined, ThunkConfig>(
   'createCS/startCreateCS',
   async (undef, thunkAPI) => {
     const {typingCSName, csId, cs, cscNameMapping} =
-      thunkAPI.getState().createCategorySetSlice;
+      thunkAPI.getState().input.createCategorySet;
 
     // 1. Create user-defined Category Sets
     try {

@@ -13,8 +13,8 @@ import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import MyText from 'ssComponents/ReactNative/MyText';
 
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {setOutputs as setOutputsR} from 'ssRedux/rateSidewaysSlice';
-import {setReplacementOutputs as setOutputsUR} from 'ssRedux/undorateSidewaysSlice';
+import {setOutputs as setOutputsR} from 'ssRedux/input/rateJournal';
+import {setReplacementOutputs as setOutputsUR} from 'ssRedux/input/undoRateJournal';
 import {select} from 'ssUtils/selector';
 import {useTheme} from 'styled-components';
 import {DefaultTheme} from 'styled-components/native';
@@ -29,13 +29,13 @@ const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
 
   // REDUX
   const {allDbOutputs} = useSelector(
-    (state: RootState) => state.appState.activeJournal,
+    (state: RootState) => state.fetched.cachedInputsOutputs,
   );
   const {outputs: outputsR} = useSelector(
-    (state: RootState) => state.rateSidewaysSlice,
+    (state: RootState) => state.input.rateJournal,
   );
   const {outputs: outputsUR} = useSelector(
-    (state: RootState) => state.undorateSidewaysSlice,
+    (state: RootState) => state.input.undoRateJournal,
   );
   // Select reducer values
   const [, outputs] = select(

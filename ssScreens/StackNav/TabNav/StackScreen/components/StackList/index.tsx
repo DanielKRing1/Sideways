@@ -16,7 +16,7 @@ import {deserializeDate, serializeDateNum} from 'ssUtils/date';
 import StackCard from './StackCard';
 import UndoRateModal from './UndoRateModal';
 import UndoRatingMenu from 'ssScreens/StackNav/TabNav/RateNav/RateHomeScreen/components/RatingMenu/UndoRatingMenu';
-import {setSnapshot} from 'ssRedux/undorateSidewaysSlice';
+import {setSnapshot} from 'ssRedux/input/undoRateJournal';
 
 const createRenderItem =
   (
@@ -39,12 +39,11 @@ const StackList: FC<StackListProps> = props => {
   const [stack, setStack] = useState<SidewaysSnapshotRow[]>([]);
 
   // REDUX
-  const {activeSliceName, readSSSignature} = useSelector(
+  const {activeSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
   );
-  const {stackStartDate, readStackSignature} = useSelector(
-    (state: RootState) =>
-      state.readSidewaysSlice.internalReadReducer.readStackReducer,
+  const {stackStartDate} = useSelector(
+    (state: RootState) => state.input.readStack,
   );
   const dispatch: AppDispatch = useDispatch();
 
@@ -61,7 +60,7 @@ const StackList: FC<StackListProps> = props => {
       );
       setStack(freshStack);
     })();
-  }, [isLoaded, activeSliceName, readStackSignature]);
+  }, [isLoaded, activeSliceName]);
 
   // 2. Get stack search index
   useEffect(() => {

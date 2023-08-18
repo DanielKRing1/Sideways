@@ -34,7 +34,7 @@ import {
 import {
   startRefreshCategoryMapping,
   startRefreshInputNameToCategoryNameMapping,
-} from 'ssRedux/userJson';
+} from 'ssRedux/fetched/userJson';
 import {AvailableIcons} from 'ssDatabase/api/userJson/constants';
 import {HexColor} from '../../global';
 
@@ -58,7 +58,7 @@ const DbCategoryRow = forwardRef<View, DbCategoryRowProps>((props, ref) => {
   const {activeSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
   );
-  const {fullUserJsonMap, userJsonSignature} = useSelector(
+  const {fullUserJsonMap} = useSelector(
     (state: RootState) => state.fetched.userJson,
   );
   const dispatch: AppDispatch = useDispatch();

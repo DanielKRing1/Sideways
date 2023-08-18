@@ -9,7 +9,7 @@ import HiLoRankingByOutputRow from '../../../../../../ssComponents/Nodes/HiLoRan
 type IdentityNodesProps = {};
 const IdentityNodes: FC<IdentityNodesProps> = () => {
   const {identityNodes} = useSelector(
-    (state: RootState) => state.analyticsSlice.identityStatsSlice,
+    (state: RootState) => state.analytics.identityStats,
   );
 
   return (

@@ -5,8 +5,8 @@ import dbDriver from 'ssDatabase/api/core/dbDriver';
 import userJsonDriver from 'ssDatabase/api/userJson';
 import {NO_ACTIVE_SLICE_NAME} from 'ssDatabase/api/userJson/category/constants';
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {startCacheAllDbInputsOutputs} from 'ssRedux/readSidewaysSlice';
-import {startRefreshAllUserJson} from 'ssRedux/userJson';
+import {startCacheAllDbInputsOutputs} from 'ssRedux/fetched/cachedInputsOutputs';
+import {startRefreshAllUserJson} from 'ssRedux/fetched/userJson';
 
 export const useHydrateJournal = () => {
   // LOCAL STATE

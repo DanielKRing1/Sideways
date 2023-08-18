@@ -6,8 +6,8 @@ import styled, {DefaultTheme} from 'styled-components/native';
 
 // REDUX
 import {RootState} from 'ssRedux/index';
-import {setRating as setRatingR} from 'ssRedux/rateSidewaysSlice';
-import {setReplacementRating as setRatingUR} from 'ssRedux/undorateSidewaysSlice';
+import {setRating as setRatingR} from 'ssRedux/input/rateJournal';
+import {setReplacementRating as setRatingUR} from 'ssRedux/input/undoRateJournal';
 
 // COMPONENTS
 // import Slider from 'ssComponents/Input/ReanimatedSlider';
@@ -47,10 +47,10 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
 
   // REDUX
   const {rating: ratingR} = useSelector(
-    (state: RootState) => state.rateSidewaysSlice,
+    (state: RootState) => state.input.rateJournal,
   );
   const {rating: ratingUR} = useSelector(
-    (state: RootState) => state.undorateSidewaysSlice,
+    (state: RootState) => state.input.undoRateJournal,
   );
   // Select reducer values
   const [, rating] = select(

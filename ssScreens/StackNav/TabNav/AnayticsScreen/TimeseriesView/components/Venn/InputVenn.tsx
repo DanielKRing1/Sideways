@@ -5,10 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import MyText from 'ssComponents/ReactNative/MyText';
 import VennStackWSlider from 'ssComponents/Charts/Venn/VennStackWSlider';
 import {AppDispatch, RootState} from 'ssRedux/index';
-import {
-  setMonthIndex,
-  VennInput,
-} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
+import {setMonthIndex, VennInput} from 'ssRedux/analytics/timeseriesStats';
 import GrowingVennInputDisplay from './GrowingVennInputDisplay';
 import {
   getOutputDecorationValue,

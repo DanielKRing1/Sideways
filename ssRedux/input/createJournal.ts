@@ -5,7 +5,7 @@ export type CreateSliceOutput = GrowingIdItem<string>;
 import DbDriver from 'ssDatabase/api/core/dbDriver';
 import {DAILY_JOURNAL_CATEGORY_SET} from 'ssDatabase/api/userJson/category/constants';
 import globalDriver from 'ssDatabase/api/userJson/globalDriver';
-import {startSetActiveSliceName} from 'ssRedux/readSidewaysSlice';
+import {startSetActiveSliceName} from 'ssRedux/appState/activeJournal';
 import {ThunkConfig} from '../../ssRedux/types';
 
 // INITIAL STATE
@@ -30,7 +30,7 @@ export const startCreateSlice = createAsyncThunk<
   ThunkConfig
 >('createSlice/startCreateJournal', async (undef, thunkAPI) => {
   const {typingSliceName, possibleOutputs, csId} =
-    thunkAPI.getState().createSidewaysSlice;
+    thunkAPI.getState().input.createJournal;
 
   // 1. Create Stack (also reloads stack LoadableRealm)
   const stackPromise: Promise<void> = DbDriver.createStack(typingSliceName);

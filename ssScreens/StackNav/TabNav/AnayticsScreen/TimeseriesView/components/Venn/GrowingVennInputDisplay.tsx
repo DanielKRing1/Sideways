@@ -9,7 +9,7 @@ import {
   startRmVennInput,
   VennInput,
   startEditVennInput,
-} from '../../../../../../../ssRedux/analyticsSlice/timeseriesStatsSlice';
+} from '../../../../../../../ssRedux/analytics/timeseriesStats';
 
 // DECORATIONS
 import AutoCompleteDisplay from 'ssComponents/CategoryRow/AutoComplete/AutoCompleteDisplay';

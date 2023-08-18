@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import DatePicker from '../../../../../ssComponents/Input/DatePicker';
 
 // REDUX
-import {setStartDate} from '../../../../../ssRedux/readSidewaysSlice/readStack';
+import {setStartDate} from '../../../../../ssRedux/input/readStack';
 import {RootState} from '../../../../../ssRedux';
 import {deserializeDate, serializeDateNum} from 'ssUtils/date';
 
@@ -16,9 +16,8 @@ const StackDatePicker: FC<StackDatePickerProps> = props => {
   const {} = props;
 
   const dispatch = useDispatch();
-  const {stackStartDate, readStackSignature} = useSelector(
-    (state: RootState) =>
-      state.readSidewaysSlice.internalReadReducer.readStackReducer,
+  const {stackStartDate} = useSelector(
+    (state: RootState) => state.input.readStack,
   );
 
   // PROP DRILLING STATE

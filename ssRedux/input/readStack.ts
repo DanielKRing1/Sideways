@@ -14,7 +14,6 @@ const initialState: ReadStackState = {
 // ACTION TYPES
 
 type SetStartDateAction = PayloadAction<number>;
-type ForceRatingsRerenderAction = PayloadAction<undefined>;
 
 // SLICE
 

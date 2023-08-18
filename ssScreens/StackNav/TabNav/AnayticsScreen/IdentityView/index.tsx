@@ -1,7 +1,6 @@
 import React, {FC, useEffect, memo} from 'react';
 
 import StickyScrollView from '../../../../../ssComponents/View/StickyScrollView';
-import {BoxShadow} from '../../../../../ssComponents/Shadow/BoxShadow';
 import IdentityNodes from './components/IdentityNodes';
 import NodeInput from './components/NodeInput';
 import InputNodeStats from './components/InputNodeStats';
@@ -10,8 +9,7 @@ import SinglyTandemNodes from './components/SinglyTandemNodes';
 import HighlyRatedTandemNodes from './components/HighlyRatedNodes';
 import {AppDispatch} from 'ssRedux/index';
 import {useDispatch} from 'react-redux';
-import {startAssureFreshness as startAssureIdentityFreshness} from 'ssRedux/analyticsSlice/identityStatsSlice';
-import MyText from 'ssComponents/ReactNative/MyText';
+import {startAssureFreshness as startAssureIdentityFreshness} from 'ssRedux/analytics/identityStats';
 import DismissKeyboardView from 'ssComponents/View/DismissKeyboardView';
 
 type StatsScreenProps = {};

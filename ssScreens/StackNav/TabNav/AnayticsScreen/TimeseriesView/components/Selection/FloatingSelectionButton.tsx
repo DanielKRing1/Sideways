@@ -13,7 +13,7 @@ import {
   LINE_GRAPH,
   setChartSelection,
   VENN_PLOT,
-} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
+} from 'ssRedux/analytics/timeseriesStats';
 
 const SelectLineGraph = (dispatch: AppDispatch) => (
   <TouchableOpacity

@@ -7,13 +7,16 @@ import HistogramWSlider from 'ssComponents/Charts/Histogram/HistogramWSlider';
 import {RootState, AppDispatch} from 'ssRedux/index';
 import {getOutputDecorationList} from 'ssDatabase/hardware/realm/userJson/utils/outputFormatting';
 import {GradientColor} from 'ssComponents/Charts/Histogram/Histogram';
-import {setMonthIndex} from 'ssRedux/analyticsSlice/timeseriesStatsSlice';
+import {setMonthIndex} from 'ssRedux/analytics/timeseriesStats';
 import {OutputDecoration} from 'ssDatabase/api/userJson/category/types';
 
 type OutputHistogramProps = {};
 const OutputHistogram: FC<OutputHistogramProps> = () => {
-  const {activeSliceName, allDbOutputs} = useSelector(
+  const {activeSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
+  );
+  const {allDbOutputs} = useSelector(
+    (state: RootState) => state.fetched.cachedInputsOutputs,
   );
   const {histogramByMonth, monthIndex} = useSelector(
     (state: RootState) => state.analytics.timeseriesStats,

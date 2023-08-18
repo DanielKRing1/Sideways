@@ -23,7 +23,7 @@ const SearchSuggestions: FC<SearchSuggestionsProps> = props => {
 
   // REDUX
   const {allDbInputs} = useSelector(
-    (state: RootState) => state.appState.activeJournal,
+    (state: RootState) => state.fetched.cachedInputsOutputs,
   );
 
   // AUTOCOMPLETE

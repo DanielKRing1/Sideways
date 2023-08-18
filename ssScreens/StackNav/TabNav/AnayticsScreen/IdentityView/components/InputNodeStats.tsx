@@ -7,11 +7,8 @@ import NodeStats from './NodeStats';
 
 type InputNodeStatsProps = {};
 const InputNodeStats: FC<InputNodeStatsProps> = props => {
-  const {readSSSignature} = useSelector(
-    (state: RootState) => state.appState.activeJournal,
-  );
-  const {nodeStats, inputStatsSignature} = useSelector(
-    (state: RootState) => state.analyticsSlice.identityStatsSlice,
+  const {nodeStats} = useSelector(
+    (state: RootState) => state.analytics.identityStats,
   );
 
   return (
@@ -20,6 +17,7 @@ const InputNodeStats: FC<InputNodeStatsProps> = props => {
         flex: 1,
         alignItems: 'center',
       }}>
+      {/* @ts-ignore */}
       <NodeStats nodeStats={nodeStats} />
     </View>
   );

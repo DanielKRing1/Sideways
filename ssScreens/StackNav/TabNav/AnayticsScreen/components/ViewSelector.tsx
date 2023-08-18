@@ -5,10 +5,9 @@ import {DISPLAY_SIZE} from '../../../../../global';
 import {FlexRow} from 'ssComponents/Flex';
 import MyButton from 'ssComponents/ReactNative/MyButton';
 import MyText from 'ssComponents/ReactNative/MyText';
-import {setSelectedView} from 'ssRedux/analyticsSlice';
+import {setSelectedView} from 'ssRedux/appState/selectedAnalytics';
 import {AppDispatch, RootState} from 'ssRedux/index';
 import {IdentityViewName, RecoViewName, TimeseriesViewName} from '../constants';
-import MyBorder from 'ssComponents/ReactNative/MyBorder';
 import {useTheme} from 'styled-components';
 import VerticalSpace from 'ssComponents/Spacing/VerticalSpace';
 
@@ -16,7 +15,7 @@ type ViewSelectorProps = {};
 const ViewSelector: FC<ViewSelectorProps> = props => {
   // REDUX
   const {selectedView} = useSelector(
-    (state: RootState) => state.analyticsSlice.selectedViewSlice,
+    (state: RootState) => state.appState.selectedAnalytics,
   );
   const dispatch: AppDispatch = useDispatch();
 

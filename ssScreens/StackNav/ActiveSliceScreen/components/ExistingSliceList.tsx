@@ -88,7 +88,7 @@ const ExistingSliceList: FC<ExistingSliceListProps> = props => {
   const [lastLogged, setLastLogged] = useState<ExistingSlice[]>([]);
 
   // REDUX
-  const {activeSliceName, searchedSliceName, readSSSignature} = useSelector(
+  const {activeSliceName, typingSliceName} = useSelector(
     (state: RootState) => state.appState.activeJournal,
   );
 
@@ -106,13 +106,13 @@ const ExistingSliceList: FC<ExistingSliceListProps> = props => {
 
   // 2. Fill lastLogged slices into Trie
   useEffect(() => {
-    setTrieValues(searchedSliceName.toLocaleLowerCase(), lastLogged);
+    setTrieValues(typingSliceName.toLocaleLowerCase(), lastLogged);
   }, [lastLogged]);
 
   // 3. Get autoComplete list, based on searchedSliceName
   useEffect(() => {
-    search(searchedSliceName.toLocaleLowerCase());
-  }, [searchedSliceName]);
+    search(typingSliceName.toLocaleLowerCase());
+  }, [typingSliceName]);
 
   // LIST COMPONENT
   const ExistingSliceCard = useMemo(
