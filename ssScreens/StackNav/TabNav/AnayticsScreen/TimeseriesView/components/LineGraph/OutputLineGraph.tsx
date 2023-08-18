@@ -63,7 +63,9 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
   );
   // List start of all months from first to last point
   const xValues: number[] = useMemo(() => {
-    if (lineGraph.length === 0) return [0, 1];
+    if (lineGraph.length === 0) {
+      return [0, 1];
+    }
 
     return getAllMonthsRangeMs(
       lineGraph[lineGraph.length - 1].x,
@@ -72,8 +74,12 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
   }, [lineGraph]);
   const brushXValues: number[] = useMemo(() => {
     const MAX_BRUSH_VALUES = 4;
-    if (lineGraph.length === 0) return [0, 1];
-    if (xValues.length <= MAX_BRUSH_VALUES) return xValues;
+    if (lineGraph.length === 0) {
+      return [0, 1];
+    }
+    if (xValues.length <= MAX_BRUSH_VALUES) {
+      return xValues;
+    }
 
     return getSliceRangeMs(
       lineGraph[lineGraph.length - 1].x,
@@ -124,14 +130,18 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
         xValues={xValues}
         // xValues={lineGraph.map((day: DailyOutput) => day.x)}
         xTickFormat={(t: CallbackArgs) => {
-          if (t.index === undefined) return '';
+          if (t.index === undefined) {
+            return '';
+          }
 
           const {month, day, year} = abbrDate(deserializeDate(t.datum));
           return `${month.slice(0, 3)}-${day}`;
         }}
         brushXValues={brushXValues}
         brushTickFormat={(t: CallbackArgs) => {
-          if (t.index === undefined) return '';
+          if (t.index === undefined) {
+            return '';
+          }
 
           const {month, day, year} = abbrDate(deserializeDate(t.datum));
           return t.index === 0 || t.index === brushXValues.length - 1
@@ -141,7 +151,9 @@ const OutputLineGraph: FC<OutputLineGraphProps> = () => {
         // brushXValues={lineGraph.map((day: DailyOutput) => day.x)}
         // yValues={Object.keys(outputColorMap).map(str => parseInt(str, 10))}
         yTickFormat={(t: CallbackArgs) => {
-          if (t.index === undefined) return '';
+          if (t.index === undefined) {
+            return '';
+          }
 
           return t.datum;
         }}

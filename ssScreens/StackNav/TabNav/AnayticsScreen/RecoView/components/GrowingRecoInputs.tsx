@@ -41,8 +41,11 @@ const GrowingRecoInputs: FC<GrowingRecoInputsProps> = () => {
   };
   const handleUpdateInput = (newInput: RecoInput, index: number) => {
     // TODO: Dispatch a copy of the previous state: [ ...possibleOutputs ]?
-    if (newInput.item.id === '') handleDeleteInput(index);
-    else dispatch(editRecommendationInput({index, input: newInput}));
+    if (newInput.item.id === '') {
+      handleDeleteInput(index);
+    } else {
+      dispatch(editRecommendationInput({index, input: newInput}));
+    }
   };
 
   console.log('RECOMMENDATION INPUTS----------------------');

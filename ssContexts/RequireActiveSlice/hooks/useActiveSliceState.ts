@@ -30,13 +30,18 @@ export function useActiveSliceState() {
       !dbDriver.getSliceNames().includes(activeSliceName)
     ) {
       // 1.1. Invalid
-      if (dbDriver.getSliceNames().length > 0)
+      if (dbDriver.getSliceNames().length > 0) {
         setActiveSliceState(ActiveSliceState.INVALID_ACTIVE_SLICE);
+      }
       // 1.2. No available
-      else setActiveSliceState(ActiveSliceState.NO_AVAILABLE_SLICES);
+      else {
+        setActiveSliceState(ActiveSliceState.NO_AVAILABLE_SLICES);
+      }
     }
     // 1.3. Valid
-    else setActiveSliceState(ActiveSliceState.VALID_ACTIVE_SLICE);
+    else {
+      setActiveSliceState(ActiveSliceState.VALID_ACTIVE_SLICE);
+    }
   }, [activeSliceName]);
 
   return {

@@ -58,7 +58,9 @@ export const useHydrateJournal = () => {
       await load();
 
       // 1. Refresh UserJsonMap after switching active slices
-      if (activeSliceName === NO_ACTIVE_SLICE_NAME) return;
+      if (activeSliceName === NO_ACTIVE_SLICE_NAME) {
+        return;
+      }
 
       dispatch(startRefreshAllUserJson());
       dispatch(startCacheAllDbInputsOutputs());

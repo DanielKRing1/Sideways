@@ -26,7 +26,9 @@ const RawCollapsible: FC<RawCollapsibleProps> = props => {
 
   // EFFECTS
   useEffect(() => {
-    if (isOpen) animation.setValue(openHeight);
+    if (isOpen) {
+      animation.setValue(openHeight);
+    }
   }, [openHeight]);
 
   useEffect(() => {

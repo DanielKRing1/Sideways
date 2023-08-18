@@ -37,7 +37,9 @@ const GrowingTextList: FC<GrowingTextListProps> = props => {
     console.log('HANDLECHANGETEXT------------------------');
     console.log(newText);
     console.log(index);
-    if (index === data.length) handleAddOutput(popId(), '');
+    if (index === data.length) {
+      handleAddOutput(popId(), '');
+    }
     handleUpdateOutput(index, newText);
   };
 

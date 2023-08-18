@@ -100,7 +100,9 @@ const InputVenn: FC<InputVennProps> = () => {
           (nodeInput: VennInput) => nodeInput.item.id,
         )}
         yTickFormat={(t: CallbackArgs) => {
-          if (vennNodeInputs.length === 0) return '';
+          if (vennNodeInputs.length === 0) {
+            return '';
+          }
 
           // console.log('CALLBACK ARGS----------------');
           // console.log(t);

@@ -4,13 +4,16 @@ export class TimerMan {
   static timerMap: Record<string, Timer> = {};
 
   constructor() {
-    if (TimerMan._instance) return TimerMan._instance;
+    if (TimerMan._instance) {
+      return TimerMan._instance;
+    }
     TimerMan._instance = this;
   }
 
   static getTimer(key: string) {
-    if (TimerMan.timerMap[key] === undefined)
+    if (TimerMan.timerMap[key] === undefined) {
       TimerMan.timerMap[key] = new Timer();
+    }
 
     return TimerMan.timerMap[key];
   }

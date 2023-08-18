@@ -110,12 +110,15 @@ export const createSS = createSlice({
     editC: (state: CreateCSState, action: EditCAction) => {
       const {cId, partialUserCD} = action.payload;
 
-      if (partialUserCD.icon !== undefined)
+      if (partialUserCD.icon !== undefined) {
         state.cs[cId].icon = partialUserCD.icon;
-      if (partialUserCD.color !== undefined)
+      }
+      if (partialUserCD.color !== undefined) {
         state.cs[cId].color = partialUserCD.color;
-      if (partialUserCD.name !== undefined)
+      }
+      if (partialUserCD.name !== undefined) {
         state.cscNameMapping[cId] = partialUserCD.name;
+      }
     },
     removeC: (state: CreateCSState, action: RmCAction) => {
       const cId: string = action.payload;

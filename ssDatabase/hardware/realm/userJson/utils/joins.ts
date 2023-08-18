@@ -162,10 +162,11 @@ export function snToCSId(
   console.log(activeSliceName);
   console.log(userJsonMap);
 
-  if (csId === undefined)
+  if (csId === undefined) {
     throw new Error(
       `Slice name ${activeSliceName} does not map to any Category Set id (thrown from 'snToCSId method)`,
     );
+  }
 
   return csId;
   // || DEFAULT_CATEGORY_SET_ID;
@@ -199,8 +200,9 @@ export function csIdToCD(
   categoryId: string,
   userJsonMap: UserJsonMap,
 ): GJ_CategoryDecoration {
-  if (categoryId === UNASSIGNED_CATEGORY_ID)
+  if (categoryId === UNASSIGNED_CATEGORY_ID) {
     return genDefaultCategoryDecoration(categoryId);
+  }
 
   // 1. Get submaps of Json
   const snToCSIdMapping: GJ_SliceNameToCategorySetIdMapping =
@@ -215,10 +217,11 @@ export function csIdToCD(
     // console.log(csId);
     // console.log(categoryId);
     // console.log(cd);
-    if (cd === undefined)
+    if (cd === undefined) {
       throw new Error(
         `csIdToCD(): 'cd' === undefined; Generate a default CategoryDecoration`,
       );
+    }
     return cd;
   } catch (err) {
     console.log('csIdToCD() Error Below:');

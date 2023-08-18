@@ -27,7 +27,9 @@ const HeatMap: FC<HeatMapProps> = props => {
   const dataRows: CompleteHeatMapCell[][] = useMemo(
     () =>
       data.reduce<CompleteHeatMapCell[][]>((acc, cur, i) => {
-        if (i % cols === 0) acc.push([]);
+        if (i % cols === 0) {
+          acc.push([]);
+        }
         acc[acc.length - 1].push({
           index: i,
           ...cur,

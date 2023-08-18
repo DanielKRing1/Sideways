@@ -37,7 +37,9 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
     console.log(monthIndex);
     // 1. Get HeatMap month { day, outputs }
     // Handle case of no heatmap at monthIndex
-    if (monthIndex >= heatMapByMonth.length) return [];
+    if (monthIndex >= heatMapByMonth.length) {
+      return [];
+    }
     const heatMapRaw: HeatMapDay[] = heatMapByMonth[monthIndex].heatMap;
 
     // 2. Convert raw map to heat map cells
@@ -69,6 +71,7 @@ const OutputHeatMap: FC<OutputHeatMapProps> = () => {
       while (heatMapCellsFullset.length < date - 1) {
         heatMapCellsFullset.push(UNRATED_DAY_CELL);
       }
+
       heatMapCellsFullset.push(heatMapCellsSubset[i]);
     }
 

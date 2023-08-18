@@ -36,7 +36,9 @@ const DomainScroller: FC<DomainScrollerProps> = props => {
 
   // Prevent updating even when domain has not changed
   const handleBrush = (newDomain: XDomain) => {
-    if (newDomain.x[0] !== xDomain.x[0]) setXDomain({x: newDomain.x});
+    if (newDomain.x[0] !== xDomain.x[0]) {
+      setXDomain({x: newDomain.x});
+    }
   };
 
   const fullDomain: XDomain = {

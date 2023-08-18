@@ -65,7 +65,9 @@ const getMonthlyOutputHistogram = async ({
   const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
   // 0. Short-circuit
-  if (list.length === 0) return [];
+  if (list.length === 0) {
+    return [];
+  }
 
   // 1. Create initial count map: { output: 0, ... }
   const initialCountMap: Dict<number> = outputs.reduce<Dict<number>>(
@@ -113,8 +115,11 @@ const getMonthlyOutputHistogram = async ({
     for (const output of outputs) {
       const outputKey: string = output;
 
-      if (countMap[outputKey] === undefined) countMap[outputKey] = 1;
-      else countMap[outputKey]++;
+      if (countMap[outputKey] === undefined) {
+        countMap[outputKey] = 1;
+      } else {
+        countMap[outputKey]++;
+      }
     }
   }
   // // 7. Handle last month
@@ -138,7 +143,9 @@ const getNodeOverlapVenn = async ({
   const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
   // 0. Short-circuit
-  if (list.length === 0) return [];
+  if (list.length === 0) {
+    return [];
+  }
 
   // 1. Hash nodeIds to number value
   const nodeIdValueMap: Dict<number> = nodeIds.reduce<Dict<number>>(
@@ -238,7 +245,9 @@ const getNodeOverlapVenn = async ({
     // 8. Record desired nodeIds that appear in the snapshot
     for (const nodeId of inputs) {
       // Unwanted nodeId
-      if (nodeIdValueMap[nodeId] === undefined) continue;
+      if (nodeIdValueMap[nodeId] === undefined) {
+        continue;
+      }
 
       // Wanted nodeId, track timestamp + height of 1 + y0 starts at nodeIdKey
       const nodeIdKey: number = nodeIdValueMap[nodeId];
@@ -270,7 +279,9 @@ const getDailyOutputHM = async ({
   const list: SidewaysSnapshotRow[] = await dbDriver.getList(sliceName);
 
   // 0. Short-circuit
-  if (list.length === 0) return [];
+  if (list.length === 0) {
+    return [];
+  }
 
   // 1. For each month's worth of snapshots...
   let monthBucket: number = getMonth(list[0].timestamp);

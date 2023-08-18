@@ -68,7 +68,9 @@ const RatingSlider: React.FC<RatingSliderProps> = props => {
 
   const onChangeValue = (newText: string) => {
     // @ts-ignore
-    if (isNaN(newText)) return;
+    if (isNaN(newText)) {
+      return;
+    }
 
     const newNum: number = newText === '' ? 0 : parseInt(newText, 10);
 

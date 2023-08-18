@@ -10,8 +10,9 @@ import thunk from 'redux-thunk';
 // 0. Edit Realm Path Constants ---- START
 const TEST_NAME: string = 'TimeseriesStatsDriver';
 const mockTEST_DIRECTORY: string = `ssDatabase/realm/__tests__/${TEST_NAME}`;
-if (fs.existsSync(mockTEST_DIRECTORY))
+if (fs.existsSync(mockTEST_DIRECTORY)) {
   fs.rmSync(mockTEST_DIRECTORY, {recursive: true});
+}
 fs.mkdirSync(mockTEST_DIRECTORY);
 
 jest.mock(`ssDatabase/realm/core/config`, () => {
@@ -281,8 +282,9 @@ describe('TimeseriesStatsDriver', () => {
   afterAll(async () => {
     await dbDriver.closeAll();
 
-    if (fs.existsSync(mockTEST_DIRECTORY))
+    if (fs.existsSync(mockTEST_DIRECTORY)) {
       fs.rmSync(mockTEST_DIRECTORY, {recursive: true});
+    }
   });
 });
 

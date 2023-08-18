@@ -35,7 +35,9 @@ const Accordion: FC<AccordionProps> = props => {
   // HANDLERS
   const handleSetIsOpen = (isOpen: boolean, index: number) => {
     // 1. Handle close
-    if (!isOpen) areOpen[index] = false;
+    if (!isOpen) {
+      areOpen[index] = false;
+    }
     // 2. Handle open
     else {
       // 2.1. Close all

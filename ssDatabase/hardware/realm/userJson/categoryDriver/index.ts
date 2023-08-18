@@ -53,7 +53,9 @@ const load = async (activeSliceName: string): Promise<void> => {
   console.log(activeSliceName);
   console.log(loadedActiveSliceName);
 
-  if (loadedActiveSliceName === activeSliceName) return;
+  if (loadedActiveSliceName === activeSliceName) {
+    return;
+  }
 
   console.log('categoryJson about to load');
 
@@ -93,10 +95,11 @@ const closeAll = async (): Promise<void> => {
 };
 
 const getRealmJsonManager = (): typeof RealmJsonManager => {
-  if (!isLoaded)
+  if (!isLoaded) {
     throw new Error(
       'Must call "load()" before RealmJson (user json categories) can be used',
     );
+  }
 
   return RealmJsonManager;
 };
@@ -182,8 +185,9 @@ const setAllOutputDecorations = (
  */
 const addInputCategory = (inputInfo: ASJ_InputInfo): void | never => {
   // Do not add empty InputName
-  if (inputInfo.inputId === '')
+  if (inputInfo.inputId === '') {
     return console.log('Empty inputId in categoryDriver.addInputCategory');
+  }
 
   // 1. Get Json Row
   const inputToCategoryMapping: ASJ_InputNameToCategoryIdMapping =
@@ -220,8 +224,9 @@ const rmInputCategories = (inputNamesToRm: string[]): void | never => {
 
     console.log(inputToCategoryMapping[inputName]);
     // 2.2. If exists, delete inputName key
-    if (inputToCategoryMapping[inputName] !== undefined)
+    if (inputToCategoryMapping[inputName] !== undefined) {
       delete inputToCategoryMapping[inputName];
+    }
   }
   console.log('AFTER');
   console.log(inputToCategoryMapping);
@@ -240,8 +245,9 @@ const rmInputCategories = (inputNamesToRm: string[]): void | never => {
  */
 const editInputCategory = (inputInfo: ASJ_InputInfo): void | never => {
   // Do not add empty InputName
-  if (inputInfo.inputId === '')
+  if (inputInfo.inputId === '') {
     return console.log('Empty inputId in categoryDriver.addInputCategory');
+  }
 
   // 1. Get Json Row
   const inputToCategoryMapping: ASJ_InputNameToCategoryIdMapping =

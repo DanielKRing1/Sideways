@@ -111,9 +111,12 @@ export const startAssureFreshness = createAsyncThunk<
   }
 
   // 3. Is now fresh
-  if (activeSliceName !== analyzedSliceName)
+  if (activeSliceName !== analyzedSliceName) {
     thunkAPI.dispatch(setAnalyzedSliceName(activeSliceName));
-  if (!isFresh) thunkAPI.dispatch(markTimeseriesStatsFresh());
+  }
+  if (!isFresh) {
+    thunkAPI.dispatch(markTimeseriesStatsFresh());
+  }
 
   return true;
 });
@@ -337,10 +340,14 @@ export const timeseriesStatsSlice = createSlice({
       state.isFresh = action.payload;
     },
     markTimeseriesStatsFresh: (state: TimeStatsState) => {
-      if (state.isFresh !== true) state.isFresh = true;
+      if (state.isFresh !== true) {
+        state.isFresh = true;
+      }
     },
     markTimeseriesStatsUnfresh: (state: TimeStatsState) => {
-      if (state.isFresh !== false) state.isFresh = false;
+      if (state.isFresh !== false) {
+        state.isFresh = false;
+      }
     },
     setAnalyzedSliceName: (
       state: TimeStatsState,

@@ -68,7 +68,9 @@ const GrowingCategorySet: FC<GrowingCategorySetProps> = props => {
       handleAddInput={(id: string, newText: string) => {
         console.log('HANDLEADDINPUT-------------------------');
         console.log(newText);
-        if (newText === undefined) return;
+        if (newText === undefined) {
+          return;
+        }
         dispatch(
           addC({
             cName: newText,

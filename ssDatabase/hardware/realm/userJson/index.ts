@@ -68,19 +68,21 @@ const closeAll = async (): Promise<void> => {
 };
 
 const getGlobalJsonDriver = () => {
-  if (!isLoaded)
+  if (!isLoaded) {
     throw new Error(
       'Must call "load()" before RealmJson (user json) can be used',
     );
+  }
 
   return GlobalJsonDriver;
 };
 
 const getCategoryJsonDriver = () => {
-  if (!isLoaded)
+  if (!isLoaded) {
     throw new Error(
       'Must call "load()" before RealmJson (user json) can be used',
     );
+  }
 
   return CategoryJsonDriver;
 };

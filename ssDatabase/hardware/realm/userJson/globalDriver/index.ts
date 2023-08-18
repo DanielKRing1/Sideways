@@ -36,7 +36,9 @@ let isLoaded: boolean = false;
 // LOAD/CLOSE ----
 
 const load = async (): Promise<void> => {
-  if (isLoaded) return;
+  if (isLoaded) {
+    return;
+  }
 
   // 1. LOAD GLOBAL COLLECTION
   // 1.1. Try to create global collection for first time
@@ -80,10 +82,11 @@ const closeAll = async (): Promise<void> => {
 };
 
 const getRealmJsonManager = (): typeof RealmJsonManager => {
-  if (!isLoaded)
+  if (!isLoaded) {
     throw new Error(
       'Must call "load()" before RealmJson (global json) can be used',
     );
+  }
 
   return RealmJsonManager;
 };
@@ -196,7 +199,9 @@ const addPredefinedCS = (
   userCS: GJ_UserCategorySet,
 ): void | never => {
   // 0. Do not add duplicate CategorySet
-  if (hasCS(predefinedCSName)) return;
+  if (hasCS(predefinedCSName)) {
+    return;
+  }
 
   console.log('addPredefinedCS HASSS???');
   console.log(hasCS(predefinedCSName));
@@ -247,7 +252,9 @@ const addCS = (
   console.log('ADDCS2-----------------------');
 
   // 0. Do not add duplicate CategorySet name
-  if (hasCS(csName)) return;
+  if (hasCS(csName)) {
+    return;
+  }
 
   console.log('addCS HASSS???');
   console.log(hasCS(csName));
@@ -264,12 +271,15 @@ const addCS = (
 
   // 2.1. Save new csId
   // Create new csId only if one is not provided (pre-defined Category Sets will have their own csIds)
-  if (csId === '') csId = getUniqueId(5, new Set(Object.keys(csNameMapping)));
-  if (csNameMapping[csId] === undefined)
+  if (csId === '') {
+    csId = getUniqueId(5, new Set(Object.keys(csNameMapping)));
+  }
+  if (csNameMapping[csId] === undefined) {
     setGlobalJson(GJ_COLLECTION_ROW_KEY.CATEGORY_SET_NAME_MAPPING, {
       ...csNameMapping,
       [csId]: csName,
     });
+  }
   console.log(5);
 
   // TODO: 8/11/2023:
@@ -280,8 +290,11 @@ const addCS = (
     ? Object.keys(cdMapping[csId])
     : [];
   for (let cId of existingCIds) {
-    if (cs[cId] === undefined) delete cNameMapping[csId];
+    if (cs[cId] === undefined) {
+      delete cNameMapping[csId];
+    }
   }
+
   console.log(6);
 
   // 2.3. Save new cNameMapping
@@ -338,9 +351,15 @@ const editCD = (csId: string, cdInfo: GJ_CDInfo): void | never => {
     const cd: GJ_CategoryDecoration = cs[cdInfo.cId];
 
     // 4. Edit CategoryDecoation
-    if (cdInfo.color !== undefined) cd.color = cdInfo.color;
-    if (cdInfo.icon !== undefined) cd.icon = cdInfo.icon;
-    if (cdInfo.cId !== undefined) cd.cId = cdInfo.cId;
+    if (cdInfo.color !== undefined) {
+      cd.color = cdInfo.color;
+    }
+    if (cdInfo.icon !== undefined) {
+      cd.icon = cdInfo.icon;
+    }
+    if (cdInfo.cId !== undefined) {
+      cd.cId = cdInfo.cId;
+    }
 
     // 5. Save new id-mapped category
     setGlobalJson(GJ_COLLECTION_ROW_KEY.CATEGORY_DECORATION_MAPPING, {

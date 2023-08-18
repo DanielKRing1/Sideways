@@ -33,19 +33,22 @@ export const SearchableFlatList: FC<SearchableFlatListProps> = props => {
   };
 
   const scrollToIndex = (index: number, animated: boolean) => {
-    if (!!flatListRef.current && index + 1 <= data.length)
+    if (!!flatListRef.current && index + 1 <= data.length) {
       flatListRef.current.scrollToIndex({animated, index});
+    }
   };
   const scrollToOffset = (offset: number, animated: boolean) => {
-    if (!!flatListRef.current)
+    if (!!flatListRef.current) {
       flatListRef.current.scrollToOffset({animated, offset});
+    }
   };
 
   // EFFECTS
   // Scroll to searchIndex, when it changes
   useEffect(() => {
-    if (searchIndex > -1 && searchIndex < data.length)
+    if (searchIndex > -1 && searchIndex < data.length) {
       scrollToIndex(searchIndex, false);
+    }
   }, [scrollToIndex, searchIndex]);
 
   return (

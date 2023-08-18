@@ -106,9 +106,12 @@ export const startAssureFreshness = createAsyncThunk<
   }
 
   // 3. Is now fresh
-  if (activeSliceName !== analyzedSliceName)
+  if (activeSliceName !== analyzedSliceName) {
     thunkAPI.dispatch(setAnalyzedSliceName(activeSliceName));
-  if (!isFresh) thunkAPI.dispatch(markNodeStatsFresh());
+  }
+  if (!isFresh) {
+    thunkAPI.dispatch(markNodeStatsFresh());
+  }
 
   return true;
 });
@@ -266,7 +269,9 @@ const startComputeNodeStats = createAsyncThunk<
       nodeId,
       rawOutputs,
     });
-    if (nodeStats === undefined) return false;
+    if (nodeStats === undefined) {
+      return false;
+    }
 
     thunkAPI.dispatch(setNodeStats(nodeStats));
 
@@ -406,10 +411,14 @@ export const identityStatsSlice = createSlice({
       state.isFresh = action.payload;
     },
     markNodeStatsFresh: (state: IdentityStatsState) => {
-      if (state.isFresh !== true) state.isFresh = true;
+      if (state.isFresh !== true) {
+        state.isFresh = true;
+      }
     },
     markNodeStatsUnfresh: (state: IdentityStatsState) => {
-      if (state.isFresh !== false) state.isFresh = false;
+      if (state.isFresh !== false) {
+        state.isFresh = false;
+      }
     },
     setAnalyzedSliceName: (
       state: IdentityStatsState,

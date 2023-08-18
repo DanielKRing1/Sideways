@@ -58,8 +58,11 @@ const OutputHistogram: FC<OutputHistogramProps> = () => {
     const INC: number = 2;
     const vals = [];
     for (let i = min; i < max; i += INC) {
-      if (i % INC === 0) vals.push(i);
+      if (i % INC === 0) {
+        vals.push(i);
+      }
     }
+
     vals.push(max);
     return vals;
   }, [histogramByMonth[monthIndex].histogram]);

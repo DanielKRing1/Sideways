@@ -47,13 +47,17 @@ const EditableText: FC<EditableTextProps> = props => {
   // useEffect
   useEffect(() => {
     // Reset the editable text
-    if (isEditing === true) setEditableText(text);
+    if (isEditing === true) {
+      setEditableText(text);
+    }
   }, [isEditing]);
 
   // HANDLERS
 
   const handleStartEditing = () => {
-    if (editable) setIsEditing(true);
+    if (editable) {
+      setIsEditing(true);
+    }
   };
 
   // Called every keystroke

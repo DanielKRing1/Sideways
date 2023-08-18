@@ -42,7 +42,9 @@ let isLoaded = false;
 const load = async (): Promise<void> => {
   // TODO: Set isCoreLoaded instead of isLoaded
 
-  if (isLoaded) return;
+  if (isLoaded) {
+    return;
+  }
 
   const graphPromise: Promise<any> = RealmGraphManager.loadGraphs(
     DEFAULT_REALM_GRAPH_META_REALM_PATH,
@@ -70,15 +72,17 @@ const closeAll = async (): Promise<void> => {
 };
 
 const getRealmStackManager = (): typeof RealmStackManager => {
-  if (!isLoaded)
+  if (!isLoaded) {
     throw new Error('Must call "load()" before RealmStack can be used');
+  }
 
   return RealmStackManager;
 };
 
 const getRealmGraphManager = (): typeof RealmGraphManager => {
-  if (!isLoaded)
+  if (!isLoaded) {
     throw new Error('Must call "load()" before RealmGraph can be used');
+  }
 
   return RealmGraphManager;
 };
@@ -132,10 +136,15 @@ const getLastLoggedSlices = async (): Promise<ExistingSlice[]> | never => {
     const {sliceName: sliceNameA, lastLogged: lastLoggedA} = sliceA;
     const {sliceName: sliceNameB, lastLogged: lastLoggedB} = sliceB;
 
-    if (lastLoggedA === undefined && lastLoggedB === undefined)
+    if (lastLoggedA === undefined && lastLoggedB === undefined) {
       return sliceNameA.localeCompare(sliceNameB);
-    if (lastLoggedA === undefined) return 1;
-    if (lastLoggedB === undefined) return -1;
+    }
+    if (lastLoggedA === undefined) {
+      return 1;
+    }
+    if (lastLoggedB === undefined) {
+      return -1;
+    }
 
     return lastLoggedB.getTime() - lastLoggedA.getTime();
   });
@@ -169,7 +178,9 @@ const getStack = async (
   // 2. Get RealmStackRow
   const stackRow: (RealmStackRow & Realm.Object) | undefined =
     await realmStack.getStackRow();
-  if (stackRow === undefined) return [];
+  if (stackRow === undefined) {
+    return [];
+  }
 
   return stackRow.list as unknown as Realm.List<SidewaysSnapshotRow>;
 };
@@ -217,7 +228,9 @@ const setSnapshotInputs = async (
 ): Promise<void> | never => {
   const stack: (RealmStackRow & Realm.Object) | undefined =
     await getRealmStackManager().getStack(stackName).getStackRow();
-  if (stack === undefined) return;
+  if (stack === undefined) {
+    return;
+  }
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
     index
@@ -231,7 +244,9 @@ const rmSnapshotInputs = async (
 ): Promise<void> | never => {
   const stack: (RealmStackRow & Realm.Object) | undefined =
     await getRealmStackManager().getStack(stackName).getStackRow();
-  if (stack === undefined) return;
+  if (stack === undefined) {
+    return;
+  }
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
     index
@@ -248,7 +263,9 @@ const setSnapshotOutputs = async (
 ): Promise<void> | never => {
   const stack: (RealmStackRow & Realm.Object) | undefined =
     await getRealmStackManager().getStack(stackName).getStackRow();
-  if (stack === undefined) return;
+  if (stack === undefined) {
+    return;
+  }
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
     index
@@ -262,7 +279,9 @@ const rmSnapshotOutputs = async (
 ): Promise<void> | never => {
   const stack: (RealmStackRow & Realm.Object) | undefined =
     await getRealmStackManager().getStack(stackName).getStackRow();
-  if (stack === undefined) return;
+  if (stack === undefined) {
+    return;
+  }
 
   const entry: Realm.Object & SidewaysSnapshotRow = stack.list[
     index

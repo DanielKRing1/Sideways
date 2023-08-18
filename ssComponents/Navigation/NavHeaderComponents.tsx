@@ -230,8 +230,9 @@ export const GoBackValidSliceNavButton: FC<
 
   // HANDLERS
   const handleGoBack = (navigation: StackNavigatorNavigationProp) => {
-    if (activeSliceState === ActiveSliceState.VALID_ACTIVE_SLICE)
+    if (activeSliceState === ActiveSliceState.VALID_ACTIVE_SLICE) {
       navigation.goBack();
+    }
   };
 
   return <_GoBackNavButtonBase onGoBack={handleGoBack} style={style} />;
@@ -250,8 +251,9 @@ export const GoBackAvailableSliceNavButton: FC<
 
   // HANDLERS
   const handleGoBack = (navigation: StackNavigatorNavigationProp) => {
-    if (activeSliceState !== ActiveSliceState.NO_AVAILABLE_SLICES)
+    if (activeSliceState !== ActiveSliceState.NO_AVAILABLE_SLICES) {
       navigation.goBack();
+    }
   };
 
   return <_GoBackNavButtonBase onGoBack={handleGoBack} style={style} />;
@@ -291,8 +293,9 @@ export const GoNavButton: FC<GoNavButtonProps> = props => {
   // HANDLERS
   const handleGoNav = () => {
     console.log(activeSliceState === ActiveSliceState.VALID_ACTIVE_SLICE);
-    if (activeSliceState === ActiveSliceState.VALID_ACTIVE_SLICE)
+    if (activeSliceState === ActiveSliceState.VALID_ACTIVE_SLICE) {
       navigation.navigate(screenName);
+    }
   };
 
   return (

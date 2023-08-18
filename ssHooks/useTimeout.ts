@@ -19,7 +19,9 @@ export const useTimeout = () => {
   };
 
   const clearTO = () => {
-    if (to !== undefined) clearTimeout(to);
+    if (to !== undefined) {
+      clearTimeout(to);
+    }
   };
 
   return {

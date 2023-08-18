@@ -59,8 +59,11 @@ const RatingOutputOptions: FC<RatingOutputOptionsProps> = props => {
   const toggleSelected = useCallback(
     (output: string) => {
       // 1. Toggle selected outputs
-      if (!selectedOutputs.has(output)) selectedOutputs.add(output);
-      else selectedOutputs.delete(output);
+      if (!selectedOutputs.has(output)) {
+        selectedOutputs.add(output);
+      } else {
+        selectedOutputs.delete(output);
+      }
 
       // 2. Set Redux outputs
       dispatch(setOutputs(Array.from(selectedOutputs)));

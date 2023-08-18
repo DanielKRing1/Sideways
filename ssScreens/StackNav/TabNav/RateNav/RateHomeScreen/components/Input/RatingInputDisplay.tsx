@@ -102,7 +102,9 @@ const RatingInputDisplay: FC<RatingInputDisplayProps> = props => {
     newInputName = newInputName.toLocaleLowerCase();
 
     // Do not add an empty string as an input
-    if (newInputName === '') return;
+    if (newInputName === '') {
+      return;
+    }
 
     // REDUX
     // 1. Create new id

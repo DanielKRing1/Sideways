@@ -132,23 +132,27 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
   // MODAL HANDLERS
   const handleOpenCIdModal = () => {
     // If category is selected
-    if (true) setCIdPickerOpen(true);
+    if (true) {
+      setCIdPickerOpen(true);
+    }
   };
   /**
    * Display an error modal if trying to open color/icon picker before a valid category is selected
    */
   const handleOpenColorModal = () => {
     // If category is selected
-    if (categoryId !== UNASSIGNED_CATEGORY_ID) setColorPickerOpen(true);
-    else {
+    if (categoryId !== UNASSIGNED_CATEGORY_ID) {
+      setColorPickerOpen(true);
+    } else {
       setErrMsg('Choose a category first!');
       createInvalidCategoryErrTO(() => setErrMsg(''), 1000);
     }
   };
   const handleOpenIconModal = () => {
     // If category is selected
-    if (categoryId !== UNASSIGNED_CATEGORY_ID) setIconPickerOpen(true);
-    else {
+    if (categoryId !== UNASSIGNED_CATEGORY_ID) {
+      setIconPickerOpen(true);
+    } else {
       setErrMsg('Choose a category first!');
       createInvalidCategoryErrTO(() => setErrMsg(''), 1000);
     }
@@ -186,27 +190,34 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
     console.log(onCommitInputName);
 
     // No inputName
-    if (newInputName === '') onDeleteCategoryRow();
-    else {
+    if (newInputName === '') {
+      onDeleteCategoryRow();
+    } else {
       console.log('calling onCommitInputName');
       onCommitInputName(newInputName);
     }
   };
   const handleCommitCId = (newCId: string) => {
     // No change
-    if (categoryId === localCId) return;
+    if (categoryId === localCId) {
+      return;
+    }
 
     onCommitCId(newCId);
   };
   const handleCommitColor = (newColor: HexColor) => {
     // No change
-    if (categoryDecoration.color === localColor) return;
+    if (categoryDecoration.color === localColor) {
+      return;
+    }
 
     onCommitColor(newColor);
   };
   const handleCommitIcon = (newIcon: AvailableIcons) => {
     // No change
-    if (categoryDecoration.icon === localIcon) return;
+    if (categoryDecoration.icon === localIcon) {
+      return;
+    }
 
     onCommitIcon(newIcon);
   };
@@ -216,23 +227,35 @@ const BaseCategoryRow = forwardRef<View, BaseCategoryRowProps>((props, ref) => {
   // Commit cId
   useEffect(() => {
     // Update local color
-    if (cIdPickerOpen === true) setLocalCId(categoryId);
+    if (cIdPickerOpen === true) {
+      setLocalCId(categoryId);
+    }
     // If local color is new color, then Commit local color when ColorPicker modal closes
-    else handleCommitCId(localCId);
+    else {
+      handleCommitCId(localCId);
+    }
   }, [cIdPickerOpen]);
   // Commit color
   useEffect(() => {
     // Update local color
-    if (colorPickerOpen === true) setLocalColor(categoryDecoration.color);
+    if (colorPickerOpen === true) {
+      setLocalColor(categoryDecoration.color);
+    }
     // If local color is new color, then Commit local color when ColorPicker modal closes
-    else handleCommitColor(localColor);
+    else {
+      handleCommitColor(localColor);
+    }
   }, [colorPickerOpen]);
   // Commit icon
   useEffect(() => {
     // Update local icon
-    if (iconPickerOpen === true) setLocalIcon(categoryDecoration.icon);
+    if (iconPickerOpen === true) {
+      setLocalIcon(categoryDecoration.icon);
+    }
     // If local icon is new icon, then Commit local icon when IconPicker modal closes
-    else handleCommitIcon(localIcon);
+    else {
+      handleCommitIcon(localIcon);
+    }
   }, [iconPickerOpen]);
 
   return (
